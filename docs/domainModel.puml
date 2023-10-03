@@ -1,0 +1,151 @@
+@startuml domain model
+skinparam DefaultFontName Arial
+skinparam DefaultFontSize 16
+skinparam DefaultFontStyle bold
+skinparam ArrowThickness 2.5
+!theme toy
+
+title domain model
+
+package "<<aggregate>> Building"{
+
+    entity Building <<entity>><<root>>{
+        designation
+    }
+
+}
+
+package "<<aggregate>> Elevator"{
+
+    entity Elevator <<entity>><<root>>{
+        designation
+    }
+
+}
+
+package "<<aggregate>> Floor"{
+    entity Floor <<entity>>{
+        number
+        information
+    }
+}
+
+package "<<aggregate>> Room"{
+    entity Room <<entity>>{
+        number
+    }
+}
+
+package "<<aggregate>> Passage"{
+    entity Passage <<entity>>{
+        
+    }
+}
+
+
+package "<<aggregate>> User"{
+
+    entity User <<entity>><<root>>{
+        firstName
+        lastName
+        email
+        password
+        role
+    }
+
+}
+
+package "<<aggregate>> NormalUser"{
+
+    entity NormalUser <<entity>><<root>>{
+        
+    }
+
+}
+
+package "<<aggregate>> SysAdmin"{
+
+    entity SysAdmin <<entity>><<root>>{
+        
+    }
+
+}
+
+package "<<aggregate>> FleetManager"{
+
+    entity FleetManager <<entity>><<root>>{
+        
+    }
+
+}
+
+package "<<aggregate>> CampusManager"{
+
+    entity CampusManager <<entity>><<root>>{
+        
+    }
+
+}
+
+package "<<aggregate>> Autonomous "{
+
+    entity Autonomous <<entity>><<root>>{
+        designation
+    }
+
+}
+
+package "<<aggregate>> Robot"{
+
+    entity Robot <<entity>><<root>>{
+        
+    }
+
+}
+
+package "<<aggregate>> Drone"{
+
+    entity Drone <<entity>><<root>>{
+        
+    }
+
+}
+
+package "<<aggregate>> Task"{
+
+    entity Task <<entity>><<root>>{
+        type
+        designation
+    }
+
+}
+
+' connections
+' building
+Floor "*" --- "1" Building: is associated >
+Elevator "1" --- "1" Building: is associated >
+
+' floor
+Room "*" --- "1" Floor: is on >
+Passage "*" --- "1" Floor: connects >
+
+' task
+Task "*" --- "1" Autonomous: is associated >
+Task "*" --- "1" Building: is associated >
+Task "*" --- "1" Floor: is associated >
+Task "*" --- "1" Room: is associated >
+Task "*" --- "1" Room: is associated >
+Task "*" --- "1" NormalUser: is requested by >
+
+'hierarchy
+NormalUser ---|> User
+SysAdmin ---|> User
+FleetManager ---|> User
+CampusManager ---|> User
+
+Robot ---|> Autonomous
+Drone ---|> Autonomous
+
+@enduml
+
+
