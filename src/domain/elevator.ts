@@ -2,12 +2,15 @@ import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
+import { Building } from "./building";
 import { ElevatorId } from "./valueObj/elevatorId";
 
 // import IElevatorDTO from "../dto/IElevatorDTO"; // TODO: criar o DTO
 
 interface ElevatorProps {
     designation: string; //TODO: criar um value obj para designacoes/informacoes (meter um max de chars por exemplo)
+    building: Building;
+    floorsAllowed: number[];
 }
 
 export class Elevator extends AggregateRoot<ElevatorProps> {
@@ -17,6 +20,10 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
 
     get elevatorId(): ElevatorId {
         return new ElevatorId(this.elevatorId.toValue());
+    }
+        
+    get building(): Building {
+        return this.props.building;
     }
     
     private constructor(props: ElevatorProps, id?: UniqueEntityID) {

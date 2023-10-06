@@ -3,7 +3,7 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
 import { TaskId } from "./valueObj/taskId";
-import { TaskType } from "./valueObj/taskType";
+import { TaskType } from "./taskType";
 import { IAutonomous } from "./IAutonomous";
 
 // import ITaskDTO from "../dto/ITaskDTO"; // TODO: criar o DTO

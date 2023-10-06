@@ -2,12 +2,15 @@ import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
+import { Building } from "./building";
 import { PassageId } from "./valueObj/passageId";
 
 // import IPassageDTO from "../dto/IPassageDTO"; // TODO: criar o DTO
 
 interface PassageProps {
     designation: string; // TODO: criar um value obj para designacoes (meter um max de chars por exemplo)
+    fromBuilding: Building;
+    toBuilding: Building;
 }
 
 export class Passage extends AggregateRoot<PassageProps> {
@@ -26,6 +29,15 @@ export class Passage extends AggregateRoot<PassageProps> {
     set designation(value: string) {
         this.props.designation = value;
     }
+    
+    get fromBuilding(): Building {
+        return this.props.fromBuilding;
+    }
+    
+    get toBuilding(): Building {
+        return this.props.toBuilding;
+    }
+
     private constructor(props: PassageProps, id?: UniqueEntityID) {
         super(props, id);
     }

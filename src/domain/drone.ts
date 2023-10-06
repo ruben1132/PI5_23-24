@@ -3,14 +3,16 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
 import { IAutonomous } from "./IAutonomous";
+import { TaskType } from "./taskType";
 import { AutonomousId } from "./valueObj/autonomousId";
 
 // import IDroneDTO from "../dto/IDroneDTO"; // TODO: criar o DTO
 
 interface DroneProps {
-   // TODO: 
+    // TODO: 
     state: boolean;
     designation: string;
+    taskTypesAllowed: Set<TaskType>
 }
 
 export class Drone extends AggregateRoot<DroneProps> implements IAutonomous {
@@ -39,10 +41,18 @@ export class Drone extends AggregateRoot<DroneProps> implements IAutonomous {
         this.state = value;
     }
 
+    get taskTypesAllowed(): Set<TaskType> {
+        return this.taskTypesAllowed;
+    }
+
+    set taskTypesAllowed(value: Set<TaskType>) {
+        this.taskTypesAllowed = value;
+    }
+
     private constructor(props: DroneProps, id?: UniqueEntityID) {
         super(props, id);
     }
-    
+
 
     // TODO: implementar regras de negocio na criacao de uma drone
     //   public static create (droneDTO: IDroneDTO, id?: UniqueEntityID): Result<Drone> {
@@ -56,4 +66,3 @@ export class Drone extends AggregateRoot<DroneProps> implements IAutonomous {
     //     }
     //   }
 }
-        

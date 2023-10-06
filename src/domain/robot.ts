@@ -3,6 +3,7 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
 import { IAutonomous } from "./IAutonomous";
+import { TaskType } from "./taskType";
 import { AutonomousId } from "./valueObj/autonomousId";
 
 // import IRobotDTO from "../dto/IRobotDTO"; // TODO: criar o DTO
@@ -11,6 +12,7 @@ interface RobotProps {
    // TODO: 
     state: boolean;
     designation: string;
+    taskTypesAllowed: Set<TaskType>
 }
 
 export class Robot extends AggregateRoot<RobotProps> implements IAutonomous {
@@ -37,6 +39,14 @@ export class Robot extends AggregateRoot<RobotProps> implements IAutonomous {
 
     set state(value: boolean) {
         this.state = value;
+    }
+    
+    get taskTypesAllowed(): Set<TaskType> {
+        return this.taskTypesAllowed;
+    }
+
+    set taskTypesAllowed(value: Set<TaskType>) {
+        this.taskTypesAllowed = value;
     }
 
     private constructor(props: RobotProps, id?: UniqueEntityID) {
