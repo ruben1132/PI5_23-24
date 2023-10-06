@@ -2,7 +2,7 @@ import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
-import { RoleId } from "./roleId";
+import { RoleId } from "./valueObj/roleId";
 
 import IRoleDTO from "../dto/IRoleDTO";
 

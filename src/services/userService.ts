@@ -15,8 +15,8 @@ import IUserRepo from './IRepos/IUserRepo';
 import IRoleRepo from './IRepos/IRoleRepo';
 
 import { User } from '../domain/user';
-import { UserPassword } from '../domain/userPassword';
-import { UserEmail } from '../domain/userEmail';
+import { UserPassword } from '../domain/valueObj/userPassword';
+import { UserEmail } from '../domain/valueObj/userEmail';
 
 import { Role } from '../domain/role';
 

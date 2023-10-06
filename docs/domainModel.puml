@@ -87,10 +87,11 @@ package "<<aggregate>> CampusManager"{
 
 }
 
-package "<<aggregate>> Autonomous "{
+package "IAutonomous"{
 
-    entity Autonomous <<entity>><<root>>{
+    interface Autonomous <<interface>>{
         designation
+        state
     }
 
 }
@@ -143,8 +144,8 @@ SysAdmin ---|> User
 FleetManager ---|> User
 CampusManager ---|> User
 
-Robot ---|> Autonomous
-Drone ---|> Autonomous
+Robot -[dashed]-> Autonomous
+Drone -[dashed]-> Autonomous
 
 @enduml
 

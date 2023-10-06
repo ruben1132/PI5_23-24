@@ -2,7 +2,7 @@ import { Service, Inject } from 'typedi';
 
 import IRoleRepo from "../services/IRepos/IRoleRepo";
 import { Role } from "../domain/role";
-import { RoleId } from "../domain/roleId";
+import { RoleId } from "../domain/valueObj/roleId";
 import { RoleMap } from "../mappers/RoleMap";
 
 import { Document, FilterQuery, Model } from 'mongoose';

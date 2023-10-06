@@ -1,6 +1,6 @@
 import { Repo } from "../../core/infra/Repo";
 import { User } from "../../domain/user";
-import { UserEmail } from "../../domain/userEmail";
+import { UserEmail } from "../../domain/valueObj/userEmail";
 
 export default interface IUserRepo extends Repo<User> {
 	save(user: User): Promise<User>;
