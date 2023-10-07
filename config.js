@@ -14,12 +14,12 @@ export default {
   /**
    * Your favorite port : optional change to 4000 by JRT
    */
-  port: parseInt(process.env.PORT, 10) || 4000, 
+  port: parseInt(process.env.PORT, 10) || 4000,
 
   /**
    * That long string from mlab
    */
-  databaseURL: process.env.MONGODB_URI || "mongodb://vsgate-s1.dei.isep.ipp.pt:10937/test",
+  databaseURL: process.env.MONGODB_URI || "mongodb://mongoadmin:ca7408396943512431f6af8a@vsgate-s1.dei.isep.ipp.pt:10937/?authMechanism=SCRAM-SHA-1",
 
   /**
    * Your secret sauce
@@ -64,4 +64,57 @@ export default {
       path: "../services/roleService"
     }
   },
+
+  schemas: {
+    user: {
+      name: "userShcema",
+      schema: "../persistence/schemas/userSchema"
+    },
+
+    role: {
+      name: "roleSchema",
+      schema: "../persistence/schemas/roleSchema"
+    },
+
+    task: {
+      name: "taskSchema",
+      patschemah: "../persistence/schemas/taskSchema"
+    },
+
+    robot: {
+      name: "robotSchema",
+      schema: "../persistence/schemas/robotSchema"
+    },
+
+    drone: {
+      name: "droneSchema",
+      schema: "../persistence/schemas/droneSchema"
+    },
+
+    room: {
+      name: "roomSchema",
+      schema: "../persistence/schemas/roomSchema"
+    },
+
+    passage: {
+      name: "passageSchema",
+      schema: "../persistence/schemas/passageSchema"
+    },
+
+    elevator: {
+      name: "elevatorSchema",
+      schema: "../persistence/schemas/elevatorSchema"
+    },
+
+    floor: {
+      name: "floorSchema",
+      schema: "../persistence/schemas/floorSchema"
+    },
+    
+    building: {
+      name: "buildingSchema",
+      schema: "../persistence/schemas/buildingSchema"
+    },
+  },
+
 };

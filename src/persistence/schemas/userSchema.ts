@@ -1,7 +1,7 @@
 import { IUserPersistence } from '../../dataschema/IUserPersistence';
 import mongoose from 'mongoose';
 
-const User = new mongoose.Schema(
+const UserSchema = new mongoose.Schema(
   {
     domainId: { 
       type: String,
@@ -39,4 +39,4 @@ const User = new mongoose.Schema(
   { timestamps: true },
 );
 
-export default mongoose.model<IUserPersistence & mongoose.Document>('User', User);
+export default mongoose.model<IUserPersistence & mongoose.Document>('User', UserSchema);

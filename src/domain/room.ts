@@ -2,12 +2,14 @@ import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
+import { Floor } from "./floor";
 import { RoomId } from "./valueObj/roomId";
 
 // import IRoomDTO from "../dto/IRoomDTO"; // TODO: criar o DTO
 
 interface RoomProps {
     number: number; //TODO: criar um value obj para intervalo de numeros 
+    floor: Floor;
 }
 
 export class Room extends AggregateRoot<RoomProps> {
@@ -26,6 +28,11 @@ export class Room extends AggregateRoot<RoomProps> {
     set number(value: number) {
         this.props.number = value;
     }
+    
+    get floor(): Floor {
+        return this.props.floor;
+    }
+
     private constructor(props: RoomProps, id?: UniqueEntityID) {
         super(props, id);
     }

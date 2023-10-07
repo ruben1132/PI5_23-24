@@ -12,7 +12,7 @@ interface RobotProps {
    // TODO: 
     state: boolean;
     designation: string;
-    taskTypesAllowed: Set<TaskType>
+    taskTypesAllowed: [TaskType]
 }
 
 export class Robot extends AggregateRoot<RobotProps> implements IAutonomous {
@@ -41,11 +41,11 @@ export class Robot extends AggregateRoot<RobotProps> implements IAutonomous {
         this.state = value;
     }
     
-    get taskTypesAllowed(): Set<TaskType> {
+    get taskTypesAllowed(): [TaskType] {
         return this.taskTypesAllowed;
     }
 
-    set taskTypesAllowed(value: Set<TaskType>) {
+    set taskTypesAllowed(value: [TaskType]) {
         this.taskTypesAllowed = value;
     }
 
