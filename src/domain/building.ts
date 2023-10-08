@@ -4,7 +4,7 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import { Result } from "../core/logic/Result";
 import { BuildingId } from "./valueObj/buildingId";
 
-// import IBuildingDTO from "../dto/IBuildingDTO"; // TODO: criar o DTO
+import IBuildingDTO from "../dto/IBuildingDTO"; // TODO: criar o DTO
 
 interface BuildingProps {
     designation: string; //TODO: criar um value obj para designacoes/informacoes (meter um max de chars por exemplo)
@@ -18,20 +18,24 @@ export class Building extends AggregateRoot<BuildingProps> {
     get buildingId(): BuildingId {
         return new BuildingId(this.buildingId.toValue());
     }
-    
+  
+    get designation(): string {
+      return this.props.designation;
+  }
+
     private constructor(props: BuildingProps, id?: UniqueEntityID) {
         super(props, id);
     }
 
     // TODO: implementar regras de negocio na criacao de uma building
-    //   public static create (buildingDTO: IBuildingDTO, id?: UniqueEntityID): Result<Building> {
-    //     const designation = buildingDTO.designation;
+      public static create (buildingDTO: IBuildingDTO, id?: UniqueEntityID): Result<Building> {
+        const designation = buildingDTO.designation;
 
-    //     if (!!designation === false || designation.length === 0) {
-    //       return Result.fail<Building>('Must provide a building name')
-    //     } else {
-    //       const role = new Building({ designation: designation }, id);
-    //       return Result.ok<Building>( role )
-    //     }
-    //   }
+        if (!!designation === false || designation.length === 0) {
+          return Result.fail<Building>('Must provide a building name')
+        } else {
+          const role = new Building({ designation: designation }, id);
+          return Result.ok<Building>( role )
+        }
+      }
 }

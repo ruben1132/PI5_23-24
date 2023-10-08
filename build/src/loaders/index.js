@@ -56,6 +56,10 @@ exports.default = async ({ expressApp }) => {
         name: config_1.default.controllers.role.name,
         path: config_1.default.controllers.role.path
     };
+    const buildingController = {
+        name: config_1.default.controllers.building.name,
+        path: config_1.default.controllers.building.path
+    };
     const roleRepo = {
         name: config_1.default.repos.role.name,
         path: config_1.default.repos.role.path
@@ -64,9 +68,17 @@ exports.default = async ({ expressApp }) => {
         name: config_1.default.repos.user.name,
         path: config_1.default.repos.user.path
     };
+    const buildingRepo = {
+        name: config_1.default.repos.building.name,
+        path: config_1.default.repos.building.path
+    };
     const roleService = {
         name: config_1.default.services.role.name,
         path: config_1.default.services.role.path
+    };
+    const buildingService = {
+        name: config_1.default.services.building.name,
+        path: config_1.default.services.building.path
     };
     await (0, dependencyInjector_1.default)({
         mongoConnection,
@@ -83,14 +95,17 @@ exports.default = async ({ expressApp }) => {
             buildingSchema
         ],
         controllers: [
-            roleController
+            roleController,
+            buildingController
         ],
         repos: [
             roleRepo,
-            userRepo
+            userRepo,
+            buildingRepo
         ],
         services: [
-            roleService
+            roleService,
+            buildingService
         ]
     });
     logger_1.default.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');
