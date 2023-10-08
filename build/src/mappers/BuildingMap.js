@@ -19,7 +19,7 @@ class BuildingMap extends Mapper_1.Mapper {
     static toPersistence(building) {
         return {
             domainId: building.id.toString(),
-            name: building.designation
+            designation: building.designation
         };
     }
 }

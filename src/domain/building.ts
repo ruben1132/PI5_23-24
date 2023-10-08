@@ -34,8 +34,8 @@ export class Building extends AggregateRoot<BuildingProps> {
         if (!!designation === false || designation.length === 0) {
           return Result.fail<Building>('Must provide a building name')
         } else {
-          const role = new Building({ designation: designation }, id);
-          return Result.ok<Building>( role )
+          const building = new Building({ designation: designation }, id);
+          return Result.ok<Building>( building )
         }
       }
 }

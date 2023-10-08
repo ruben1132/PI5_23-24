@@ -25,7 +25,7 @@ let BuildingController = class BuildingController {
         try {
             const buildingOrError = await this.buildingServiceInstance.createBuilding(req.body);
             if (buildingOrError.isFailure) {
-                return res.status(402).send();
+                return res.status(500).send();
             }
             const BuildingDTO = buildingOrError.getValue();
             return res.json(BuildingDTO).status(201);
@@ -38,7 +38,7 @@ let BuildingController = class BuildingController {
 };
 BuildingController = __decorate([
     (0, typedi_1.Service)(),
-    __param(0, (0, typedi_1.Inject)(config_1.default.services.Building.name)),
+    __param(0, (0, typedi_1.Inject)(config_1.default.services.building.name)),
     __metadata("design:paramtypes", [Object])
 ], BuildingController);
 exports.default = BuildingController;

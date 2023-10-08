@@ -31,7 +31,7 @@ export class BuildingMap extends Mapper<Building> {
   public static toPersistence (building: Building): any {
     return {
       domainId: building.id.toString(),
-      name: building.designation
+      designation: building.designation
     }
   }
 }

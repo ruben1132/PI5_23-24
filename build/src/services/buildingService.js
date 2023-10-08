@@ -24,21 +24,20 @@ let BuildingService = class BuildingService {
     constructor(buildingRepo) {
         this.buildingRepo = buildingRepo;
     }
-    async getBuilding(buildingId) {
-        try {
-            const building = await this.buildingRepo.findByDomainId(buildingId);
-            if (building === null) {
-                return Result_1.Result.fail("Building not found");
-            }
-            else {
-                const buildingDTOResult = BuildingMap_1.BuildingMap.toDTO(building);
-                return Result_1.Result.ok(buildingDTOResult);
-            }
-        }
-        catch (e) {
-            throw e;
-        }
-    }
+    //   public async getBuilding( buildingId: string): Promise<Result<IBuildingDTO>> {
+    //     try {
+    //       const building = await this.buildingRepo.findByDomainId(buildingId);
+    //       if (building === null) {
+    //         return Result.fail<IBuildingDTO>("Building not found");
+    //       }
+    //       else {
+    //         const buildingDTOResult = BuildingMap.toDTO( building ) as IBuildingDTO;
+    //         return Result.ok<IBuildingDTO>( buildingDTOResult )
+    //         }
+    //     } catch (e) {
+    //       throw e;
+    //     }
+    //   }
     async createBuilding(buildingDTO) {
         try {
             const buildingOrError = await building_1.Building.create(buildingDTO);
@@ -46,7 +45,7 @@ let BuildingService = class BuildingService {
                 return Result_1.Result.fail(buildingOrError.errorValue());
             }
             const buildingResult = buildingOrError.getValue();
-            await this.buildingRepo.save(buildingResult);
+            const test = await this.buildingRepo.save(buildingResult);
             const buildingDTOResult = BuildingMap_1.BuildingMap.toDTO(buildingResult);
             return Result_1.Result.ok(buildingDTOResult);
         }

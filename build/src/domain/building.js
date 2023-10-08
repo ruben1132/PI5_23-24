@@ -24,8 +24,8 @@ class Building extends AggregateRoot_1.AggregateRoot {
             return Result_1.Result.fail('Must provide a building name');
         }
         else {
-            const role = new Building({ designation: designation }, id);
-            return Result_1.Result.ok(role);
+            const building = new Building({ designation: designation }, id);
+            return Result_1.Result.ok(building);
         }
     }
 }
