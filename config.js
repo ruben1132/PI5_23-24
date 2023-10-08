@@ -44,6 +44,10 @@ export default {
     role: {
       name: "RoleController",
       path: "../controllers/roleController"
+    },
+    building: {
+      name: "BuildingController",
+      path: "../controllers/buildingController"
     }
   },
 
@@ -55,6 +59,10 @@ export default {
     user: {
       name: "UserRepo",
       path: "../repos/userRepo"
+    },
+    building: {
+      name: "BuildingRepo",
+      path: "../repos/buildingRepo"
     }
   },
 
@@ -62,6 +70,10 @@ export default {
     role: {
       name: "RoleService",
       path: "../services/roleService"
+    },
+    building: {
+      name: "BuildingService",
+      path: "../services/buildingService"
     }
   },
 
@@ -110,7 +122,7 @@ export default {
       name: "floorSchema",
       schema: "../persistence/schemas/floorSchema"
     },
-    
+
     building: {
       name: "buildingSchema",
       schema: "../persistence/schemas/buildingSchema"
