@@ -49,6 +49,32 @@ let RoleController = class RoleController {
         }
     }
     ;
+    async getRoles() {
+        try {
+            const rolesOrError = await this.roleServiceInstance.getRoles();
+            if (rolesOrError.isFailure) {
+                return [];
+            }
+            const rolesDTO = rolesOrError.getValue();
+            return rolesDTO;
+        }
+        catch (e) {
+            return [];
+        }
+    }
+    async getRoleById(roleId) {
+        try {
+            const roleOrError = await this.roleServiceInstance.getRoleById(roleId);
+            if (roleOrError.isFailure) {
+                return null;
+            }
+            const roleDTO = roleOrError.getValue();
+            return roleDTO;
+        }
+        catch (e) {
+            return null;
+        }
+    }
 };
 RoleController = __decorate([
     (0, typedi_1.Service)(),

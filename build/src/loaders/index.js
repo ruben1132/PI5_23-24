@@ -11,54 +11,44 @@ const config_1 = __importDefault(require("../../config"));
 exports.default = async ({ expressApp }) => {
     const mongoConnection = await (0, mongoose_1.default)();
     logger_1.default.info('✌️ DB loaded and connected!');
-    // SO DA DESTA FORMA IDK WHY
+    // "compare with the approach followed in repos and services" ' SO DA FORMA Q ESTA AND IDK WHY
     const userSchema = {
-        // compare with the approach followed in repos and services
         name: 'userSchema',
         schema: '../persistence/schemas/userSchema',
     };
     const roleSchema = {
-        // compare with the approach followed in repos and services
         name: 'roleSchema',
         schema: '../persistence/schemas/roleSchema',
     };
     const taskSchema = {
-        // compare with the approach followed in repos and services
         name: 'taskSchema',
         schema: '../persistence/schemas/taskSchema',
     };
     const robotSchema = {
-        // compare with the approach followed in repos and services
         name: 'robotSchema',
         schema: '../persistence/schemas/robotSchema',
     };
     const droneSchema = {
-        // compare with the approach followed in repos and services
         name: 'droneSchema',
         schema: '../persistence/schemas/droneSchema',
     };
     const roomSchema = {
-        // compare with the approach followed in repos and services
         name: 'roomSchema',
         schema: '../persistence/schemas/roomSchema',
     };
     const passageSchema = {
-        // compare with the approach followed in repos and services
         name: 'passageSchema',
         schema: '../persistence/schemas/passageSchema',
     };
     const elevatorSchema = {
-        // compare with the approach followed in repos and services
         name: 'droneSchema',
         schema: '../persistence/schemas/elevatorSchema',
     };
     const floorSchema = {
-        // compare with the approach followed in repos and services
         name: 'floorSchema',
         schema: '../persistence/schemas/floorSchema',
     };
     const buildingSchema = {
-        // compare with the approach followed in repos and services
         name: 'buildingSchema',
         schema: '../persistence/schemas/buildingSchema',
     };

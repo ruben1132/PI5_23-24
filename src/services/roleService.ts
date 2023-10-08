@@ -13,9 +13,9 @@ export default class RoleService implements IRoleService {
       @Inject(config.repos.role.name) private roleRepo : IRoleRepo
   ) {}
 
-  public async getRole( roleId: string): Promise<Result<IRoleDTO>> {
+  public async getRoleById( roleId: string): Promise<Result<IRoleDTO>> {
     try {
-      const role = await this.roleRepo.findByDomainId(roleId);
+      const role = await this.roleRepo.getRoleById(roleId);
 
       if (role === null) {
         return Result.fail<IRoleDTO>("Role not found");
@@ -23,6 +23,22 @@ export default class RoleService implements IRoleService {
       else {
         const roleDTOResult = RoleMap.toDTO( role ) as IRoleDTO;
         return Result.ok<IRoleDTO>( roleDTOResult )
+        }
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  public async getRoles(): Promise<Result<Array<IRoleDTO>>> {
+    try {
+      const roles = await this.roleRepo.getRoles();
+
+      if (roles === null) {
+        return Result.fail<Array<IRoleDTO>>("Roles not found");
+      }
+      else {
+        const rolesDTOResult = roles.map( role => RoleMap.toDTO( role ) as IRoleDTO );
+        return Result.ok<Array<IRoleDTO>>( rolesDTOResult )
         }
     } catch (e) {
       throw e;

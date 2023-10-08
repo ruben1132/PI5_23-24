@@ -24,15 +24,30 @@ let RoleService = class RoleService {
     constructor(roleRepo) {
         this.roleRepo = roleRepo;
     }
-    async getRole(roleId) {
+    async getRoleById(roleId) {
         try {
-            const role = await this.roleRepo.findByDomainId(roleId);
+            const role = await this.roleRepo.getRoleById(roleId);
             if (role === null) {
                 return Result_1.Result.fail("Role not found");
             }
             else {
                 const roleDTOResult = RoleMap_1.RoleMap.toDTO(role);
                 return Result_1.Result.ok(roleDTOResult);
+            }
+        }
+        catch (e) {
+            throw e;
+        }
+    }
+    async getRoles() {
+        try {
+            const roles = await this.roleRepo.getRoles();
+            if (roles === null) {
+                return Result_1.Result.fail("Roles not found");
+            }
+            else {
+                const rolesDTOResult = roles.map(role => RoleMap_1.RoleMap.toDTO(role));
+                return Result_1.Result.ok(rolesDTOResult);
             }
         }
         catch (e) {
