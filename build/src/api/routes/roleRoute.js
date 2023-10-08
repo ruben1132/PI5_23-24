@@ -11,6 +11,12 @@ const route = (0, express_1.Router)();
 exports.default = (app) => {
     app.use('/roles', route);
     const ctrl = typedi_1.Container.get(config_1.default.controllers.role.name);
+    route.get('', (req, res, next) => ctrl.getRoles(req, res, next));
+    route.get('/:id', (0, celebrate_1.celebrate)({
+        params: celebrate_1.Joi.object({
+            id: celebrate_1.Joi.string().required()
+        })
+    }), (req, res, next) => ctrl.getRoleById(req, res, next));
     route.post('', (0, celebrate_1.celebrate)({
         body: celebrate_1.Joi.object({
             name: celebrate_1.Joi.string().required()

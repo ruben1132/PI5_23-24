@@ -13,32 +13,32 @@ export default class RoleRepo implements IRoleRepo {
   private models: any;
 
   constructor(
-    @Inject('roleSchema') private roleSchema : Model<IRolePersistence & Document>,
-  ) {}
+    @Inject('roleSchema') private roleSchema: Model<IRolePersistence & Document>,
+  ) { }
 
-  private createBaseQuery (): any {
+  private createBaseQuery(): any {
     return {
       where: {},
     }
   }
 
   public async exists(role: Role): Promise<boolean> {
-    
+
     const idX = role.id instanceof RoleId ? (<RoleId>role.id).toValue() : role.id;
 
-    const query = { domainId: idX}; 
-    const roleDocument = await this.roleSchema.findOne( query as FilterQuery<IRolePersistence & Document>);
+    const query = { domainId: idX };
+    const roleDocument = await this.roleSchema.findOne(query as FilterQuery<IRolePersistence & Document>);
 
     return !!roleDocument === true;
   }
 
-  public async save (role: Role): Promise<Role> {
-    const query = { domainId: role.id.toString()}; 
+  public async save(role: Role): Promise<Role> {
+    const query = { domainId: role.id.toString() };
 
-    const roleDocument = await this.roleSchema.findOne( query );
+    const roleDocument = await this.roleSchema.findOne(query);
 
     try {
-      if (roleDocument === null ) {
+      if (roleDocument === null) {
         const rawRole: any = RoleMap.toPersistence(role);
 
         const roleCreated = await this.roleSchema.create(rawRole);
@@ -55,14 +55,36 @@ export default class RoleRepo implements IRoleRepo {
     }
   }
 
-  public async findByDomainId (roleId: RoleId | string): Promise<Role> {
-    const query = { domainId: roleId};
-    const roleRecord = await this.roleSchema.findOne( query as FilterQuery<IRolePersistence & Document> );
+  public async findByDomainId(roleId: RoleId | string): Promise<Role> {
+    const query = { domainId: roleId };
+    const roleRecord = await this.roleSchema.findOne(query as FilterQuery<IRolePersistence & Document>);
 
-    if( roleRecord != null) {
+    if (roleRecord != null) {
       return RoleMap.toDomain(roleRecord);
     }
     else
       return null;
+  }
+
+  public async getRoles(): Promise<Role[]> {
+    const roleRecord = await this.roleSchema.find({});
+
+    if (roleRecord != null) {
+      return roleRecord.map((role) => RoleMap.toDomain(role));
+    }
+    else
+      return null;
+  }
+
+  public async getRoleById(roleId: RoleId | string): Promise<Role> {
+    const query = { domainId: roleId };
+    const roleRecord = await this.roleSchema.findOne(query as FilterQuery<IRolePersistence & Document>);
+
+    if (roleRecord != null) {
+      return RoleMap.toDomain(roleRecord);
+    }
+    else
+      return null;
+
   }
 }

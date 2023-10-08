@@ -5,6 +5,9 @@ import { RoleId } from "../../domain/valueObj/roleId";
 export default interface IRoleRepo extends Repo<Role> {
   save(role: Role): Promise<Role>;
   findByDomainId (roleId: RoleId | string): Promise<Role>;
+
+  getRoles (): Promise<Role[]>;
+  getRoleById (roleId: RoleId | string): Promise<Role>;
     
   //findByIds (rolesIds: RoleId[]): Promise<Role[]>;
   //saveCollection (roles: Role[]): Promise<Role[]>;

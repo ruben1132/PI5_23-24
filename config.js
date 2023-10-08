@@ -1,45 +1,37 @@
 import dotenv from 'dotenv';
 
+// Load environment variables from .env file
+dotenv.config();
+
 // Set the NODE_ENV to 'development' by default
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
-const envFound = dotenv.config();
-if (!envFound) {
-  // This error should crash whole process
-
-  throw new Error("⚠️  Couldn't find .env file  ⚠️");
-}
+// Function to get environment variables or use defaults
+const getEnvVariable = (name, defaultValue) => {
+  return process.env[name] || defaultValue;
+};
 
 export default {
-  /**
-   * Your favorite port : optional change to 4000 by JRT
-   */
-  port: parseInt(process.env.PORT, 10) || 4000,
+  // Your favorite port: optional change to 4000 by JRT
+  port: parseInt(getEnvVariable('PORT', 4000), 10),
 
-  /**
-   * That long string from mlab
-   */
-  databaseURL: process.env.MONGODB_URI || "mongodb://mongoadmin:ca7408396943512431f6af8a@vsgate-s1.dei.isep.ipp.pt:10937/?authMechanism=SCRAM-SHA-1",
+  // MongoDB connection URL
+  databaseURL: getEnvVariable('MONGODB_URI', 'mongodb://mongoadmin:ca7408396943512431f6af8a@vsgate-s1.dei.isep.ipp.pt:10937/?authMechanism=SCRAM-SHA-1'),
 
-  /**
-   * Your secret sauce
-   */
-  jwtSecret: process.env.JWT_SECRET || "my sakdfho2390asjod$%jl)!sdjas0i secret",
+  // Your secret sauce
+  jwtSecret: getEnvVariable('JWT_SECRET', 'secret'),
 
-  /**
-   * Used by winston logger
-   */
+  // Logging configuration
   logs: {
-    level: process.env.LOG_LEVEL || 'info',
+    level: getEnvVariable('LOG_LEVEL', 'info'),
   },
 
-  /**
-   * API configs
-   */
+  // API configs
   api: {
     prefix: '/api',
   },
 
+  // Controllers, Repos, Services, and Schemas
   controllers: {
     role: {
       name: "RoleController",
@@ -53,8 +45,8 @@ export default {
 
   repos: {
     role: {
-      name: "RoleRepo",
-      path: "../repos/roleRepo"
+      name: 'RoleRepo',
+      path: '../repos/roleRepo',
     },
     user: {
       name: "UserRepo",
@@ -79,54 +71,44 @@ export default {
 
   schemas: {
     user: {
-      name: "userShcema",
-      schema: "../persistence/schemas/userSchema"
+      name: 'userSchema',
+      schema: '../persistence/schemas/userSchema',
     },
-
     role: {
-      name: "roleSchema",
-      schema: "../persistence/schemas/roleSchema"
+      name: 'roleSchema',
+      schema: '../persistence/schemas/roleSchema',
     },
-
     task: {
-      name: "taskSchema",
-      patschemah: "../persistence/schemas/taskSchema"
+      name: 'taskSchema',
+      schema: '../persistence/schemas/taskSchema',
     },
-
     robot: {
-      name: "robotSchema",
-      schema: "../persistence/schemas/robotSchema"
+      name: 'robotSchema',
+      schema: '../persistence/schemas/robotSchema',
     },
-
     drone: {
-      name: "droneSchema",
-      schema: "../persistence/schemas/droneSchema"
+      name: 'droneSchema',
+      schema: '../persistence/schemas/droneSchema',
     },
-
     room: {
-      name: "roomSchema",
-      schema: "../persistence/schemas/roomSchema"
+      name: 'roomSchema',
+      schema: '../persistence/schemas/roomSchema',
     },
-
     passage: {
-      name: "passageSchema",
-      schema: "../persistence/schemas/passageSchema"
+      name: 'passageSchema',
+      schema: '../persistence/schemas/passageSchema',
     },
-
     elevator: {
-      name: "elevatorSchema",
-      schema: "../persistence/schemas/elevatorSchema"
+      name: 'elevatorSchema',
+      schema: '../persistence/schemas/elevatorSchema',
     },
-
     floor: {
-      name: "floorSchema",
-      schema: "../persistence/schemas/floorSchema"
+      name: 'floorSchema',
+      schema: '../persistence/schemas/floorSchema',
     },
-
     building: {
-      name: "buildingSchema",
-      schema: "../persistence/schemas/buildingSchema"
+      name: 'buildingSchema',
+      schema: '../persistence/schemas/buildingSchema',
     },
   },
-
 };

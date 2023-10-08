@@ -59,6 +59,23 @@ let RoleRepo = class RoleRepo {
         else
             return null;
     }
+    async getRoles() {
+        const roleRecord = await this.roleSchema.find({});
+        if (roleRecord != null) {
+            return roleRecord.map((role) => RoleMap_1.RoleMap.toDomain(role));
+        }
+        else
+            return null;
+    }
+    async getRoleById(roleId) {
+        const query = { domainId: roleId };
+        const roleRecord = await this.roleSchema.findOne(query);
+        if (roleRecord != null) {
+            return RoleMap_1.RoleMap.toDomain(roleRecord);
+        }
+        else
+            return null;
+    }
 };
 RoleRepo = __decorate([
     (0, typedi_1.Service)(),
