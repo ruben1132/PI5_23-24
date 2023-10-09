@@ -25,12 +25,12 @@ export default (app: Router) => {
     route.get('',
         (req, res, next) => ctrl.getBuildings(req, res, next));
 
-    //   route.put('',
-    //     celebrate({
-    //       body: Joi.object({
-    //         id: Joi.string().required(),
-    //         name: Joi.string().required()
-    //       }),
-    //     }),
-    //     (req, res, next) => ctrl.updateBuilding(req, res, next) );
+      route.put('',
+        celebrate({
+          body: Joi.object({
+            id: Joi.string().required(),
+            designation: Joi.string().required()
+          }),
+        }),
+        (req, res, next) => ctrl.updateBuilding(req, res, next) );
 };
