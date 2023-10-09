@@ -92,7 +92,7 @@ export default class RoleService implements IRoleService {
         return Result.fail<void>("Role not found");
       }
       else {
-        await this.roleRepo.delete(roleId);
+        await this.roleRepo.deleteRole(roleId);
         return Result.ok<void>();
       }
     } catch (e) {
