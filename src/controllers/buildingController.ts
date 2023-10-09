@@ -30,4 +30,22 @@ export default class BuildingController implements IBuildingController /* TODO: 
     }
   };
 
+  public async getBuildingsByFloorRange(req: Request, res: Response, next: NextFunction) {
+    try {
+      const min = req.params.min;
+      const max = req.params.max;
+      const buildingOrError = await this.buildingServiceInstance.getBuildingsByFloorRange(min, max) as Result<IBuildingDTO[]>;
+      
+      if (buildingOrError.isFailure) {
+        return res.status(500).send();
+      }
+
+      const BuildingDTOs = buildingOrError.getValue();
+      return res.json( BuildingDTOs ).status(200);
+    }
+    catch (e) {
+      return next(e);
+    }
+  }
+
 }

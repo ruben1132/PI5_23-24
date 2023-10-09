@@ -69,4 +69,16 @@ export default class BuildingService implements IBuildingService {
     //     }
     //   }
 
+    public async getBuildingsByFloorRange(idMin: string, idMax: string): Promise<Result<IBuildingDTO[]>> {
+        try {
+            const buildings = await this.buildingRepo.getBuildingsByFloorRange(idMin, idMax);
+            // const floors = await this.floorRe
+            const buildingDTOs = buildings.map(building => BuildingMap.toDTO(building));
+            return Result.ok<IBuildingDTO[]>(buildingDTOs);
+        } catch (err) {
+            throw err;
+        }
+    }
+    
+
 }

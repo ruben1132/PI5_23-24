@@ -5,6 +5,9 @@ import { Result } from "../core/logic/Result";
 import { Building } from "./building";
 import { FloorId } from "./valueObj/floorId";
 
+import IFloorDTO from "../dto/IFloorDTO"; // TODO: criar o DTO
+
+
 // import IFloorDTO from "../dto/IFloorDTO"; // TODO: criar o DTO
 
 interface FloorProps {
@@ -29,9 +32,21 @@ export class Floor extends AggregateRoot<FloorProps> {
     set number(value: number) {
         this.props.number = value;
     }
-    
+
+    get information(): string {
+        return this.props.information;
+    }
+
+    set information(value: string) {
+        this.props.information = value;
+    }
+
     get building(): Building {
         return this.props.building;
+    }
+
+    set building(value: Building) {
+        this.props.building = value;
     }
 
     private constructor(props: FloorProps, id?: UniqueEntityID) {
@@ -39,14 +54,20 @@ export class Floor extends AggregateRoot<FloorProps> {
     }
 
     // TODO: implementar regras de negocio na criacao de uma floor
-    //   public static create (floorDTO: IFloorDTO, id?: UniqueEntityID): Result<Floor> {
-    //     const designation = floorDTO.designation;
+    public static create(floorDTO: IFloorDTO, id?: UniqueEntityID): Result<Floor> {
+        const number = floorDTO.number;
+        const information = floorDTO.information;
+        const building = floorDTO.building;
 
-    //     if (!!designation === false || designation.length === 0) {
-    //       return Result.fail<Floor>('Must provide a floor name')
-    //     } else {
-    //       const role = new Floor({ designation: designation }, id);
-    //       return Result.ok<Floor>( role )
-    //     }
-    //   }
+        if (!!number === false || number === 0) {
+            return Result.fail<Floor>('Must provide a floor number')
+        } else if (!!information === false || information === '') {
+            return Result.fail<Floor>('Must provide a floor information')
+        } else if (!!building === false || building === null) {
+            return Result.fail<Floor>('Must provide a building')
+        } else {
+            const floor = new Floor({ number: number, information: information, building: building }, id);
+            return Result.ok<Floor>(floor)
+        }
+    }
 }

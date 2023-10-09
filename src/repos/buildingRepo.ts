@@ -13,32 +13,32 @@ export default class BuildingRepo implements IBuildingRepo {
   private models: any;
 
   constructor(
-    @Inject('buildingSchema') private buildingSchema : Model<IBuildingPersistence & Document>,
-  ) {}
+    @Inject('buildingSchema') private buildingSchema: Model<IBuildingPersistence & Document>,
+  ) { }
 
-  private createBaseQuery (): any {
+  private createBaseQuery(): any {
     return {
       where: {},
     }
   }
 
   public async exists(building: Building): Promise<boolean> {
-    
+
     const idX = building.id instanceof BuildingId ? (<BuildingId>building.id).toValue() : building.id;
 
-    const query = { domainId: idX}; 
-    const buildingDocument = await this.buildingSchema.findOne( query as FilterQuery<IBuildingPersistence & Document>);
+    const query = { domainId: idX };
+    const buildingDocument = await this.buildingSchema.findOne(query as FilterQuery<IBuildingPersistence & Document>);
 
     return !!buildingDocument === true;
   }
 
-  public async save (building: Building): Promise<Building> {
-      const query = { domainId: building.id.toString() }; 
-    
-    const buildingDocument = await this.buildingSchema.findOne( query );
+  public async save(building: Building): Promise<Building> {
+    const query = { domainId: building.id.toString() };
+
+    const buildingDocument = await this.buildingSchema.findOne(query);
 
     try {
-      if (buildingDocument === null ) {
+      if (buildingDocument === null) {
         const rawBuilding: any = BuildingMap.toPersistence(building);
 
         const buildingCreated = await this.buildingSchema.create(rawBuilding);
@@ -55,14 +55,57 @@ export default class BuildingRepo implements IBuildingRepo {
     }
   }
 
-  public async findByDomainId (buildingId: BuildingId | string): Promise<Building> {
-    const query = { domainId: buildingId};
-    const buildingRecord = await this.buildingSchema.findOne( query as FilterQuery<IBuildingPersistence & Document> );
+  public async findByDomainId(buildingId: BuildingId | string): Promise<Building> {
+    const query = { domainId: buildingId };
+    const buildingRecord = await this.buildingSchema.findOne(query as FilterQuery<IBuildingPersistence & Document>);
 
-    if( buildingRecord != null) {
+    if (buildingRecord != null) {
       return BuildingMap.toDomain(buildingRecord);
     }
     else
       return null;
+  }
+
+  public async getBuildingsByFloorRange(min: string, max: string): Promise<Building[]> {
+    const minFloors = min; // Set your minimum number of floors
+    const maxFloors = max; // Set your maximum number of floors
+
+    // console.log(minFloors);
+    // console.log(maxFloors); 
+    try {
+      const buildingRecord = await this.buildingSchema.aggregate([
+        {
+          $lookup: {
+            from: 'floors',
+            localField: '_id',
+            foreignField: 'building',
+            as: 'floors',
+          },
+        },
+        {
+          $project: {
+            // Include other properties as needed
+            floorCount: { $size: { $ifNull: ['$floors', []] } }, // Use $ifNull to handle empty 'floors' array
+          },
+        },
+        {
+          $match: {
+            floorCount: { $gte: minFloors, $lte: maxFloors },
+          },
+        },
+      ]).exec();
+    
+      console.log(buildingRecord);
+    
+      if (buildingRecord) {
+        return buildingRecord.map((building) => BuildingMap.toDomain(building));
+      } else {
+        console.error("Error occurred during query execution");
+        return [];
+      }
+    } catch (err) {
+      console.error(err);
+      // Handle the error appropriately (e.g., return an error response or rethrow)
+    }
   }
 }
