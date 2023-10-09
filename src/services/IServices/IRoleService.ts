@@ -7,4 +7,6 @@ export default interface IRoleService  {
 
   getRoleById (roleId: string): Promise<Result<IRoleDTO>>;
   getRoles (): Promise<Result<Array<IRoleDTO>>>;
+
+  deleteRole(roleId: string): Promise<Result<void>>;
 }

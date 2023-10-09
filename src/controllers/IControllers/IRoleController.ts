@@ -6,4 +6,6 @@ export default interface IRoleController  {
 
   getRoles(req: Request, res: Response, next: NextFunction);
   getRoleById(req: Request, res: Response, next: NextFunction);
+
+  deleteRole(req: Request, res: Response, next: NextFunction);
 }

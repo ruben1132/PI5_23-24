@@ -87,4 +87,16 @@ export default class RoleRepo implements IRoleRepo {
       return null;
 
   }
+
+  public async deleteRole(roleId: RoleId | string): Promise<boolean> {
+    const query = { domainId: roleId };
+    const roleRecord = await this.roleSchema.findOne(query as FilterQuery<IRolePersistence & Document>);
+
+    if (roleRecord != null) {
+      await roleRecord.remove();
+      return true;
+    }
+    else
+      return null;
+  }
 }
