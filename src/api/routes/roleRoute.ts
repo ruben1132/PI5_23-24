@@ -42,4 +42,13 @@ export default (app: Router) => {
       }),
     }),
     (req, res, next) => ctrl.updateRole(req, res, next));
+
+  route.delete('/:id',
+    celebrate({
+      params: Joi.object({
+        id: Joi.string().required()
+      })
+    }),
+    (req, res, next) => ctrl.deleteRole(req, res, next));
+
 };

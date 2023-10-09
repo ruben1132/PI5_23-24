@@ -75,4 +75,21 @@ export default class RoleController implements IRoleController /* TODO: extends 
       return next(e);
     }
   }
+
+  public async deleteRole(req: Request, res: Response, next: NextFunction) {
+
+    try {
+      const roleOrError = await this.roleServiceInstance.deleteRole(req.params.id) as Result<void>;
+
+      if (roleOrError.isFailure) {
+        return res.status(400).send();
+      }
+
+      return res.status(201).send();
+    }
+    catch (e) {
+      return next(e);
+    }
+  }
+
 }
