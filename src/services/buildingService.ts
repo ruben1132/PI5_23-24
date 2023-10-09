@@ -13,22 +13,21 @@ export default class BuildingService implements IBuildingService {
         @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo
     ) { }
 
-    //   public async getBuilding( buildingId: string): Promise<Result<IBuildingDTO>> {
-    //     try {
-    //       const building = await this.buildingRepo.findByDomainId(buildingId);
-
-    //       if (building === null) {
-    //         return Result.fail<IBuildingDTO>("Building not found");
-    //       }
-    //       else {
-    //         const buildingDTOResult = BuildingMap.toDTO( building ) as IBuildingDTO;
-    //         return Result.ok<IBuildingDTO>( buildingDTOResult )
-    //         }
-    //     } catch (e) {
-    //       throw e;
-    //     }
-    //   }
-
+    public async getBuildings(): Promise<Result<Array<IBuildingDTO>>> {
+        try {
+          const roles = await this.buildingRepo.getBuildings();
+    
+          if (roles === null) {
+            return Result.fail<Array<IBuildingDTO>>("Buildings not found");
+          }
+          else {
+            const buildingsDTOResult = roles.map(building => BuildingMap.toDTO(building) as IBuildingDTO);        
+            return Result.ok<Array<IBuildingDTO>>( buildingsDTOResult )
+            }
+        } catch (e) {
+          throw e;
+        }
+      }
 
     public async createBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
         try {

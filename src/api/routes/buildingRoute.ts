@@ -21,6 +21,10 @@ export default (app: Router) => {
         }),
         (req, res, next) => ctrl.createBuilding(req, res, next));
 
+
+    route.get('',
+        (req, res, next) => ctrl.getBuildings(req, res, next));
+
     //   route.put('',
     //     celebrate({
     //       body: Joi.object({
