@@ -14,6 +14,9 @@ class Building extends AggregateRoot_1.AggregateRoot {
     get designation() {
         return this.props.designation;
     }
+    set designation(value) {
+        this.props.designation = value;
+    }
     constructor(props, id) {
         super(props, id);
     }

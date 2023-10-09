@@ -15,7 +15,7 @@ const RoomSchema = new mongoose.Schema(
         },
 
         floor: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             ref: 'Floor',
         },
 

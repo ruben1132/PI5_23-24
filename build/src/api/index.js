@@ -8,12 +8,14 @@ const userRoute_1 = __importDefault(require("./routes/userRoute"));
 const userRoute_2 = __importDefault(require("./routes/userRoute"));
 const roleRoute_1 = __importDefault(require("./routes/roleRoute"));
 const buildingRoute_1 = __importDefault(require("./routes/buildingRoute"));
+const floorRoute_1 = __importDefault(require("./routes/floorRoute"));
 exports.default = () => {
     const app = (0, express_1.Router)();
     (0, userRoute_1.default)(app);
     (0, userRoute_2.default)(app);
     (0, roleRoute_1.default)(app);
     (0, buildingRoute_1.default)(app);
+    (0, floorRoute_1.default)(app);
     return app;
 };
 //# sourceMappingURL=index.js.map

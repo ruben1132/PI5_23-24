@@ -59,6 +59,55 @@ let BuildingRepo = class BuildingRepo {
         else
             return null;
     }
+    async getBuildingsByFloorRange(min, max) {
+        const minFloors = min; // Set your minimum number of floors
+        const maxFloors = max; // Set your maximum number of floors
+        // console.log(minFloors);
+        // console.log(maxFloors); 
+        try {
+            const buildingRecord = await this.buildingSchema.aggregate([
+                {
+                    $lookup: {
+                        from: 'floors',
+                        localField: '_id',
+                        foreignField: 'building',
+                        as: 'floors',
+                    },
+                },
+                {
+                    $project: {
+                        // Include other properties as needed
+                        floorCount: { $size: { $ifNull: ['$floors', []] } }, // Use $ifNull to handle empty 'floors' array
+                    },
+                },
+                {
+                    $match: {
+                        floorCount: { $gte: minFloors, $lte: maxFloors },
+                    },
+                },
+            ]).exec();
+            console.log(buildingRecord);
+            if (buildingRecord) {
+                return buildingRecord.map((building) => BuildingMap_1.BuildingMap.toDomain(building));
+            }
+            else {
+                console.error("Error occurred during query execution");
+                return [];
+            }
+        }
+        catch (err) {
+            console.error(err);
+            // Handle the error appropriately (e.g., return an error response or rethrow)
+        }
+    }
+    async getBuildings() {
+        const buildingRecord = await this.buildingSchema.find({});
+        if (buildingRecord != null) {
+            return buildingRecord.map((building) => BuildingMap_1.BuildingMap.toDomain(building));
+        }
+        else
+            return null;
+    }
 };
 BuildingRepo = __decorate([
     (0, typedi_1.Service)(),

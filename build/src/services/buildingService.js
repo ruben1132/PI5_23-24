@@ -24,20 +24,21 @@ let BuildingService = class BuildingService {
     constructor(buildingRepo) {
         this.buildingRepo = buildingRepo;
     }
-    //   public async getBuilding( buildingId: string): Promise<Result<IBuildingDTO>> {
-    //     try {
-    //       const building = await this.buildingRepo.findByDomainId(buildingId);
-    //       if (building === null) {
-    //         return Result.fail<IBuildingDTO>("Building not found");
-    //       }
-    //       else {
-    //         const buildingDTOResult = BuildingMap.toDTO( building ) as IBuildingDTO;
-    //         return Result.ok<IBuildingDTO>( buildingDTOResult )
-    //         }
-    //     } catch (e) {
-    //       throw e;
-    //     }
-    //   }
+    async getBuildings() {
+        try {
+            const roles = await this.buildingRepo.getBuildings();
+            if (roles === null) {
+                return Result_1.Result.fail("Buildings not found");
+            }
+            else {
+                const buildingsDTOResult = roles.map(building => BuildingMap_1.BuildingMap.toDTO(building));
+                return Result_1.Result.ok(buildingsDTOResult);
+            }
+        }
+        catch (e) {
+            throw e;
+        }
+    }
     async createBuilding(buildingDTO) {
         try {
             const buildingOrError = await building_1.Building.create(buildingDTO);
@@ -51,6 +52,34 @@ let BuildingService = class BuildingService {
         }
         catch (e) {
             throw e;
+        }
+    }
+    async updateBuilding(buildingDTO) {
+        try {
+            const building = await this.buildingRepo.findByDomainId(buildingDTO.id);
+            if (building === null) {
+                return Result_1.Result.fail("Building not found");
+            }
+            else {
+                building.designation = buildingDTO.designation;
+                await this.buildingRepo.save(building);
+                const buildingDTOResult = BuildingMap_1.BuildingMap.toDTO(building);
+                return Result_1.Result.ok(buildingDTOResult);
+            }
+        }
+        catch (e) {
+            throw e;
+        }
+    }
+    async getBuildingsByFloorRange(idMin, idMax) {
+        try {
+            const buildings = await this.buildingRepo.getBuildingsByFloorRange(idMin, idMax);
+            // const floors = await this.floorRe
+            const buildingDTOs = buildings.map(building => BuildingMap_1.BuildingMap.toDTO(building));
+            return Result_1.Result.ok(buildingDTOs);
+        }
+        catch (err) {
+            throw err;
         }
     }
 };

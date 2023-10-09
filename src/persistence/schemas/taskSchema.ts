@@ -20,7 +20,7 @@ const TaskSchema = new mongoose.Schema(
         },
 
         assigned: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             ref: 'Drone' || 'Robot',
             required: [false],
         },

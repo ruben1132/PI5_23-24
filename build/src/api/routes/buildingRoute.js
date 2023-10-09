@@ -16,13 +16,18 @@ exports.default = (app) => {
             designation: celebrate_1.Joi.string().required()
         })
     }), (req, res, next) => ctrl.createBuilding(req, res, next));
-    //   route.put('',
-    //     celebrate({
-    //       body: Joi.object({
-    //         id: Joi.string().required(),
-    //         name: Joi.string().required()
-    //       }),
-    //     }),
-    //     (req, res, next) => ctrl.updateBuilding(req, res, next) );
+    route.get('/ranges/:min/:max', (0, celebrate_1.celebrate)({
+        params: celebrate_1.Joi.object({
+            min: celebrate_1.Joi.string().required(),
+            max: celebrate_1.Joi.string().required()
+        })
+    }), (req, res, next) => ctrl.getBuildingsByFloorRange(req, res, next));
+    route.get('', (req, res, next) => ctrl.getBuildings(req, res, next));
+    route.put('', (0, celebrate_1.celebrate)({
+        body: celebrate_1.Joi.object({
+            id: celebrate_1.Joi.string().required(),
+            designation: celebrate_1.Joi.string().required()
+        }),
+    }), (req, res, next) => ctrl.updateBuilding(req, res, next));
 };
 //# sourceMappingURL=buildingRoute.js.map

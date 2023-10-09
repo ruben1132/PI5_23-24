@@ -49,30 +49,40 @@ let RoleController = class RoleController {
         }
     }
     ;
-    async getRoles() {
+    async getRoles(req, res, next) {
         try {
             const rolesOrError = await this.roleServiceInstance.getRoles();
             if (rolesOrError.isFailure) {
-                return [];
+                return res.status(400).send();
             }
-            const rolesDTO = rolesOrError.getValue();
-            return rolesDTO;
+            return res.json(rolesOrError.getValue()).status(201);
         }
         catch (e) {
-            return [];
+            return next(e);
         }
     }
-    async getRoleById(roleId) {
+    async getRoleById(req, res, next) {
         try {
-            const roleOrError = await this.roleServiceInstance.getRoleById(roleId);
+            const roleOrError = await this.roleServiceInstance.getRoleById(req.params.id);
             if (roleOrError.isFailure) {
-                return null;
+                return res.status(400).send();
             }
-            const roleDTO = roleOrError.getValue();
-            return roleDTO;
+            return res.json(roleOrError.getValue()).status(201);
         }
         catch (e) {
-            return null;
+            return next(e);
+        }
+    }
+    async deleteRole(req, res, next) {
+        try {
+            const roleOrError = await this.roleServiceInstance.deleteRole(req.params.id);
+            if (roleOrError.isFailure) {
+                return res.status(400).send();
+            }
+            return res.status(201).send();
+        }
+        catch (e) {
+            return next(e);
         }
     }
 };

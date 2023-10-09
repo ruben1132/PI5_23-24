@@ -14,12 +14,12 @@ const PassageSchema = new mongoose.Schema(
         },
 
         fromBuilding: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             ref: 'Building',
         },
 
         toBuilding: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             ref: 'Building',
         },
 

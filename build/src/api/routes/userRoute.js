@@ -53,6 +53,7 @@ exports.default = (app) => {
             if (result.isFailure)
                 return res.json().status(403);
             const { userDTO, token } = result.getValue();
+            // console.log(Container);
             return res.json({ userDTO, token }).status(200);
         }
         catch (e) {

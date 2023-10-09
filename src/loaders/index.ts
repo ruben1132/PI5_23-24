@@ -70,6 +70,11 @@ export default async ({ expressApp }) => {
     path: config.controllers.building.path
   }
 
+  const floorController = {
+    name: config.controllers.floor.name,
+    path: config.controllers.floor.path
+  }
+
   const roleRepo = {
     name: config.repos.role.name,
     path: config.repos.role.path
@@ -85,6 +90,11 @@ export default async ({ expressApp }) => {
     path: config.repos.building.path
   }
 
+  const floorRepo = {
+    name: config.repos.floor.name,
+    path: config.repos.floor.path
+  }
+
   const roleService = {
     name: config.services.role.name,
     path: config.services.role.path
@@ -93,6 +103,11 @@ export default async ({ expressApp }) => {
   const buildingService = {
     name: config.services.building.name,
     path: config.services.building.path
+  }
+
+  const floorService = {
+    name: config.services.floor.name,
+    path: config.services.floor.path
   }
 
   await dependencyInjectorLoader({
@@ -111,16 +126,19 @@ export default async ({ expressApp }) => {
     ],
     controllers: [
       roleController,
-      buildingController
+      buildingController,
+      floorController
     ],
     repos: [
       roleRepo,
       userRepo,
-      buildingRepo
+      buildingRepo,
+      floorRepo
     ],
     services: [
       roleService,
-      buildingService
+      buildingService,
+      floorService
     ]
   });
   Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

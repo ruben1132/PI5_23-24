@@ -35,6 +35,47 @@ let BuildingController = class BuildingController {
         }
     }
     ;
+    async getBuildingsByFloorRange(req, res, next) {
+        try {
+            const min = req.params.min;
+            const max = req.params.max;
+            const buildingOrError = await this.buildingServiceInstance.getBuildingsByFloorRange(min, max);
+            if (buildingOrError.isFailure) {
+                return res.status(500).send();
+            }
+            const BuildingDTOs = buildingOrError.getValue();
+            return res.json(BuildingDTOs).status(200);
+        }
+        catch (e) {
+            return next(e);
+        }
+    }
+    async getBuildings(req, res, next) {
+        try {
+            const buildingsOrError = await this.buildingServiceInstance.getBuildings();
+            if (buildingsOrError.isFailure) {
+                return res.status(400).send();
+            }
+            return res.json(buildingsOrError.getValue()).status(201);
+        }
+        catch (e) {
+            return next(e);
+        }
+    }
+    async updateBuilding(req, res, next) {
+        try {
+            const buildingOrError = await this.buildingServiceInstance.updateBuilding(req.body);
+            if (buildingOrError.isFailure) {
+                return res.status(404).send();
+            }
+            const buildingDTO = buildingOrError.getValue();
+            return res.status(201).json(buildingDTO);
+        }
+        catch (e) {
+            return next(e);
+        }
+    }
+    ;
 };
 BuildingController = __decorate([
     (0, typedi_1.Service)(),

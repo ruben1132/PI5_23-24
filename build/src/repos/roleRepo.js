@@ -76,6 +76,16 @@ let RoleRepo = class RoleRepo {
         else
             return null;
     }
+    async deleteRole(roleId) {
+        const query = { domainId: roleId };
+        const roleRecord = await this.roleSchema.findOne(query);
+        if (roleRecord != null) {
+            await roleRecord.remove();
+            return true;
+        }
+        else
+            return null;
+    }
 };
 RoleRepo = __decorate([
     (0, typedi_1.Service)(),

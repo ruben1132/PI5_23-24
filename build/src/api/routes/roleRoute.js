@@ -28,5 +28,10 @@ exports.default = (app) => {
             name: celebrate_1.Joi.string().required()
         }),
     }), (req, res, next) => ctrl.updateRole(req, res, next));
+    route.delete('/:id', (0, celebrate_1.celebrate)({
+        params: celebrate_1.Joi.object({
+            id: celebrate_1.Joi.string().required()
+        })
+    }), (req, res, next) => ctrl.deleteRole(req, res, next));
 };
 //# sourceMappingURL=roleRoute.js.map

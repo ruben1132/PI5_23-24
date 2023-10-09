@@ -86,6 +86,21 @@ let RoleService = class RoleService {
             throw e;
         }
     }
+    async deleteRole(roleId) {
+        try {
+            const role = await this.roleRepo.findByDomainId(roleId);
+            if (role === null) {
+                return Result_1.Result.fail("Role not found");
+            }
+            else {
+                await this.roleRepo.deleteRole(roleId);
+                return Result_1.Result.ok();
+            }
+        }
+        catch (e) {
+            throw e;
+        }
+    }
 };
 RoleService = __decorate([
     (0, typedi_1.Service)(),
