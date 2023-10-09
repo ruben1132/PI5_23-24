@@ -26,6 +26,7 @@ export class Role extends AggregateRoot<RoleProps> {
   set name ( value: string) {
     this.props.name = value;
   }
+  
   private constructor (props: RoleProps, id?: UniqueEntityID) {
     super(props, id);
   }

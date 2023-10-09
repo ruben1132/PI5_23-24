@@ -94,9 +94,9 @@ export default class BuildingRepo implements IBuildingRepo {
           },
         },
       ]).exec();
-    
+
       console.log(buildingRecord);
-    
+
       if (buildingRecord) {
         return buildingRecord.map((building) => BuildingMap.toDomain(building));
       } else {
@@ -107,5 +107,15 @@ export default class BuildingRepo implements IBuildingRepo {
       console.error(err);
       // Handle the error appropriately (e.g., return an error response or rethrow)
     }
+  }
+
+  public async getBuildings(): Promise<Building[]> {
+    const buildingRecord = await this.buildingSchema.find({});
+
+    if (buildingRecord != null) {
+      return buildingRecord.map((building) => BuildingMap.toDomain(building));
+    }
+    else
+      return null;
   }
 }

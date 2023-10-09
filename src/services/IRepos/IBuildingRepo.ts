@@ -10,4 +10,5 @@ export default interface IBuildingRepo extends Repo<Building> {
   //findByIds (buildingsIds: BuildingId[]): Promise<Building[]>;
   //saveCollection (buildings: Building[]): Promise<Building[]>;
   //removeByBuildingIds (buildings: BuildingId[]): Promise<any>
+  getBuildings(): Promise<Building[]>;
 }
