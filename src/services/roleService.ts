@@ -37,7 +37,7 @@ export default class RoleService implements IRoleService {
         return Result.fail<Array<IRoleDTO>>("Roles not found");
       }
       else {
-        const rolesDTOResult = roles.map( role => RoleMap.toDTO( role ) as IRoleDTO );
+        const rolesDTOResult = roles.map(role => RoleMap.toDTO(role) as IRoleDTO);        
         return Result.ok<Array<IRoleDTO>>( rolesDTOResult )
         }
     } catch (e) {
