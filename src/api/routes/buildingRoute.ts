@@ -24,8 +24,8 @@ export default (app: Router) => {
         route.get('/ranges/:min/:max',
         celebrate({
             params: Joi.object({
-                min: Joi.string().required(),
-                max: Joi.string().required()
+                min: Joi.number().required(),
+                max: Joi.number().required()
             })
         }),
         (req, res, next) => ctrl.getBuildingsByFloorRange(req, res, next));

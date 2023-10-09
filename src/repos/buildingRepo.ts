@@ -62,41 +62,32 @@ export default class BuildingRepo implements IBuildingRepo {
     if (buildingRecord != null) {
       return BuildingMap.toDomain(buildingRecord);
     }
-    else
+
       return null;
   }
 
-  public async getBuildingsByFloorRange(min: string, max: string): Promise<Building[]> {
+  public async getBuildingsByFloorRange(min: number, max: number): Promise<Building[]> {
     const minFloors = min; // Set your minimum number of floors
     const maxFloors = max; // Set your maximum number of floors
 
-    // console.log(minFloors);
-    // console.log(maxFloors); 
     try {
       const buildingRecord = await this.buildingSchema.aggregate([
         {
-          $lookup: {
-            from: 'floors',
-            localField: '_id',
-            foreignField: 'building',
-            as: 'floors',
-          },
-        },
-        {
           $project: {
-            // Include other properties as needed
-            floorCount: { $size: { $ifNull: ['$floors', []] } }, // Use $ifNull to handle empty 'floors' array
+            designation: 1,
+            domainId: 1,
+            floorCount: { $size: { $ifNull: ['$floors', []] } },
           },
         },
         {
           $match: {
-            floorCount: { $gte: minFloors, $lte: maxFloors },
+            floorCount: { $gte: min, $lte: max },
           },
         },
       ]).exec();
 
-      console.log(buildingRecord);
-
+      // console.log(buildingRecord);
+    
       if (buildingRecord) {
         return buildingRecord.map((building) => BuildingMap.toDomain(building));
       } else {
@@ -106,6 +97,7 @@ export default class BuildingRepo implements IBuildingRepo {
     } catch (err) {
       console.error(err);
       // Handle the error appropriately (e.g., return an error response or rethrow)
+      throw err;
     }
   }
 
