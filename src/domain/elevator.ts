@@ -31,8 +31,8 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
     }
 
     // TODO: implementar regras de negocio na criacao de uma elevator
-    //   public static create (elevatorDTO: IElevatorDTO, id?: UniqueEntityID): Result<Elevator> {
-    //     const designation = elevatorDTO.designation;
+    //   public static create (props: ElevatorProps, id?: UniqueEntityID): Result<Elevator> {
+    //     const designation = props.designation;
 
     //     if (!!designation === false || designation.length === 0) {
     //       return Result.fail<Elevator>('Must provide a elevator name')

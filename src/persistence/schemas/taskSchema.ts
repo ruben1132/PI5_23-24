@@ -21,7 +21,7 @@ const TaskSchema = new mongoose.Schema(
 
         assigned: {
             type: String,
-            required: [false],
+            required: false,
         },
     },
     { timestamps: true },

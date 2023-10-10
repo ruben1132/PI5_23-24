@@ -6,6 +6,9 @@ import IBuildingRepo from '../services/IRepos/IBuildingRepo';
 import IBuildingService from './IServices/IBuildingService';
 import { Result } from "../core/logic/Result";
 import { BuildingMap } from "../mappers/BuildingMap";
+import { BuildingCode } from '../domain/valueObj/buildingCode';
+import { BuildingName } from '../domain/valueObj/buildingName';
+import { BuildingDimensions } from '../domain/valueObj/buildingDimensions';
 
 @Service()
 export default class BuildingService implements IBuildingService {
@@ -32,7 +35,28 @@ export default class BuildingService implements IBuildingService {
     public async createBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
         try {
 
-            const buildingOrError = await Building.create(buildingDTO);
+            const code = await BuildingCode.create(buildingDTO.code);
+            if (code.isFailure) {
+                return Result.fail<IBuildingDTO>(code.errorValue());
+            }
+
+            const name = await BuildingName.create(buildingDTO.name);
+            if (name.isFailure) {
+                return Result.fail<IBuildingDTO>(name.errorValue());
+            }
+
+            const dimensions = await BuildingDimensions.create(buildingDTO.dimensions);
+            if (dimensions.isFailure) {
+                return Result.fail<IBuildingDTO>(dimensions.errorValue());
+            }
+
+            const buildingOrError = await Building.create(
+                {
+                    code: code.getValue(),
+                    name: name.getValue(),
+                    dimensions: dimensions.getValue(),
+                }
+            );
 
             if (buildingOrError.isFailure) {
                 return Result.fail<IBuildingDTO>(buildingOrError.errorValue());
@@ -56,21 +80,39 @@ export default class BuildingService implements IBuildingService {
             if (building === null) {
                 return Result.fail<IBuildingDTO>("Building not found");
             }
-            else {
-                building.designation = buildingDTO.designation;
-                await this.buildingRepo.save(building);
 
-                const buildingDTOResult = BuildingMap.toDTO(building) as IBuildingDTO;
-                return Result.ok<IBuildingDTO>(buildingDTOResult)
+            const code = await BuildingCode.create(buildingDTO.code);
+            if (code.isFailure) {
+                return Result.fail<IBuildingDTO>(code.errorValue());
             }
+
+            const name = await BuildingName.create(buildingDTO.name);
+            if (name.isFailure) {
+                return Result.fail<IBuildingDTO>(name.errorValue());
+            }
+
+            const dimensions = await BuildingDimensions.create(buildingDTO.dimensions);
+            if (dimensions.isFailure) {
+                return Result.fail<IBuildingDTO>(dimensions.errorValue());
+            }
+
+            building.code = code.getValue();
+            building.name = name.getValue();
+            building.dimensions = dimensions.getValue();
+
+            await this.buildingRepo.save(building);
+            const buildingDTOResult = BuildingMap.toDTO(building) as IBuildingDTO;
+
+            return Result.ok<IBuildingDTO>(buildingDTOResult)
+
         } catch (e) {
             throw e;
         }
     }
 
-    public async getBuildingsByFloorRange(idMin: string, idMax: string): Promise<Result<IBuildingDTO[]>> {
+    public async getBuildingsByFloorRange(min: number, max: number): Promise<Result<IBuildingDTO[]>> {
         try {
-            const buildings = await this.buildingRepo.getBuildingsByFloorRange(idMin, idMax);
+            const buildings = await this.buildingRepo.getBuildingsByFloorRange(min, max);
             // const floors = await this.floorRe
             const buildingDTOs = buildings.map(building => BuildingMap.toDTO(building));
             return Result.ok<IBuildingDTO[]>(buildingDTOs);
@@ -78,6 +120,5 @@ export default class BuildingService implements IBuildingService {
             throw err;
         }
     }
-    
 
 }

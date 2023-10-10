@@ -54,10 +54,10 @@ export class Floor extends AggregateRoot<FloorProps> {
     }
 
     // TODO: implementar regras de negocio na criacao de uma floor
-    public static create(floorDTO: IFloorDTO, id?: UniqueEntityID): Result<Floor> {
-        const number = floorDTO.number;
-        const information = floorDTO.information;
-        const building = floorDTO.building;
+    public static create(props: FloorProps, id?: UniqueEntityID): Result<Floor> {
+        const number = props.number;
+        const information = props.information;
+        const building = props.building;
 
         if (!!number === false || number === 0) {
             return Result.fail<Floor>('Must provide a floor number')

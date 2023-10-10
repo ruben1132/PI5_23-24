@@ -45,7 +45,9 @@ export default class BuildingRepo implements IBuildingRepo {
 
         return BuildingMap.toDomain(buildingCreated);
       } else {
-        buildingDocument.designation = building.designation;
+        buildingDocument.code = building.code.value;
+        buildingDocument.name = building.name.value;
+        buildingDocument.dimensions = building.dimensions.value;
         await buildingDocument.save();
 
         return building;

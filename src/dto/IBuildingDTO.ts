@@ -1,6 +1,7 @@
 
 export default interface IBuildingDTO {
-    id: string;
-    designation: string
-  }
-  
+  id: string;
+  code: string;
+  name: string;
+  dimensions: string;
+}

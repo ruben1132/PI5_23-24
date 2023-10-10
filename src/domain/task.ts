@@ -4,14 +4,14 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import { Result } from "../core/logic/Result";
 import { TaskId } from "./valueObj/taskId";
 import { TaskType } from "./taskType";
-import { IAutonomous } from "./IAutonomous";
+import { Robot } from "./robot";
 
 // import ITaskDTO from "../dto/ITaskDTO"; // TODO: criar o DTO
 
 interface TaskProps {
     designation: string; // TODO: criar um value obj para designacoes (meter um max de chars por exemplo)
     type: TaskType;
-    assigned: IAutonomous;
+    assigned: Robot;
 }
 
 export class Task extends AggregateRoot<TaskProps> {
@@ -27,7 +27,7 @@ export class Task extends AggregateRoot<TaskProps> {
         return this.props.designation;
     }
 
-    get assigned(): IAutonomous {
+    get assigned(): Robot {
         return this.props.assigned;
     }
     

@@ -38,8 +38,8 @@ export class Room extends AggregateRoot<RoomProps> {
     }
 
     // TODO: implementar regras de negocio na criacao de uma room
-    //   public static create (roomDTO: IRoomDTO, id?: UniqueEntityID): Result<Room> {
-    //     const designation = roomDTO.designation;
+    //   public static create (props: RoomProps, id?: UniqueEntityID): Result<Room> {
+    //     const designation = props.designation;
 
     //     if (!!designation === false || designation.length === 0) {
     //       return Result.fail<Room>('Must provide a room name')

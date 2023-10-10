@@ -8,10 +8,20 @@ const BuildingSchema = new mongoose.Schema(
             unique: true
         },
 
-        designation: {
+        code: {
             type: String,
-            required: [true, 'Please enter a designation'],
-        }
+            required: [true, 'Please enter the code of the building'],
+        },
+
+        name: {
+            type: String,
+            required: false,
+        },
+        
+        dimensions: {
+            type: String,
+            required: [true, 'Please enter the dimensions of the building'],
+        },
 
     },
     { timestamps: true },

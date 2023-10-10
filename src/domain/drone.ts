@@ -55,8 +55,8 @@ export class Drone extends AggregateRoot<DroneProps> implements IAutonomous {
 
 
     // TODO: implementar regras de negocio na criacao de uma drone
-    //   public static create (droneDTO: IDroneDTO, id?: UniqueEntityID): Result<Drone> {
-    //     const designation = droneDTO.designation;
+    //   public static create (props: DroneProps, id?: UniqueEntityID): Result<Drone> {
+    //     const designation = props.designation;
 
     //     if (!!designation === false || designation.length === 0) {
     //       return Result.fail<Drone>('Must provide a drone name')

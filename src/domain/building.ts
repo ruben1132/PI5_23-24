@@ -3,11 +3,17 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
 import { BuildingId } from "./valueObj/buildingId";
+import { Guard } from "../core/logic/Guard";
 
 import IBuildingDTO from "../dto/IBuildingDTO"; // TODO: criar o DTO
+import { BuildingCode } from "./valueObj/buildingCode";
+import { BuildingName } from "./valueObj/buildingName";
+import { BuildingDimensions } from "./valueObj/buildingDimensions";
 
 interface BuildingProps {
-  designation: string; //TODO: criar um value obj para designacoes/informacoes (meter um max de chars por exemplo)
+  code: BuildingCode; 
+  name: BuildingName;
+  dimensions: BuildingDimensions;
 }
 
 export class Building extends AggregateRoot<BuildingProps> {
@@ -19,12 +25,28 @@ export class Building extends AggregateRoot<BuildingProps> {
     return new BuildingId(this.buildingId.toValue());
   }
 
-  get designation(): string {
-    return this.props.designation;
+  get code(): BuildingCode {
+    return this.props.code;
   }
 
-  set designation(value: string) {
-    this.props.designation = value;
+  set code(value: BuildingCode) {
+    this.props.code = value;
+  }
+
+  get name(): BuildingName {
+    return this.props.name;
+  }
+
+  set name(value: BuildingName) {
+    this.props.name = value;
+  }
+
+  get dimensions(): BuildingDimensions {
+    return this.props.dimensions;
+  }
+
+  set dimensions(value: BuildingDimensions) {
+    this.props.dimensions = value;
   }
 
   private constructor(props: BuildingProps, id?: UniqueEntityID) {
@@ -32,14 +54,24 @@ export class Building extends AggregateRoot<BuildingProps> {
   }
 
   // TODO: implementar regras de negocio na criacao de uma building
-  public static create(buildingDTO: IBuildingDTO, id?: UniqueEntityID): Result<Building> {
-    const designation = buildingDTO.designation;
+  public static create(props: BuildingProps, id?: UniqueEntityID): Result<Building> {
 
-    if (!!designation === false || designation.length === 0) {
-      return Result.fail<Building>('Must provide a building name')
-    } else {
-      const building = new Building({ designation: designation }, id);
-      return Result.ok<Building>(building)
+    const guardedProps = [
+      { argument: props.code, argumentName: 'code' },
+      { argument: props.dimensions, argumentName: 'dimensions' }
+    ];
+
+    const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
+
+    if (!guardResult.succeeded) {
+      return Result.fail<Building>(guardResult.message)
+    }     
+    else {
+      const user = new Building({
+        ...props
+      }, id);
+
+      return Result.ok<Building>(user);
     }
   }
 }

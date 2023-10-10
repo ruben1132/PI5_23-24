@@ -19,7 +19,7 @@ export default class BuildingController implements IBuildingController /* TODO: 
       const buildingOrError = await this.buildingServiceInstance.createBuilding(req.body as IBuildingDTO) as Result<IBuildingDTO>;
 
       if (buildingOrError.isFailure) {
-        return res.status(500).send();
+        return res.status(400).send({ error: buildingOrError.errorValue()});
       }
 
       const BuildingDTO = buildingOrError.getValue();
@@ -32,12 +32,12 @@ export default class BuildingController implements IBuildingController /* TODO: 
 
   public async getBuildingsByFloorRange(req: Request, res: Response, next: NextFunction) {
     try {
-      const min = req.params.min;
-      const max = req.params.max;
+      const min = Number(req.params.min);
+      const max = Number(req.params.max);
       const buildingOrError = await this.buildingServiceInstance.getBuildingsByFloorRange(min, max) as Result<IBuildingDTO[]>;
 
       if (buildingOrError.isFailure) {
-        return res.status(500).send();
+        return res.status(400).send({ error: buildingOrError.errorValue()});
       }
 
       const BuildingDTOs = buildingOrError.getValue();
@@ -53,7 +53,7 @@ export default class BuildingController implements IBuildingController /* TODO: 
       const buildingsOrError = await this.buildingServiceInstance.getBuildings() as Result<Array<IBuildingDTO>>;
 
       if (buildingsOrError.isFailure) {
-        return res.status(400).send();
+        return res.status(400).send({ error: buildingsOrError.errorValue()});
       }
 
       return res.json(buildingsOrError.getValue()).status(201);
@@ -68,7 +68,7 @@ export default class BuildingController implements IBuildingController /* TODO: 
       const buildingOrError = await this.buildingServiceInstance.updateBuilding(req.body as IBuildingDTO) as Result<IBuildingDTO>;
 
       if (buildingOrError.isFailure) {
-        return res.status(404).send();
+        return res.status(404).send({ error: buildingOrError.errorValue()});
       }
 
       const buildingDTO = buildingOrError.getValue();

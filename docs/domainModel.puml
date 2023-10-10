@@ -10,7 +10,9 @@ title domain model
 package "<<aggregate>> Building"{
 
     entity Building <<entity>><<root>>{
-        designation
+        code
+        name
+        dimensions
     }
 
 }

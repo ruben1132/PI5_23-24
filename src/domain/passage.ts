@@ -43,8 +43,8 @@ export class Passage extends AggregateRoot<PassageProps> {
     }
 
     // TODO: implementar regras de negocio na criacao de uma passage
-    //   public static create (passageDTO: IPassageDTO, id?: UniqueEntityID): Result<Passage> {
-    //     const designation = passageDTO.designation;
+    //   public static create (props: PassageProps, id?: UniqueEntityID): Result<Passage> {
+    //     const designation = props.designation;
 
     //     if (!!designation === false || designation.length === 0) {
     //       return Result.fail<Passage>('Must provide a passage name')

@@ -30,8 +30,8 @@ export class TaskType extends AggregateRoot<TaskTypeProps> {
     super(props, id);
   }
 
-//   public static create (taskTypeDTO: ITaskTypeDTO, id?: UniqueEntityID): Result<TaskType> {
-//     const name = taskTypeDTO.name;
+//   public static create (TaskTypeProps: ITaskTypeDTO, id?: UniqueEntityID): Result<TaskType> {
+//     const name = props.name;
 
 //     if (!!name === false || name.length === 0) {
 //       return Result.fail<TaskType>('Must provide a taskType name')

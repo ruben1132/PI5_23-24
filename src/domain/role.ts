@@ -31,8 +31,8 @@ export class Role extends AggregateRoot<RoleProps> {
     super(props, id);
   }
 
-  public static create (roleDTO: IRoleDTO, id?: UniqueEntityID): Result<Role> {
-    const name = roleDTO.name;
+  public static create (props: RoleProps, id?: UniqueEntityID): Result<Role> {
+    const name = props.name;
 
     if (!!name === false || name.length === 0) {
       return Result.fail<Role>('Must provide a role name')
