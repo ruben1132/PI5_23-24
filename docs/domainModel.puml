@@ -39,7 +39,7 @@ package "<<aggregate>> Room"{
 
 package "<<aggregate>> Passage"{
     entity Passage <<entity>>{
-        
+
     }
 }
 
@@ -54,46 +54,17 @@ package "<<aggregate>> User"{
         role
     }
 
-}
+    entity NormalUser <<entity>>{
 
-package "<<aggregate>> NormalUser"{
-
-    entity NormalUser <<entity>><<root>>{
-        
     }
+    entity SysAdmin <<entity>>{
 
-}
-
-package "<<aggregate>> SysAdmin"{
-
-    entity SysAdmin <<entity>><<root>>{
-        
     }
+    entity FleetManager <<entity>>{
 
-}
-
-package "<<aggregate>> FleetManager"{
-
-    entity FleetManager <<entity>><<root>>{
-        
     }
+    entity CampusManager <<entity>>{
 
-}
-
-package "<<aggregate>> CampusManager"{
-
-    entity CampusManager <<entity>><<root>>{
-        
-    }
-
-}
-
-package "IAutonomous"{
-
-    interface Autonomous <<interface>>{
-        designation
-        state
-        taskTypesAllowed
     }
 
 }
@@ -101,7 +72,7 @@ package "IAutonomous"{
 package "<<aggregate>> Robot"{
 
     entity Robot <<entity>><<root>>{
-        
+
     }
 
 }
@@ -109,7 +80,7 @@ package "<<aggregate>> Robot"{
 package "<<aggregate>> Drone"{
 
     entity Drone <<entity>><<root>>{
-        
+
     }
 
 }
@@ -133,12 +104,12 @@ Room "*" --- "1" Floor: is on >
 Passage "*" --- "1" Floor: connects >
 
 ' task
-Task "*" --- "1" Autonomous: is associated >
+Task "*" --- "1" Robot: is associated >
+Task "*" --- "1" Drone: is associated >
 Task "*" --- "1" Building: is associated >
 Task "*" --- "1" Floor: is associated >
 Task "*" --- "1" Room: is associated >
-Task "*" --- "1" Room: is associated >
-Task "*" --- "1" NormalUser: is requested by >
+Task "*" --- "1" User: is requested by >
 
 'hierarchy
 NormalUser ---|> User
@@ -146,8 +117,6 @@ SysAdmin ---|> User
 FleetManager ---|> User
 CampusManager ---|> User
 
-Robot -[dashed]-> Autonomous
-Drone -[dashed]-> Autonomous
 
 @enduml
 
