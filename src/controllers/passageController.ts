@@ -19,7 +19,7 @@ export default class PassageController implements IPassageController /* TODO: ex
             const passageOrError = await this.passageServiceInstance.createPassage(req.body as IPassageDTO) as Result<IPassageDTO>;
 
             if (passageOrError.isFailure) {
-                return res.status(500).send();
+                return res.status(400).send({ error: passageOrError.errorValue()});
             }
 
             const PassageDTO = passageOrError.getValue();
@@ -36,7 +36,7 @@ export default class PassageController implements IPassageController /* TODO: ex
             const passagesOrError = await this.passageServiceInstance.getPassages() as Result<Array<IPassageDTO>>;
 
             if (passagesOrError.isFailure) {
-                return res.status(400).send();
+                return res.status(400).send({ error: passagesOrError.errorValue()});
             }
 
             return res.json(passagesOrError.getValue()).status(201);

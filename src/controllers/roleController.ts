@@ -35,7 +35,7 @@ export default class RoleController implements IRoleController /* TODO: extends 
       const roleOrError = await this.roleServiceInstance.updateRole(req.body as IRoleDTO) as Result<IRoleDTO>;
 
       if (roleOrError.isFailure) {
-        return res.status(404).send();
+        return res.status(404).send({ error: roleOrError.errorValue()});
       }
 
       const roleDTO = roleOrError.getValue();
@@ -51,7 +51,7 @@ export default class RoleController implements IRoleController /* TODO: extends 
       const rolesOrError = await this.roleServiceInstance.getRoles() as Result<Array<IRoleDTO>>;
 
       if (rolesOrError.isFailure) {
-        return res.status(400).send();
+        return res.status(400).send({ error: rolesOrError.errorValue()});
       }
 
       return res.json(rolesOrError.getValue()).status(201);
@@ -66,7 +66,7 @@ export default class RoleController implements IRoleController /* TODO: extends 
       const roleOrError = await this.roleServiceInstance.getRoleById(req.params.id) as Result<IRoleDTO>;
 
       if (roleOrError.isFailure) {
-        return res.status(400).send();
+        return res.status(400).send({ error: roleOrError.errorValue()});
       }
 
       return res.json(roleOrError.getValue()).status(201);
@@ -82,7 +82,7 @@ export default class RoleController implements IRoleController /* TODO: extends 
       const roleOrError = await this.roleServiceInstance.deleteRole(req.params.id) as Result<void>;
 
       if (roleOrError.isFailure) {
-        return res.status(400).send();
+        return res.status(400).send({ error: roleOrError.errorValue()});
       }
 
       return res.status(201).send();

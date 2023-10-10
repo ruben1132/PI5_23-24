@@ -22,7 +22,7 @@ export class BuildingMap extends Mapper<Building> {
     } as IBuildingDTO;
   }
 
-  public static toDomain (building: any | Model<IBuildingPersistence & Document> ): Building {
+  public static toDomain(building: any | Model<IBuildingPersistence & Document>): Building {
     const buildingCodeOrError = BuildingCode.create(building.code);
     const buildingNameOrError = BuildingName.create(building.name);
     const buildingDimensionsOrError = BuildingDimensions.create(building.dimensions);

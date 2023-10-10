@@ -74,7 +74,9 @@ export default class BuildingRepo implements IBuildingRepo {
             const buildingRecord = await this.buildingSchema.aggregate([
                 {
                     $project: {
-                        designation: 1,
+                        code: 1,
+                        name: 1,
+                        dimensions: 1,
                         domainId: 1,
                         floorCount: { $size: { $ifNull: ['$floors', []] } },
                     },
