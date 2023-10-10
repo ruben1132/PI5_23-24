@@ -27,6 +27,13 @@ export default (app: Router) => {
     route.get('',
         (req, res, next) => ctrl.getFloors(req, res, next));
 
+    //ger floors by building id
+    route.get('/buildingId/:id',
+        (req, res, next) => ctrl.getFloorsByBuildingId(req, res, next));
+
+
+
+
     //   route.put('',
     //     celebrate({
     //       body: Joi.object({

@@ -34,15 +34,6 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async getFloorByBuildingId(buildingId: string): Promise<Result<IFloorDTO[]>> {
-        try {
-            const floors = await this.floorRepo.getFloorByBuildingId(buildingId);
-            const floorDTOs = floors.map(floor => FloorMap.toDTO(floor));
-            return Result.ok<IFloorDTO[]>(floorDTOs);
-        } catch (err) {
-            throw err;
-        }
-    }
 
     public async getFloors(): Promise<Result<Array<IFloorDTO>>> {
         try {
@@ -60,4 +51,18 @@ export default class FloorService implements IFloorService {
         }
     }
 
+    public async getFloorsByBuildingId(buildingId: string): Promise<Result<IFloorDTO[]>> {
+        try {
+            const floors = await this.floorRepo.getFloorsByBuildingId(buildingId);
+
+            if (floors === null) {
+                return Result.fail<IFloorDTO[]>("Floors not found");
+            } else {
+                const floorsDTOResult = floors.map(floor => FloorMap.toDTO(floor) as IFloorDTO);
+                return Result.ok<IFloorDTO[]>(floorsDTOResult);
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
 }
