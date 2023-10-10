@@ -21,7 +21,7 @@ export default (app: Router) => {
         }),
         (req, res, next) => ctrl.createBuilding(req, res, next));
 
-        route.get('/ranges/:min/:max',
+    route.get('/ranges/:min/:max',
         celebrate({
             params: Joi.object({
                 min: Joi.number().required(),
@@ -34,12 +34,12 @@ export default (app: Router) => {
     route.get('',
         (req, res, next) => ctrl.getBuildings(req, res, next));
 
-      route.put('',
+    route.put('',
         celebrate({
-          body: Joi.object({
-            id: Joi.string().required(),
-            designation: Joi.string().required()
-          }),
+            body: Joi.object({
+                id: Joi.string().required(),
+                designation: Joi.string().required()
+            }),
         }),
-        (req, res, next) => ctrl.updateBuilding(req, res, next) );
+        (req, res, next) => ctrl.updateBuilding(req, res, next));
 };
