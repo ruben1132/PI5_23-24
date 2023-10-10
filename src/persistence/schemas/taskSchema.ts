@@ -21,7 +21,6 @@ const TaskSchema = new mongoose.Schema(
 
         assigned: {
             type: String,
-            ref: 'Drone' || 'Robot',
             required: [false],
         },
     },

@@ -16,7 +16,6 @@ const RoomSchema = new mongoose.Schema(
 
         floor: {
             type: String,
-            ref: 'Floor',
         },
 
     },

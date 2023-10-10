@@ -15,7 +15,6 @@ const ElevatorSchema = new mongoose.Schema(
 
         building: {
             type: String,
-            ref: 'Building',
         },
 
         floorsAllowed: {

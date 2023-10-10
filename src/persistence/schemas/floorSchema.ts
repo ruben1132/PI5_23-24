@@ -13,9 +13,12 @@ const FloorSchema = new mongoose.Schema(
             required: [true, 'Please enter the number of this floor'],
         },
 
+        information: {
+            type: String,
+        },
+
         building: {
             type: String,
-            ref: 'Building',
         }
 
     },

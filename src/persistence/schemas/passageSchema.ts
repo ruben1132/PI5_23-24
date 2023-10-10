@@ -15,12 +15,10 @@ const PassageSchema = new mongoose.Schema(
 
         fromBuilding: {
             type: String,
-            ref: 'Building',
         },
 
         toBuilding: {
             type: String,
-            ref: 'Building',
         },
 
     },
