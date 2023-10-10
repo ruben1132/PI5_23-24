@@ -10,25 +10,25 @@ import { Result } from "../core/logic/Result";
 
 @Service()
 export default class BuildingController implements IBuildingController /* TODO: extends ../core/infra/BaseController */ {
-  constructor(
-    @Inject(config.services.building.name) private buildingServiceInstance: IBuildingService
-  ) { }
+    constructor(
+        @Inject(config.services.building.name) private buildingServiceInstance: IBuildingService
+    ) { }
 
-  public async createBuilding(req: Request, res: Response, next: NextFunction) {
-    try {
-      const buildingOrError = await this.buildingServiceInstance.createBuilding(req.body as IBuildingDTO) as Result<IBuildingDTO>;
+    public async createBuilding(req: Request, res: Response, next: NextFunction) {
+        try {
+            const buildingOrError = await this.buildingServiceInstance.createBuilding(req.body as IBuildingDTO) as Result<IBuildingDTO>;
 
       if (buildingOrError.isFailure) {
         return res.status(400).send({ error: buildingOrError.errorValue()});
       }
 
-      const BuildingDTO = buildingOrError.getValue();
-      return res.json(BuildingDTO).status(201);
-    }
-    catch (e) {
-      return next(e);
-    }
-  };
+            const BuildingDTO = buildingOrError.getValue();
+            return res.json(BuildingDTO).status(201);
+        }
+        catch (e) {
+            return next(e);
+        }
+    };
 
   public async getBuildingsByFloorRange(req: Request, res: Response, next: NextFunction) {
     try {

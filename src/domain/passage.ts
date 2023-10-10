@@ -5,10 +5,14 @@ import { Result } from "../core/logic/Result";
 import { Building } from "./building";
 import { PassageId } from "./valueObj/passageId";
 
+import IPassageDTO from "../dto/IPassageDTO"; // TODO: criar o DTO
+import e from "express";
+
+
 // import IPassageDTO from "../dto/IPassageDTO"; // TODO: criar o DTO
 
 interface PassageProps {
-    designation: string; // TODO: criar um value obj para designacoes (meter um max de chars por exemplo)
+    designation: string;
     fromBuilding: Building;
     toBuilding: Building;
 }
@@ -29,11 +33,11 @@ export class Passage extends AggregateRoot<PassageProps> {
     set designation(value: string) {
         this.props.designation = value;
     }
-    
+
     get fromBuilding(): Building {
         return this.props.fromBuilding;
     }
-    
+
     get toBuilding(): Building {
         return this.props.toBuilding;
     }
@@ -43,14 +47,20 @@ export class Passage extends AggregateRoot<PassageProps> {
     }
 
     // TODO: implementar regras de negocio na criacao de uma passage
-    //   public static create (props: PassageProps, id?: UniqueEntityID): Result<Passage> {
-    //     const designation = props.designation;
+    public static create(props: PassageProps, id?: UniqueEntityID): Result<Passage> {
+        const designation = props.designation;
+        const fromBuilding = props.fromBuilding;
+        const toBuilding = props.toBuilding;
 
-    //     if (!!designation === false || designation.length === 0) {
-    //       return Result.fail<Passage>('Must provide a passage name')
-    //     } else {
-    //       const role = new Passage({ designation: designation }, id);
-    //       return Result.ok<Passage>( role )
-    //     }
-    //   }
+        if (!!designation === false || designation.length === 0) {
+            return Result.fail<Passage>('Must provide a passage name')
+        } else if (!!fromBuilding === false) {
+            return Result.fail<Passage>('Must provide a fromBuilding')
+        } else if (!!toBuilding === false) {
+            return Result.fail<Passage>('Must provide a toBuilding')
+        } else {
+            const role = new Passage({ designation: designation, fromBuilding: fromBuilding, toBuilding: toBuilding}, id);
+            return Result.ok<Passage>(role)
+        }
+    }
 }

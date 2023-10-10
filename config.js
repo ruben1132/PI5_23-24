@@ -16,7 +16,10 @@ export default {
   port: parseInt(getEnvVariable('PORT', 4000), 10),
 
   // MongoDB connection URL
-  databaseURL: getEnvVariable('MONGODB_URI', 'mongodb://mongoadmin:ca7408396943512431f6af8a@vsgate-s1.dei.isep.ipp.pt:10937/?authMechanism=SCRAM-SHA-1'),
+  databaseURL: getEnvVariable(
+    'MONGODB_URI',
+    'mongodb://mongoadmin:ca7408396943512431f6af8a@vsgate-s1.dei.isep.ipp.pt:10937/?authMechanism=SCRAM-SHA-1',
+  ),
 
   // Your secret sauce
   jwtSecret: getEnvVariable('JWT_SECRET', 'secret'),
@@ -34,16 +37,20 @@ export default {
   // Controllers, Repos, Services, and Schemas
   controllers: {
     role: {
-      name: "RoleController",
-      path: "../controllers/roleController"
+      name: 'RoleController',
+      path: '../controllers/roleController',
     },
     building: {
-      name: "BuildingController",
-      path: "../controllers/buildingController"
+      name: 'BuildingController',
+      path: '../controllers/buildingController',
     },
     floor: {
-      name: "FloorController",
-      path: "../controllers/floorController"
+      name: 'FloorController',
+      path: '../controllers/floorController',
+    },
+    passage: {
+      name: 'PassageController',
+      path: '../controllers/passageController',
     },
   },
 
@@ -53,31 +60,39 @@ export default {
       path: '../repos/roleRepo',
     },
     user: {
-      name: "UserRepo",
-      path: "../repos/userRepo"
+      name: 'UserRepo',
+      path: '../repos/userRepo',
     },
     building: {
-      name: "BuildingRepo",
-      path: "../repos/buildingRepo"
+      name: 'BuildingRepo',
+      path: '../repos/buildingRepo',
     },
     floor: {
-      name: "FloorRepo",
-      path: "../repos/floorRepo"
+      name: 'FloorRepo',
+      path: '../repos/floorRepo',
+    },
+    passage: {
+      name: 'PassageRepo',
+      path: '../repos/passageRepo',
     },
   },
 
   services: {
     role: {
-      name: "RoleService",
-      path: "../services/roleService"
+      name: 'RoleService',
+      path: '../services/roleService',
     },
     building: {
-      name: "BuildingService",
-      path: "../services/buildingService"
+      name: 'BuildingService',
+      path: '../services/buildingService',
     },
     floor: {
-      name: "FloorService",
-      path: "../services/floorService"
+      name: 'FloorService',
+      path: '../services/floorService',
+    },
+    passage: {
+      name: 'PassageService',
+      path: '../services/passageService',
     },
   },
 

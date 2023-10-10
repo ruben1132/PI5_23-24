@@ -23,14 +23,14 @@ export default (app: Router) => {
     }),
     (req, res, next) => ctrl.createBuilding(req, res, next));
 
-  route.get('/ranges/:min/:max',
-    celebrate({
-      params: Joi.object({
-        min: Joi.number().required(),
-        max: Joi.number().required()
-      })
-    }),
-    (req, res, next) => ctrl.getBuildingsByFloorRange(req, res, next));
+    route.get('/ranges/:min/:max',
+        celebrate({
+            params: Joi.object({
+                min: Joi.number().required(),
+                max: Joi.number().required()
+            })
+        }),
+        (req, res, next) => ctrl.getBuildingsByFloorRange(req, res, next));
 
 
   route.get('',
