@@ -6,8 +6,6 @@ import { TaskId } from "./valueObj/taskId";
 import { TaskType } from "./taskType";
 import { Robot } from "./robot";
 
-// import ITaskDTO from "../dto/ITaskDTO"; // TODO: criar o DTO
-
 interface TaskProps {
     designation: string; // TODO: criar um value obj para designacoes (meter um max de chars por exemplo)
     type: TaskType;

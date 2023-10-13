@@ -5,12 +5,6 @@ import { Result } from "../core/logic/Result";
 import { Building } from "./building";
 import { PassageId } from "./valueObj/passageId";
 
-import IPassageDTO from "../dto/IPassageDTO"; // TODO: criar o DTO
-import e from "express";
-
-
-// import IPassageDTO from "../dto/IPassageDTO"; // TODO: criar o DTO
-
 interface PassageProps {
     designation: string;
     fromBuilding: Building;

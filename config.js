@@ -133,6 +133,10 @@ export default {
       name: 'floorSchema',
       schema: '../persistence/schemas/floorSchema',
     },
+    floorMap: {
+      name: 'floorMapSchema',
+      schema: '../persistence/schemas/floorMapSchema',
+    },
     building: {
       name: 'buildingSchema',
       schema: '../persistence/schemas/buildingSchema',

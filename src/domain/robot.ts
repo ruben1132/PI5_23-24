@@ -6,8 +6,6 @@ import { IAutonomous } from "./IAutonomous";
 import { TaskType } from "./taskType";
 import { AutonomousId } from "./valueObj/autonomousId";
 
-// import IRobotDTO from "../dto/IRobotDTO"; // TODO: criar o DTO
-
 interface RobotProps {
    // TODO: 
     state: boolean;

@@ -4,8 +4,6 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import { Result } from "../core/logic/Result";
 import { TaskTypeId } from "./valueObj/taskTypeId";
 
-// import ITaskTypeDTO from "../dto/ITaskTypeDTO"; // TODO: criar o DTO
-
 interface TaskTypeProps {
   name: string;
 }

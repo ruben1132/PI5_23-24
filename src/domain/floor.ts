@@ -5,7 +5,6 @@ import { Result } from "../core/logic/Result";
 import { Building } from "./building";
 import { FloorId } from "./valueObj/floorId";
 
-import IFloorDTO from "../dto/IFloorDTO"; // TODO: criar o DTO
 
 
 // import IFloorDTO from "../dto/IFloorDTO"; // TODO: criar o DTO

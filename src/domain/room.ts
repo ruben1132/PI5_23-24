@@ -5,8 +5,6 @@ import { Result } from "../core/logic/Result";
 import { Floor } from "./floor";
 import { RoomId } from "./valueObj/roomId";
 
-// import IRoomDTO from "../dto/IRoomDTO"; // TODO: criar o DTO
-
 interface RoomProps {
     number: number; //TODO: criar um value obj para intervalo de numeros 
     floor: Floor;

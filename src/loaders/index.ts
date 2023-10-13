@@ -55,6 +55,11 @@ export default async ({ expressApp }) => {
         schema: '../persistence/schemas/floorSchema',
     };
 
+    const floorMapSchema = {
+        name: 'floorMapSchema',
+        schema: '../persistence/schemas/floorMapSchema',
+    };
+
     const buildingSchema = {
         name: 'buildingSchema',
         schema: '../persistence/schemas/buildingSchema',
@@ -137,6 +142,7 @@ export default async ({ expressApp }) => {
             passageSchema,
             elevatorSchema,
             floorSchema,
+            floorMapSchema,
             buildingSchema
         ],
         controllers: [
