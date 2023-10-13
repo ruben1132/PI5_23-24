@@ -2,13 +2,13 @@ import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
-import { Building } from "./building";
+import { Floor } from "./floor";
 import { PassageId } from "./valueObj/passageId";
 
 interface PassageProps {
     designation: string;
-    fromBuilding: Building;
-    toBuilding: Building;
+    fromFloor: Floor;
+    toFloor: Floor;
 }
 
 export class Passage extends AggregateRoot<PassageProps> {
@@ -28,12 +28,12 @@ export class Passage extends AggregateRoot<PassageProps> {
         this.props.designation = value;
     }
 
-    get fromBuilding(): Building {
-        return this.props.fromBuilding;
+    get fromFloor(): Floor {
+        return this.props.fromFloor;
     }
 
-    get toBuilding(): Building {
-        return this.props.toBuilding;
+    get toFloor(): Floor {
+        return this.props.toFloor;
     }
 
     private constructor(props: PassageProps, id?: UniqueEntityID) {
@@ -43,17 +43,17 @@ export class Passage extends AggregateRoot<PassageProps> {
     // TODO: implementar regras de negocio na criacao de uma passage
     public static create(props: PassageProps, id?: UniqueEntityID): Result<Passage> {
         const designation = props.designation;
-        const fromBuilding = props.fromBuilding;
-        const toBuilding = props.toBuilding;
+        const fromFloor = props.fromFloor;
+        const toFloor = props.toFloor;
 
         if (!!designation === false || designation.length === 0) {
             return Result.fail<Passage>('Must provide a passage name')
-        } else if (!!fromBuilding === false) {
-            return Result.fail<Passage>('Must provide a fromBuilding')
-        } else if (!!toBuilding === false) {
-            return Result.fail<Passage>('Must provide a toBuilding')
+        } else if (!!fromFloor === false) {
+            return Result.fail<Passage>('Must provide a fromFloor')
+        } else if (!!toFloor === false) {
+            return Result.fail<Passage>('Must provide a toFloor')
         } else {
-            const role = new Passage({ designation: designation, fromBuilding: fromBuilding, toBuilding: toBuilding}, id);
+            const role = new Passage({ designation: designation, fromFloor: fromFloor, toFloor: toFloor}, id);
             return Result.ok<Passage>(role)
         }
     }

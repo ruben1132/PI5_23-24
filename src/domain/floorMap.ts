@@ -8,10 +8,11 @@ import { Floor } from "./floor";
 import { Passage } from "./passage";
 import { Room } from "./room";
 import { FloorMapId } from "./valueObj/floorMapId";
+import { Guard } from "../core/logic/Guard";
 
 interface FloorMapProps {
     floor: Floor; //TODO: criar um value obj para intervalo de numeros 
-    map: [[number]]; //TODO: criar um value obj para designacoes/informacoes (meter um max de chars por exemplo)
+    map: number[][]; //TODO: criar um value obj para designacoes/informacoes (meter um max de chars por exemplo)
     rooms: [Room];
     doors: [Door]; //TODO: create value obj
     elevator: [Elevator]; //TODO: create value obj
@@ -31,15 +32,15 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
         return this.props.floor;
     }
 
-    set floor (value: Floor) {
+    set floor(value: Floor) {
         this.props.floor = value;
     }
 
-    set map (value: [[number]]) {
+    set map(value: number[][]) {
         this.props.map = value;
     }
 
-    get map(): [[number]] {
+    get map(): number[][] {
         return this.props.map;
     }
 
@@ -47,7 +48,7 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
         return this.props.rooms;
     }
 
-    set rooms (value: [Room]) {
+    set rooms(value: [Room]) {
         this.props.rooms = value;
     }
 
@@ -55,7 +56,7 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
         return this.props.doors;
     }
 
-    set doors (value: [Door]) {
+    set doors(value: [Door]) {
         this.props.doors = value;
     }
 
@@ -63,7 +64,7 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
         return this.props.elevator;
     }
 
-    set elevator (value: [Elevator]) {
+    set elevator(value: [Elevator]) {
         this.props.elevator = value;
     }
 
@@ -71,7 +72,7 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
         return this.props.passages;
     }
 
-    set passages (value: [Passage]) {
+    set passages(value: [Passage]) {
         this.props.passages = value;
     }
 
@@ -81,19 +82,24 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
 
     // TODO: implementar regras de negocio na criacao de uma floorMap
     public static create(props: FloorMapProps, id?: UniqueEntityID): Result<FloorMap> {
-        const number = props.number;
-        const information = props.information;
-        const building = props.building;
 
-        if (!!number === false || number === 0) {
-            return Result.fail<FloorMap>('Must provide a floorMap number')
-        } else if (!!information === false || information === '') {
-            return Result.fail<FloorMap>('Must provide a floorMap information')
-        } else if (!!building === false || building === null) {
-            return Result.fail<FloorMap>('Must provide a building')
-        } else {
-            const floorMap = new FloorMap({ number: number, information: information, building: building }, id);
-            return Result.ok<FloorMap>(floorMap)
+        const guardedProps = [
+            { argument: props.floor, argumentName: 'floor' },
+            { argument: props.map, argumentName: 'map' },
+        ];
+
+        const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
+
+        if (!guardResult.succeeded) {
+            return Result.fail<FloorMap>(guardResult.message)
         }
+
+        if (props.map.length === 0) {
+            return Result.fail<FloorMap>('Make sure you give a valid map')
+        }
+
+        const floorMap = new FloorMap({ ...props }, id);
+        return Result.ok<FloorMap>(floorMap)
+
     }
 }

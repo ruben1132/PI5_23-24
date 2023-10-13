@@ -60,13 +60,15 @@ export class Floor extends AggregateRoot<FloorProps> {
 
         if (!!number === false || number === 0) {
             return Result.fail<Floor>('Must provide a floor number')
-        } else if (!!information === false || information === '') {
-            return Result.fail<Floor>('Must provide a floor information')
-        } else if (!!building === false || building === null) {
-            return Result.fail<Floor>('Must provide a building')
-        } else {
-            const floor = new Floor({ number: number, information: information, building: building }, id);
-            return Result.ok<Floor>(floor)
         }
+        if (!!information === false || information === '') {
+            return Result.fail<Floor>('Must provide a floor information')
+        }
+        if (!!building === false || building === null) {
+            return Result.fail<Floor>('Must provide a building')
+        }
+        
+        const floor = new Floor({ number: number, information: information, building: building }, id);
+        return Result.ok<Floor>(floor)
     }
 }

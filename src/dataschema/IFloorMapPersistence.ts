@@ -1,7 +1,7 @@
 export interface IFloorMapSchemaPersistence {
     _id: string;
     floor: string;
-    map: [[number]];
+    map: number[][];
     rooms: {
         roomId: string;
         positionX: number;

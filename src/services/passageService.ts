@@ -6,18 +6,42 @@ import IPassageRepo from './IRepos/IPassageRepo';
 import IPassageService from './IServices/IPassageService';
 import { Result } from "../core/logic/Result";
 import { PassageMap } from "../mappers/PassageMap";
+import IFloorRepo from './IRepos/IFloorRepo';
+import { Floor } from '../domain/floor';
 
 @Service()
 export default class PassageService implements IPassageService {
     constructor(
-        @Inject(config.repos.passage.name) private passageRepo: IPassageRepo
+        @Inject(config.repos.passage.name) private passageRepo: IPassageRepo,
+        @Inject(config.repos.passage.name) private floorRepo: IFloorRepo
     ) { }
 
 
     public async createPassage(passageDTO: IPassageDTO): Promise<Result<IPassageDTO>> {
         try {
 
-            const passageOrError = await Passage.create(passageDTO);
+            // check if floor exists
+            let fromFloor: Floor;
+            const fromFloorOrError = await this.getFloor(passageDTO.fromFloor);
+            if (fromFloorOrError.isFailure) {
+                return Result.fail<IPassageDTO>(fromFloorOrError.error);
+            } else {
+                fromFloor = fromFloorOrError.getValue();
+            }
+
+            let toFloor: Floor;
+            const toOrError = await this.getFloor(passageDTO.fromFloor);
+            if (toOrError.isFailure) {
+                return Result.fail<IPassageDTO>(toOrError.error);
+            } else {
+                toFloor = toOrError.getValue();
+            }
+
+            const passageOrError = await Passage.create({
+                fromFloor: fromFloor,
+                toFloor: toFloor,
+                designation: passageDTO.designation
+            });
 
             if (passageOrError.isFailure) {
                 return Result.fail<IPassageDTO>(passageOrError.errorValue());
@@ -48,6 +72,19 @@ export default class PassageService implements IPassageService {
             }
         } catch (e) {
             throw e;
+        }
+    }
+
+    // check if floor exists
+    private async getFloor(floorId: string): Promise<Result<Floor>> {
+
+        const floor = await this.floorRepo.findByDomainId(floorId);
+        const found = !!floor;
+
+        if (found) {
+            return Result.ok<Floor>(floor);
+        } else {
+            return Result.fail<Floor>("Couldn't find floor by id=" + floorId);
         }
     }
 

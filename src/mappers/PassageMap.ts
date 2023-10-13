@@ -13,8 +13,8 @@ export class PassageMap extends Mapper<Passage> {
     public static toDTO(passage: Passage): IPassageDTO {
         return {
             designation: passage.designation,
-            fromBuilding: passage.fromBuilding,
-            toBuilding: passage.toBuilding
+            fromFloor: passage.fromFloor.floorId.toValue(),
+            toFloor: passage.toFloor.floorId.toValue()
         } as IPassageDTO;
     }
 
@@ -33,8 +33,8 @@ export class PassageMap extends Mapper<Passage> {
         return {
             domainId: passage.id.toString(),
             designation: passage.designation,
-            fromBuilding: passage.fromBuilding,
-            toBuilding: passage.toBuilding
+            fromFloor: passage.fromFloor,
+            toFloor: passage.toFloor
         }
     }
 }

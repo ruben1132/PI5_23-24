@@ -1,5 +1,5 @@
 export default interface IPassageDTO {
     designation: string; 
-    fromBuilding: string;
-    toBuilding: string;
+    fromFloor: string;
+    toFloor: string;
 }

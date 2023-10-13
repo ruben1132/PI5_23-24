@@ -13,11 +13,11 @@ const PassageSchema = new mongoose.Schema(
             required: true
         },
 
-        fromBuilding: {
+        fromFloor: {
             type: String,
         },
 
-        toBuilding: {
+        toFloor: {
             type: String,
         },
 
