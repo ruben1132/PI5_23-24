@@ -68,40 +68,6 @@ export default class BuildingRepo implements IBuildingRepo {
         return null;
     }
 
-    public async getBuildingsByFloorRange(min: number, max: number): Promise<Building[]> {
-
-        try {
-            const buildingRecord = await this.buildingSchema.aggregate([
-                {
-                    $project: {
-                        code: 1,
-                        name: 1,
-                        dimensions: 1,
-                        domainId: 1,
-                        floorCount: { $size: { $ifNull: ['$floors', []] } },
-                    },
-                },
-                {
-                    $match: {
-                        floorCount: { $gte: min, $lte: max },
-                    },
-                },
-            ]).exec();
-
-            // console.log(buildingRecord);
-
-            if (buildingRecord) {
-                return buildingRecord.map((building) => BuildingMap.toDomain(building));
-            } else {
-                console.error("Error occurred during query execution");
-                return [];
-            }
-        } catch (err) {
-            console.error(err);
-            // Handle the error appropriately (e.g., return an error response or rethrow)
-            throw err;
-        }
-    }
 
     public async getBuildings(): Promise<Building[]> {
         const buildingRecord = await this.buildingSchema.find({});
