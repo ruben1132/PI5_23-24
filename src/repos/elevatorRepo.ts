@@ -3,7 +3,7 @@ import { Service, Inject } from 'typedi';
 import IElevatorRepo from "../services/IRepos/IElevatorRepo";
 import { Elevator } from "../domain/elevator";
 import { ElevatorId } from "../domain/valueObj/elevatorId";
-import { ElevatorMap } from "../mappers/ElevatorMap"; // TODO: implementar
+// import { ElevatorMap } from "../mappers/ElevatorMap"; // TODO: implementar
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IElevatorPersistence } from '../dataschema/IElevatorPersistence';
@@ -40,11 +40,11 @@ export default class ElevatorRepo implements IElevatorRepo {
 
         try {
             if (elevatorDocument === null) {
-                const rawElevator: any = ElevatorMap.toPersistence(elevator);
+                // const rawElevator: any = ElevatorMap.toPersistence(elevator);
 
-                const elevatorCreated = await this.elevatorSchema.create(rawElevator);
+                // const elevatorCreated = await this.elevatorSchema.create(rawElevator);
 
-                return ElevatorMap.toDomain(elevatorCreated);
+                // return ElevatorMap.toDomain(elevatorCreated);
             } else {
                 // elevatorDocument.name = elevator.name;
                 await elevatorDocument.save();
@@ -61,7 +61,7 @@ export default class ElevatorRepo implements IElevatorRepo {
         const elevatorRecord = await this.elevatorSchema.findOne(query as FilterQuery<IElevatorPersistence & Document>);
 
         if (elevatorRecord != null) {
-            return ElevatorMap.toDomain(elevatorRecord);
+            // return ElevatorMap.toDomain(elevatorRecord);
         }
         else
             return null;
@@ -72,7 +72,7 @@ export default class ElevatorRepo implements IElevatorRepo {
         const elevatorRecord = await this.elevatorSchema.find(query as FilterQuery<IElevatorPersistence & Document>);
 
         if (elevatorRecord != null) {
-            return elevatorRecord.map((elevator) => ElevatorMap.toDomain(elevator));
+            // return elevatorRecord.map((elevator) => ElevatorMap.toDomain(elevator));
         }
 
         return null;
@@ -82,7 +82,7 @@ export default class ElevatorRepo implements IElevatorRepo {
         const elevatorRecord = await this.elevatorSchema.find({});
 
         if (elevatorRecord != null) {
-            return elevatorRecord.map((elevator) => ElevatorMap.toDomain(elevator));
+            // return elevatorRecord.map((elevator) => ElevatorMap.toDomain(elevator));
         }
         else
             return null;
@@ -93,7 +93,7 @@ export default class ElevatorRepo implements IElevatorRepo {
         const elevatorRecord = await this.elevatorSchema.findOne(query as FilterQuery<IElevatorPersistence & Document>);
 
         if (elevatorRecord != null) {
-            return ElevatorMap.toDomain(elevatorRecord);
+            // return ElevatorMap.toDomain(elevatorRecord);
         }
         else
             return null;

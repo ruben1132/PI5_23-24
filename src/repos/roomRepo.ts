@@ -3,7 +3,7 @@ import { Service, Inject } from 'typedi';
 import IRoomRepo from "../services/IRepos/IRoomRepo";
 import { Room } from "../domain/room";
 import { RoomId } from "../domain/valueObj/roomId";
-import { RoomMap } from "../mappers/RoomMap"; // TODO: implementar
+// import { RoomMap } from "../mappers/RoomMap"; // TODO: implementar
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IRoomPersistence } from '../dataschema/IRoomPersistence';
@@ -40,11 +40,11 @@ export default class RoomRepo implements IRoomRepo {
 
     try {
       if (roomDocument === null) {
-        const rawRoom: any = RoomMap.toPersistence(room);
+        // const rawRoom: any = RoomMap.toPersistence(room);
 
-        const roomCreated = await this.roomSchema.create(rawRoom);
+        // const roomCreated = await this.roomSchema.create(rawRoom);
 
-        return RoomMap.toDomain(roomCreated);
+        // return RoomMap.toDomain(roomCreated);
       } else {
         // roomDocument.name = room.name;
         await roomDocument.save();
@@ -61,7 +61,7 @@ export default class RoomRepo implements IRoomRepo {
     const roomRecord = await this.roomSchema.findOne(query as FilterQuery<IRoomPersistence & Document>);
 
     if (roomRecord != null) {
-      return RoomMap.toDomain(roomRecord);
+      // return RoomMap.toDomain(roomRecord);
     }
     else
       return null;
@@ -72,7 +72,7 @@ export default class RoomRepo implements IRoomRepo {
         const roomRecord = await this.roomSchema.find(query as FilterQuery<IRoomPersistence & Document>);
 
         if (roomRecord != null) {
-            return roomRecord.map((room) => RoomMap.toDomain(room));
+            // return roomRecord.map((room) => RoomMap.toDomain(room));
         }
 
         return null;
@@ -82,7 +82,7 @@ export default class RoomRepo implements IRoomRepo {
     const roomRecord = await this.roomSchema.find({});
 
     if (roomRecord != null) {
-      return roomRecord.map((room) => RoomMap.toDomain(room));
+      // return roomRecord.map((room) => RoomMap.toDomain(room));
     }
     else
       return null;
@@ -93,7 +93,7 @@ export default class RoomRepo implements IRoomRepo {
     const roomRecord = await this.roomSchema.findOne(query as FilterQuery<IRoomPersistence & Document>);
 
     if (roomRecord != null) {
-      return RoomMap.toDomain(roomRecord);
+      // return RoomMap.toDomain(roomRecord);
     }
     else
       return null;
