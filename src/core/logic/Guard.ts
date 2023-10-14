@@ -37,6 +37,23 @@ export class Guard {
     return { succeeded: true }
   }
 
+  public static againstZeroOrNegativeBulk(args: GuardArgumentCollection): IGuardResult {
+    for (let arg of args) {
+      const result = this.againstNullOrUndefined(arg.argument, arg.argumentName);
+      if (!result.succeeded) return result;
+    }
+
+    return { succeeded: true }
+  }
+
+  public static againstZeroOrNegative (argument: any, argumentName: string): IGuardResult {
+    if (argument <= 0) {
+      return { succeeded: false, message: `${argumentName} is zero or less than zero` }
+    } else {
+      return { succeeded: true }
+    }
+  }
+
   public static isOneOf (value: any, validValues: any[], argumentName: string) : IGuardResult {
     let isValid = false;
     for (let validValue of validValues) {

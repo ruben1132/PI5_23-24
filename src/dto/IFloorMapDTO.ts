@@ -1,28 +1,26 @@
 export default interface IFloorMapDTO {
     floor: string;
     map: [[number]];
-    rooms: {
+    fmRooms: {
         roomId: string;
-        positionX: number;
-        positionY: number;
-        width: number;
-        height: number;
+        startX: number;
+        startY: number;
+        endX: number;
+        endY: number;
 
     }[];
-    doors: {
+    fmDoors: {
         positionX: number;
         positionY: number;
-        width: number;
-        height: number;
         direction: string;
     }[];
-    elevator: {
+    fmElevator: {
         elevatorId: string;
         positionX: number;
         positionY: number;
-        direction: string;  
+        direction: string; 
     };
-    passages: {
+    fmPassages: {
         passageId: string;
         positionX: number;
         positionY: number;

@@ -1,19 +1,17 @@
-import { IFloorMapSchemaPersistence } from '../../dataschema/IFloorMapPersistence';
+import { IFloorMapPersistence } from '../../dataschema/IFloorMapPersistence';
 import mongoose from 'mongoose';
 
 const roomSchema = new mongoose.Schema({
     roomId: String,
-    positionX: Number,
-    positionY: Number,
-    width: Number,
-    height: Number,
+    startX: Number,
+    startY: Number,
+    endX: Number,
+    endY: Number,
 });
 
 const doorSchema = new mongoose.Schema({
     positionX: Number,
     positionY: Number,
-    width: Number,
-    height: Number,
     direction: String,
 });
 
@@ -73,6 +71,6 @@ const FloorMapSchemaSchema = new mongoose.Schema(
     { timestamps: true },
 );
 
-export default mongoose.model<IFloorMapSchemaPersistence & mongoose.Document>('FloorMapSchema', FloorMapSchemaSchema);
+export default mongoose.model<IFloorMapPersistence & mongoose.Document>('FloorMapSchema', FloorMapSchemaSchema);
 
 

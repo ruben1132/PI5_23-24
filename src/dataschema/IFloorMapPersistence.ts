@@ -1,20 +1,18 @@
-export interface IFloorMapSchemaPersistence {
+export interface IFloorMapPersistence {
     _id: string;
     floor: string;
     map: number[][];
     rooms: {
         roomId: string;
-        positionX: number;
-        positionY: number;
-        width: number;
-        height: number;
+        startX: number;
+        startY: number;
+        endX: number;
+        endY: number;
 
     }[];
     doors: {
         positionX: number;
         positionY: number;
-        width: number;
-        height: number;
         direction: string;
     }[];
     elevator: {

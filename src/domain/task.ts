@@ -33,7 +33,6 @@ export class Task extends AggregateRoot<TaskProps> {
         super(props, id);
     }
 
-    // TODO: implementar regras de negocio na criacao de uma task
     //   public static create (taskDTO: ITaskDTO, id?: UniqueEntityID): Result<Task> {
     //     const designation = taskDTO.designation;
 

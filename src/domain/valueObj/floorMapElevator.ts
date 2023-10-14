@@ -1,43 +1,49 @@
 import { ValueObject } from "../../core/domain/ValueObject";
 import { Result } from "../../core/logic/Result";
 import { Guard } from "../../core/logic/Guard";
+import { FloorMapPosition } from "./floorMapPosition";
+import { Elevator } from "../elevator";
 
 interface FloorMapElevatorProps {
-    value: string;
+    elevator: Elevator;
+    position: FloorMapPosition;
 }
 
 export class FloorMapElevator extends ValueObject<FloorMapElevatorProps> {
-    get value(): string {
-        return this.props.value;
+
+    get elevator(): Elevator {
+        return this.props.elevator;
     }
 
-    set value(value: string) {
-        this.props.value = value;
+    set elevator(value: Elevator) {
+        this.props.elevator = value;
+    }
+
+    get position(): FloorMapPosition {
+        return this.props.position;
+    }
+
+    set position(value: FloorMapPosition) {
+        this.props.position = value;
     }
 
     private constructor(props: FloorMapElevatorProps) {
         super(props);
     }
 
-    public static create(name: string): Result<FloorMapElevator> {
-        const regex = /^[A-Za-z0-9 ]+$/i;
+    public static create(props: FloorMapElevatorProps): Result<FloorMapElevator> {
+        const guardedProps = [
+            { argument: props.elevator, argumentName: 'elevator' },
+            { argument: props.position, argumentName: 'position' },
+        ];
 
-        // allows to be null
-        if (name === undefined || name === null) {
-            return Result.ok<FloorMapElevator>(new FloorMapElevator({ value: null }));
+        const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
+
+        if (!guardResult.succeeded) {
+            return Result.fail<FloorMapElevator>(guardResult.message)
         }
-
-        // check name length
-        if (name.length > 50) {
-            return Result.fail<FloorMapElevator>("Building name is invalid");;
-        }
-
-        // check if is valid
-        if (!regex.test(name)) {
-            return Result.fail<FloorMapElevator>("Building name is invalid");
-        }
-
-        return Result.ok<FloorMapElevator>(new FloorMapElevator({ value: name }))
+        
+        return Result.ok<FloorMapElevator>(new FloorMapElevator({ ...props}))
 
     }
 }

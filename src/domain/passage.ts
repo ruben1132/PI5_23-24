@@ -40,7 +40,6 @@ export class Passage extends AggregateRoot<PassageProps> {
         super(props, id);
     }
 
-    // TODO: implementar regras de negocio na criacao de uma passage
     public static create(props: PassageProps, id?: UniqueEntityID): Result<Passage> {
         const designation = props.designation;
         const fromFloor = props.fromFloor;
@@ -48,13 +47,14 @@ export class Passage extends AggregateRoot<PassageProps> {
 
         if (!!designation === false || designation.length === 0) {
             return Result.fail<Passage>('Must provide a passage name')
-        } else if (!!fromFloor === false) {
-            return Result.fail<Passage>('Must provide a fromFloor')
-        } else if (!!toFloor === false) {
-            return Result.fail<Passage>('Must provide a toFloor')
-        } else {
-            const role = new Passage({ designation: designation, fromFloor: fromFloor, toFloor: toFloor}, id);
-            return Result.ok<Passage>(role)
         }
+        if (!!fromFloor === false) {
+            return Result.fail<Passage>('Must provide a fromFloor')
+        }
+        if (!!toFloor === false) {
+            return Result.fail<Passage>('Must provide a toFloor')
+        }
+        const role = new Passage({ designation: designation, fromFloor: fromFloor, toFloor: toFloor }, id);
+        return Result.ok<Passage>(role)
     }
 }

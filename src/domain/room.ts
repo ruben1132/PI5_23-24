@@ -35,7 +35,6 @@ export class Room extends AggregateRoot<RoomProps> {
         super(props, id);
     }
 
-    // TODO: implementar regras de negocio na criacao de uma room
     //   public static create (props: RoomProps, id?: UniqueEntityID): Result<Room> {
     //     const designation = props.designation;
 

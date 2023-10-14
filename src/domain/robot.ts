@@ -52,7 +52,6 @@ export class Robot extends AggregateRoot<RobotProps> implements IAutonomous {
     }
     
 
-    // TODO: implementar regras de negocio na criacao de uma robot
     //   public static create (props: RobotProps, id?: UniqueEntityID): Result<Robot> {
     //     const designation = props.designation;
 
