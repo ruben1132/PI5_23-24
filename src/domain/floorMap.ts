@@ -11,12 +11,12 @@ import { FloorMapRoom } from "./valueObj/floorMapRoom";
 import { Guard } from "../core/logic/Guard";
 
 interface FloorMapProps {
-    floor: Floor; //TODO: criar um value obj para intervalo de numeros 
-    map: [[number]]; //TODO: criar um value obj para designacoes/informacoes (meter um max de chars por exemplo)
+    floor: Floor; 
+    map: [[number]]; 
     fmRooms: [FloorMapRoom];
-    fmDoors: [FloorMapDoor]; //TODO: create value obj
-    fmElevator: FloorMapElevator; //TODO: create value obj
-    fmPassages: [FloorMapPassage]; //TODO: create value obj
+    fmDoors: [FloorMapDoor]; 
+    fmElevator: FloorMapElevator; 
+    fmPassages: [FloorMapPassage];
 }
 
 export class FloorMap extends AggregateRoot<FloorMapProps> {

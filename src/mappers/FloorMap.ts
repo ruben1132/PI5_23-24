@@ -14,7 +14,7 @@ export class FloorMap extends Mapper<Floor> {
     return {
       number: floor.number,
       information: floor.information.toString(),
-      building: floor.building
+      building: floor.building.buildingId.toString()
     } as IFloorDTO;
   }
 

@@ -1,12 +1,13 @@
 import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
+import { Guard } from "../core/logic/Guard";
 
 import { Result } from "../core/logic/Result";
 import { Floor } from "./floor";
 import { RoomId } from "./valueObj/roomId";
 
 interface RoomProps {
-    number: number; //TODO: criar um value obj para intervalo de numeros 
+    number: number; //TODO: criar um value obj isto 
     floor: Floor;
 }
 
@@ -26,7 +27,7 @@ export class Room extends AggregateRoot<RoomProps> {
     set number(value: number) {
         this.props.number = value;
     }
-    
+
     get floor(): Floor {
         return this.props.floor;
     }
@@ -35,14 +36,19 @@ export class Room extends AggregateRoot<RoomProps> {
         super(props, id);
     }
 
-    //   public static create (props: RoomProps, id?: UniqueEntityID): Result<Room> {
-    //     const designation = props.designation;
+    // TODO: implementar regras de negocio na criacao de uma room
+    public static create(props: RoomProps, id?: UniqueEntityID): Result<Room> {
+        const guardedProps = [
+            { argument: props.number, argumentName: 'number' },
+            { argument: props.floor, argumentName: 'floor' }
+        ];
 
-    //     if (!!designation === false || designation.length === 0) {
-    //       return Result.fail<Room>('Must provide a room name')
-    //     } else {
-    //       const role = new Room({ designation: designation }, id);
-    //       return Result.ok<Room>( role )
-    //     }
-    //   }
+        const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
+
+        if (!guardResult.succeeded) {
+            return Result.fail<Room>(guardResult.message)
+        }
+
+        return Result.ok<Room>(new Room({ ...props }, id))
+    }
 }

@@ -1,5 +1,6 @@
 import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
+import { Guard } from "../core/logic/Guard";
 
 import { Result } from "../core/logic/Result";
 import { Building } from "./building";
@@ -21,24 +22,30 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
     get elevatorId(): ElevatorId {
         return new ElevatorId(this.elevatorId.toValue());
     }
-        
+
     get building(): Building {
         return this.props.building;
     }
-    
+
     private constructor(props: ElevatorProps, id?: UniqueEntityID) {
         super(props, id);
     }
 
     // TODO: implementar regras de negocio na criacao de uma elevator
-    //   public static create (props: ElevatorProps, id?: UniqueEntityID): Result<Elevator> {
-    //     const designation = props.designation;
+    public static create(props: ElevatorProps, id?: UniqueEntityID): Result<Elevator> {
+        const guardedProps = [
+            { argument: props.designation, argumentName: 'designation' },
+            { argument: props.building, argumentName: 'building' },
+            { argument: props.floorsAllowed, argumentName: 'floorsAllowed' },
+        ];
 
-    //     if (!!designation === false || designation.length === 0) {
-    //       return Result.fail<Elevator>('Must provide a elevator name')
-    //     } else {
-    //       const role = new Elevator({ designation: designation }, id);
-    //       return Result.ok<Elevator>( role )
-    //     }
-    //   }
+        const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
+
+        if (!guardResult.succeeded) {
+            return Result.fail<Elevator>(guardResult.message)
+        }
+
+        return Result.ok<Elevator>(new Elevator({ ...props }, id))
+    }
+
 }

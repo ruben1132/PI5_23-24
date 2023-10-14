@@ -48,6 +48,10 @@ export default {
       name: 'FloorController',
       path: '../controllers/floorController',
     },
+    floorMap: {
+      name: 'FloorMapController',
+      path: '../controllers/floorMapController',
+    },
     passage: {
       name: 'PassageController',
       path: '../controllers/passageController',
@@ -71,10 +75,22 @@ export default {
       name: 'FloorRepo',
       path: '../repos/floorRepo',
     },
+    floorMap: {
+      name: 'FloorMapRepo',
+      path: '../repos/floorMapRepo',
+    },
     passage: {
       name: 'PassageRepo',
       path: '../repos/passageRepo',
     },
+    room: {
+      name: 'RoomRepo',
+      path: '../repos/roomRepo',
+    },
+    elevator: {
+      name: 'ElevatorRepo',
+      path: '../repos/elevatorRepo',
+    }
   },
 
   services: {
@@ -89,6 +105,10 @@ export default {
     floor: {
       name: 'FloorService',
       path: '../services/floorService',
+    },
+    floorMap: { 
+      name: 'FloorMapService',
+      path: '../services/floorMapService',
     },
     passage: {
       name: 'PassageService',

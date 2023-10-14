@@ -1,7 +1,7 @@
 import { IFloorMapPersistence } from '../../dataschema/IFloorMapPersistence';
 import mongoose from 'mongoose';
 
-const roomSchema = new mongoose.Schema({
+const fmRoomSchema = new mongoose.Schema({
     roomId: String,
     startX: Number,
     startY: Number,
@@ -9,20 +9,20 @@ const roomSchema = new mongoose.Schema({
     endY: Number,
 });
 
-const doorSchema = new mongoose.Schema({
+const fmDoorSchema = new mongoose.Schema({
     positionX: Number,
     positionY: Number,
     direction: String,
 });
 
-const elevatorSchema = new mongoose.Schema({
+const fmElevatorSchema = new mongoose.Schema({
     elevatorId: String,
     positionX: Number,
     positionY: Number,
     direction: String,
 });
 
-const passageSchema = new mongoose.Schema({
+const fmPassageSchema = new mongoose.Schema({
     passageId: String,
     positionX: Number,
     positionY: Number,
@@ -47,23 +47,23 @@ const FloorMapSchemaSchema = new mongoose.Schema(
             required: [true, 'Please enter the floor map matrix'],
         },
 
-        rooms: {
-            type: [roomSchema],
+        fmRooms: {
+            type: [fmRoomSchema],
             required: [true, 'Please select existing rooms'],
         },
 
-        doors: {
-            type: [doorSchema],
+        fmDoors: {
+            type: [fmDoorSchema],
             required: [true, 'Please enter doors'],
         },
 
-        elevator: {
-            type: elevatorSchema,
+        fmElevator: {
+            type: fmElevatorSchema,
             required: [true, 'Please select an existing elevator'],
         },
 
-        passages: {
-            type: [passageSchema],
+        fmPassages: {
+            type: [fmPassageSchema],
             required: [true, 'Please select existing passages'],
         },
 

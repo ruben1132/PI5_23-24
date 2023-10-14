@@ -80,6 +80,11 @@ export default async ({ expressApp }) => {
         path: config.controllers.floor.path
     }
 
+    const floorMapController = {
+        name: config.controllers.floorMap.name,
+        path: config.controllers.floorMap.path
+    }
+
     const passageController = {
         name: config.controllers.passage.name,
         path: config.controllers.passage.path
@@ -105,9 +110,24 @@ export default async ({ expressApp }) => {
         path: config.repos.floor.path
     }
 
+    const floorMapRepo = {
+        name: config.repos.floorMap.name,
+        path: config.repos.floorMap.path
+    }
+
     const passageRepo = {
         name: config.repos.passage.name,
         path: config.repos.passage.path
+    }
+
+    const roomRepo = {
+        name: config.repos.room.name,
+        path: config.repos.room.path
+    }
+
+    const elevatorRepo = {
+        name: config.repos.elevator.name,
+        path: config.repos.elevator.path
     }
 
     const roleService = {
@@ -123,6 +143,11 @@ export default async ({ expressApp }) => {
     const floorService = {
         name: config.services.floor.name,
         path: config.services.floor.path
+    }
+
+    const floorMapService = {
+        name: config.services.floorMap.name,
+        path: config.services.floorMap.path
     }
 
     const passageService = {
@@ -149,6 +174,7 @@ export default async ({ expressApp }) => {
             roleController,
             buildingController,
             floorController,
+            floorMapController,
             passageController
         ],
         repos: [
@@ -156,12 +182,16 @@ export default async ({ expressApp }) => {
             userRepo,
             buildingRepo,
             floorRepo,
-            passageRepo
+            floorMapRepo,
+            passageRepo,
+            roomRepo,
+            elevatorRepo
         ],
         services: [
             roleService,
             buildingService,
             floorService,
+            floorMapService,
             passageService
         ]
     });

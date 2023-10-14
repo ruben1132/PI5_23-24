@@ -46,8 +46,8 @@ export default class PassageRepo implements IPassageRepo {
                 return PassageMap.toDomain(passageCreated);
             } else {
                 passageDocument.designation = passage.designation.toString();
-                passageDocument.fromBuilding = passage.fromBuilding.toString();
-                passageDocument.toBuilding = passage.toBuilding.toString();
+                passageDocument.fromFloor = passage.fromFloor.toString();
+                passageDocument.toFloor = passage.toFloor.toString();
 
                 await passageDocument.save();
 
@@ -78,4 +78,16 @@ export default class PassageRepo implements IPassageRepo {
 
         return null;
     }
+
+    public async findByIds(rolesIds: PassageId[] | string[]): Promise<Passage[]> {
+        const query = { domainId: { $in: rolesIds } };
+        const passageRecord = await this.passageSchema.find(query as FilterQuery<IPassagePersistence & Document>);
+
+        if (passageRecord != null) {
+            return passageRecord.map((passage) => PassageMap.toDomain(passage));
+        }
+
+        return null;
+    }
+
 }

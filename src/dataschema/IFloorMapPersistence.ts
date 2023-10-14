@@ -2,7 +2,7 @@ export interface IFloorMapPersistence {
     _id: string;
     floor: string;
     map: number[][];
-    rooms: {
+    fmRooms: {
         roomId: string;
         startX: number;
         startY: number;
@@ -10,18 +10,18 @@ export interface IFloorMapPersistence {
         endY: number;
 
     }[];
-    doors: {
+    fmDoors: {
         positionX: number;
         positionY: number;
         direction: string;
     }[];
-    elevator: {
+    fmElevator: {
         elevatorId: string;
         positionX: number;
         positionY: number;
         direction: string;  
     };
-    passages: {
+    fmPassages: {
         passageId: string;
         positionX: number;
         positionY: number;
