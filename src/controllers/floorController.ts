@@ -16,11 +16,12 @@ export default class FloorController implements IFloorController /* TODO: extend
 
     public async createFloor(req: Request, res: Response, next: NextFunction) {
         try {
+            
             const floorOrError = await this.floorServiceInstance.createFloor(req.body as IFloorDTO) as Result<IFloorDTO>;
 
-      if (floorOrError.isFailure) {
-        return res.status(400).send({ error: floorOrError.errorValue()});
-      }
+            if (floorOrError.isFailure) {
+                return res.status(400).send({ error: floorOrError.errorValue() });
+            }
 
             const FloorDTO = floorOrError.getValue();
             return res.json(FloorDTO).status(201);
@@ -35,8 +36,10 @@ export default class FloorController implements IFloorController /* TODO: extend
         try {
             const floorsOrError = await this.floorServiceInstance.getFloors() as Result<Array<IFloorDTO>>;
 
+            // console.log('floorsOrError: ', floorsOrError.getValue());
+
             if (floorsOrError.isFailure) {
-                return res.status(400).send({ error: floorsOrError.errorValue()});
+                return res.status(400).send({ error: floorsOrError.errorValue() });
             }
 
             return res.json(floorsOrError.getValue()).status(201);
@@ -51,7 +54,7 @@ export default class FloorController implements IFloorController /* TODO: extend
             const floorsOrError = await this.floorServiceInstance.getFloorsByBuildingId(req.params.id) as Result<Array<IFloorDTO>>;
 
             if (floorsOrError.isFailure) {
-                return res.status(400).send({ error: floorsOrError.errorValue()});
+                return res.status(400).send({ error: floorsOrError.errorValue() });
             }
 
             return res.json(floorsOrError.getValue()).status(201);
@@ -61,21 +64,22 @@ export default class FloorController implements IFloorController /* TODO: extend
         }
     }
 
-    //   public async updateFloor(req: Request, res: Response, next: NextFunction) {
-    //     try {
-    //       const floorOrError = await this.floorServiceInstance.updateFloor(req.body as IFloorDTO) as Result<IFloorDTO>;
+    public async updateFloor(req: Request, res: Response, next: NextFunction) {
 
-    //       if (floorOrError.isFailure) {
-    //         return res.status(404).send({ error: floorOrError.errorValue()});
-    //       }
+        try {
+            const floorOrError = await this.floorServiceInstance.updateFloor(req.body as IFloorDTO) as Result<IFloorDTO>;
 
-    //       const floorDTO = floorOrError.getValue();
-    //       return res.status(201).json(floorDTO);
-    //     }
-    //     catch (e) {
-    //       return next(e);
-    //     }
-    //   };
+            if (floorOrError.isFailure) {
+                return res.status(400).send({ error: floorOrError.errorValue() });
+            }
+
+            const floorDTO = floorOrError.getValue();
+            return res.json(floorDTO).status(201);
+        }
+        catch (e) {
+            return next(e);
+        }
+    }
 
 
 }

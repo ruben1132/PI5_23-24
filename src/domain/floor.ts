@@ -5,13 +5,16 @@ import { Result } from "../core/logic/Result";
 import { Building } from "./building";
 import { FloorId } from "./valueObj/floorId";
 
+import { FloorNumber } from "./valueObj/floorNumber";
+import { FloorInformation } from "./valueObj/floorInformation";
+
 
 
 // import IFloorDTO from "../dto/IFloorDTO"; // TODO: criar o DTO
 
 interface FloorProps {
-    number: number; //TODO: criar um value obj para intervalo de numeros 
-    information: string; //TODO: criar um value obj para designacoes/informacoes (meter um max de chars por exemplo)
+    number: FloorNumber; //TODO: criar um value obj para intervalo de numeros 
+    information: FloorInformation; //TODO: criar um value obj para designacoes/informacoes (meter um max de chars por exemplo)
     building: Building;
 }
 
@@ -24,19 +27,19 @@ export class Floor extends AggregateRoot<FloorProps> {
         return new FloorId(this.floorId.toValue());
     }
 
-    get number(): number {
+    get number(): FloorNumber {
         return this.props.number;
     }
 
-    set number(value: number) {
+    set number(value: FloorNumber) {
         this.props.number = value;
     }
 
-    get information(): string {
+    get information(): FloorInformation {
         return this.props.information;
     }
 
-    set information(value: string) {
+    set information(value: FloorInformation) {
         this.props.information = value;
     }
 
@@ -58,10 +61,10 @@ export class Floor extends AggregateRoot<FloorProps> {
         const information = props.information;
         const building = props.building;
 
-        if (!!number === false || number === 0) {
+        if (!!number === false || number === null) {
             return Result.fail<Floor>('Must provide a floor number')
         }
-        if (!!information === false || information === '') {
+        if (!!information === false || information === null) {
             return Result.fail<Floor>('Must provide a floor information')
         }
         if (!!building === false || building === null) {

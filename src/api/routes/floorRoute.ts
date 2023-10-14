@@ -27,19 +27,19 @@ export default (app: Router) => {
     route.get('',
         (req, res, next) => ctrl.getFloors(req, res, next));
 
-    //ger floors by building id
+    //get floors by building id
     route.get('/buildingId/:id',
         (req, res, next) => ctrl.getFloorsByBuildingId(req, res, next));
 
 
-
-
-    //   route.put('',
-    //     celebrate({
-    //       body: Joi.object({
-    //         id: Joi.string().required(),
-    //         designation: Joi.string().required()
-    //       }),
-    //     }),
-    //     (req, res, next) => ctrl.updateFloor(req, res, next) );
+    route.put('',
+        celebrate({
+            body: Joi.object({
+                id: Joi.string().required(),
+                building: Joi.string().required(),
+                number: Joi.number().required(),
+                information: Joi.string().required()
+            }),
+        }),
+        (req, res, next) => ctrl.updateFloor(req, res, next));
 };

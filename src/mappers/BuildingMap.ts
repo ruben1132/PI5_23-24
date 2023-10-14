@@ -14,6 +14,8 @@ import { BuildingDimensions } from "../domain/valueObj/buildingDimensions";
 export class BuildingMap extends Mapper<Building> {
   
   public static toDTO( building: Building): IBuildingDTO {
+
+    console.log(building);
     return {
       id: building.id.toString(),
       code: building.code.value,
@@ -23,16 +25,11 @@ export class BuildingMap extends Mapper<Building> {
   }
 
   public static toDomain(building: any | Model<IBuildingPersistence & Document>): Building {
-    const buildingCodeOrError = BuildingCode.create(building.code);
-    const buildingNameOrError = BuildingName.create(building.name);
-    const buildingDimensionsOrError = BuildingDimensions.create(building.dimensions);
+    const buildingOrError = Building.create(
+      building,
+      new UniqueEntityID(building.domainId)
+    );
 
-    const buildingOrError = Building.create({
-      code: buildingCodeOrError.getValue(),
-      name: buildingNameOrError.getValue(),
-      dimensions: buildingDimensionsOrError.getValue(),
-    }, new UniqueEntityID(building.domainId));
-    
     buildingOrError.isFailure ? console.log(buildingOrError.error) : '';
 
     return buildingOrError.isSuccess ? buildingOrError.getValue() : null;

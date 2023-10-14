@@ -2,7 +2,7 @@ import { Service, Inject } from 'typedi';
 import config from "../../config";
 import IFloorMapDTO from '../dto/IFloorMapDTO';
 import { FloorMap } from "../domain/floorMap";
-import IFloorMapRepo from '../services/IRepos/IFloorMapRepo';
+import IFloorMapRepo from './IRepos/IFloorMapRepo';
 import IFloorMapService from './IServices/IFloorMapService';
 import { Result } from "../core/logic/Result";
 import { FloorMapMap } from "../mappers/FloorMapMap";

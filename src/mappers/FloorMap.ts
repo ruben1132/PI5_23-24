@@ -8,33 +8,40 @@ import { Floor } from "../domain/floor";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
+import { FloorNumber } from "../domain/valueObj/floorNumber";
+import { FloorInformation } from "../domain/valueObj/floorInformation";
+import { Building } from "../domain/building";
+
 export class FloorMap extends Mapper<Floor> {
-  
-  public static toDTO( floor: Floor): IFloorDTO {
-    return {
-      number: floor.number,
-      information: floor.information.toString(),
-      building: floor.building.buildingId.toString()
-    } as IFloorDTO;
-  }
 
-  public static toDomain (floor: any | Model<IFloorPersistence & Document> ): Floor {
-    const floorOrError = Floor.create(
-      floor,
-      new UniqueEntityID(floor.domainId)
-    );
+    public static toDTO(floor: Floor): IFloorDTO {
 
-    floorOrError.isFailure ? console.log(floorOrError.error) : '';
-
-    return floorOrError.isSuccess ? floorOrError.getValue() : null;
-  }
-
-  public static toPersistence (floor: Floor): any {
-    return {
-      domainId: floor.id.toString(),
-      number: floor.number,
-      information: floor.information.toString(),
-      building: floor.building
+        return {
+            number: floor.number.value,
+            information: floor.information.value,
+            building: floor.building.id.toValue()
+        } as IFloorDTO;
     }
-  }
+
+    public static toDomain(floor: any | Model<IFloorPersistence & Document>): Floor {
+
+        const floorOrError = Floor.create(
+            floor,
+            new UniqueEntityID(floor.domainId)
+        );
+
+        floorOrError.isFailure ? console.log(floorOrError.error) : '';
+
+        return floorOrError.isSuccess ? floorOrError.getValue() : null;
+    }
+
+    public static toPersistence(floor: Floor): any {
+
+        return {
+            domainId: floor.id.toString(),
+            number: floor.number.value,
+            information: floor.information.value,
+            building: floor.building.id
+        }
+    }
 }
