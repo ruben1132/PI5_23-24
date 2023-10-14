@@ -46,7 +46,7 @@ export default async ({ expressApp }) => {
     };
 
     const elevatorSchema = {
-        name: 'droneSchema',
+        name: 'elevatorSchema',
         schema: '../persistence/schemas/elevatorSchema',
     };
 
