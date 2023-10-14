@@ -37,26 +37,13 @@ export default class BuildingService implements IBuildingService {
     public async createBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
         try {
 
-            const code = await BuildingCode.create(buildingDTO.code);
-            if (code.isFailure) {
-                return Result.fail<IBuildingDTO>(code.errorValue());
-            }
-
-            const name = await BuildingName.create(buildingDTO.name);
-            if (name.isFailure) {
-                return Result.fail<IBuildingDTO>(name.errorValue());
-            }
-
-            const dimensions = await BuildingDimensions.create(buildingDTO.dimensions);
-            if (dimensions.isFailure) {
-                return Result.fail<IBuildingDTO>(dimensions.errorValue());
-            }
+            const buildingDM = BuildingMap.toDomain(buildingDTO);
 
             const buildingOrError = await Building.create(
                 {
-                    code: code.getValue(),
-                    name: name.getValue(),
-                    dimensions: dimensions.getValue(),
+                    code: buildingDM.code,
+                    name: buildingDM.name,
+                    dimensions: buildingDM.dimensions,
                 }
             );
 
