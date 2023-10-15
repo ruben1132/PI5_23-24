@@ -110,7 +110,7 @@ export default class FloorService implements IFloorService {
 
     public async updateFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
         try {
-            const floor = await this.floorRepo.getFloorById(floorDTO.id);
+            const floor = await this.floorRepo.findByDomainId(floorDTO.id);
 
             if (floor === null) {
                 return Result.fail<IFloorDTO>("Floor not found");
@@ -126,11 +126,19 @@ export default class FloorService implements IFloorService {
                 return Result.fail<IFloorDTO>(information.errorValue());
             }
 
+            const building = await this.buildingRepo.findByDomainId(floorDTO.building);
+            if (building === null) {
+                return Result.fail<IFloorDTO>("Building not found");
+            }
+
 
             floor.number = number.getValue();
             floor.information = information.getValue();
+            floor.building = building;
 
             await this.floorRepo.save(floor);
+
+            console.log('FloorService.updateFloor - floor: ', floor);
             const floorDTOResult = FloorMap.toDTO(floor) as IFloorDTO;
 
             return Result.ok<IFloorDTO>(floorDTOResult)
