@@ -44,6 +44,10 @@ export default {
       name: 'BuildingController',
       path: '../controllers/buildingController',
     },
+    elevator: {
+      name: 'ElevatorController',
+      path: '../controllers/elevatorController',
+    },
     floor: {
       name: 'FloorController',
       path: '../controllers/floorController',
@@ -71,6 +75,10 @@ export default {
       name: 'BuildingRepo',
       path: '../repos/buildingRepo',
     },
+    elevator: {
+      name: 'ElevatorRepo',
+      path: '../repos/elevatorRepo',
+    },
     floor: {
       name: 'FloorRepo',
       path: '../repos/floorRepo',
@@ -86,10 +94,6 @@ export default {
     room: {
       name: 'RoomRepo',
       path: '../repos/roomRepo',
-    },
-    elevator: {
-      name: 'ElevatorRepo',
-      path: '../repos/elevatorRepo',
     }
   },
 
@@ -101,6 +105,10 @@ export default {
     building: {
       name: 'BuildingService',
       path: '../services/buildingService',
+    },
+    elevator: {
+      name: 'ElevatorService',
+      path: '../services/elevatorService',
     },
     floor: {
       name: 'FloorService',

@@ -5,13 +5,14 @@ import { Guard } from "../core/logic/Guard";
 import { Result } from "../core/logic/Result";
 import { Building } from "./building";
 import { ElevatorId } from "./valueObj/elevatorId";
+import { ElevatorDesignation } from "./valueObj/elevatorDesignation";
 
-// import IElevatorDTO from "../dto/IElevatorDTO"; // TODO: criar o DTO
+import IElevatorDTO from "../dto/IElevatorDTO"; 
 
 interface ElevatorProps {
-    designation: string; //TODO: criar um value obj para designacoes/informacoes (meter um max de chars por exemplo)
+    designation: ElevatorDesignation;
     building: Building;
-    floorsAllowed: number[];
+    //floorsAllowed: [Number];
 }
 
 export class Elevator extends AggregateRoot<ElevatorProps> {
@@ -21,6 +22,10 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
 
     get elevatorId(): ElevatorId {
         return new ElevatorId(this.elevatorId.toValue());
+    }
+
+    get elevatorDesignation(): ElevatorDesignation {
+        return this.props.designation
     }
 
     get building(): Building {
@@ -36,7 +41,7 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
         const guardedProps = [
             { argument: props.designation, argumentName: 'designation' },
             { argument: props.building, argumentName: 'building' },
-            { argument: props.floorsAllowed, argumentName: 'floorsAllowed' },
+            //{ argument: props.floorsAllowed, argumentName: 'floorsAllowed' },
         ];
 
         const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
