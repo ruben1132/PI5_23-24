@@ -17,8 +17,8 @@ export default (app: Router) => {
         celebrate({
             body: Joi.object({
                 designation: Joi.string().required(),
-                fromBuilding: Joi.string().required(),
-                toBuilding: Joi.string().required()
+                fromFloor: Joi.string().required(),
+                toFloor: Joi.string().required()
             })
         }),
         (req, res, next) => ctrl.createPassage(req, res, next));
@@ -27,6 +27,8 @@ export default (app: Router) => {
     route.get('',
         (req, res, next) => ctrl.getPassages(req, res, next));
 
+    route.delete('/:id',
+        (req, res, next) => ctrl.deletePassage(req, res, next));
 
 
 

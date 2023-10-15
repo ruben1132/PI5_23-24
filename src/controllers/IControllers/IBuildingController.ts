@@ -5,4 +5,5 @@ export default interface IBuildingController {
     createBuilding(req: Request, res: Response, next: NextFunction);
     getBuildingsByFloorRange(req: Request, res: Response, next: NextFunction);
     updateBuilding(req: Request, res: Response, next: NextFunction);
+    deleteBuilding(req: Request, res: Response, next: NextFunction);
 }

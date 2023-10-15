@@ -16,7 +16,7 @@ export default class FloorController implements IFloorController /* TODO: extend
 
     public async createFloor(req: Request, res: Response, next: NextFunction) {
         try {
-            
+
             const floorOrError = await this.floorServiceInstance.createFloor(req.body as IFloorDTO) as Result<IFloorDTO>;
 
             if (floorOrError.isFailure) {
@@ -75,6 +75,23 @@ export default class FloorController implements IFloorController /* TODO: extend
 
             const floorDTO = floorOrError.getValue();
             return res.json(floorDTO).status(201);
+        }
+        catch (e) {
+            return next(e);
+        }
+    }
+
+    public async deleteFloor(req: Request, res: Response, next: NextFunction) {
+        try {
+            const floorOrError = await this.floorServiceInstance.deleteFloor(req.params.id) as Result<void>;
+
+            if (floorOrError.isFailure) {
+                return res.status(400).send({ error: floorOrError.errorValue() });
+            }
+
+            //204 - No content  - The server successfully processed the request, but is not returning any content
+            //we will use 200 - OK and return a success message
+            return res.status(200).send({ Success: "Floor deleted successfully" });
         }
         catch (e) {
             return next(e);

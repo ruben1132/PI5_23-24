@@ -78,4 +78,20 @@ export default class BuildingRepo implements IBuildingRepo {
         else
             return null;
     }
+
+    public async deleteBuilding(buildingId: BuildingId | string): Promise<Boolean> {
+        try {
+            const query = { domainId: buildingId };
+            const buildingRecord = await this.buildingSchema.findOne(query as FilterQuery<IBuildingPersistence & Document>);
+
+            if (buildingRecord != null) {
+                await buildingRecord.delete();
+                return true;
+            }
+            else
+                return false;
+        } catch (err) {
+            throw err;
+        }
+    }
 }

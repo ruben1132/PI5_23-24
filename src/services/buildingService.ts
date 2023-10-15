@@ -110,4 +110,21 @@ export default class BuildingService implements IBuildingService {
         }
     }
 
+    public async deleteBuilding(buildingId: string): Promise<Result<void>> {
+        try {
+            const building = await this.buildingRepo.findByDomainId(buildingId);
+
+            if (building === null) {
+                return Result.fail<void>("Building not found");
+            }
+
+            await this.buildingRepo.deleteBuilding(buildingId);
+
+            return Result.ok<void>();
+
+        } catch (e) {
+            throw e;
+        }
+    };
+
 }

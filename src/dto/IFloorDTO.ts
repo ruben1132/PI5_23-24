@@ -1,5 +1,5 @@
 export default interface IFloorDTO {
-    id: string;
+    domainId: string;
     number: number;
     information: string;
     building: string;

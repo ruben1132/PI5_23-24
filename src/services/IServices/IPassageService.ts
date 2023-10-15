@@ -5,5 +5,6 @@ export default interface IPassageService {
 
   createPassage(passageDTO: IPassageDTO): Promise<Result<IPassageDTO>>;
   getPassages (): Promise<Result<Array<IPassageDTO>>>;
+  deletePassage (id: string): Promise<Result<void>>;
   
 }

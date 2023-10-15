@@ -7,5 +7,5 @@ export default interface IFloorController {
     updateFloor(req: Request, res: Response, next: NextFunction);
     
     //   getFloorById(req: Request, res: Response, next: NextFunction);
-    //   deleteFloor(req: Request, res: Response, next: NextFunction);
+    deleteFloor(req: Request, res: Response, next: NextFunction);
 }

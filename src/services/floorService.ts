@@ -56,7 +56,7 @@ export default class FloorService implements IFloorService {
             await this.floorRepo.save(floorResult);
 
             // console.log('FloorService.createFloor - floorResult: ', floorResult);
-            const floorDTOResult = FloorMap.toDTO(floorResult) ;
+            const floorDTOResult = FloorMap.toDTO(floorResult);
 
             return Result.ok<IFloorDTO>(floorDTOResult)
         } catch (e) {
@@ -64,7 +64,7 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    public async getFloors(): Promise<Result<Array<IFloorDTO>>> {    
+    public async getFloors(): Promise<Result<Array<IFloorDTO>>> {
         try {
             const floors = await this.floorRepo.getFloors();
 
@@ -110,7 +110,7 @@ export default class FloorService implements IFloorService {
 
     public async updateFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
         try {
-            const floor = await this.floorRepo.findByDomainId(floorDTO.id);
+            const floor = await this.floorRepo.findByDomainId(floorDTO.domainId);
 
             if (floor === null) {
                 return Result.fail<IFloorDTO>("Floor not found");
@@ -138,10 +138,25 @@ export default class FloorService implements IFloorService {
 
             await this.floorRepo.save(floor);
 
-            console.log('FloorService.updateFloor - floor: ', floor);
             const floorDTOResult = FloorMap.toDTO(floor) as IFloorDTO;
 
             return Result.ok<IFloorDTO>(floorDTOResult)
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    public async deleteFloor(floorId: string): Promise<Result<void>> {
+        try {
+            const floor = await this.floorRepo.findByDomainId(floorId);
+
+            if (floor === null) {
+                return Result.fail<void>("Floor not found");
+            }
+            else {
+                const floors = await this.floorRepo.deleteFloor(floorId);
+                return Result.ok<void>()
+            }
         } catch (e) {
             throw e;
         }

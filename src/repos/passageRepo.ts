@@ -4,6 +4,7 @@ import IPassageRepo from "../services/IRepos/IPassageRepo";
 import { Passage } from "../domain/passage";
 import { PassageId } from "../domain/valueObj/passageId";
 import { PassageMap } from "../mappers/PassageMap";
+import { FloorMap } from "../mappers/FloorMap";
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IPassagePersistence } from '../dataschema/IPassagePersistence';
@@ -43,6 +44,8 @@ export default class PassageRepo implements IPassageRepo {
 
                 const passageCreated = await this.passageSchema.create(rawPassage);
 
+                // console.log(passageCreated);
+
                 return PassageMap.toDomain(passageCreated);
             } else {
                 passageDocument.designation = passage.designation.toString();
@@ -59,14 +62,50 @@ export default class PassageRepo implements IPassageRepo {
     }
 
     public async getPassages(): Promise<Passage[]> {
-        const passageRecord = await this.passageSchema.find({});
+        try {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'floors', // Name of the "floors" collection
+                        localField: 'fromFloor', // Field in the "passages" collection
+                        foreignField: 'domainId', // Field in the "floors" collection
+                        as: 'fromFloorData'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'floors', // Name of the "floors" collection
+                        localField: 'toFloor', // Field in the "passages" collection
+                        foreignField: 'domainId', // Field in the "floors" collection
+                        as: 'toFloorData'
+                    }
+                }
+            ];
 
-        if (passageRecord != null) {
-            return passageRecord.map((passage) => PassageMap.toDomain(passage));
+            const passagesWithFloorData = await this.passageSchema.aggregate(pipeline);
+
+            if (passagesWithFloorData) {
+                // Map the raw MongoDB documents to your custom Passage objects
+                const passagesWithCustomFloorData = passagesWithFloorData.map((passage) => {
+                    // Convert the 'fromFloorData' and 'toFloorData' fields to custom Floor objects
+                    const fromFloor = FloorMap.toDomain(passage.fromFloorData[0]); // Assuming a one-to-one relationship
+                    const toFloor = FloorMap.toDomain(passage.toFloorData[0]); // Assuming a one-to-one relationship
+
+                    // Merge the converted objects with the rest of the passage data
+                    return { ...passage, fromFloor, toFloor };
+                });
+
+                return passagesWithCustomFloorData.map((passage) => PassageMap.toDomain(passage));
+            } else {
+                console.log("No matching data found.");
+                return [];
+            }
+        } catch (error) {
+            console.error("Error during aggregation:", error);
+            return [];
         }
-        else
-            return null;
     }
+
 
     public async findByDomainId(passageId: PassageId | string): Promise<Passage> {
         const query = { domainId: passageId };
@@ -90,4 +129,20 @@ export default class PassageRepo implements IPassageRepo {
         return null;
     }
 
+    public async deletePassage(passageId: PassageId | string): Promise<Boolean> {
+
+        try {
+            const query = { domainId: passageId };
+            const passageRecord = await this.passageSchema.findOne(query as FilterQuery<IPassagePersistence & Document>);
+
+            if (passageRecord != null) {
+                await passageRecord.remove();
+                return true;
+            }
+
+            return null;
+        } catch (err) {
+            throw err;
+        }
+    }
 }

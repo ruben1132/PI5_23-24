@@ -42,7 +42,6 @@ export default class FloorRepo implements IFloorRepo {
 
         const floorDocument = await this.floorSchema.findOne(query);
 
-
         try {
             if (floorDocument === null) {
                 const rawFloor: any = FloorMap.toPersistence(floor);
@@ -54,9 +53,6 @@ export default class FloorRepo implements IFloorRepo {
                 floorDocument.number = floor.number.value;
                 floorDocument.information = floor.information.value;
                 floorDocument.building = floor.building.id.toString();
-
-                console.log('floorDocument: ', floorDocument);
-
 
                 await floorDocument.save();
 
@@ -112,6 +108,7 @@ export default class FloorRepo implements IFloorRepo {
 
     public async findByDomainId(floorId: FloorId | string): Promise<Floor> {
         const query = { domainId: floorId };
+
         const floorRecord = await this.floorSchema.findOne(query as FilterQuery<IFloorPersistence & Document>);
 
         if (floorRecord != null) {
@@ -139,23 +136,23 @@ export default class FloorRepo implements IFloorRepo {
                     $unwind: '$building'
                 }
             ];
-    
+
             const floorsWithBuildings = await this.floorSchema.aggregate(pipeline);
-    
+
             if (floorsWithBuildings) {
                 // Map the raw MongoDB documents to your custom Building objects
                 const floorsWithCustomBuildings = floorsWithBuildings.map((floor) => {
                     // Convert the 'building' field to a custom Building object
                     const building = BuildingMap.toDomain(floor.building);
-    
+
                     // Convert 'information' and 'number' to value objects
                     const information = FloorInformation.create(floor.information).getValue();
                     const number = FloorNumber.create(floor.number).getValue();
-    
+
                     // Merge the converted objects with the rest of the floor data
                     return { ...floor, building, information, number };
                 });
-    
+
                 return floorsWithCustomBuildings.map((floor) => FloorMap.toDomain(floor));
             } else {
                 console.log("No matching data found.");
@@ -212,6 +209,22 @@ export default class FloorRepo implements IFloorRepo {
             }
         } catch (err) {
             console.error(err);
+            throw err;
+        }
+    }
+
+    public async deleteFloor(floorId: string): Promise<Boolean> {
+        try {
+            const query = { domainId: floorId };
+            const floorRecord = await this.floorSchema.findOne(query as FilterQuery<IFloorPersistence & Document>);
+
+            if (floorRecord != null) {
+                await floorRecord.remove();
+                return true;
+            }
+
+            return false;
+        } catch (err) {
             throw err;
         }
     }

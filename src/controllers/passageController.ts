@@ -19,7 +19,7 @@ export default class PassageController implements IPassageController /* TODO: ex
             const passageOrError = await this.passageServiceInstance.createPassage(req.body as IPassageDTO) as Result<IPassageDTO>;
 
             if (passageOrError.isFailure) {
-                return res.status(400).send({ error: passageOrError.errorValue()});
+                return res.status(400).send({ error: passageOrError.errorValue() });
             }
 
             const PassageDTO = passageOrError.getValue();
@@ -36,10 +36,27 @@ export default class PassageController implements IPassageController /* TODO: ex
             const passagesOrError = await this.passageServiceInstance.getPassages() as Result<Array<IPassageDTO>>;
 
             if (passagesOrError.isFailure) {
-                return res.status(400).send({ error: passagesOrError.errorValue()});
+                return res.status(400).send({ error: passagesOrError.errorValue() });
             }
 
             return res.json(passagesOrError.getValue()).status(201);
+        }
+        catch (e) {
+            return next(e);
+        }
+    }
+
+    public async deletePassage(req: Request, res: Response, next: NextFunction) {
+        try {
+            const passagesOrError = await this.passageServiceInstance.deletePassage(req.params.id) as Result<void>;
+
+            if (passagesOrError.isFailure) {
+                return res.status(400).send({ error: passagesOrError.errorValue() });
+            }
+
+            //204 - No content  - The server successfully processed the request, but is not returning any content
+            //we will use 200 - OK and return a success message
+            return res.status(200).send({ Success: "Passage deleted successfully" });
         }
         catch (e) {
             return next(e);

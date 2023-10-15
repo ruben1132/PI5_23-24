@@ -35,11 +35,14 @@ export default (app: Router) => {
     route.put('',
         celebrate({
             body: Joi.object({
-                id: Joi.string().required(),
+                domainId: Joi.string().required(),
                 building: Joi.string().required(),
                 number: Joi.number().required(),
                 information: Joi.string().required()
             }),
         }),
         (req, res, next) => ctrl.updateFloor(req, res, next));
+
+    route.delete('/:id',
+        (req, res, next) => ctrl.deleteFloor(req, res, next));
 };

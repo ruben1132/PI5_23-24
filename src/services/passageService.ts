@@ -13,7 +13,7 @@ import { Floor } from '../domain/floor';
 export default class PassageService implements IPassageService {
     constructor(
         @Inject(config.repos.passage.name) private passageRepo: IPassageRepo,
-        @Inject(config.repos.passage.name) private floorRepo: IFloorRepo
+        @Inject(config.repos.floor.name) private floorRepo: IFloorRepo
     ) { }
 
 
@@ -30,7 +30,7 @@ export default class PassageService implements IPassageService {
             }
 
             let toFloor: Floor;
-            const toOrError = await this.getFloor(passageDTO.fromFloor);
+            const toOrError = await this.getFloor(passageDTO.toFloor);
             if (toOrError.isFailure) {
                 return Result.fail<IPassageDTO>(toOrError.error);
             } else {
@@ -85,6 +85,24 @@ export default class PassageService implements IPassageService {
             return Result.ok<Floor>(floor);
         } else {
             return Result.fail<Floor>("Couldn't find floor by id=" + floorId);
+        }
+    }
+
+    public async deletePassage(id: string): Promise<Result<void>> {
+        try {
+
+            const role = await this.passageRepo.findByDomainId(id);
+
+            if (role === null) {
+                return Result.fail<void>("Role not found");
+            }
+            else {
+                const passages = await this.passageRepo.deletePassage(id);
+
+                return Result.ok<void>();
+            }
+        } catch (e) {
+            throw e;
         }
     }
 

@@ -12,9 +12,10 @@ export class PassageMap extends Mapper<Passage> {
 
     public static toDTO(passage: Passage): IPassageDTO {
         return {
+            domainId: passage.id.toString(),
             designation: passage.designation,
-            fromFloor: passage.fromFloor.floorId.toValue(),
-            toFloor: passage.toFloor.floorId.toValue()
+            fromFloor: passage.fromFloor.id.toValue(),
+            toFloor: passage.toFloor.id.toValue()
         } as IPassageDTO;
     }
 
@@ -30,11 +31,12 @@ export class PassageMap extends Mapper<Passage> {
     }
 
     public static toPersistence(passage: Passage): any {
+
         return {
             domainId: passage.id.toString(),
             designation: passage.designation,
-            fromFloor: passage.fromFloor,
-            toFloor: passage.toFloor
+            fromFloor: passage.fromFloor.id.toString(),
+            toFloor: passage.toFloor.id
         }
     }
 }

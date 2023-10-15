@@ -18,9 +18,9 @@ export default class BuildingController implements IBuildingController /* TODO: 
         try {
             const buildingOrError = await this.buildingServiceInstance.createBuilding(req.body as IBuildingDTO) as Result<IBuildingDTO>;
 
-      if (buildingOrError.isFailure) {
-        return res.status(400).send({ error: buildingOrError.errorValue()});
-      }
+            if (buildingOrError.isFailure) {
+                return res.status(400).send({ error: buildingOrError.errorValue() });
+            }
 
             const BuildingDTO = buildingOrError.getValue();
             return res.json(BuildingDTO).status(201);
@@ -30,54 +30,71 @@ export default class BuildingController implements IBuildingController /* TODO: 
         }
     };
 
-  public async getBuildingsByFloorRange(req: Request, res: Response, next: NextFunction) {
-    try {
-      const min = Number(req.params.min);
-      const max = Number(req.params.max);
-      const buildingOrError = await this.buildingServiceInstance.getBuildingsByFloorRange(min, max) as Result<IBuildingDTO[]>;
+    public async getBuildingsByFloorRange(req: Request, res: Response, next: NextFunction) {
+        try {
+            const min = Number(req.params.min);
+            const max = Number(req.params.max);
+            const buildingOrError = await this.buildingServiceInstance.getBuildingsByFloorRange(min, max) as Result<IBuildingDTO[]>;
 
-      if (buildingOrError.isFailure) {
-        return res.status(400).send({ error: buildingOrError.errorValue()});
-      }
+            if (buildingOrError.isFailure) {
+                return res.status(400).send({ error: buildingOrError.errorValue() });
+            }
 
-      const BuildingDTOs = buildingOrError.getValue();
-      return res.json(BuildingDTOs).status(200);
+            const BuildingDTOs = buildingOrError.getValue();
+            return res.json(BuildingDTOs).status(200);
+        }
+        catch (e) {
+            return next(e);
+        }
     }
-    catch (e) {
-      return next(e);
+
+    public async getBuildings(req: Request, res: Response, next: NextFunction) {
+        try {
+            const buildingsOrError = await this.buildingServiceInstance.getBuildings() as Result<Array<IBuildingDTO>>;
+
+            if (buildingsOrError.isFailure) {
+                return res.status(400).send({ error: buildingsOrError.errorValue() });
+            }
+
+            return res.json(buildingsOrError.getValue()).status(201);
+        }
+        catch (e) {
+            return next(e);
+        }
     }
-  }
 
-  public async getBuildings(req: Request, res: Response, next: NextFunction) {
-    try {
-      const buildingsOrError = await this.buildingServiceInstance.getBuildings() as Result<Array<IBuildingDTO>>;
+    public async updateBuilding(req: Request, res: Response, next: NextFunction) {
+        try {
+            const buildingOrError = await this.buildingServiceInstance.updateBuilding(req.body as IBuildingDTO) as Result<IBuildingDTO>;
 
-      if (buildingsOrError.isFailure) {
-        return res.status(400).send({ error: buildingsOrError.errorValue()});
-      }
+            if (buildingOrError.isFailure) {
+                return res.status(404).send({ error: buildingOrError.errorValue() });
+            }
 
-      return res.json(buildingsOrError.getValue()).status(201);
+            const buildingDTO = buildingOrError.getValue();
+            return res.status(201).json(buildingDTO);
+        }
+        catch (e) {
+            return next(e);
+        }
+    };
+
+    public async deleteBuilding(req: Request, res: Response, next: NextFunction) {
+        try {
+            const buildingOrError = await this.buildingServiceInstance.deleteBuilding(req.params.id) as Result<void>;
+
+            if (buildingOrError.isFailure) {
+                return res.status(404).send({ error: buildingOrError.errorValue() });
+            }
+
+            //204 - No content  - The server successfully processed the request, but is not returning any content
+            //we will use 200 - OK and return a success message
+            return res.status(200).send({ Success: "Building deleted successfully" });
+        }
+        catch (e) {
+            return next(e);
+        }
     }
-    catch (e) {
-      return next(e);
-    }
-  }
-
-  public async updateBuilding(req: Request, res: Response, next: NextFunction) {
-    try {
-      const buildingOrError = await this.buildingServiceInstance.updateBuilding(req.body as IBuildingDTO) as Result<IBuildingDTO>;
-
-      if (buildingOrError.isFailure) {
-        return res.status(404).send({ error: buildingOrError.errorValue()});
-      }
-
-      const buildingDTO = buildingOrError.getValue();
-      return res.status(201).json(buildingDTO);
-    }
-    catch (e) {
-      return next(e);
-    }
-  };
 
 
 }
