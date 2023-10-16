@@ -2,6 +2,7 @@ import { Service, Inject } from 'typedi';
 import config from "../../config";
 import IElevatorDTO from '../dto/IElevatorDTO';
 import { Elevator } from "../domain/elevator";
+import { Building } from '../domain/building';
 import IBuildingRepo from './IRepos/IBuildingRepo';
 import IElevatorRepo from '../services/IRepos/IElevatorRepo';
 import IFloorRepo from '../services/IRepos/IFloorRepo';
@@ -36,12 +37,26 @@ export default class ElevatorService implements IElevatorService {
     public async createElevator(elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
         try {
 
-            const elevatorDM = ElevatorMap.toDomain(elevatorDTO);
+            // check if building exists
+            let building: Building;
+            const buildingOrError = await this.getBuilding(elevatorDTO.building);
+            if (buildingOrError.isFailure) {
+                return Result.fail<IElevatorDTO>(buildingOrError.errorValue());
+            } else {
+                building = buildingOrError.getValue();
+            }
+
+            // const elevatorDM = ElevatorMap.toDomain(elevatorDTO);
+
+            const designation = await ElevatorDesignation.create(elevatorDTO.designation);
+            if (designation.isFailure) {
+                return Result.fail<IElevatorDTO>(designation.errorValue());
+            }
 
             const elevatorOrError = await Elevator.create(
                 {
-                    designation: elevatorDM.elevatorDesignation,
-                    building: elevatorDM.building
+                    designation: designation.getValue(),
+                    building: building
                     //floorsAllowed: elevatorDM,
                 }
             );
@@ -52,9 +67,9 @@ export default class ElevatorService implements IElevatorService {
 
             const elevatorResult = elevatorOrError.getValue();
 
-            const test = await this.elevatorRepo.save(elevatorResult);
+            await this.elevatorRepo.save(elevatorResult);
 
-            const elevatorDTOResult = ElevatorMap.toDTO(elevatorResult) as IElevatorDTO;
+            const elevatorDTOResult = ElevatorMap.toDTO(elevatorResult);
             return Result.ok<IElevatorDTO>(elevatorDTOResult)
         } catch (e) {
             throw e;
@@ -114,5 +129,18 @@ export default class ElevatorService implements IElevatorService {
             throw e;
         }
     };
+
+    // check if building exists
+    private async getBuilding(buildingId: string): Promise<Result<Building>> {
+
+        const building = await this.buildingRepo.findByDomainId(buildingId);
+        const found = !!building;
+
+        if (found) {
+            return Result.ok<Building>(building);
+        } else {
+            return Result.fail<Building>("Couldn't find building by id=" + buildingId);
+        }
+    }
 
 }

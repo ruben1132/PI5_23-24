@@ -32,7 +32,7 @@ export class ElevatorMap extends Mapper<Elevator> {
 
     const elevatorOrError = Elevator.create(
       elevator,
-      new UniqueEntityID(elevator.domainId)
+      new UniqueEntityID(elevator.id)
   );
     
     elevatorOrError.isFailure ? console.log(elevatorOrError.error) : '';
@@ -42,7 +42,7 @@ export class ElevatorMap extends Mapper<Elevator> {
 
   public static toPersistence (elevator: Elevator): any {
     return {
-      domainId: elevator.id.toString(),
+      id: elevator.id.toString(),
       designation: elevator.elevatorDesignation.value,
       building: elevator.building.id.toString()
     }
