@@ -1,9 +1,9 @@
 import { Service, Inject } from 'typedi';
 
-import IBuildingRepo from "../services/IRepos/IBuildingRepo";
-import { Building } from "../domain/building";
-import { BuildingId } from "../domain/valueObj/buildingId";
-import { BuildingMap } from "../mappers/BuildingMap";
+import IBuildingRepo from '../services/IRepos/IBuildingRepo';
+import { Building } from '../domain/building';
+import { BuildingId } from '../domain/valueObj/buildingId';
+import { BuildingMap } from '../mappers/BuildingMap';
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IBuildingPersistence } from '../dataschema/IBuildingPersistence';
@@ -12,22 +12,21 @@ import { IBuildingPersistence } from '../dataschema/IBuildingPersistence';
 export default class BuildingRepo implements IBuildingRepo {
     private models: any;
 
-    constructor(
-        @Inject('buildingSchema') private buildingSchema: Model<IBuildingPersistence & Document>,
-    ) { }
+    constructor(@Inject('buildingSchema') private buildingSchema: Model<IBuildingPersistence & Document>) {}
 
     private createBaseQuery(): any {
         return {
             where: {},
-        }
+        };
     }
 
     public async exists(building: Building): Promise<boolean> {
-
         const idX = building.id instanceof BuildingId ? (<BuildingId>building.id).toValue() : building.id;
 
         const query = { domainId: idX };
-        const buildingDocument = await this.buildingSchema.findOne(query as FilterQuery<IBuildingPersistence & Document>);
+        const buildingDocument = await this.buildingSchema.findOne(
+            query as FilterQuery<IBuildingPersistence & Document>,
+        );
 
         return !!buildingDocument === true;
     }
@@ -68,28 +67,25 @@ export default class BuildingRepo implements IBuildingRepo {
         return null;
     }
 
-
     public async getBuildings(): Promise<Building[]> {
         const buildingRecord = await this.buildingSchema.find({});
 
         if (buildingRecord != null) {
-            return buildingRecord.map((building) => BuildingMap.toDomain(building));
-        }
-        else
-            return null;
+            return buildingRecord.map(building => BuildingMap.toDomain(building));
+        } else return null;
     }
 
-    public async deleteBuilding(buildingId: BuildingId | string): Promise<Boolean> {
+    public async deleteBuilding(buildingId: BuildingId | string): Promise<boolean> {
         try {
             const query = { domainId: buildingId };
-            const buildingRecord = await this.buildingSchema.findOne(query as FilterQuery<IBuildingPersistence & Document>);
+            const buildingRecord = await this.buildingSchema.findOne(
+                query as FilterQuery<IBuildingPersistence & Document>,
+            );
 
             if (buildingRecord != null) {
                 await buildingRecord.delete();
                 return true;
-            }
-            else
-                return false;
+            } else return false;
         } catch (err) {
             throw err;
         }

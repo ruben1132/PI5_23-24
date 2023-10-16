@@ -4,7 +4,7 @@ import { celebrate, Joi } from 'celebrate';
 import { Container } from 'typedi';
 import IPassageController from '../../controllers/IControllers/IPassageController';
 
-import config from "../../../config";
+import config from '../../../config';
 
 const route = Router();
 
@@ -13,25 +13,21 @@ export default (app: Router) => {
 
     const ctrl = Container.get(config.controllers.passage.name) as IPassageController;
 
-    route.post('',
+    route.post(
+        '',
         celebrate({
             body: Joi.object({
                 designation: Joi.string().required(),
                 fromFloor: Joi.string().required(),
-                toFloor: Joi.string().required()
-            })
+                toFloor: Joi.string().required(),
+            }),
         }),
-        (req, res, next) => ctrl.createPassage(req, res, next));
+        (req, res, next) => ctrl.createPassage(req, res, next),
+    );
 
+    route.get('', (req, res, next) => ctrl.getPassages(req, res, next));
 
-    route.get('',
-        (req, res, next) => ctrl.getPassages(req, res, next));
-
-    route.delete('/:id',
-        (req, res, next) => ctrl.deletePassage(req, res, next));
-
-
-
+    route.delete('/:id', (req, res, next) => ctrl.deletePassage(req, res, next));
 
     //   route.put('',
     //     celebrate({
