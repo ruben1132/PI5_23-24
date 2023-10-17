@@ -21,9 +21,6 @@ export class FloorMapMap extends Mapper<FloorMap> {
     }
 
     public static toDomain(floorMap: any | Model<IFloorMapPersistence & Document>): FloorMap {
-        
-        // create value obj
-        
         const floorMapOrError = FloorMap.create(
             floorMap,
             new UniqueEntityID(floorMap.domainId)

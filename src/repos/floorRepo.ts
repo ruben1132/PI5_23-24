@@ -65,12 +65,35 @@ export default class FloorRepo implements IFloorRepo {
 
     public async getFloors(): Promise<Array<Floor>> {
         try {
-            const floors = await this.floorSchema.find({});
+            const floorsWithBuildings = await this.floorSchema.aggregate([
+                {
+                    $lookup: {
+                        from: 'buildings', // Name of the "buildings" collection
+                        localField: 'building', // Field in the "floors" collection
+                        foreignField: 'domainId', // Field in the "buildings" collection
+                        as: 'building'
+                    }
+                },
+                {
+                    $unwind: '$building'
+                }
+            ]);
 
-            if (floors) {
-                const floorPromisses = floors.map((floor) => FloorMap.toDomain(floor));
-                return Promise.all(floorPromisses);
+            if (floorsWithBuildings) {
+                // Map the raw MongoDB documents to your custom Building objects
+                const floorsWithCustomBuildings = floorsWithBuildings.map((floor) => {
+                    // Convert the 'building' field to a custom Building object
+                    const building = BuildingMap.toDomain(floor.building);
 
+                    // Convert 'information' and 'number' to value objects
+                    const information = floor.information;
+                    const number = floor.number;
+
+                    // Merge the converted objects with the rest of the floor data
+                    return { ...floor, building, information, number };
+                });
+
+                return floorsWithCustomBuildings.map((floor) => FloorMap.toDomain(floor));
             } else {
                 console.log("No matching data found.");
                 return [];
@@ -100,15 +123,37 @@ export default class FloorRepo implements IFloorRepo {
             const pipeline = [
                 {
                     $match: { building: buildingId }
+                },
+                {
+                    $lookup: {
+                        from: 'buildings', // Name of the "buildings" collection
+                        localField: 'building', // Field in the "floors" collection
+                        foreignField: 'domainId', // Field in the "buildings" collection
+                        as: 'building'
+                    }
+                },
+                {
+                    $unwind: '$building'
                 }
             ];
 
-            const floors = await this.floorSchema.aggregate(pipeline);
+            const floorsWithBuildings = await this.floorSchema.aggregate(pipeline);
 
-            if (floors) {
-                const floorPromisses = floors.map((floor) => FloorMap.toDomain(floor));
-                return Promise.all(floorPromisses);
+            if (floorsWithBuildings) {
+                // Map the raw MongoDB documents to your custom Building objects
+                const floorsWithCustomBuildings = floorsWithBuildings.map((floor) => {
+                    // Convert the 'building' field to a custom Building object
+                    const building = BuildingMap.toDomain(floor.building);
 
+                    // Convert 'information' and 'number' to value objects
+                    const information = FloorInformation.create(floor.information).getValue();
+                    const number = FloorNumber.create(floor.number).getValue();
+
+                    // Merge the converted objects with the rest of the floor data
+                    return { ...floor, building, information, number };
+                });
+
+                return floorsWithCustomBuildings.map((floor) => FloorMap.toDomain(floor));
             } else {
                 console.log("No matching data found.");
                 return [];
