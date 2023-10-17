@@ -15,25 +15,24 @@ export class ElevatorMap extends Mapper<Elevator> {
     return {
       id: elevator.id.toString(),
       designation: elevator.elevatorDesignation.value,
-      building: elevator.building.id.toValue(),
+      //building: elevator.building.id.toValue(),
       //floorsAllowed: elevator.floorsAllowed.value,
     } as IElevatorDTO;
   }
 
   public static toDomain(elevator: any | Model<IElevatorPersistence & Document>): Elevator {
-    /*const elevatorDesignationOrError = ElevatorDesignation.create(elevator.designation);
-    const elevatorBuildingOrError = 
+    const elevatorDesignationOrError = ElevatorDesignation.create(elevator.designation);
 
     const elevatorOrError = Elevator.create({
       designation: elevatorDesignationOrError.getValue(),
-      building: buildingNameOrError.getValue(),
+      //building: buildingNameOrError.getValue(),
       //floorsAllowed: ,
-    }, new UniqueEntityID(elevator.domainId));*/
+    }, new UniqueEntityID(elevator.domainId));
 
-    const elevatorOrError = Elevator.create(
+    /*const elevatorOrError = Elevator.create(
       elevator,
       new UniqueEntityID(elevator.id)
-  );
+  );*/
     
     elevatorOrError.isFailure ? console.log(elevatorOrError.error) : '';
 
@@ -42,9 +41,9 @@ export class ElevatorMap extends Mapper<Elevator> {
 
   public static toPersistence (elevator: Elevator): any {
     return {
-      id: elevator.id.toString(),
+      domainId: elevator.id.toString(),
       designation: elevator.elevatorDesignation.value,
-      building: elevator.building.id.toString()
+      //building: elevator.building.id.toString()
     }
   }
 }

@@ -15,7 +15,7 @@ import { ElevatorDesignation } from '../domain/valueObj/elevatorDesignation';
 export default class ElevatorService implements IElevatorService {
     constructor(
         @Inject(config.repos.elevator.name) private elevatorRepo: IElevatorRepo,
-        @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
+        //@Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
     ) { }
 
     public async getElevators(): Promise<Result<Array<IElevatorDTO>>> {
@@ -38,13 +38,13 @@ export default class ElevatorService implements IElevatorService {
         try {
 
             // check if building exists
-            let building: Building;
+            /*let building: Building;
             const buildingOrError = await this.getBuilding(elevatorDTO.building);
             if (buildingOrError.isFailure) {
                 return Result.fail<IElevatorDTO>(buildingOrError.errorValue());
             } else {
                 building = buildingOrError.getValue();
-            }
+            }*/
 
             // const elevatorDM = ElevatorMap.toDomain(elevatorDTO);
 
@@ -56,7 +56,7 @@ export default class ElevatorService implements IElevatorService {
             const elevatorOrError = await Elevator.create(
                 {
                     designation: designation.getValue(),
-                    building: building
+                    //building: building
                     //floorsAllowed: elevatorDM,
                 }
             );
@@ -131,7 +131,7 @@ export default class ElevatorService implements IElevatorService {
     };
 
     // check if building exists
-    private async getBuilding(buildingId: string): Promise<Result<Building>> {
+    /*private async getBuilding(buildingId: string): Promise<Result<Building>> {
 
         const building = await this.buildingRepo.findByDomainId(buildingId);
         const found = !!building;
@@ -141,6 +141,6 @@ export default class ElevatorService implements IElevatorService {
         } else {
             return Result.fail<Building>("Couldn't find building by id=" + buildingId);
         }
-    }
+    }*/
 
 }

@@ -24,9 +24,7 @@ export default class BuildingRepo implements IBuildingRepo {
         const idX = building.id instanceof BuildingId ? (<BuildingId>building.id).toValue() : building.id;
 
         const query = { domainId: idX };
-        const buildingDocument = await this.buildingSchema.findOne(
-            query as FilterQuery<IBuildingPersistence & Document>,
-        );
+        const buildingDocument = await this.buildingSchema.findOne(query as FilterQuery<IBuildingPersistence & Document>);
 
         return !!buildingDocument === true;
     }
@@ -78,9 +76,7 @@ export default class BuildingRepo implements IBuildingRepo {
     public async deleteBuilding(buildingId: BuildingId | string): Promise<boolean> {
         try {
             const query = { domainId: buildingId };
-            const buildingRecord = await this.buildingSchema.findOne(
-                query as FilterQuery<IBuildingPersistence & Document>,
-            );
+            const buildingRecord = await this.buildingSchema.findOne(query as FilterQuery<IBuildingPersistence & Document>);
 
             if (buildingRecord != null) {
                 await buildingRecord.delete();
