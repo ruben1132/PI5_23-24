@@ -5,6 +5,7 @@ import role from './routes/roleRoute';
 import building from './routes/buildingRoute';
 import floor from './routes/floorRoute';
 import passageRoute from './routes/passageRoute';
+import taskType from './routes/taskTypeRoute';
 
 export default () => {
 	const app = Router();
@@ -15,7 +16,8 @@ export default () => {
 	building(app);
 	floor(app);
     passageRoute(app);
+    taskType(app);
 
-	
+
 	return app
 }

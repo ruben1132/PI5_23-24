@@ -65,6 +65,11 @@ export default async ({ expressApp }) => {
         schema: '../persistence/schemas/buildingSchema',
     };
 
+    const taskTypeSchema = {
+        name: 'taskTypeSchema',
+        schema: '../persistence/schemas/taskTypeSchema',
+    };
+
     const roleController = {
         name: config.controllers.role.name,
         path: config.controllers.role.path
@@ -88,6 +93,11 @@ export default async ({ expressApp }) => {
     const passageController = {
         name: config.controllers.passage.name,
         path: config.controllers.passage.path
+    }
+
+    const taskTypeController = {
+        name: config.controllers.taskType.name,
+        path: config.controllers.taskType.path
     }
 
     const roleRepo = {
@@ -130,6 +140,11 @@ export default async ({ expressApp }) => {
         path: config.repos.elevator.path
     }
 
+    const taskTypeRepo = {
+        name: config.repos.taskType.name,
+        path: config.repos.taskType.path
+    }
+
     const roleService = {
         name: config.services.role.name,
         path: config.services.role.path
@@ -155,6 +170,11 @@ export default async ({ expressApp }) => {
         path: config.services.passage.path
     }
 
+    const taskTypeService = {
+        name: config.services.taskType.name,
+        path: config.services.taskType.path
+    }
+
     await dependencyInjectorLoader({
         mongoConnection,
         schemas: [
@@ -168,14 +188,16 @@ export default async ({ expressApp }) => {
             elevatorSchema,
             floorSchema,
             floorMapSchema,
-            buildingSchema
+            buildingSchema,
+            taskTypeSchema
         ],
         controllers: [
             roleController,
             buildingController,
             floorController,
             floorMapController,
-            passageController
+            passageController,
+            taskTypeController
         ],
         repos: [
             roleRepo,
@@ -185,14 +207,16 @@ export default async ({ expressApp }) => {
             floorMapRepo,
             passageRepo,
             roomRepo,
-            elevatorRepo
+            elevatorRepo,
+            taskTypeRepo
         ],
         services: [
             roleService,
             buildingService,
             floorService,
             floorMapService,
-            passageService
+            passageService,
+            taskTypeService
         ]
     });
     Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');
