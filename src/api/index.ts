@@ -6,6 +6,7 @@ import building from './routes/buildingRoute';
 import floor from './routes/floorRoute';
 import passageRoute from './routes/passageRoute';
 import taskType from './routes/taskTypeRoute';
+import robotType from './routes/robotTypeRoute';
 
 export default () => {
 	const app = Router();
@@ -17,6 +18,7 @@ export default () => {
 	floor(app);
     passageRoute(app);
     taskType(app);
+    robotType(app);
 
 
 	return app

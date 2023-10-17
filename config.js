@@ -64,6 +64,10 @@ export default {
             name: 'TaskTypeController',
             path: '../controllers/taskTypeController',
         },
+        robotType: {
+            name: 'RobotTypeController',
+            path: '../controllers/robotTypeController',
+        },
     },
 
     repos: {
@@ -103,6 +107,10 @@ export default {
             name: 'TaskTypeRepo',
             path: '../repos/taskTypeRepo',
         },
+        robotType: {
+            name: 'RobotTypeRepo',
+            path: '../repos/robotTypeRepo',
+        },
     },
 
     services: {
@@ -133,6 +141,10 @@ export default {
         taskType: {
             name: 'TaskTypeService',
             path: '../services/taskTypeService',
+        },
+        robotType: {
+            name: 'RobotTypeService',
+            path: '../services/robotTypeService',
         },
     },
 
@@ -184,6 +196,10 @@ export default {
         taskType: {
             name: 'taskTypeSchema',
             schema: '../persistence/schemas/taskTypeSchema',
+        },
+        robotType: {
+            name: 'robotTypeSchema',
+            schema: '../persistence/schemas/robotTypeSchema',
         },
     },
 };

@@ -70,110 +70,133 @@ export default async ({ expressApp }) => {
         schema: '../persistence/schemas/taskTypeSchema',
     };
 
+    const robotTypeSchema = {
+        name: 'robotTypeSchema',
+        schema: '../persistence/schemas/robotTypeSchema',
+    };
+
+    // ******************* CONTROLLERS *******************
     const roleController = {
         name: config.controllers.role.name,
-        path: config.controllers.role.path
-    }
+        path: config.controllers.role.path,
+    };
 
     const buildingController = {
         name: config.controllers.building.name,
-        path: config.controllers.building.path
-    }
+        path: config.controllers.building.path,
+    };
 
     const floorController = {
         name: config.controllers.floor.name,
-        path: config.controllers.floor.path
-    }
+        path: config.controllers.floor.path,
+    };
 
     const floorMapController = {
         name: config.controllers.floorMap.name,
-        path: config.controllers.floorMap.path
-    }
+        path: config.controllers.floorMap.path,
+    };
 
     const passageController = {
         name: config.controllers.passage.name,
-        path: config.controllers.passage.path
-    }
+        path: config.controllers.passage.path,
+    };
 
     const taskTypeController = {
         name: config.controllers.taskType.name,
-        path: config.controllers.taskType.path
-    }
+        path: config.controllers.taskType.path,
+    };
 
+    const robotTypeController = {
+        name: config.controllers.robotType.name,
+        path: config.controllers.robotType.path,
+    };
+
+    // ******************* REPO *******************
     const roleRepo = {
         name: config.repos.role.name,
-        path: config.repos.role.path
-    }
+        path: config.repos.role.path,
+    };
 
     const userRepo = {
         name: config.repos.user.name,
-        path: config.repos.user.path
-    }
+        path: config.repos.user.path,
+    };
 
     const buildingRepo = {
         name: config.repos.building.name,
-        path: config.repos.building.path
-    }
+        path: config.repos.building.path,
+    };
 
     const floorRepo = {
         name: config.repos.floor.name,
-        path: config.repos.floor.path
-    }
+        path: config.repos.floor.path,
+    };
 
     const floorMapRepo = {
         name: config.repos.floorMap.name,
-        path: config.repos.floorMap.path
-    }
+        path: config.repos.floorMap.path,
+    };
 
     const passageRepo = {
         name: config.repos.passage.name,
-        path: config.repos.passage.path
-    }
+        path: config.repos.passage.path,
+    };
 
     const roomRepo = {
         name: config.repos.room.name,
-        path: config.repos.room.path
-    }
+        path: config.repos.room.path,
+    };
 
     const elevatorRepo = {
         name: config.repos.elevator.name,
-        path: config.repos.elevator.path
-    }
+        path: config.repos.elevator.path,
+    };
 
     const taskTypeRepo = {
         name: config.repos.taskType.name,
-        path: config.repos.taskType.path
-    }
+        path: config.repos.taskType.path,
+    };
 
+    const robotTypeRepo = {
+        name: config.repos.robotType.name,
+        path: config.repos.robotType.path,
+    };
+
+    // ******************* SERVICES *******************
     const roleService = {
         name: config.services.role.name,
-        path: config.services.role.path
-    }
+        path: config.services.role.path,
+    };
 
     const buildingService = {
         name: config.services.building.name,
-        path: config.services.building.path
-    }
+        path: config.services.building.path,
+    };
 
     const floorService = {
         name: config.services.floor.name,
-        path: config.services.floor.path
-    }
+        path: config.services.floor.path,
+    };
 
     const floorMapService = {
         name: config.services.floorMap.name,
-        path: config.services.floorMap.path
-    }
+        path: config.services.floorMap.path,
+    };
 
     const passageService = {
         name: config.services.passage.name,
-        path: config.services.passage.path
-    }
+        path: config.services.passage.path,
+    };
 
     const taskTypeService = {
         name: config.services.taskType.name,
-        path: config.services.taskType.path
-    }
+        path: config.services.taskType.path,
+    };
+
+    const robotTypeService = {
+        name: config.services.robotType.name,
+        path: config.services.robotType.path,
+    };
 
     await dependencyInjectorLoader({
         mongoConnection,
@@ -189,7 +212,8 @@ export default async ({ expressApp }) => {
             floorSchema,
             floorMapSchema,
             buildingSchema,
-            taskTypeSchema
+            taskTypeSchema,
+            robotTypeSchema,
         ],
         controllers: [
             roleController,
@@ -197,7 +221,8 @@ export default async ({ expressApp }) => {
             floorController,
             floorMapController,
             passageController,
-            taskTypeController
+            taskTypeController,
+            robotTypeController,
         ],
         repos: [
             roleRepo,
@@ -208,7 +233,8 @@ export default async ({ expressApp }) => {
             passageRepo,
             roomRepo,
             elevatorRepo,
-            taskTypeRepo
+            taskTypeRepo,
+            robotTypeRepo,
         ],
         services: [
             roleService,
@@ -216,8 +242,9 @@ export default async ({ expressApp }) => {
             floorService,
             floorMapService,
             passageService,
-            taskTypeService
-        ]
+            taskTypeService,
+            robotTypeService,
+        ],
     });
     Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');
 
