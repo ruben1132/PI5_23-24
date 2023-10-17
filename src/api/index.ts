@@ -5,6 +5,7 @@ import role from './routes/roleRoute';
 import building from './routes/buildingRoute';
 import floor from './routes/floorRoute';
 import passageRoute from './routes/passageRoute';
+import elevatorRoute from './routes/elevatorRoute';
 import taskType from './routes/taskTypeRoute';
 import robotType from './routes/robotTypeRoute';
 
@@ -17,6 +18,7 @@ export default () => {
 	building(app);
 	floor(app);
     passageRoute(app);
+	elevatorRoute(app);
     taskType(app);
     robotType(app);
 

@@ -11,7 +11,7 @@ import IElevatorDTO from "../dto/IElevatorDTO";
 
 interface ElevatorProps {
     designation: ElevatorDesignation;
-    building: Building;
+    //building: Building;
     //floorsAllowed: [Number];
 }
 
@@ -28,9 +28,9 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
         return this.props.designation
     }
 
-    get building(): Building {
+    /*get building(): Building {
         return this.props.building;
-    }
+    }*/
 
     private constructor(props: ElevatorProps, id?: UniqueEntityID) {
         super(props, id);
@@ -53,16 +53,16 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
         return Result.ok<Elevator>(new Elevator({ ...props }, id))*/
 
         const designation = props.designation;
-        const building = props.building;
+        //const building = props.building;
 
         if (!!designation === false || designation === null) {
             return Result.fail<Elevator>('Must provide an elevator designation')
         }
-        if (!!building === false || building === null) {
+        /*if (!!building === false || building === null) {
             return Result.fail<Elevator>('Must provide a building')
-        }
+        }*/
         
-        const elevator = new Elevator({ designation: designation, building: building }, id);
+        const elevator = new Elevator({ designation: designation }, id);
         return Result.ok<Elevator>(elevator)
     }
 

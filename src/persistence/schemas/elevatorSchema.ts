@@ -13,14 +13,14 @@ const ElevatorSchema = new mongoose.Schema(
             required: [true, 'Please enter a designation'],
         },
 
-        building: {
+        /*building: {
             type: String,
-        },
+        },*/
 
-        floorsAllowed: {
+        /*floorsAllowed: {
             type: [Number],
             required: [true, 'Please select the floors allowed for this elevator'],
-        },
+        },*/
 
     },
     { timestamps: true },

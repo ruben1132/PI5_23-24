@@ -101,6 +101,11 @@ export default async ({ expressApp }) => {
         path: config.controllers.passage.path,
     };
 
+    const elevatorController = {
+        name: config.controllers.elevator.name,
+        path: config.controllers.elevator.path,
+    };
+
     const taskTypeController = {
         name: config.controllers.taskType.name,
         path: config.controllers.taskType.path,
@@ -187,6 +192,11 @@ export default async ({ expressApp }) => {
         name: config.services.passage.name,
         path: config.services.passage.path,
     };
+    
+    const elevatorService = {
+        name: config.services.elevator.name,
+        path: config.services.elevator.path,
+    };
 
     const taskTypeService = {
         name: config.services.taskType.name,
@@ -221,6 +231,7 @@ export default async ({ expressApp }) => {
             floorController,
             floorMapController,
             passageController,
+            elevatorController,
             taskTypeController,
             robotTypeController,
         ],
@@ -242,6 +253,7 @@ export default async ({ expressApp }) => {
             floorService,
             floorMapService,
             passageService,
+            elevatorService,
             taskTypeService,
             robotTypeService,
         ],
