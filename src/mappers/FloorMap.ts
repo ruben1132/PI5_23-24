@@ -1,3 +1,5 @@
+import { Container } from 'typedi';
+
 import { Mapper } from "../core/infra/Mapper";
 
 import { Document, Model } from 'mongoose';
@@ -8,9 +10,10 @@ import { Floor } from "../domain/floor";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
-import { FloorNumber } from "../domain/valueObj/floorNumber";
-import { FloorInformation } from "../domain/valueObj/floorInformation";
-import { Building } from "../domain/building";
+import BuildingRepo from "../repos/buildingRepo";
+import { FloorInformation } from '../domain/valueObj/floorInformation';
+import { FloorNumber } from '../domain/valueObj/floorNumber';
+
 
 export class FloorMap extends Mapper<Floor> {
 
@@ -24,10 +27,19 @@ export class FloorMap extends Mapper<Floor> {
         } as IFloorDTO;
     }
 
-    public static toDomain(floor: any | Model<IFloorPersistence & Document>): Floor {
+    public static async toDomain(floor: any | Model<IFloorPersistence & Document>): Promise<Floor> {
 
-        const floorOrError = Floor.create(
-            floor,
+        const information = FloorInformation.create(floor.information);
+        const number = FloorNumber.create(floor.number);
+        
+        const repo = Container.get(BuildingRepo);
+        const building = await repo.findByDomainId(floor.building);
+
+        const floorOrError = Floor.create({
+            number: number.getValue(),
+            information: information.getValue(),
+            building: building
+        },
             new UniqueEntityID(floor.domainId)
         );
 
