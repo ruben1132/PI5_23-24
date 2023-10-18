@@ -29,12 +29,17 @@ export default (app: Router) => {
 
     route.delete('/:id', (req, res, next) => ctrl.deletePassage(req, res, next));
 
-    //   route.put('',
-    //     celebrate({
-    //       body: Joi.object({
-    //         id: Joi.string().required(),
-    //         designation: Joi.string().required()
-    //       }),
-    //     }),
-    //     (req, res, next) => ctrl.updatePassage(req, res, next) );
+    route.put(
+        '',
+        celebrate({
+            body: Joi.object({
+                id: Joi.string().required(),
+                designation: Joi.string().required(),
+                fromFloor: Joi.string().required(),
+                toFloor: Joi.string().required(),
+            }),
+        }),
+        (req, res, next) => ctrl.updatePassage(req, res, next),
+    );
+
 };

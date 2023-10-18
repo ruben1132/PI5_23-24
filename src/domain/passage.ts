@@ -32,8 +32,16 @@ export class Passage extends AggregateRoot<PassageProps> {
         return this.props.fromFloor;
     }
 
+    set fromFloor(value: Floor) {
+        this.props.fromFloor = value;
+    }
+
     get toFloor(): Floor {
         return this.props.toFloor;
+    }
+
+    set toFloor(value: Floor) {
+        this.props.toFloor = value;
     }
 
     private constructor(props: PassageProps, id?: UniqueEntityID) {

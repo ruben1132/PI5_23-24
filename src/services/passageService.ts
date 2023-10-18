@@ -88,6 +88,45 @@ export default class PassageService implements IPassageService {
         }
     }
 
+    public async updatePassage(passageDTO: IPassageDTO): Promise<Result<IPassageDTO>> {
+        try {
+            const passage = await this.passageRepo.findByDomainId(passageDTO.id);
+
+            if (passage === null) {
+                return Result.fail<IPassageDTO>("Passage not found");
+            }
+
+            // check if floor exists
+            let fromFloor: Floor;
+            const fromFloorOrError = await this.getFloor(passageDTO.fromFloor);
+            if (fromFloorOrError.isFailure) {
+                return Result.fail<IPassageDTO>(fromFloorOrError.error);
+            } else {
+                fromFloor = fromFloorOrError.getValue();
+            }
+
+            let toFloor: Floor;
+            const toOrError = await this.getFloor(passageDTO.toFloor);
+            if (toOrError.isFailure) {
+                return Result.fail<IPassageDTO>(toOrError.error);
+            } else {
+                toFloor = toOrError.getValue();
+            }
+
+            //passage.toFloor = toFloor;
+            //passage.toFloor = toFloor;
+            passage.designation = passageDTO.designation;
+
+            await this.passageRepo.save(passage);
+
+            const passageDTOResult = PassageMap.toDTO(passage) as IPassageDTO;
+
+            return Result.ok<IPassageDTO>(passageDTOResult)
+        } catch (e) {
+            throw e;
+        }
+    }
+
     public async deletePassage(id: string): Promise<Result<void>> {
         try {
 
