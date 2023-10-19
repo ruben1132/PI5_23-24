@@ -1,5 +1,5 @@
 export default interface IElevatorDTO {
-    id: string;
+    domainId: string;
     designation: string;
     //building: string;
     //floorsAllowed: [Number];

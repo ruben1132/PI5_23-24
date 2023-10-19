@@ -16,12 +16,12 @@ interface ElevatorProps {
 }
 
 export class Elevator extends AggregateRoot<ElevatorProps> {
-    get id(): UniqueEntityID {
+    get domainId(): UniqueEntityID {
         return this._id;
     }
 
-    get elevatorId(): ElevatorId {
-        return new ElevatorId(this.elevatorId.toValue());
+    get elevatorDomainId(): ElevatorId {
+        return new ElevatorId(this.elevatorDomainId.toValue());
     }
 
     get elevatorDesignation(): ElevatorDesignation {
@@ -32,12 +32,12 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
         return this.props.building;
     }*/
 
-    private constructor(props: ElevatorProps, id?: UniqueEntityID) {
-        super(props, id);
+    private constructor(props: ElevatorProps, domainId?: UniqueEntityID) {
+        super(props, domainId);
     }
 
     // TODO: implementar regras de negocio na criacao de uma elevator
-    public static create(props: ElevatorProps, id?: UniqueEntityID): Result<Elevator> {
+    public static create(props: ElevatorProps, domainId?: UniqueEntityID): Result<Elevator> {
         /*const guardedProps = [
             { argument: props.designation, argumentName: 'designation' },
             { argument: props.building, argumentName: 'building' },
@@ -62,7 +62,7 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
             return Result.fail<Elevator>('Must provide a building')
         }*/
         
-        const elevator = new Elevator({ designation: designation }, id);
+        const elevator = new Elevator({ designation: designation }, domainId);
         return Result.ok<Elevator>(elevator)
     }
 
