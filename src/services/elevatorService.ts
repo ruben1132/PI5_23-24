@@ -2,8 +2,7 @@ import { Service, Inject } from 'typedi';
 import config from "../../config";
 import IElevatorDTO from '../dto/IElevatorDTO';
 import { Elevator } from "../domain/elevator";
-import { Building } from '../domain/building';
-import IBuildingRepo from './IRepos/IBuildingRepo';
+import { Floor } from '../domain/floor';
 import IElevatorRepo from '../services/IRepos/IElevatorRepo';
 import IFloorRepo from '../services/IRepos/IFloorRepo';
 import IElevatorService from './IServices/IElevatorService';
@@ -15,7 +14,7 @@ import { ElevatorDesignation } from '../domain/valueObj/elevatorDesignation';
 export default class ElevatorService implements IElevatorService {
     constructor(
         @Inject(config.repos.elevator.name) private elevatorRepo: IElevatorRepo,
-        //@Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
+        @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
     ) { }
 
     public async getElevators(): Promise<Result<Array<IElevatorDTO>>> {
@@ -37,16 +36,19 @@ export default class ElevatorService implements IElevatorService {
     public async createElevator(elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
         try {
 
-            // check if building exists
-            /*let building: Building;
-            const buildingOrError = await this.getBuilding(elevatorDTO.building);
-            if (buildingOrError.isFailure) {
-                return Result.fail<IElevatorDTO>(buildingOrError.errorValue());
-            } else {
-                building = buildingOrError.getValue();
-            }*/
-
-            // const elevatorDM = ElevatorMap.toDomain(elevatorDTO);
+            let floorsAllowed: Floor[];
+            elevatorDTO.floorsAllowed.forEach(async floorId => {
+                // check if floor exists
+                const floorOrError = await this.getFloor(floorId);
+                if (floorOrError.isFailure) {
+                    return Result.fail<IElevatorDTO>(floorOrError.errorValue());
+                }else {
+                    const floor = floorOrError.getValue();
+                    console.log(floor);
+                    //floorsAllowed.push(floor);
+                    //floorsAllowed.
+                }
+            });
 
             const designation = await ElevatorDesignation.create(elevatorDTO.designation);
             if (designation.isFailure) {
@@ -56,8 +58,7 @@ export default class ElevatorService implements IElevatorService {
             const elevatorOrError = await Elevator.create(
                 {
                     designation: designation.getValue(),
-                    //building: building
-                    //floorsAllowed: elevatorDM,
+                    floorsAllowed: floorsAllowed
                 }
             );
 
@@ -130,17 +131,17 @@ export default class ElevatorService implements IElevatorService {
         }
     };
 
-    // check if building exists
-    /*private async getBuilding(buildingId: string): Promise<Result<Building>> {
+    // check if floor exists
+    private async getFloor(floorId: string): Promise<Result<Floor>> {
 
-        const building = await this.buildingRepo.findByDomainId(buildingId);
-        const found = !!building;
+        const floor = await this.floorRepo.findByDomainId(floorId);
+        const found = !!floor;
 
         if (found) {
-            return Result.ok<Building>(building);
+            return Result.ok<Floor>(floor);
         } else {
-            return Result.fail<Building>("Couldn't find building by id=" + buildingId);
+            return Result.fail<Floor>("Couldn't find floor by id=" + floorId);
         }
-    }*/
+    }
 
 }
