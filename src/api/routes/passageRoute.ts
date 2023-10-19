@@ -27,6 +27,17 @@ export default (app: Router) => {
 
     route.get('', (req, res, next) => ctrl.getPassages(req, res, next));
 
+    route.get(
+        '/buildings/:first/:second',
+        celebrate({
+            params: Joi.object({
+                first: Joi.string().required(),
+                second: Joi.string().required(),
+            }),
+        }),
+        (req, res, next) => ctrl.getPassagesBetweenBuildings(req, res, next),
+    );
+
     route.delete('/:id', (req, res, next) => ctrl.deletePassage(req, res, next));
 
     route.put(

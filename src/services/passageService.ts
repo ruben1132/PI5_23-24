@@ -75,6 +75,22 @@ export default class PassageService implements IPassageService {
         }
     }
 
+    public async getPassagesBetweenBuildings(first: string, second: string): Promise<Result<Array<IPassageDTO>>> {
+        try {
+            const passages = await this.passageRepo.getPassagesBetweenBuildings(first, second);
+
+            if (passages === null) {
+                return Result.fail<Array<IPassageDTO>>("Passages not found");
+            }
+            else {
+                const passagesDTOResult = passages.map(passage => PassageMap.toDTO(passage) as IPassageDTO);
+                return Result.ok<Array<IPassageDTO>>(passagesDTOResult)
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+
     // check if floor exists
     private async getFloor(floorId: string): Promise<Result<Floor>> {
 
@@ -113,8 +129,8 @@ export default class PassageService implements IPassageService {
                 toFloor = toOrError.getValue();
             }
 
-            //passage.toFloor = toFloor;
-            //passage.toFloor = toFloor;
+            passage.toFloor = toFloor;
+            passage.toFloor = toFloor;
             passage.designation = passageDTO.designation;
 
             await this.passageRepo.save(passage);
