@@ -116,6 +116,11 @@ export default async ({ expressApp }) => {
         path: config.controllers.robotType.path,
     };
 
+    const roomController = {
+        name: config.controllers.room.name,
+        path: config.controllers.room.path,
+    };
+
     // ******************* REPO *******************
     const roleRepo = {
         name: config.repos.role.name,
@@ -208,6 +213,11 @@ export default async ({ expressApp }) => {
         path: config.services.robotType.path,
     };
 
+    const roomService = {
+        name: config.services.room.name,
+        path: config.services.room.path,
+    };
+
     await dependencyInjectorLoader({
         mongoConnection,
         schemas: [
@@ -234,6 +244,7 @@ export default async ({ expressApp }) => {
             elevatorController,
             taskTypeController,
             robotTypeController,
+            roomController,
         ],
         repos: [
             roleRepo,
@@ -256,6 +267,7 @@ export default async ({ expressApp }) => {
             elevatorService,
             taskTypeService,
             robotTypeService,
+            roomService,
         ],
     });
     Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

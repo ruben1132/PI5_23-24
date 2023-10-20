@@ -8,6 +8,7 @@ import passageRoute from './routes/passageRoute';
 import elevatorRoute from './routes/elevatorRoute';
 import taskType from './routes/taskTypeRoute';
 import robotType from './routes/robotTypeRoute';
+import roomRoute from './routes/roomRoute';
 
 export default () => {
 	const app = Router();
@@ -21,7 +22,7 @@ export default () => {
 	elevatorRoute(app);
     taskType(app);
     robotType(app);
-
+	roomRoute(app);
 
 	return app
 }

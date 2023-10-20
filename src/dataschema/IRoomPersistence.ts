@@ -1,6 +1,6 @@
 export interface IRoomPersistence {
 	_id: string;
-    number: number; 
+    number: string; 
     floor: string;
 }
   

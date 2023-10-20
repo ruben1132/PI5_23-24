@@ -3,7 +3,7 @@ import { Service, Inject } from 'typedi';
 import IRoomRepo from "../services/IRepos/IRoomRepo";
 import { Room } from "../domain/room";
 import { RoomId } from "../domain/valueObj/roomId";
-// import { RoomMap } from "../mappers/RoomMap"; // TODO: implementar
+import { RoomMap } from "../mappers/RoomMap"; 
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IRoomPersistence } from '../dataschema/IRoomPersistence';
@@ -24,7 +24,7 @@ export default class RoomRepo implements IRoomRepo {
 
   public async exists(room: Room): Promise<boolean> {
 
-    const idX = room.id instanceof RoomId ? (<RoomId>room.id).toValue() : room.id;
+    const idX = room.domainId instanceof RoomId ? (<RoomId>room.domainId).toValue() : room.domainId;
 
     const query = { domainId: idX };
     const roomDocument = await this.roomSchema.findOne(query as FilterQuery<IRoomPersistence & Document>);
@@ -32,21 +32,23 @@ export default class RoomRepo implements IRoomRepo {
     return !!roomDocument === true;
   }
 
-    // TODO: so dei copy + paste de outro repo q ja tava feito - fazer as alteracoes necessarias
   public async save(room: Room): Promise<Room> {
-    const query = { domainId: room.id.toString() };
+    const query = { domainId: room.domainId.toString() };
 
     const roomDocument = await this.roomSchema.findOne(query);
 
     try {
       if (roomDocument === null) {
-        // const rawRoom: any = RoomMap.toPersistence(room);
+        const rawRoom: any = RoomMap.toPersistence(room);
 
-        // const roomCreated = await this.roomSchema.create(rawRoom);
+        console.log(rawRoom);
 
-        // return RoomMap.toDomain(roomCreated);
+        const roomCreated = await this.roomSchema.create(rawRoom);
+
+        return RoomMap.toDomain(roomCreated);
       } else {
-        // roomDocument.name = room.name;
+        roomDocument.number = room.number.value;
+        roomDocument.floor = room.floor.id.toString();
         await roomDocument.save();
 
         return room;
@@ -61,7 +63,7 @@ export default class RoomRepo implements IRoomRepo {
     const roomRecord = await this.roomSchema.findOne(query as FilterQuery<IRoomPersistence & Document>);
 
     if (roomRecord != null) {
-      // return RoomMap.toDomain(roomRecord);
+      return RoomMap.toDomain(roomRecord);
     }
     else
       return null;
@@ -72,7 +74,7 @@ export default class RoomRepo implements IRoomRepo {
         const roomRecord = await this.roomSchema.find(query as FilterQuery<IRoomPersistence & Document>);
 
         if (roomRecord != null) {
-            // return roomRecord.map((room) => RoomMap.toDomain(room));
+            return roomRecord.map((room) => RoomMap.toDomain(room));
         }
 
         return null;
@@ -82,7 +84,7 @@ export default class RoomRepo implements IRoomRepo {
     const roomRecord = await this.roomSchema.find({});
 
     if (roomRecord != null) {
-      // return roomRecord.map((room) => RoomMap.toDomain(room));
+      return roomRecord.map((room) => RoomMap.toDomain(room));
     }
     else
       return null;
@@ -93,7 +95,7 @@ export default class RoomRepo implements IRoomRepo {
     const roomRecord = await this.roomSchema.findOne(query as FilterQuery<IRoomPersistence & Document>);
 
     if (roomRecord != null) {
-      // return RoomMap.toDomain(roomRecord);
+      return RoomMap.toDomain(roomRecord);
     }
     else
       return null;
