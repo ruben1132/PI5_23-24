@@ -37,6 +37,23 @@ export class Guard {
     return { succeeded: true }
   }
 
+  public static againstEmpty (argument: any, argumentName: string): IGuardResult {
+    if (argument === '') {      
+      return { succeeded: false, message: `${argumentName} is empty` }
+    } else {
+      return { succeeded: true }
+    }
+  }
+
+  public static againstEmptyBulk(args: GuardArgumentCollection): IGuardResult {
+    for (let arg of args) {
+      const result = this.againstEmpty(arg.argument, arg.argumentName);
+      if (!result.succeeded) return result;
+    }
+
+    return { succeeded: true }
+  }
+
   public static againstZeroOrNegativeBulk(args: GuardArgumentCollection): IGuardResult {
     for (let arg of args) {
       const result = this.againstNullOrUndefined(arg.argument, arg.argumentName);

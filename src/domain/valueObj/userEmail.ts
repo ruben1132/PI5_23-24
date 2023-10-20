@@ -8,20 +8,24 @@ interface UserEmailProps {
 }
 
 export class UserEmail extends ValueObject<UserEmailProps> {
-  get value (): string {
+  get value(): string {
     return this.props.value;
   }
-  
-  private constructor (props: UserEmailProps) {
+
+  private constructor(props: UserEmailProps) {
     super(props);
   }
 
-  public static create (email: string): Result<UserEmail> {
+  public static create(email: string): Result<UserEmail> {
     const guardResult = Guard.againstNullOrUndefined(email, 'email');
+    const guardResult2 = Guard.againstEmpty(email, 'email');
     if (!guardResult.succeeded) {
       return Result.fail<UserEmail>(guardResult.message);
-    } else {
-      return Result.ok<UserEmail>(new UserEmail({ value: email }))
     }
+    if (!guardResult2.succeeded) {
+      return Result.fail<UserEmail>(guardResult2.message);
+    }
+    return Result.ok<UserEmail>(new UserEmail({ value: email }))
+
   }
 }

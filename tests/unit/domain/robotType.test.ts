@@ -49,7 +49,7 @@ describe('RobotType', () => {
             }, new UniqueEntityID());
 
             expect(robotType.isFailure).to.be.true;
-            expect(robotType.error).to.equal('type is null or undefined');
+            expect('type is null or undefined').to.equal(robotType.error);
         });
 
         it('should fail if no brand is provided', () => {
@@ -61,7 +61,7 @@ describe('RobotType', () => {
             }, new UniqueEntityID());
 
             expect(robotType.isFailure).to.be.true;
-            expect(robotType.error).to.equal('brand is null or undefined');
+            expect('brand is null or undefined').to.equal(robotType.error);
         });
 
         it('should fail if no model is provided', () => {
@@ -73,7 +73,7 @@ describe('RobotType', () => {
             }, new UniqueEntityID());
 
             expect(robotType.isFailure).to.be.true;
-            expect(robotType.error).to.equal('model is null or undefined');
+            expect('model is null or undefined').to.equal(robotType.error);
         });
 
         it('should fail if tasksAvailable is empty', () => {
@@ -85,7 +85,7 @@ describe('RobotType', () => {
             }, new UniqueEntityID());
 
             expect(robotType.isFailure).to.be.true;
-            expect(robotType.error).to.equal('tasksAvailable is empty');
+            expect('tasksAvailable is empty').to.equal(robotType.error);
         });
     });
 });

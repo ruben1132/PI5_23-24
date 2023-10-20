@@ -34,20 +34,20 @@ describe("Robot", () => {
         const robotOrError = Robot.create({ state: true, taskTypesAllowed: taskTypesAllowed, designation: null });
 
         expect(robotOrError.isFailure).to.be.true;
-        expect(robotOrError.errorValue()).to.equal("designation is null or undefined");
+        expect("designation is null or undefined").to.equal(robotOrError.errorValue());
     });
 
     it("should fail if no state is provided", () => {
         const robotOrError = Robot.create({ state: null, taskTypesAllowed: taskTypesAllowed, designation: "Robot 1" });
 
         expect(robotOrError.isFailure).to.be.true;
-        expect(robotOrError.errorValue()).to.equal("state is null or undefined");
+        expect("state is null or undefined").to.equal(robotOrError.errorValue());
     });
 
     it("should fail if no taskTypesAllowed is provided", () => {
         const robotOrError = Robot.create({ state: true, taskTypesAllowed: null, designation: "Robot 1" });
 
         expect(robotOrError.isFailure).to.be.true;
-        expect(robotOrError.errorValue()).to.equal("taskTypesAllowed is null or undefined");
+        expect("taskTypesAllowed is null or undefined").to.equal(robotOrError.errorValue());
     });
 });

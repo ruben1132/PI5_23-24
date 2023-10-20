@@ -5,6 +5,7 @@ import { Result } from "../core/logic/Result";
 import { TaskId } from "./valueObj/taskId";
 import { TaskType } from "./taskType";
 import { Robot } from "./robot";
+import { Guard } from "../core/logic/Guard";
 
 interface TaskProps {
     designation: string; // TODO: criar um value obj para designacoes (meter um max de chars por exemplo)
@@ -28,19 +29,35 @@ export class Task extends AggregateRoot<TaskProps> {
     get assigned(): Robot {
         return this.props.assigned;
     }
-    
+
+    get type(): TaskType {
+        return this.props.type;
+    }
+
     private constructor(props: TaskProps, id?: UniqueEntityID) {
         super(props, id);
     }
 
-    //   public static create (taskDTO: ITaskDTO, id?: UniqueEntityID): Result<Task> {
-    //     const designation = taskDTO.designation;
+    public static create(props: TaskProps, id?: UniqueEntityID): Result<Task> {
 
-    //     if (!!designation === false || designation.length === 0) {
-    //       return Result.fail<Task>('Must provide a task name')
-    //     } else {
-    //       const role = new Task({ designation: designation }, id);
-    //       return Result.ok<Task>( role )
-    //     }
-    //   }
+        const guardedProps = [
+            { argument: props.designation, argumentName: 'designation' },
+            { argument: props.type, argumentName: 'type' },
+            { argument: props.assigned, argumentName: 'assigned' }
+        ];
+        const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
+
+        if (!guardResult.succeeded) {
+            return Result.fail<Task>(guardResult.message)
+        }
+
+        const role = new Task({
+            designation: props.designation,
+            type: props.type,
+            assigned: props.assigned
+        }, id);
+
+        return Result.ok<Task>(role)
+
+    }
 }

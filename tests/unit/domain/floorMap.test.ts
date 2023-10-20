@@ -20,6 +20,7 @@ import { Elevator } from '../../../src/domain/elevator';
 import { ElevatorDesignation } from '../../../src/domain/valueObj/elevatorDesignation';
 import { Passage } from '../../../src/domain/passage';
 import { expect } from 'chai';
+import { RoomNumber } from '../../../src/domain/valueObj/roomNumber';
 
 describe('FloorMap', () => {
     const building1 = Building.create({
@@ -47,12 +48,12 @@ describe('FloorMap', () => {
     }).getValue();
 
     const room1 = Room.create({
-        number: 1,
+        number: RoomNumber.create("A001").getValue(),
         floor: floor1,
     }).getValue();
 
     const room2 = Room.create({
-        number: 2,
+        number: RoomNumber.create("A001").getValue(),
         floor: floor1,
     }).getValue();
 

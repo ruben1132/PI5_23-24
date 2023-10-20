@@ -1,5 +1,6 @@
 import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
+import { Guard } from "../core/logic/Guard";
 
 import { Result } from "../core/logic/Result";
 import { Floor } from "./floor";
@@ -41,17 +42,16 @@ export class Room extends AggregateRoot<RoomProps> {
 
     public static create(props: RoomProps, domainId?: UniqueEntityID): Result<Room> {
         
-        const number = props.number;
-        const floor = props.floor;
+        const guardedProps = [
+            { argument: props.number, argumentName: 'number' },
+            { argument: props.floor, argumentName: 'floor' }
+        ];
+        const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
-        if (!!number === false || number === null) {
-            return Result.fail<Room>('Must provide a room number')
-        }
-        if (!!floor === false || floor === null) {
-            return Result.fail<Room>('Must provide a floor')
-        }
-        
-        const room = new Room({ number: number, floor: floor }, domainId);
+        if (!guardResult.succeeded) {
+            return Result.fail<Room>(guardResult.message)
+          }
+        const room = new Room({ number: props.number, floor: props.floor }, domainId);
         return Result.ok<Room>(room)
     }
 }

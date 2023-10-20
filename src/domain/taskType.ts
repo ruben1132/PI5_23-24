@@ -1,5 +1,6 @@
 import { AggregateRoot } from '../core/domain/AggregateRoot';
 import { UniqueEntityID } from '../core/domain/UniqueEntityID';
+import { Guard } from '../core/logic/Guard';
 
 import { Result } from '../core/logic/Result';
 import { TaskTypeId } from './valueObj/taskTypeId';
@@ -38,17 +39,23 @@ export class TaskType extends AggregateRoot<TaskTypeProps> {
         super(props, id);
     }
 
-    public static create(TaskTypeProps: TaskTypeProps, id?: UniqueEntityID): Result<TaskType> {
-        const name = TaskTypeProps.name;
-        const description = TaskTypeProps.description;
+    public static create(props: TaskTypeProps, id?: UniqueEntityID): Result<TaskType> {
+        const guardedProps = [
+            { argument: props.name, argumentName: 'name' },
+            { argument: props.description, argumentName: 'description' }
+        ];
+        const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
+        const guardResult2 = Guard.againstEmptyBulk(guardedProps);
 
-        if (!!name === false || name.length === 0) {
-            return Result.fail<TaskType>('Must provide a task type name');
-        } else if (!!description === false || description.length === 0) {
-            return Result.fail<TaskType>('Must provide a task type description');
-        } else {
-            const taskType = new TaskType({ name: name, description: description }, id);
-            return Result.ok<TaskType>(taskType);
+        if (!guardResult.succeeded) {
+            return Result.fail<TaskType>(guardResult.message)
         }
+        if (!guardResult2.succeeded) {
+            return Result.fail<TaskType>(guardResult2.message)
+        }
+        
+        const taskType = new TaskType({ name: props.name, description: props.description }, id);
+        return Result.ok<TaskType>(taskType);
+
     }
 }
