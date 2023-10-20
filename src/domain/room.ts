@@ -1,30 +1,30 @@
 import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
-import { Guard } from "../core/logic/Guard";
 
 import { Result } from "../core/logic/Result";
 import { Floor } from "./floor";
 import { RoomId } from "./valueObj/roomId";
+import { RoomNumber } from "./valueObj/roomNumber";
 
 interface RoomProps {
-    number: number; 
+    number: RoomNumber; 
     floor: Floor;
 }
 
 export class Room extends AggregateRoot<RoomProps> {
-    get id(): UniqueEntityID {
+    get domainId(): UniqueEntityID {
         return this._id;
     }
 
-    get roomId(): RoomId {
-        return new RoomId(this.roomId.toValue());
+    get roomDomainId(): RoomId {
+        return new RoomId(this.roomDomainId.toValue());
     }
 
-    get number(): number {
+    get number(): RoomNumber {
         return this.props.number;
     }
 
-    set number(value: number) {
+    set number(value: RoomNumber) {
         this.props.number = value;
     }
 
@@ -32,23 +32,26 @@ export class Room extends AggregateRoot<RoomProps> {
         return this.props.floor;
     }
 
-    private constructor(props: RoomProps, id?: UniqueEntityID) {
-        super(props, id);
+    set floor(value: Floor) {
+        this.props.floor = value;
+    }
+    private constructor(props: RoomProps, domainId?: UniqueEntityID) {
+        super(props, domainId);
     }
 
-    // TODO: implementar regras de negocio na criacao de uma room
-    public static create(props: RoomProps, id?: UniqueEntityID): Result<Room> {
-        const guardedProps = [
-            { argument: props.number, argumentName: 'number' },
-            { argument: props.floor, argumentName: 'floor' }
-        ];
+    public static create(props: RoomProps, domainId?: UniqueEntityID): Result<Room> {
+        
+        const number = props.number;
+        const floor = props.floor;
 
-        const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
-
-        if (!guardResult.succeeded) {
-            return Result.fail<Room>(guardResult.message)
+        if (!!number === false || number === null) {
+            return Result.fail<Room>('Must provide a room number')
         }
-
-        return Result.ok<Room>(new Room({ ...props }, id))
+        if (!!floor === false || floor === null) {
+            return Result.fail<Room>('Must provide a floor')
+        }
+        
+        const room = new Room({ number: number, floor: floor }, domainId);
+        return Result.ok<Room>(room)
     }
 }

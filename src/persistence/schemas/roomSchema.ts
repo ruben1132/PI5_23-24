@@ -9,13 +9,13 @@ const RoomSchema = new mongoose.Schema(
         },
 
         number: {
-            type: Number,
-            min: 1,
-            index: true,
+            type: String,
+            required: [true, 'Please enter the number of the room'],
         },
 
         floor: {
             type: String,
+            required: [true, 'Please enter the floor of the room'],
         },
 
     },
