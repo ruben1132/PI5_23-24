@@ -1,1 +1,0 @@
-{"version":3,"file":"userId.js","sourceRoot":"","sources":["../../../../src/domain/valueObj/userId.ts"],"names":[],"mappings":";;;AACA,qDAAkD;AAGlD,MAAa,MAAO,SAAQ,eAAW;IAErC,IAAI,EAAE;QACJ,OAAO,IAAI,CAAC,GAAG,CAAC;IAClB,CAAC;IAED,YAAqB,EAAmB;QACtC,KAAK,CAAC,IAAI,EAAE,EAAE,CAAC,CAAA;IACjB,CAAC;CACF;AATD,wBASC"}

@@ -24,7 +24,7 @@
   },
   "include": [
     "./src/**/*", "index.js"
-  ],
+, "tests/controllers/roleController.test.ts"  ],
   "exclude": [
     "node_modules",
     "tests"
