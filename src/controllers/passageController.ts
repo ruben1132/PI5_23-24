@@ -46,6 +46,37 @@ export default class PassageController implements IPassageController /* TODO: ex
         }
     }
 
+    public async getPassagesBetweenBuildings(req: Request, res: Response, next: NextFunction) {
+        try {
+            const passagesOrError = await this.passageServiceInstance.getPassagesBetweenBuildings(req.body.first as string, req.body.second as string) as Result<Array<IPassageDTO>>;
+
+            if (passagesOrError.isFailure) {
+                return res.status(400).send({ error: passagesOrError.errorValue() });
+            }
+
+            return res.json(passagesOrError.getValue()).status(201);
+        }
+        catch (e) {
+            return next(e);
+        }
+    }
+
+    public async updatePassage(req: Request, res: Response, next: NextFunction) {
+        try {
+            const passageOrError = await this.passageServiceInstance.updatePassage(req.body as IPassageDTO) as Result<IPassageDTO>;
+
+            if (passageOrError.isFailure) {
+                return res.status(404).send({ error: passageOrError.errorValue() });
+            }
+
+            const passageDTO = passageOrError.getValue();
+            return res.status(201).json(passageDTO);
+        }
+        catch (e) {
+            return next(e);
+        }
+    };
+
     public async deletePassage(req: Request, res: Response, next: NextFunction) {
         try {
             const passagesOrError = await this.passageServiceInstance.deletePassage(req.params.id) as Result<void>;

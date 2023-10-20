@@ -3,7 +3,7 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import { Guard } from "../core/logic/Guard";
 
 import { Result } from "../core/logic/Result";
-import { Building } from "./building";
+import { Floor } from "./floor";
 import { ElevatorId } from "./valueObj/elevatorId";
 import { ElevatorDesignation } from "./valueObj/elevatorDesignation";
 
@@ -11,33 +11,32 @@ import IElevatorDTO from "../dto/IElevatorDTO";
 
 interface ElevatorProps {
     designation: ElevatorDesignation;
-    //building: Building;
-    //floorsAllowed: [Number];
+    floorsAllowed: Floor[];
 }
 
 export class Elevator extends AggregateRoot<ElevatorProps> {
-    get id(): UniqueEntityID {
+    get domainId(): UniqueEntityID {
         return this._id;
     }
 
-    get elevatorId(): ElevatorId {
-        return new ElevatorId(this.elevatorId.toValue());
+    get elevatorDomainId(): ElevatorId {
+        return new ElevatorId(this.elevatorDomainId.toValue());
     }
 
     get elevatorDesignation(): ElevatorDesignation {
         return this.props.designation
     }
 
-    /*get building(): Building {
-        return this.props.building;
-    }*/
+    get floorsAllowed(): Floor[] {
+        return this.props.floorsAllowed
+    }
 
-    private constructor(props: ElevatorProps, id?: UniqueEntityID) {
-        super(props, id);
+    private constructor(props: ElevatorProps, domainId?: UniqueEntityID) {
+        super(props, domainId);
     }
 
     // TODO: implementar regras de negocio na criacao de uma elevator
-    public static create(props: ElevatorProps, id?: UniqueEntityID): Result<Elevator> {
+    public static create(props: ElevatorProps, domainId?: UniqueEntityID): Result<Elevator> {
         /*const guardedProps = [
             { argument: props.designation, argumentName: 'designation' },
             { argument: props.building, argumentName: 'building' },
@@ -53,16 +52,16 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
         return Result.ok<Elevator>(new Elevator({ ...props }, id))*/
 
         const designation = props.designation;
-        //const building = props.building;
+        const floorsAllowed = props.floorsAllowed;
 
         if (!!designation === false || designation === null) {
             return Result.fail<Elevator>('Must provide an elevator designation')
         }
-        /*if (!!building === false || building === null) {
-            return Result.fail<Elevator>('Must provide a building')
-        }*/
+        if (!!floorsAllowed === false || floorsAllowed === null) {
+            return Result.fail<Elevator>('Must provide floors')
+        }
         
-        const elevator = new Elevator({ designation: designation }, id);
+        const elevator = new Elevator({ designation: designation, floorsAllowed: floorsAllowed }, domainId);
         return Result.ok<Elevator>(elevator)
     }
 

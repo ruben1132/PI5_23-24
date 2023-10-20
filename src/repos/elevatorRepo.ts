@@ -31,7 +31,6 @@ export default class ElevatorRepo implements IElevatorRepo {
         return !!elevatorDocument === true;
     }
 
-    // TODO: so dei copy + paste de outro repo q ja tava feito - fazer as alteracoes necessarias
     public async save(elevator: Elevator): Promise<Elevator> {
         const query = { domainId: elevator.id.toString() };
 
@@ -43,8 +42,15 @@ export default class ElevatorRepo implements IElevatorRepo {
                 const elevatorCreated = await this.elevatorSchema.create(rawElevator);
                 return ElevatorMap.toDomain(elevatorCreated);
             } else {
+
+                let floorsAllowed: string[];
+                elevator.floorsAllowed.forEach(floor => {
+                    const floorId = floor.id.toString();
+                    floorsAllowed.push(floorId);
+                });
+
                 elevatorDocument.designation = elevator.elevatorDesignation.value;
-                //elevatorDocument.building = elevator.building.id.toString();
+                elevatorDocument.floorsAllowed = floorsAllowed;
                 await elevatorDocument.save();
 
                 return elevator;

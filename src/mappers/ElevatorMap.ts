@@ -12,11 +12,16 @@ import { ElevatorDesignation } from "../domain/valueObj/elevatorDesignation";
 export class ElevatorMap extends Mapper<Elevator> {
   
   public static toDTO( elevator: Elevator): IElevatorDTO {
+    let floorsAllowed: string[];
+    elevator.floorsAllowed.forEach(floor => {
+      const floorId = floor.id.toString();
+      floorsAllowed.push(floorId);
+    });
+    
     return {
-      id: elevator.id.toString(),
+      domainId: elevator.domainId.toString(),
       designation: elevator.elevatorDesignation.value,
-      //building: elevator.building.id.toValue(),
-      //floorsAllowed: elevator.floorsAllowed.value,
+      floorsAllowed: floorsAllowed,
     } as IElevatorDTO;
   }
 
@@ -25,14 +30,8 @@ export class ElevatorMap extends Mapper<Elevator> {
 
     const elevatorOrError = Elevator.create({
       designation: elevatorDesignationOrError.getValue(),
-      //building: buildingNameOrError.getValue(),
-      //floorsAllowed: ,
+      floorsAllowed: elevator.floorsAllowed
     }, new UniqueEntityID(elevator.domainId));
-
-    /*const elevatorOrError = Elevator.create(
-      elevator,
-      new UniqueEntityID(elevator.id)
-  );*/
     
     elevatorOrError.isFailure ? console.log(elevatorOrError.error) : '';
 
@@ -41,9 +40,9 @@ export class ElevatorMap extends Mapper<Elevator> {
 
   public static toPersistence (elevator: Elevator): any {
     return {
-      domainId: elevator.id.toString(),
+      domainId: elevator.domainId.toString(),
       designation: elevator.elevatorDesignation.value,
-      //building: elevator.building.id.toString()
+      floorsAllowed: elevator.floorsAllowed
     }
   }
 }

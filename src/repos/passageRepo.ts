@@ -106,6 +106,61 @@ export default class PassageRepo implements IPassageRepo {
         }
     }
 
+    public async getPassagesBetweenBuildings(first: string, second: string): Promise<Passage[]> {
+        try {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'floors', // Name of the "floors" collection
+                        localField: 'fromFloor', // Field in the "passages" collection
+                        foreignField: 'domainId', // Field in the "floors" collection
+                        as: 'fromFloorData'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'floors', // Name of the "floors" collection
+                        localField: 'toFloor', // Field in the "passages" collection
+                        foreignField: 'domainId', // Field in the "floors" collection
+                        as: 'toFloorData'
+                    }
+                }
+            ];
+
+            const passagesWithFloorData = await this.passageSchema.aggregate(pipeline);
+
+            if (passagesWithFloorData) {
+                // Map the raw MongoDB documents to your custom Passage objects
+                const passagesWithCustomFloorData = passagesWithFloorData.map((passage) => {
+                    //console.log(first.toString());
+                    //console.log(passage.fromFloorData[0].building);
+                    // Convert the 'fromFloorData' and 'toFloorData' fields to custom Floor objects
+                    if( (passage.fromFloorData[0].building.code.toString() === first && passage.toFloorData[0].building.code.toString() === second) 
+                    ||  (passage.fromFloorData[0].building.code.toString() === second && passage.toFloorData[0].building.code.toString() === first)){
+                        
+                        const fromFloor = FloorMap.toDomain(passage.fromFloorData[0]); // Assuming a one-to-one relationship
+                        const toFloor = FloorMap.toDomain(passage.toFloorData[0]); // Assuming a one-to-one relationship
+
+                        return { ...passage, fromFloor, toFloor };
+                    }
+                    /*const fromFloor = FloorMap.toDomain(passage.fromFloorData[0]); // Assuming a one-to-one relationship
+                    const toFloor = FloorMap.toDomain(passage.toFloorData[0]); // Assuming a one-to-one relationship
+
+                    // Merge the converted objects with the rest of the passage data
+                    return { ...passage, fromFloor, toFloor };*/
+                });
+
+                return passagesWithCustomFloorData.map((passage) => PassageMap.toDomain(passage));
+            } else {
+                console.log("No matching data found.");
+                return [];
+            }
+        } catch (error) {
+            console.error("Error during aggregation:", error);
+            return [];
+        }
+    }
+
 
     public async findByDomainId(passageId: PassageId | string): Promise<Passage> {
         const query = { domainId: passageId };

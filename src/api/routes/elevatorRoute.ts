@@ -17,8 +17,7 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         designation: Joi.string().required(),
-        //building: Joi.string().required(),
-        //floorsAllowed: Joi.array().number().required()     
+        floorsAllowed: Joi.array().required()     
       })
     }),
     (req, res, next) => ctrl.createElevator(req, res, next));
