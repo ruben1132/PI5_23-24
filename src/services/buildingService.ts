@@ -118,7 +118,7 @@ export default class BuildingService implements IBuildingService {
                 return Result.fail<void>("Building not found");
             }
 
-            await this.buildingRepo.delete(buildingId);
+            await this.buildingRepo.deleteBuilding(buildingId);
 
             return Result.ok<void>();
 

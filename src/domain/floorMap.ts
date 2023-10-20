@@ -12,11 +12,11 @@ import { Guard } from "../core/logic/Guard";
 
 interface FloorMapProps {
     floor: Floor; 
-    map: [[number]]; 
-    fmRooms: [FloorMapRoom];
-    fmDoors: [FloorMapDoor]; 
+    map: number[][]; 
+    fmRooms: FloorMapRoom[];
+    fmDoors: FloorMapDoor[]; 
     fmElevator: FloorMapElevator; 
-    fmPassages: [FloorMapPassage];
+    fmPassages: FloorMapPassage[];
 }
 
 export class FloorMap extends AggregateRoot<FloorMapProps> {
@@ -36,27 +36,27 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
         return this.props.floor;
     }
 
-    get map(): [[number]] {
+    get map(): number[][] {
         return this.props.map;
     }
 
-    set map(value: [[number]]) {
+    set map(value: number[][]) {
         this.props.map = value;
     }
 
-    get fmRooms(): [FloorMapRoom] {
+    get fmRooms(): FloorMapRoom[] {
         return this.props.fmRooms;
     }
 
-    set fmRooms(value: [FloorMapRoom]) {
+    set fmRooms(value: FloorMapRoom[]) {
         this.props.fmRooms = value;
     }
 
-    get fmDoors(): [FloorMapDoor] {
+    get fmDoors(): FloorMapDoor[] {
         return this.props.fmDoors;
     }
 
-    set fmDoors(value: [FloorMapDoor]) {
+    set fmDoors(value: FloorMapDoor[]) {
         this.props.fmDoors = value;
     }
 
@@ -68,11 +68,11 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
         this.props.fmElevator = value;
     }
 
-    get fmPassages(): [FloorMapPassage] {
+    get fmPassages(): FloorMapPassage[] {
         return this.props.fmPassages;
     }
 
-    set fmPassages(value: [FloorMapPassage]) {
+    set fmPassages(value: FloorMapPassage[]) {
         this.props.fmPassages = value;
     }
 
@@ -96,9 +96,14 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
         if (!guardResult.succeeded) {
             return Result.fail<FloorMap>(guardResult.message)
         }
+
+        if (props.map.length === 0) {
+            return Result.fail<FloorMap>("Map is empty")
+        }
         
         const floorMap = new FloorMap({ ...props }, id);
         return Result.ok<FloorMap>(floorMap)
 
     }
 }
+

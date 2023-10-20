@@ -7,7 +7,7 @@ import { Floor } from "./floor";
 import { RoomId } from "./valueObj/roomId";
 
 interface RoomProps {
-    number: number; //TODO: criar um value obj isto 
+    number: number; 
     floor: Floor;
 }
 

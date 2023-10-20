@@ -2,9 +2,8 @@ import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
-import { IAutonomous } from "./IAutonomous";
 import { TaskType } from "./taskType";
-import { AutonomousId } from "./valueObj/autonomousId";
+import { DroneId } from "./valueObj/droneId";
 
 // import IDroneDTO from "../dto/IDroneDTO"; // TODO: criar o DTO
 
@@ -15,38 +14,38 @@ interface DroneProps {
     taskTypesAllowed: [TaskType]
 }
 
-export class Drone extends AggregateRoot<DroneProps> implements IAutonomous {
+export class Drone extends AggregateRoot<DroneProps> {
 
     get id(): UniqueEntityID {
         return this._id;
     }
 
-    get autonomousId(): AutonomousId {
-        return new AutonomousId(this.autonomousId.toValue());
+    get droneId(): DroneId {
+        return new DroneId(this.droneId.toValue());
     }
 
     get designation(): string {
-        return this.designation;
+        return this.props.designation;
     }
 
     set designation(value: string) {
-        this.designation = value;
+        this.props.designation = value;
     }
 
     get state(): boolean {
-        return this.state;
+        return this.props.state;
     }
 
     set state(value: boolean) {
-        this.state = value;
+        this.props.state = value;
     }
 
     get taskTypesAllowed(): [TaskType] {
-        return this.taskTypesAllowed;
+        return this.props.taskTypesAllowed;
     }
 
     set taskTypesAllowed(value: [TaskType]) {
-        this.taskTypesAllowed = value;
+        this.props.taskTypesAllowed = value;
     }
 
     private constructor(props: DroneProps, id?: UniqueEntityID) {

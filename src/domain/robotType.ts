@@ -8,6 +8,7 @@ import { RobotTypeType } from './valueObj/robotTypeType';
 
 import { RobotTypeId } from './valueObj/robotTypeId';
 import { TaskType } from './taskType';
+import { Guard } from '../core/logic/Guard';
 
 interface RobotTypeProps {
     type: RobotTypeType;
@@ -61,26 +62,29 @@ export class RobotType extends AggregateRoot<RobotTypeProps> {
         super(props, id);
     }
 
-    public static create(RobotTypeProps: RobotTypeProps, id?: UniqueEntityID): Result<RobotType> {
-        const type = RobotTypeProps.type;
-        const brand = RobotTypeProps.brand;
-        const model = RobotTypeProps.model;
-        const tasksAvailable = RobotTypeProps.tasksAvailable;
+    public static create(props: RobotTypeProps, id?: UniqueEntityID): Result<RobotType> {
+        const guardedProps = [
+            { argument: props.type, argumentName: 'type' },
+            { argument: props.brand, argumentName: 'brand' },
+            { argument: props.model, argumentName: 'model' },
+            { argument: props.tasksAvailable, argumentName: 'tasksAvailable' },
+        ];
+        const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
-        if (!!type === false) {
-            return Result.fail<RobotType>('Must provide a robot type type');
-        } else if (!!brand === false) {
-            return Result.fail<RobotType>('Must provide a robot type brand');
-        } else if (!!model === false) {
-            return Result.fail<RobotType>('Must provide a robot type model');
-        } else if (!!tasksAvailable === false) {
-            return Result.fail<RobotType>('Must provide a robot type tasks available');
-        } else {
-            const robotType = new RobotType(
-                { type: type, brand: brand, model: model, tasksAvailable: tasksAvailable },
-                id,
-            );
-            return Result.ok<RobotType>(robotType);
+        if (!guardResult.succeeded) {
+            return Result.fail<RobotType>(guardResult.message)
         }
+
+        if (props.tasksAvailable.length === 0) {
+            return Result.fail<RobotType>("tasksAvailable is empty")
+        }
+
+        const robotType = new RobotType(
+            { type: props.type, brand: props.brand, model: props.model, tasksAvailable: props.tasksAvailable },
+            id,
+        );
+
+        return Result.ok<RobotType>(robotType);
+
     }
 }

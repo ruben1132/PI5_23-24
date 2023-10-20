@@ -1,5 +1,6 @@
 import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
+import { Guard } from "../core/logic/Guard";
 
 import { Result } from "../core/logic/Result";
 import { Floor } from "./floor";
@@ -49,20 +50,24 @@ export class Passage extends AggregateRoot<PassageProps> {
     }
 
     public static create(props: PassageProps, id?: UniqueEntityID): Result<Passage> {
-        const designation = props.designation;
-        const fromFloor = props.fromFloor;
-        const toFloor = props.toFloor;
 
-        if (!!designation === false || designation.length === 0) {
-            return Result.fail<Passage>('Must provide a passage name')
+        const guardedProps = [
+            { argument: props.designation, argumentName: 'designation' },
+            { argument: props.fromFloor, argumentName: 'fromFloor' },
+            { argument: props.toFloor, argumentName: 'toFloor' },
+        ];
+        const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
+
+        if (!guardResult.succeeded) {
+            return Result.fail<Passage>(guardResult.message)
         }
-        if (!!fromFloor === false) {
-            return Result.fail<Passage>('Must provide a fromFloor')
+
+        // doesnt allow to create a passage for the same building
+        if (props.fromFloor.building === props.toFloor.building) {
+            return Result.fail<Passage>('The passage must be between different buildings')
         }
-        if (!!toFloor === false) {
-            return Result.fail<Passage>('Must provide a toFloor')
-        }
-        const role = new Passage({ designation: designation, fromFloor: fromFloor, toFloor: toFloor }, id);
-        return Result.ok<Passage>(role)
+
+        const passage = new Passage({ designation: props.designation, fromFloor: props.fromFloor, toFloor: props.toFloor }, id);
+        return Result.ok<Passage>(passage)
     }
 }

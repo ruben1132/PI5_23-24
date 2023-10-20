@@ -2,13 +2,13 @@ import { Elevator } from "../../../src/domain/elevator";
 import { ElevatorDesignation } from "../../../src/domain/valueObj/elevatorDesignation";
 import { Floor } from "../../../src/domain/floor";
 import { UniqueEntityID } from "../../../src/core/domain/UniqueEntityID";
-import { expect } from 'chai';
 import { FloorNumber } from "../../../src/domain/valueObj/floorNumber";
 import { FloorInformation } from "../../../src/domain/valueObj/floorInformation";
 import { Building } from "../../../src/domain/building";
 import { BuildingCode } from "../../../src/domain/valueObj/buildingCode";
 import { BuildingName } from "../../../src/domain/valueObj/buildingName";
 import { BuildingDimensions } from "../../../src/domain/valueObj/buildingDimensions";
+import { expect } from 'chai';
 
 describe("Elevator", () => {
     const validElevatorDesignation = ElevatorDesignation.create("Elevator 1").getValue();

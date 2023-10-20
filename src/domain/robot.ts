@@ -1,50 +1,50 @@
 import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
+import { Guard } from "../core/logic/Guard";
 
 import { Result } from "../core/logic/Result";
-import { IAutonomous } from "./IAutonomous";
 import { TaskType } from "./taskType";
-import { AutonomousId } from "./valueObj/autonomousId";
+import { RobotId } from "./valueObj/robotId";
 
 interface RobotProps {
    // TODO: 
     state: boolean;
     designation: string;
-    taskTypesAllowed: [TaskType]
+    taskTypesAllowed: TaskType[]
 }
 
-export class Robot extends AggregateRoot<RobotProps> implements IAutonomous {
+export class Robot extends AggregateRoot<RobotProps> {
 
     get id(): UniqueEntityID {
         return this._id;
     }
 
-    get autonomousId(): AutonomousId {
-        return new AutonomousId(this.autonomousId.toValue());
+    get robotId(): RobotId {
+        return new RobotId(this.robotId.toValue());
     }
 
     get designation(): string {
-        return this.designation;
+        return this.props.designation;
     }
 
     set designation(value: string) {
-        this.designation = value;
+        this.props.designation = value;
     }
 
     get state(): boolean {
-        return this.state;
+        return this.props.state;
     }
 
     set state(value: boolean) {
-        this.state = value;
+        this.props.state = value;
     }
     
-    get taskTypesAllowed(): [TaskType] {
-        return this.taskTypesAllowed;
+    get taskTypesAllowed():  TaskType[] {
+        return this.props.taskTypesAllowed;
     }
 
-    set taskTypesAllowed(value: [TaskType]) {
-        this.taskTypesAllowed = value;
+    set taskTypesAllowed(value:  TaskType[]) {
+        this.props.taskTypesAllowed = value;
     }
 
     private constructor(props: RobotProps, id?: UniqueEntityID) {
@@ -52,15 +52,22 @@ export class Robot extends AggregateRoot<RobotProps> implements IAutonomous {
     }
     
 
-    //   public static create (props: RobotProps, id?: UniqueEntityID): Result<Robot> {
-    //     const designation = props.designation;
+      public static create (props: RobotProps, id?: UniqueEntityID): Result<Robot> {
+        const guardedProps = [
+            { argument: props.state, argumentName: 'state' },
+            { argument: props.designation, argumentName: 'designation' },
+            { argument: props.taskTypesAllowed, argumentName: 'taskTypesAllowed' },
+        ];
+        const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
-    //     if (!!designation === false || designation.length === 0) {
-    //       return Result.fail<Robot>('Must provide a robot name')
-    //     } else {
-    //       const role = new Robot({ designation: designation }, id);
-    //       return Result.ok<Robot>( role )
-    //     }
-    //   }
+        if (!guardResult.succeeded) {
+            return Result.fail<Robot>(guardResult.message)
+          }
+
+          const robot = new Robot({...props}, id);
+          return Result.ok<Robot>( robot )
+      }
 }
+
+
         

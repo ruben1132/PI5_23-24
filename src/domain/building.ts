@@ -63,7 +63,6 @@ export class Building extends AggregateRoot<BuildingProps> {
         const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
         if (!guardResult.succeeded) {
-            console.log(props.code, props.dimensions);
             return Result.fail<Building>(guardResult.message)
         }
         else {

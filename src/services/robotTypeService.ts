@@ -14,7 +14,8 @@ import { RobotTypeModel } from '../domain/valueObj/robotTypeModel';
 
 import { TaskType } from '../domain/taskType';
 
-import { ITaskTypeRepo } from './IRepos/ITaskTypeRepo';
+import  ITaskTypeRepo  from './IRepos/ITaskTypeRepo';
+
 import { forEach } from 'lodash';
 @Service()
 export default class RobotTypeService implements IRobotTypeService {

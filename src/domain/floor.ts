@@ -7,6 +7,7 @@ import { FloorId } from "./valueObj/floorId";
 
 import { FloorNumber } from "./valueObj/floorNumber";
 import { FloorInformation } from "./valueObj/floorInformation";
+import { Guard } from "../core/logic/Guard";
 
 
 
@@ -57,21 +58,21 @@ export class Floor extends AggregateRoot<FloorProps> {
 
     // TODO: implementar regras de negocio na criacao de uma floor
     public static create(props: FloorProps, id?: UniqueEntityID): Result<Floor> {
-        const number = props.number;
-        const information = props.information;
-        const building = props.building;
 
-        if (!!number === false || number === null) {
-            return Result.fail<Floor>('Must provide a floor number')
-        }
-        if (!!information === false || information === null) {
-            return Result.fail<Floor>('Must provide a floor information')
-        }
-        if (!!building === false || building === null) {
-            return Result.fail<Floor>('Must provide a building')
-        }
+
+        const guardedProps = [
+            { argument: props.number, argumentName: 'number' },
+            { argument: props.information, argumentName: 'information' },
+            { argument: props.building, argumentName: 'building' }
+        ];
+        const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
         
-        const floor = new Floor({ number: number, information: information, building: building }, id);
+        if (!guardResult.succeeded) {
+            return Result.fail<Floor>(guardResult.message)
+        }
+
+        const floor = new Floor({ number: props.number, information: props.information, building: props.building }, id);
         return Result.ok<Floor>(floor)
     }
 }
+
