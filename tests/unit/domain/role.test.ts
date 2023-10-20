@@ -1,7 +1,6 @@
 import { Role } from '../../../src/domain/role';
 import { RoleId } from '../../../src/domain/valueObj/roleId';
 import { expect } from 'chai';
-import sinon from 'sinon';
 
 describe('Role', () => {
     describe('create', () => {
@@ -12,8 +11,8 @@ describe('Role', () => {
 
             expect(role.isSuccess).to.be.true;
             expect(role.getValue()).to.be.instanceOf(Role);
-            expect(role.getValue().name).to.equal(props.name);
-            expect(role.getValue().id).to.equal(id);
+            expect(props.name).to.equal(role.getValue().name);
+            expect(id).to.equal(role.getValue().id);
         });
     });
 
@@ -22,11 +21,11 @@ describe('Role', () => {
             const props = { name: 'admin' };
             const role = Role.create(props).getValue();
 
-            expect(role.name).to.equal(props.name);
+            expect(props.name).to.equal(role.name);
 
             role.name = 'user';
 
-            expect(role.name).to.equal('user');
+            expect('user').to.equal(role.name);
         });
     });
 
@@ -36,7 +35,7 @@ describe('Role', () => {
             const role = Role.create(props);
 
             expect(role.getValue()).to.be.instanceOf(Role);
-            expect(role.getValue().name).to.equal(props.name);
+            expect(props.name).to.equal(role.getValue().name);
             // expect(role.getValue().roleId).to.be.instanceOf(RoleId);
         });
 
@@ -46,8 +45,8 @@ describe('Role', () => {
             const role = Role.create(props, id);
 
             expect(role.getValue()).to.be.instanceOf(Role);
-            expect(role.getValue().name).to.equal(props.name);
-            expect(role.getValue().id).to.equal(id);
+            expect(props.name).to.equal(role.getValue().name);
+            expect(id).to.equal(role.getValue().id);
         });
     });
 

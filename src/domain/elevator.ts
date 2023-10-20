@@ -35,34 +35,24 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
         super(props, domainId);
     }
 
-    // TODO: implementar regras de negocio na criacao de uma elevator
     public static create(props: ElevatorProps, domainId?: UniqueEntityID): Result<Elevator> {
-        /*const guardedProps = [
+        const guardedProps = [
             { argument: props.designation, argumentName: 'designation' },
-            { argument: props.building, argumentName: 'building' },
-            //{ argument: props.floorsAllowed, argumentName: 'floorsAllowed' },
+            { argument: props.floorsAllowed, argumentName: 'floorsAllowed' },
         ];
 
         const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
+        if (props.floorsAllowed.length === 0) {
+            return Result.fail<Elevator>('Must provide floors');
+        }
+        
         if (!guardResult.succeeded) {
             return Result.fail<Elevator>(guardResult.message)
         }
 
-        return Result.ok<Elevator>(new Elevator({ ...props }, id))*/
+        return Result.ok<Elevator>(new Elevator({ ...props }, domainId))
 
-        const designation = props.designation;
-        const floorsAllowed = props.floorsAllowed;
-
-        if (!!designation === false || designation === null) {
-            return Result.fail<Elevator>('Must provide an elevator designation')
-        }
-        if (!!floorsAllowed === false || floorsAllowed === null) {
-            return Result.fail<Elevator>('Must provide floors')
-        }
-        
-        const elevator = new Elevator({ designation: designation, floorsAllowed: floorsAllowed }, domainId);
-        return Result.ok<Elevator>(elevator)
     }
 
 }
