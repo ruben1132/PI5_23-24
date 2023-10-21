@@ -24,7 +24,7 @@ export class Floor extends AggregateRoot<FloorProps> {
         return this._id;
     }
 
-    get floorId(): FloorId {
+    get domainId(): FloorId {
         return new FloorId(this.id.toValue());
     }
 

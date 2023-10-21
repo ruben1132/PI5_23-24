@@ -3,7 +3,7 @@ import { Service, Inject } from 'typedi';
 import IRoomRepo from "../services/IRepos/IRoomRepo";
 import { Room } from "../domain/room";
 import { RoomId } from "../domain/valueObj/roomId";
-import { RoomMap } from "../mappers/RoomMap"; 
+import { RoomMap } from "../mappers/RoomMap";
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IRoomPersistence } from '../dataschema/IRoomPersistence';
@@ -59,47 +59,75 @@ export default class RoomRepo implements IRoomRepo {
   }
 
   public async findByDomainId(roomId: RoomId | string): Promise<Room> {
-    const query = { domainId: roomId };
-    const roomRecord = await this.roomSchema.findOne(query as FilterQuery<IRoomPersistence & Document>);
-
-    if (roomRecord != null) {
-      return RoomMap.toDomain(roomRecord);
-    }
-    else
-      return null;
-    }
-    
-    public async findByIds(roomsIds: RoomId[] | string[]): Promise<Room[]> {
-        const query = { domainId: { $in: roomsIds } };
-        const roomRecord = await this.roomSchema.find(query as FilterQuery<IRoomPersistence & Document>);
-
-        if (roomRecord != null) {
-            return roomRecord.map((room) => RoomMap.toDomain(room));
+    const roomWithFloor = await this.roomSchema.aggregate([
+      {
+        $match: { domainId: roomId }
+      },
+      {
+        $lookup: {
+          from: 'floors',
+          localField: 'floor', 
+          foreignField: 'domainId', 
+          as: 'floor'
         }
+      },
+      {
+        $unwind: '$floor'
+      }
+    ]);
 
-        return null;
+    if (roomWithFloor != null) {
+      return RoomMap.toDomain(roomWithFloor[0]);
     }
 
-  public async getRooms(): Promise<Room[]> {
-    const roomRecord = await this.roomSchema.find({});
-
-    if (roomRecord != null) {
-      return roomRecord.map((room) => RoomMap.toDomain(room));
-    }
-    else
       return null;
   }
 
-  public async getRoomById(roomId: RoomId | string): Promise<Room> {
-    const query = { domainId: roomId };
-    const roomRecord = await this.roomSchema.findOne(query as FilterQuery<IRoomPersistence & Document>);
+  public async findByIds(roomsIds: RoomId[] | string[]): Promise<Room[]> {
 
-    if (roomRecord != null) {
-      return RoomMap.toDomain(roomRecord);
+    const roomsWithFloors = await this.roomSchema.aggregate([
+      {
+        $match: { domainId: { $in: roomsIds } }
+      },
+      {
+        $lookup: {
+          from: 'floors', 
+          localField: 'floor',
+          foreignField: 'domainId', 
+          as: 'floor'
+        }
+      },
+      {
+        $unwind: '$floor'
+      }
+    ]);
+
+    if (roomsWithFloors != null) {
+      return roomsWithFloors.map((room) => RoomMap.toDomain(room));
+    }
+
+    return null;
+  }
+
+  public async getRooms(): Promise<Room[]> {
+    const roomsWithFloors = await this.roomSchema.aggregate([
+      {
+        $lookup: {
+          from: 'floors', 
+          localField: 'floor',
+          foreignField: 'domainId', 
+          as: 'floor'
+        }
+      },
+      {
+        $unwind: '$floor'
+      }
+    ]);
+    if (roomsWithFloors != null) {
+      return roomsWithFloors.map((room) => RoomMap.toDomain(room));
     }
     else
       return null;
-
   }
 
   public async deleteRoom(roomId: RoomId | string): Promise<boolean> {

@@ -42,6 +42,8 @@ export default class RoomService implements IRoomService {
 
             const roomResult = roomOrError.getValue();
 
+            console.log(roomResult);
+            
             await this.roomRepo.save(roomResult);
 
             const roomDTOResult = RoomMap.toDTO(roomResult) as IRoomDTO;

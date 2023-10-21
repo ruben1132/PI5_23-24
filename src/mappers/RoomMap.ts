@@ -11,10 +11,11 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 export class RoomMap extends Mapper<Room> {
 
     public static toDTO(room: Room): IRoomDTO {
+        
         return {
             domainId: room.id.toString(),
             number: room.number.toString(),
-            floor: room.floor.toString(),
+            floor: room.floor.domainId.toString(),
         } as IRoomDTO;
     }
 

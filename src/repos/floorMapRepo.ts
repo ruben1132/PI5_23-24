@@ -49,7 +49,7 @@ export default class FloorMapRepo implements IFloorMapRepo {
 
                const fmPersistence=  FloorMapMap.toPersistence(floorMap);
 
-                floorMapDocument.floor = floorMap.floor.floorId.toValue().toString();
+                floorMapDocument.floor = floorMap.floor.domainId.toValue().toString();
                 floorMapDocument.map = floorMap.map;
                 floorMapDocument.fmRooms = fmPersistence.fmRooms;
                 floorMapDocument.fmDoors = fmPersistence.fmDoors;

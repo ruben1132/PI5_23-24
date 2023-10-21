@@ -57,7 +57,7 @@ describe('Passage', () => {
             const passage = Passage.create({ designation: 'Passage 1', fromFloor, toFloor: fromFloor });
 
             expect(passage.isFailure).to.be.true;
-            expect('The passage must be between different buildings').to.be.equal(passage.errorValue());
+            expect('The passage must be between different floors and buildings').to.be.equal(passage.errorValue());
         });
 
         it('should fail if no designation', () => {
