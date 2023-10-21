@@ -34,10 +34,11 @@ export default class FloorMapRepo implements IFloorMapRepo {
     }
 
     public async save(floorMap: FloorMap): Promise<FloorMap> {
-        const query = { domainId: floorMap.id.toString() };
+        const query = { floor: floorMap.floor.id };
 
+        // looks for a floorMap with the same floor id
         const floorMapDocument = await this.floorMapSchema.findOne(query);
-
+        
         try {
             if (floorMapDocument === null) {
                 const rawFloorMap: any = FloorMapMap.toPersistence(floorMap);
