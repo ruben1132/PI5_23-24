@@ -13,7 +13,7 @@ export default (app: Router) => {
 
     const ctrl = Container.get(config.controllers.floorMap.name) as IFloorMapController;
 
-    route.post(
+    route.patch(
         '',
         celebrate({
             body: Joi.object({

@@ -14,13 +14,13 @@ export class PassageMap extends Mapper<Passage> {
         return {
             domainId: passage.id.toString(),
             designation: passage.designation,
-            fromFloor: passage.fromFloor.id.toValue(),
-            toFloor: passage.toFloor.id.toValue()
+            fromFloor: passage.fromFloor.domainId.toString(),
+            toFloor: passage.toFloor.domainId.toString()
         } as IPassageDTO;
     }
 
     public static toDomain(passage: any | Model<IPassagePersistence & Document>): Passage {
-        
+
         const passageOrError = Passage.create(
             {
                 designation: passage.designation,
@@ -28,7 +28,7 @@ export class PassageMap extends Mapper<Passage> {
                 toFloor: passage.toFloor
             },
             new UniqueEntityID(passage.domainId)
-        );
+        );        
 
         passageOrError.isFailure ? console.log(passageOrError.error) : '';
 

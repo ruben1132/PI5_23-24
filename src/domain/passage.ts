@@ -67,6 +67,9 @@ export class Passage extends AggregateRoot<PassageProps> {
             return Result.fail<Passage>('The passage must be between different floors and buildings')
         }
 
+        // console.log( propss.fromFloor);
+        // console.log( propss.toFloor.building);
+        
         if (propss.fromFloor.building === propss.toFloor.building) {
             return Result.fail<Passage>('The passage must be between different buildings')
         }

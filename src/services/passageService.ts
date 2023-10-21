@@ -24,7 +24,7 @@ export default class PassageService implements IPassageService {
             let fromFloor: Floor;
             const fromFloorOrError = await this.getFloor(passageDTO.fromFloor);
             if (fromFloorOrError.isFailure) {
-                return Result.fail<IPassageDTO>(fromFloorOrError.error);
+                return Result.fail<IPassageDTO>(fromFloorOrError.errorValue());
             } else {
                 fromFloor = fromFloorOrError.getValue();
             }
@@ -32,7 +32,7 @@ export default class PassageService implements IPassageService {
             let toFloor: Floor;
             const toOrError = await this.getFloor(passageDTO.toFloor);
             if (toOrError.isFailure) {
-                return Result.fail<IPassageDTO>(toOrError.error);
+                return Result.fail<IPassageDTO>(toOrError.errorValue());
             } else {
                 toFloor = toOrError.getValue();
             }
@@ -78,11 +78,11 @@ export default class PassageService implements IPassageService {
     public async getPassagesBetweenBuildings(first: string, second: string): Promise<Result<Array<IPassageDTO>>> {
         try {
             const passages = await this.passageRepo.getPassagesBetweenBuildings(first, second);
-
+            
             if (passages === null) {
                 return Result.fail<Array<IPassageDTO>>("Passages not found");
             }
-            else {
+            else {                
                 const passagesDTOResult = passages.map(passage => PassageMap.toDTO(passage) as IPassageDTO);
                 return Result.ok<Array<IPassageDTO>>(passagesDTOResult)
             }
@@ -116,7 +116,7 @@ export default class PassageService implements IPassageService {
             let fromFloor: Floor;
             const fromFloorOrError = await this.getFloor(passageDTO.fromFloor);
             if (fromFloorOrError.isFailure) {
-                return Result.fail<IPassageDTO>(fromFloorOrError.error);
+                return Result.fail<IPassageDTO>(fromFloorOrError.errorValue());
             } else {
                 fromFloor = fromFloorOrError.getValue();
             }
@@ -124,7 +124,7 @@ export default class PassageService implements IPassageService {
             let toFloor: Floor;
             const toOrError = await this.getFloor(passageDTO.toFloor);
             if (toOrError.isFailure) {
-                return Result.fail<IPassageDTO>(toOrError.error);
+                return Result.fail<IPassageDTO>(toOrError.errorValue());
             } else {
                 toFloor = toOrError.getValue();
             }

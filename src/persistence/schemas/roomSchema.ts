@@ -10,6 +10,7 @@ const RoomSchema = new mongoose.Schema(
 
         number: {
             type: String,
+            unique: true,
             required: [true, 'Please enter the number of the room'],
         },
 

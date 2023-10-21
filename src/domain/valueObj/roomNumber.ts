@@ -33,6 +33,7 @@ export class RoomNumber extends ValueObject<RoomNumberProps> {
             return Result.fail<RoomNumber>("Room number must be in the format A001");
         }
 
+
         return Result.ok<RoomNumber>(new RoomNumber({ value: number }))
 
     }

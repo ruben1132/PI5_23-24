@@ -7,6 +7,7 @@ import IRoomDTO from "../dto/IRoomDTO";
 import { Room } from "../domain/room";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
+import { RoomNumber } from "../domain/valueObj/roomNumber";
 
 export class RoomMap extends Mapper<Room> {
 
@@ -14,14 +15,18 @@ export class RoomMap extends Mapper<Room> {
         
         return {
             domainId: room.id.toString(),
-            number: room.number.toString(),
+            number: room.number.value,
             floor: room.floor.domainId.toString(),
         } as IRoomDTO;
     }
 
     public static toDomain(room: any | Model<IRoomPersistence & Document>): Room {
         const roomOrError = Room.create(
-            room,
+            {
+                number: RoomNumber.create(room.number).getValue(),
+                floor: room.floor
+            
+            },
             new UniqueEntityID(room.domainId)
         );
 
@@ -34,7 +39,7 @@ export class RoomMap extends Mapper<Room> {
 
         return {
             domainId: room.id.toString(),
-            number: room.number.toString(),
+            number: room.number.value,
             floor: room.floor.id.toString(),
         }
     }

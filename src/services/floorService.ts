@@ -31,18 +31,13 @@ export default class FloorService implements IFloorService {
                 building = buildingOrError.getValue();
             }
 
-            const number = await FloorNumber.create(floorDTO.number);
-            if (number.isFailure) {
-                return Result.fail<IFloorDTO>(number.errorValue());
-            }
-
             const information = await FloorInformation.create(floorDTO.information);
             if (information.isFailure) {
                 return Result.fail<IFloorDTO>(information.errorValue());
             }
 
             const floorOrError = await Floor.create({
-                number: number.getValue(),
+                number: floorDTO.number,
                 information: information.getValue(),
                 building: building
             });
@@ -55,7 +50,6 @@ export default class FloorService implements IFloorService {
 
             await this.floorRepo.save(floorResult);
 
-            // console.log('FloorService.createFloor - floorResult: ', floorResult);
             const floorDTOResult = FloorMap.toDTO(floorResult);
 
             return Result.ok<IFloorDTO>(floorDTOResult)
@@ -116,11 +110,6 @@ export default class FloorService implements IFloorService {
                 return Result.fail<IFloorDTO>("Floor not found");
             }
 
-            const number = await FloorNumber.create(floorDTO.number);
-            if (number.isFailure) {
-                return Result.fail<IFloorDTO>(number.errorValue());
-            }
-
             const information = await FloorInformation.create(floorDTO.information);
             if (information.isFailure) {
                 return Result.fail<IFloorDTO>(information.errorValue());
@@ -132,7 +121,7 @@ export default class FloorService implements IFloorService {
             }
 
 
-            floor.number = number.getValue();
+            floor.number = floorDTO.number;
             floor.information = information.getValue();
             floor.building = building;
 

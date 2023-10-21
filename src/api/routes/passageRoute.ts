@@ -28,7 +28,7 @@ export default (app: Router) => {
     route.get('', (req, res, next) => ctrl.getPassages(req, res, next));
 
     route.get(
-        '/buildings/:first/:second',
+        '/:first/:second',
         celebrate({
             params: Joi.object({
                 first: Joi.string().required(),

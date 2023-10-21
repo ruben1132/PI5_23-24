@@ -41,8 +41,6 @@ export default class RoomRepo implements IRoomRepo {
       if (roomDocument === null) {
         const rawRoom: any = RoomMap.toPersistence(room);
 
-        console.log(rawRoom);
-
         const roomCreated = await this.roomSchema.create(rawRoom);
 
         return RoomMap.toDomain(roomCreated);

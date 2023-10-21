@@ -8,7 +8,7 @@ export default interface IPassageRepo extends Repo<Passage> {
     findByDomainId(passageId: PassageId | string): Promise<Passage>;
     findByIds (passageIds: PassageId[] | string[]): Promise<Passage[]>;
     getPassages(): Promise<Passage[]>;
-    getPassagesBetweenBuildings (first: string, second: string): Promise<Passage[]>;
+    getPassagesBetweenBuildings (from: PassageId | string, to: PassageId  | string): Promise<Passage[]>;
     deletePassage(passageId: PassageId | string): Promise<Boolean>;
 
 }

@@ -14,7 +14,7 @@ import { Guard } from "../core/logic/Guard";
 // import IFloorDTO from "../dto/IFloorDTO"; // TODO: criar o DTO
 
 interface FloorProps {
-    number: FloorNumber; //TODO: criar um value obj para intervalo de numeros 
+    number: number; 
     information: FloorInformation; //TODO: criar um value obj para designacoes/informacoes (meter um max de chars por exemplo)
     building: Building;
 }
@@ -28,11 +28,11 @@ export class Floor extends AggregateRoot<FloorProps> {
         return new FloorId(this.id.toValue());
     }
 
-    get number(): FloorNumber {
+    get number(): number {
         return this.props.number;
     }
 
-    set number(value: FloorNumber) {
+    set number(value: number) {
         this.props.number = value;
     }
 

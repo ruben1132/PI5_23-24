@@ -18,7 +18,7 @@ export class FloorMap extends Mapper<Floor> {
 
         return {
             domainId: floor.id.toString(),
-            number: floor.number.value,
+            number: floor.number,
             information: floor.information.value,
             building: floor.building.id.toValue()
         } as IFloorDTO;
@@ -27,11 +27,10 @@ export class FloorMap extends Mapper<Floor> {
     public static toDomain(floor: any | Model<IFloorPersistence & Document>): Floor {
         
         const information = FloorInformation.create(floor.information).getValue();
-        const number = FloorNumber.create(floor.number).getValue();
         
         const floorOrError = Floor.create(
             {
-                number: number,
+                number: floor.number,
                 information: information,
                 building: floor.building
             },
@@ -47,7 +46,7 @@ export class FloorMap extends Mapper<Floor> {
 
         return {
             domainId: floor.id.toString(),
-            number: floor.number.value,
+            number: floor.number,
             information: floor.information.value,
             building: floor.building.id
         }

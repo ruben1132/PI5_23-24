@@ -9,6 +9,7 @@ import elevatorRoute from './routes/elevatorRoute';
 import taskType from './routes/taskTypeRoute';
 import robotType from './routes/robotTypeRoute';
 import roomRoute from './routes/roomRoute';
+import floorMapRoute from './routes/floorMapRoute';
 
 export default () => {
 	const app = Router();
@@ -18,6 +19,7 @@ export default () => {
 	role(app);
 	building(app);
 	floor(app);
+	floorMapRoute(app);
     passageRoute(app);
 	elevatorRoute(app);
     taskType(app);

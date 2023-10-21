@@ -8,6 +8,7 @@ import { Result } from "../core/logic/Result";
 import { RoomMap } from "../mappers/RoomMap";
 import IFloorRepo from './IRepos/IFloorRepo';
 import { Floor } from '../domain/floor';
+import { RoomNumber } from '../domain/valueObj/roomNumber';
 
 @Service()
 export default class RoomService implements IRoomService {
@@ -24,15 +25,18 @@ export default class RoomService implements IRoomService {
             let floor: Floor;
             const floorOrError = await this.getFloor(roomDTO.floor);
             if (floorOrError.isFailure) {
-                return Result.fail<IRoomDTO>(floorOrError.error);
+                return Result.fail<IRoomDTO>(floorOrError.errorValue());
             } else {
                 floor = floorOrError.getValue();
             }
-
-            const roomDM = RoomMap.toDomain(roomDTO);
+            
+            const roomNum = await RoomNumber.create(roomDTO.number);
+            if (roomNum.isFailure) {
+                return Result.fail<IRoomDTO>(roomNum.errorValue());
+            }
 
             const roomOrError = await Room.create({
-                number: roomDM.number,
+                number: roomNum.getValue(),
                 floor: floor,
             });
 
@@ -41,8 +45,6 @@ export default class RoomService implements IRoomService {
             }
 
             const roomResult = roomOrError.getValue();
-
-            console.log(roomResult);
             
             await this.roomRepo.save(roomResult);
 

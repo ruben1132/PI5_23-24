@@ -14,6 +14,13 @@ import { Elevator } from '../domain/elevator';
 import { Passage } from '../domain/passage';
 import IRoomRepo from './IRepos/IRoomRepo';
 import IElevatorRepo from './IRepos/IElevatorRepo';
+import { FloorMapElevator } from '../domain/valueObj/floorMapElevator';
+import { FloorMapDoor } from '../domain/valueObj/floorMapDoor';
+import { FloorMapRoom } from '../domain/valueObj/floorMapRoom';
+import { FloorMapPosition } from '../domain/valueObj/floorMapPosition';
+import { FloorMapDimensions } from '../domain/valueObj/floorMapDimensions';
+import { FloorMapDirection } from '../domain/valueObj/floorMapDirection';
+import { FloorMapPassage } from '../domain/valueObj/floorMapPassage';
 
 @Service()
 export default class FloorMapService implements IFloorMapService {
@@ -33,7 +40,7 @@ export default class FloorMapService implements IFloorMapService {
             let floor: Floor;
             const floorOrError = await this.getFloor(floorMapDTO.floor);
             if (floorOrError.isFailure) {
-                return Result.fail<IFloorMapDTO>(floorOrError.error);
+                return Result.fail<IFloorMapDTO>(floorOrError.errorValue());
             }
             floor = floorOrError.getValue();
 
@@ -43,7 +50,12 @@ export default class FloorMapService implements IFloorMapService {
             const roomsOrError = await this.getRooms(floorMapDTO.fmRooms.map(fmRoom => fmRoom.roomId)
             );
             if (roomsOrError.isFailure) {
-                return Result.fail<IFloorMapDTO>(roomsOrError.error);
+                return Result.fail<IFloorMapDTO>(roomsOrError.errorValue());
+            }
+
+            // check if it found all the rooms
+            if (roomsOrError.getValue().length !== floorMapDTO.fmRooms.length) {
+                return Result.fail<IFloorMapDTO>("Couldn't find all the rooms by the given ids");
             }
             rooms = roomsOrError.getValue();
 
@@ -51,7 +63,7 @@ export default class FloorMapService implements IFloorMapService {
             let elevator: Elevator;
             const elevatorOrError = await this.getElevator(floorMapDTO.fmElevator.elevatorId);
             if (elevatorOrError.isFailure) {
-                return Result.fail<IFloorMapDTO>(elevatorOrError.error);
+                return Result.fail<IFloorMapDTO>(elevatorOrError.errorValue());
             }
             elevator = elevatorOrError.getValue();
 
@@ -60,21 +72,75 @@ export default class FloorMapService implements IFloorMapService {
             const passagesOrError = await this.getPassages(floorMapDTO.fmPassages.map(fmPassage => fmPassage.passageId)
             );
             if (passagesOrError.isFailure) {
-                return Result.fail<IFloorMapDTO>(passagesOrError.error);
+                return Result.fail<IFloorMapDTO>(passagesOrError.errorValue());
             }
+
+            // check if it found all the rooms
+            if (passagesOrError.getValue().length !== floorMapDTO.fmPassages.length) {
+                return Result.fail<IFloorMapDTO>("Couldn't find all the passages by the given ids");
+            }
+
             passages = passagesOrError.getValue();
 
-            const fmDomain = FloorMapMap.toDomain(floorMapDTO);
+            // create fmRooms
+            const fmRooms = floorMapDTO.fmRooms.map(fmRoom => {
+                const room = rooms.find(room => room.id.toString() === fmRoom.roomId);
+                const dimensions = FloorMapDimensions.create({ startX: fmRoom.startX, startY: fmRoom.startY, endX: fmRoom.endX, endY: fmRoom.endY }).getValue();
 
-            // create floorMap
+                return FloorMapRoom.create({ room: room, dimensions: dimensions }).getValue();
+            });
+
+            // check if created all the fmRooms
+            if (fmRooms.length !== floorMapDTO.fmRooms.length) {
+                return Result.fail<IFloorMapDTO>("There was an error creating the fmRooms");
+            }
+
+            // create fmDoors
+            const fmDoors = floorMapDTO.fmDoors.map(fmDoor => {
+                const position = FloorMapPosition.create({ posX: fmDoor.positionX, posY: fmDoor.positionY, direction: FloorMapDirection.create(fmDoor.direction).getValue() }).getValue();
+                return FloorMapDoor.create({ position: position }).getValue();
+            });
+
+            // check if created all the fmDoors
+            if (fmDoors.length !== floorMapDTO.fmDoors.length) {
+                return Result.fail<IFloorMapDTO>("There was an error creating the fmDoors");
+            }
+
+            // create fmElevator
+            const fmElevatorOrError = await FloorMapElevator.create({
+                elevator: elevator,
+                position: FloorMapPosition.create({
+                    posX: floorMapDTO.fmElevator.positionX,
+                    posY: floorMapDTO.fmElevator.positionY,
+                    direction: FloorMapDirection.create(floorMapDTO.fmElevator.direction).getValue()
+                }).getValue()
+            });
+
+            if (fmElevatorOrError.isFailure) {
+                return Result.fail<IFloorMapDTO>(fmElevatorOrError.errorValue());
+            }
+
+            // create fmPassages
+            const fmPassages = floorMapDTO.fmPassages.map(fmPassage => {
+                const passage = passages.find(passage => passage.id.toString() === fmPassage.passageId);
+                const position = FloorMapPosition.create({ posX: fmPassage.positionX, posY: fmPassage.positionY, direction: FloorMapDirection.create(fmPassage.direction).getValue() }).getValue();
+                return FloorMapPassage.create({  passage: passage, position: position }).getValue();
+            });
+
+            // check if created all the fmPassages
+            if (fmPassages.length !== floorMapDTO.fmPassages.length) {
+                return Result.fail<IFloorMapDTO>("There was an error creating the fmPassages");
+            }
+
             const floorMapOrError = await FloorMap.create({
                 floor: floor,
-                map: fmDomain.map,
-                fmRooms: fmDomain.fmRooms,
-                fmElevator: fmDomain.fmElevator,
-                fmPassages: fmDomain.fmPassages,
-                fmDoors: fmDomain.fmDoors
+                map: floorMapDTO.map,
+                fmRooms: fmRooms,
+                fmElevator: fmElevatorOrError.getValue(),
+                fmPassages: fmPassages,
+                fmDoors: fmDoors
             });
+
 
             if (floorMapOrError.isFailure) {
                 return Result.fail<IFloorMapDTO>(floorMapOrError.errorValue());

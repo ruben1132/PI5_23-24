@@ -15,12 +15,13 @@ export default class FloorMapController implements IFloorMapController /* TODO: 
     ) { }
 
     public async createFloorMap(req: Request, res: Response, next: NextFunction) {
+        
         try {
             const floorMapOrError = await this.floorMapServiceInstance.createFloorMap(req.body as IFloorMapDTO) as Result<IFloorMapDTO>;
 
-      if (floorMapOrError.isFailure) {
-        return res.status(400).send({ error: floorMapOrError.errorValue()});
-      }
+            if (floorMapOrError.isFailure) {
+                return res.status(400).send({ error: floorMapOrError.errorValue() });
+            }
 
             const FloorMapDTO = floorMapOrError.getValue();
             return res.json(FloorMapDTO).status(201);
@@ -36,7 +37,7 @@ export default class FloorMapController implements IFloorMapController /* TODO: 
             const floorMapsOrError = await this.floorMapServiceInstance.getFloorMaps() as Result<Array<IFloorMapDTO>>;
 
             if (floorMapsOrError.isFailure) {
-                return res.status(400).send({ error: floorMapsOrError.errorValue()});
+                return res.status(400).send({ error: floorMapsOrError.errorValue() });
             }
 
             return res.json(floorMapsOrError.getValue()).status(201);
@@ -51,7 +52,7 @@ export default class FloorMapController implements IFloorMapController /* TODO: 
             const floorMapsOrError = await this.floorMapServiceInstance.getFloorMapByFloorId(req.params.id) as Result<IFloorMapDTO>;
 
             if (floorMapsOrError.isFailure) {
-                return res.status(400).send({ error: floorMapsOrError.errorValue()});
+                return res.status(400).send({ error: floorMapsOrError.errorValue() });
             }
 
             return res.json(floorMapsOrError.getValue()).status(201);

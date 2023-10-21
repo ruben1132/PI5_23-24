@@ -34,6 +34,10 @@ export class FloorInformation extends ValueObject<FloorInformationProps> {
             return Result.fail<FloorInformation>("Floor information is invalid");
         }
 
+        if (information.length > 250) {
+            return Result.fail<FloorInformation>("Floor information is too long");
+        }
+
         return Result.ok<FloorInformation>(new FloorInformation({ value: information }))
 
     }

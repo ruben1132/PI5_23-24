@@ -101,23 +101,85 @@ export default class PassageRepo implements IPassageRepo {
         }
     }
 
-    public async getPassagesBetweenBuildings(first: string, second: string): Promise<Passage[]> {
+    public async getPassagesBetweenBuildings(from: PassageId | string, to: PassageId | string): Promise<Passage[]> {
         try {
             const pipeline = [
                 {
-                    $lookup: {
-                        from: 'floors', // Name of the "floors" collection
-                        localField: 'fromFloor', // Field in the "passages" collection
-                        foreignField: 'domainId', // Field in the "floors" collection
-                        as: 'fromFloorData'
+                    $match: {
+                        $or: [
+                            {
+                                fromBuilding: from, // Filter by the "from" building ID or name
+                                toBuilding: to,     // Filter by the "to" building ID or name
+                            },
+                            {
+                                fromBuilding: to,     // Filter by the "to" building ID or name
+                                toBuilding: from, // Filter by the "from" building ID or name
+                            }
+                        ]
                     }
                 },
                 {
                     $lookup: {
-                        from: 'floors', // Name of the "floors" collection
-                        localField: 'toFloor', // Field in the "passages" collection
-                        foreignField: 'domainId', // Field in the "floors" collection
-                        as: 'toFloorData'
+                        from: 'floors',
+                        localField: 'fromFloor',
+                        foreignField: 'domainId',
+                        as: 'fromFloor'
+                    }
+                },
+                {
+                    $unwind: '$fromFloor'
+                },
+                {
+                    $lookup: {
+                        from: 'floors',
+                        localField: 'toFloor',
+                        foreignField: 'domainId',
+                        as: 'toFloor'
+                    }
+                },
+                {
+                    $unwind: '$toFloor'
+                },
+                {
+                    $lookup: {
+                        from: 'buildings',
+                        localField: 'fromFloor.building',
+                        foreignField: 'domainId',
+                        as: 'fromBuilding'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$fromBuilding',
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'buildings',
+                        localField: 'toFloor.building',
+                        foreignField: 'domainId',
+                        as: 'toBuilding'
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$toBuilding',
+                    }
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        domainId: 1,
+                        designation: 1,
+                        createdAt: 1,
+                        updatedAt: 1,
+                        __v: 1,
+                        fromFloor: {
+                            $mergeObjects: ['$fromFloor', { building: '$fromBuilding' }]
+                        },
+                        toFloor: {
+                            $mergeObjects: ['$toFloor', { building: '$toBuilding' }]
+                        }
                     }
                 }
             ];
@@ -125,25 +187,8 @@ export default class PassageRepo implements IPassageRepo {
             const passagesWithFloorData = await this.passageSchema.aggregate(pipeline);
 
             if (passagesWithFloorData) {
-                // Map the raw MongoDB documents to your custom Passage objects
-                const passagesWithCustomFloorData = passagesWithFloorData.map((passage) => {
-                    // Convert the 'fromFloorData' and 'toFloorData' fields to custom Floor objects
-                    if( (passage.fromFloorData[0].building.code.toString() === first && passage.toFloorData[0].building.code.toString() === second) 
-                    ||  (passage.fromFloorData[0].building.code.toString() === second && passage.toFloorData[0].building.code.toString() === first)){
-                        
-                        const fromFloor = FloorMap.toDomain(passage.fromFloorData[0]); // Assuming a one-to-one relationship
-                        const toFloor = FloorMap.toDomain(passage.toFloorData[0]); // Assuming a one-to-one relationship
 
-                        return { ...passage, fromFloor, toFloor };
-                    }
-                    /*const fromFloor = FloorMap.toDomain(passage.fromFloorData[0]); // Assuming a one-to-one relationship
-                    const toFloor = FloorMap.toDomain(passage.toFloorData[0]); // Assuming a one-to-one relationship
-
-                    // Merge the converted objects with the rest of the passage data
-                    return { ...passage, fromFloor, toFloor };*/
-                });
-
-                return passagesWithCustomFloorData.map((passage) => PassageMap.toDomain(passage));
+                return passagesWithFloorData.map((passage) => PassageMap.toDomain(passage));
             } else {
                 return [];
             }
@@ -164,15 +209,85 @@ export default class PassageRepo implements IPassageRepo {
         return null;
     }
 
-    public async findByIds(rolesIds: PassageId[] | string[]): Promise<Passage[]> {
-        const query = { domainId: { $in: rolesIds } };
-        const passageRecord = await this.passageSchema.find(query as FilterQuery<IPassagePersistence & Document>);
+    public async findByIds(passageIds: PassageId[] | string[]): Promise<Passage[]> {
+        const pipeline = [
+            {
+                $match: { domainId: { $in: passageIds } }
+            },
+            {
+                $lookup: {
+                    from: 'floors',
+                    localField: 'fromFloor',
+                    foreignField: 'domainId',
+                    as: 'fromFloor'
+                }
+            },
+            {
+                $unwind: '$fromFloor'
+            },
+            {
+                $lookup: {
+                    from: 'floors',
+                    localField: 'toFloor',
+                    foreignField: 'domainId',
+                    as: 'toFloor'
+                }
+            },
+            {
+                $unwind: '$toFloor'
+            },
+            {
+                $lookup: {
+                    from: 'buildings',
+                    localField: 'fromFloor.building',
+                    foreignField: 'domainId',
+                    as: 'fromBuilding'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$fromBuilding',
+                }
+            },
+            {
+                $lookup: {
+                    from: 'buildings',
+                    localField: 'toFloor.building',
+                    foreignField: 'domainId',
+                    as: 'toBuilding'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$toBuilding',
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    domainId: 1,
+                    designation: 1,
+                    createdAt: 1,
+                    updatedAt: 1,
+                    __v: 1,
+                    fromFloor: {
+                        $mergeObjects: ['$fromFloor', { building: '$fromBuilding' }]
+                    },
+                    toFloor: {
+                        $mergeObjects: ['$toFloor', { building: '$toBuilding' }]
+                    }
+                }
+            }
+        ];
 
-        if (passageRecord != null) {
-            return passageRecord.map((passage) => PassageMap.toDomain(passage));
+        const passagesWithFloorData = await this.passageSchema.aggregate(pipeline);
+
+        if (passagesWithFloorData != null) {
+
+            return passagesWithFloorData.map((passage) => PassageMap.toDomain(passage));
         }
 
-        return null;
+        return [];
     }
 
     public async deletePassage(passageId: PassageId | string): Promise<Boolean> {

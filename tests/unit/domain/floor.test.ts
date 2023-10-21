@@ -15,7 +15,7 @@ describe('Floor', () => {
     dimensions: BuildingDimensions.create("10x8").getValue(),
 }, new UniqueEntityID("test-id")).getValue();
 
-  const floorNumber =  FloorNumber.create(1).getValue();
+  const floorNumber =  1;
   const floorInformation =  FloorInformation.create('Information about the floor').getValue();
 
   it('should create a new floor', () => {

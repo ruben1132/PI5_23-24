@@ -1,6 +1,6 @@
 export default interface IFloorMapDTO {
     floor: string;
-    map: [[number]];
+    map: number[][];
     fmRooms: {
         roomId: string;
         startX: number;

@@ -13,7 +13,7 @@ import { expect } from 'chai';
 describe("Elevator", () => {
     const validElevatorDesignation = ElevatorDesignation.create("Elevator 1").getValue();
     const validFloor = Floor.create({
-        number: FloorNumber.create(0).getValue(),
+        number: 0,
         information: FloorInformation.create("Floor 0").getValue(),
         building: Building.create({
             code: BuildingCode.create("B001").getValue(),

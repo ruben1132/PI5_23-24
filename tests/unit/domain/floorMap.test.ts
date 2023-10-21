@@ -36,13 +36,13 @@ describe('FloorMap', () => {
     }, new UniqueEntityID("test-id")).getValue();
 
     const floor1 = Floor.create({
-        number: FloorNumber.create(2).getValue(),
+        number: 1,
         information: FloorInformation.create('Floor 2').getValue(),
         building: building1
     }).getValue();
 
     const floor2 = Floor.create({
-        number: FloorNumber.create(2).getValue(),
+        number: 2,
         information: FloorInformation.create('Floor 2').getValue(),
         building: building2
     }).getValue();
@@ -246,7 +246,7 @@ describe('FloorMap', () => {
             }).getValue();
 
             const newFloor = Floor.create({
-                number: FloorNumber.create(3).getValue(),
+                number: 3,
                 information: FloorInformation.create('Floor 3').getValue(),
                 building: building1
             }).getValue();
