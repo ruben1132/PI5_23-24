@@ -36,7 +36,7 @@ export default class PassageService implements IPassageService {
             } else {
                 toFloor = toOrError.getValue();
             }
-
+            
             const passageOrError = await Passage.create({
                 fromFloor: fromFloor,
                 toFloor: toFloor,
@@ -46,7 +46,7 @@ export default class PassageService implements IPassageService {
             if (passageOrError.isFailure) {
                 return Result.fail<IPassageDTO>(passageOrError.errorValue());
             }
-
+            
             const passageResult = passageOrError.getValue();
 
             await this.passageRepo.save(passageResult);
@@ -96,7 +96,7 @@ export default class PassageService implements IPassageService {
 
         const floor = await this.floorRepo.findByDomainId(floorId);
         const found = !!floor;
-
+        
         if (found) {
             return Result.ok<Floor>(floor);
         } else {

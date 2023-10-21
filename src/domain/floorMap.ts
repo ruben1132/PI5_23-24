@@ -25,7 +25,7 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
     }
 
     get floorMapId(): FloorMapId {
-        return new FloorMapId(this.floorMapId.toValue());
+        return new FloorMapId(this.id.toValue());
     }
 
     set floor(value: Floor) {

@@ -25,10 +25,10 @@ export class FloorMap extends Mapper<Floor> {
     }
 
     public static toDomain(floor: any | Model<IFloorPersistence & Document>): Floor {
-
+        
         const information = FloorInformation.create(floor.information).getValue();
         const number = FloorNumber.create(floor.number).getValue();
-
+        
         const floorOrError = Floor.create(
             {
                 number: number,
@@ -38,7 +38,7 @@ export class FloorMap extends Mapper<Floor> {
             new UniqueEntityID(floor.domainId)
         );
 
-        floorOrError.isFailure ? console.log(floorOrError.error) : '';
+        floorOrError.isFailure ? console.log(floorOrError.errorValue()) : '';
 
         return floorOrError.isSuccess ? floorOrError.getValue() : null;
     }

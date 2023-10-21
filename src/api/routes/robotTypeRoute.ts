@@ -20,7 +20,7 @@ export default (app: Router) => {
                 type: Joi.string().required(),
                 brand: Joi.string().required(),
                 model: Joi.string().required(),
-                tasksAvailable: Joi.array().items(Joi.string()).required(),
+                tasksAllowed: Joi.array().items(Joi.string()).required(),
             }),
         }),
         (req, res, next) => ctrl.createRobotType(req, res, next),

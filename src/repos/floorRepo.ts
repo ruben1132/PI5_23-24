@@ -72,7 +72,7 @@ export default class FloorRepo implements IFloorRepo {
                         localField: 'building', // Field in the "floors" collection
                         foreignField: 'domainId', // Field in the "buildings" collection
                         as: 'building'
-                    }
+                    },
                 },
                 {
                     $unwind: '$building'
@@ -95,11 +95,9 @@ export default class FloorRepo implements IFloorRepo {
 
                 return floorsWithCustomBuildings.map((floor) => FloorMap.toDomain(floor));
             } else {
-                console.log("No matching data found.");
                 return [];
             }
         } catch (error) {
-            console.error("Error during aggregation:", error);
             return [];
         }
     }
@@ -107,12 +105,25 @@ export default class FloorRepo implements IFloorRepo {
 
 
     public async findByDomainId(floorId: FloorId | string): Promise<Floor> {
-        const query = { domainId: floorId };
 
-        const floorRecord = await this.floorSchema.findOne(query as FilterQuery<IFloorPersistence & Document>);
-
-        if (floorRecord != null) {
-            return FloorMap.toDomain(floorRecord);
+        const floorWithBuilding = await this.floorSchema.aggregate([
+            {
+                $match: { domainId: floorId } 
+            },
+            {
+                $lookup: {
+                    from: 'buildings', // Name of the "buildings" collection
+                    localField: 'building', // Field in the "floors" collection
+                    foreignField: 'domainId', // Field in the "buildings" collection
+                    as: 'building'
+                }
+            },
+            {
+                $unwind: '$building'
+            }
+        ]);
+        if (floorWithBuilding != null) {
+            return FloorMap.toDomain(floorWithBuilding[0]);
         }
 
         return null;

@@ -23,8 +23,8 @@ const RobotTypeSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Please enter a model for the robot type'],
         },
-        tasksAvailable: {
-            type: Array,
+        tasksAllowed: {
+            type: [String],
             required: [true, 'Please enter tasks available for the robot type'],
         },
     },

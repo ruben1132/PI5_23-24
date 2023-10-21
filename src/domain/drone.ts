@@ -21,7 +21,7 @@ export class Drone extends AggregateRoot<DroneProps> {
     }
 
     get droneId(): DroneId {
-        return new DroneId(this.droneId.toValue());
+        return new DroneId(this.id.toValue());
     }
 
     get designation(): string {

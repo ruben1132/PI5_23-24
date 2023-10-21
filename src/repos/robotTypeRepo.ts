@@ -54,11 +54,8 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
                 robotTypeDocument.brand = robotType.brand.value;
                 robotTypeDocument.model = robotType.model.value;
 
-                // console.log("robotType.tasksAvailable", robotType.tasksAvailable);
-                const tasksAvailable = await this.convertArrayToArrayString(robotType.tasksAvailable);
-                robotTypeDocument.tasksAvailable = tasksAvailable;
-
-                // console.log("robotTypeDocument", robotTypeDocument);
+                const tasksAllowed = await this.convertArrayToArrayString(robotType.tasksAllowed);
+                robotTypeDocument.tasksAllowed = tasksAllowed;
 
                 await robotTypeDocument.save();
 
@@ -71,18 +68,30 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
 
     public async getRobotTypes(): Promise<Array<RobotType>> {
         try {
-            const robotTypes = await this.robotTypeSchema.find({});
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'tasktypes', // Name of the "tasktypes" collection
+                        localField: 'tasksAllowed', // Field in the "robotType" collection
+                        foreignField: 'domainId', // Field in the "tasktypes" collection
+                        as: 'tasksAllowed'
+                    },
+                  
+                },
+            ];
 
-            if (robotTypes) {
-                const robotTypePromisses = robotTypes.map((robotType) => RobotTypeMap.toDomain(robotType));
+            const robotTypesWithTaskTypeData = await this.robotTypeSchema.aggregate(pipeline);
+
+            if (robotTypesWithTaskTypeData) {
+                
+                const robotTypePromisses = robotTypesWithTaskTypeData.map((robotType) => RobotTypeMap.toDomain(robotType));
+                
                 return Promise.all(robotTypePromisses);
 
             } else {
-                console.log("No matching data found.");
                 return [];
             }
         } catch (error) {
-            console.error("Error during aggregation:", error);
             return [];
         }
     }
@@ -123,7 +132,6 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
             arrayString.push(element.id.toString());
         });
 
-        console.log("arrayString", arrayString);
         return arrayString;
     }
 }

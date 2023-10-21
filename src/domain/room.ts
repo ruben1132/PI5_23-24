@@ -13,12 +13,12 @@ interface RoomProps {
 }
 
 export class Room extends AggregateRoot<RoomProps> {
-    get domainId(): UniqueEntityID {
+    get id(): UniqueEntityID {
         return this._id;
     }
 
-    get roomDomainId(): RoomId {
-        return new RoomId(this.roomDomainId.toValue());
+    get domainId(): RoomId {
+        return new RoomId(this.id.toValue());
     }
 
     get number(): RoomNumber {

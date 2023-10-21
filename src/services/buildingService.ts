@@ -20,13 +20,14 @@ export default class BuildingService implements IBuildingService {
 
     public async getBuildings(): Promise<Result<Array<IBuildingDTO>>> {
         try {
-            const roles = await this.buildingRepo.getBuildings();
+            const buildings = await this.buildingRepo.getBuildings();
 
-            if (roles === null) {
+            if (buildings === null) {
                 return Result.fail<Array<IBuildingDTO>>("Buildings not found");
             }
             else {
-                const buildingsDTOResult = roles.map(building => BuildingMap.toDTO(building) as IBuildingDTO);
+                
+                const buildingsDTOResult = buildings.map(building => BuildingMap.toDTO(building) as IBuildingDTO);
                 return Result.ok<Array<IBuildingDTO>>(buildingsDTOResult)
             }
         } catch (e) {

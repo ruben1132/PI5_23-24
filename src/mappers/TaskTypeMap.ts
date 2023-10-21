@@ -13,21 +13,18 @@ import { UniqueEntityID } from '../core/domain/UniqueEntityID';
 import BuildingRepo from '../repos/buildingRepo';
 
 export class TaskTypeMap extends Mapper<TaskType> {
-    public static toDTO(TaskType: TaskType): ITaskTypeDTO {
+    public static toDTO(taskType: TaskType): ITaskTypeDTO {
         return {
-            domainId: TaskType.id.toString(),
-            name: TaskType.name.toString(),
-            description: TaskType.description.toString(),
+            domainId: taskType.id.toString(),
+            name: taskType.name.toString(),
+            description: taskType.description.toString(),
         } as ITaskTypeDTO;
     }
 
-    public static async toDomain(taskType: any | Model<ITaskTypePersistence & Document>): Promise<TaskType> {
-
+    public static toDomain(taskType: any | Model<ITaskTypePersistence & Document>): TaskType {
+        
         const TaskTypeOrError = TaskType.create(
-            {
-                name: taskType.name,
-                description: taskType.description,
-            },
+            taskType,
             new UniqueEntityID(taskType.domainId),
         );
 

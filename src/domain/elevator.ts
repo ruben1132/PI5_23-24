@@ -15,12 +15,12 @@ interface ElevatorProps {
 }
 
 export class Elevator extends AggregateRoot<ElevatorProps> {
-    get domainId(): UniqueEntityID {
+    get id(): UniqueEntityID {
         return this._id;
     }
 
     get elevatorDomainId(): ElevatorId {
-        return new ElevatorId(this.elevatorDomainId.toValue());
+        return new ElevatorId(this.id.toValue());
     }
 
     get elevatorDesignation(): ElevatorDesignation {

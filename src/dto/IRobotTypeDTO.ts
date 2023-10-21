@@ -3,5 +3,5 @@ export default interface ITaskTypeDTO {
     type: string;
     brand: string;
     model: string;
-    tasksAvailable: string[];
+    tasksAllowed: string[];
 }

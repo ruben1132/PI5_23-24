@@ -17,7 +17,7 @@ describe('RobotType', () => {
         description: "Task Type 2 Description",
     }).getValue();
 
-    const tasksAvailable = [taskType1, taskType2];
+    const tasksAllowed = [taskType1, taskType2];
 
     const type = RobotTypeType.create('type').getValue();
     const brand = RobotTypeType.create('brand').getValue();
@@ -29,7 +29,7 @@ describe('RobotType', () => {
                 type: type,
                 brand: brand,
                 model: model,
-                tasksAvailable: tasksAvailable,
+                tasksAllowed: tasksAllowed,
             };
             const robotType = RobotType.create(robotTypeProps, new UniqueEntityID());
 
@@ -37,7 +37,7 @@ describe('RobotType', () => {
             expect(robotType.getValue().type).to.equal(robotTypeProps.type);
             expect(robotType.getValue().brand).to.equal(robotTypeProps.brand);
             expect(robotType.getValue().model).to.equal(robotTypeProps.model);
-            expect(robotType.getValue().tasksAvailable).to.equal(robotTypeProps.tasksAvailable);
+            expect(robotType.getValue().tasksAllowed).to.equal(robotTypeProps.tasksAllowed);
         });
 
         it('should fail if no type', () => {
@@ -45,7 +45,7 @@ describe('RobotType', () => {
                 type: null,
                 brand: brand,
                 model: model,
-                tasksAvailable: tasksAvailable
+                tasksAllowed: tasksAllowed
             }, new UniqueEntityID());
 
             expect(robotType.isFailure).to.be.true;
@@ -57,7 +57,7 @@ describe('RobotType', () => {
                 type: type,
                 brand: null,
                 model: model,
-                tasksAvailable: tasksAvailable
+                tasksAllowed: tasksAllowed
             }, new UniqueEntityID());
 
             expect(robotType.isFailure).to.be.true;
@@ -69,23 +69,23 @@ describe('RobotType', () => {
                 type: type,
                 brand: brand,
                 model: null,
-                tasksAvailable: tasksAvailable
+                tasksAllowed: tasksAllowed
             }, new UniqueEntityID());
 
             expect(robotType.isFailure).to.be.true;
             expect('model is null or undefined').to.equal(robotType.error);
         });
 
-        it('should fail if tasksAvailable is empty', () => {
+        it('should fail if tasksAllowed is empty', () => {
             const robotType = RobotType.create({
                 type: type,
                 brand: brand,
                 model: model,
-                tasksAvailable: [],
+                tasksAllowed: [],
             }, new UniqueEntityID());
 
             expect(robotType.isFailure).to.be.true;
-            expect('tasksAvailable is empty').to.equal(robotType.error);
+            expect('tasksAllowed is empty').to.equal(robotType.error);
         });
     });
 });

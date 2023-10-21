@@ -20,7 +20,7 @@ export class Robot extends AggregateRoot<RobotProps> {
     }
 
     get robotId(): RobotId {
-        return new RobotId(this.robotId.toValue());
+        return new RobotId(this.id.toValue());
     }
 
     get designation(): string {

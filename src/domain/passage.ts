@@ -18,7 +18,7 @@ export class Passage extends AggregateRoot<PassageProps> {
     }
 
     get passageId(): PassageId {
-        return new PassageId(this.passageId.toValue());
+        return new PassageId(this.id.toValue());
     }
 
     get designation(): string {
@@ -49,12 +49,12 @@ export class Passage extends AggregateRoot<PassageProps> {
         super(props, id);
     }
 
-    public static create(props: PassageProps, id?: UniqueEntityID): Result<Passage> {
+    public static create(propss: PassageProps, id?: UniqueEntityID): Result<Passage> {
 
         const guardedProps = [
-            { argument: props.designation, argumentName: 'designation' },
-            { argument: props.fromFloor, argumentName: 'fromFloor' },
-            { argument: props.toFloor, argumentName: 'toFloor' },
+            { argument: propss.designation, argumentName: 'designation' },
+            { argument: propss.fromFloor, argumentName: 'fromFloor' },
+            { argument: propss.toFloor, argumentName: 'toFloor' },
         ];
         const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
@@ -63,11 +63,15 @@ export class Passage extends AggregateRoot<PassageProps> {
         }
 
         // doesnt allow to create a passage for the same building
-        if (props.fromFloor.building === props.toFloor.building) {
+        if (propss.fromFloor === propss.toFloor) {
+            return Result.fail<Passage>('The passage must be between different floors and buildings')
+        }
+
+        if (propss.fromFloor.building === propss.toFloor.building) {
             return Result.fail<Passage>('The passage must be between different buildings')
         }
 
-        const passage = new Passage({ designation: props.designation, fromFloor: props.fromFloor, toFloor: props.toFloor }, id);
+        const passage = new Passage({ designation: propss.designation, fromFloor: propss.fromFloor, toFloor: propss.toFloor }, id);
         return Result.ok<Passage>(passage)
     }
 }

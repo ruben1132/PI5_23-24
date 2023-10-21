@@ -70,11 +70,9 @@ export default class TaskTypeRepo implements ITaskTypeRepo {
                 return Promise.all(taskTypePromisses);
 
             } else {
-                console.log("No matching data found.");
                 return [];
             }
         } catch (error) {
-            console.error("Error during aggregation:", error);
             return [];
         }
     }
@@ -87,6 +85,19 @@ export default class TaskTypeRepo implements ITaskTypeRepo {
 
         if (taskTypeRecord != null) {
             return TaskTypeMap.toDomain(taskTypeRecord);
+        }
+
+        return null;
+    }
+
+    public async findByIds(rolesIds: TaskTypeId[] | string[]): Promise<TaskType[]> {
+        const query = { domainId: { $in: rolesIds } };
+        const taskTypeRecord = await this.taskTypeSchema.find(query as FilterQuery<ITaskTypePersistence & Document>);
+
+        console.log("ddd");
+        
+        if (taskTypeRecord != null) {
+            return taskTypeRecord.map((taskType) => TaskTypeMap.toDomain(taskType));
         }
 
         return null;

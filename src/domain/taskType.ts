@@ -15,8 +15,8 @@ export class TaskType extends AggregateRoot<TaskTypeProps> {
         return this._id;
     }
 
-    get taskTypeId(): TaskTypeId {
-        return new TaskTypeId(this.taskTypeId.toValue());
+    get domainId(): TaskTypeId {
+        return new TaskTypeId(this.id.toValue());
     }
 
     get name(): string {

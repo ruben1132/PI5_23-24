@@ -16,7 +16,7 @@ export default class RobotTypeController implements IRobotTypeController /* TODO
 
     public async createRobotType(req: Request, res: Response, next: NextFunction) {
         try {
-
+            
             const robotTypeOrError = await this.robotTypeServiceInstance.createRobotType(req.body as IRobotTypeDTO) as Result<IRobotTypeDTO>;
 
             if (robotTypeOrError.isFailure) {

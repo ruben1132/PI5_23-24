@@ -25,7 +25,7 @@ export class Floor extends AggregateRoot<FloorProps> {
     }
 
     get floorId(): FloorId {
-        return new FloorId(this.floorId.toValue());
+        return new FloorId(this.id.toValue());
     }
 
     get number(): FloorNumber {

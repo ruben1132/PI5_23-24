@@ -36,8 +36,6 @@ export default class FloorController implements IFloorController /* TODO: extend
         try {
             const floorsOrError = await this.floorServiceInstance.getFloors() as Result<Array<IFloorDTO>>;
 
-            // console.log('floorsOrError: ', floorsOrError.getValue());
-
             if (floorsOrError.isFailure) {
                 return res.status(400).send({ error: floorsOrError.errorValue() });
             }

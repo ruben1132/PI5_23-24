@@ -14,7 +14,7 @@ import { RobotTypeModel } from '../domain/valueObj/robotTypeModel';
 
 import { TaskType } from '../domain/taskType';
 
-import  ITaskTypeRepo  from './IRepos/ITaskTypeRepo';
+import ITaskTypeRepo from './IRepos/ITaskTypeRepo';
 
 import { forEach } from 'lodash';
 @Service()
@@ -23,7 +23,7 @@ export default class RobotTypeService implements IRobotTypeService {
         @Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo,
         @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
         @Inject(config.repos.taskType.name) private taskTypeRepo: ITaskTypeRepo,
-    ) {}
+    ) { }
 
     public async createRobotType(robotTypeDTO: IRobotTypeDTO): Promise<Result<IRobotTypeDTO>> {
         try {
@@ -42,13 +42,17 @@ export default class RobotTypeService implements IRobotTypeService {
                 return Result.fail<IRobotTypeDTO>(model.errorValue());
             }
 
-            const ta = await this.convertToTaskTypeArray(robotTypeDTO.tasksAvailable);
+            const tasksAllowed = await this.convertToTaskTypeArray(robotTypeDTO.tasksAllowed);
+
+            if (tasksAllowed.isFailure) {
+                return Result.fail<IRobotTypeDTO>(tasksAllowed.errorValue());
+            }            
 
             const robotTypeOrError = await RobotType.create({
                 type: type.getValue(),
                 brand: brand.getValue(),
                 model: model.getValue(),
-                tasksAvailable: ta,
+                tasksAllowed: tasksAllowed.getValue(),
             });
 
             if (robotTypeOrError.isFailure) {
@@ -69,10 +73,10 @@ export default class RobotTypeService implements IRobotTypeService {
     public async getRobotTypes(): Promise<Result<Array<IRobotTypeDTO>>> {
         try {
             const robotTypes = await this.robotTypeRepo.getRobotTypes();
-
+            
             if (robotTypes === null) {
                 return Result.fail<Array<IRobotTypeDTO>>('RobotTypes not found');
-            } else {
+            } else {                
                 const robotTypesDTOResult = robotTypes.map(robotType => RobotTypeMap.toDTO(robotType) as IRobotTypeDTO);
                 return Result.ok<Array<IRobotTypeDTO>>(robotTypesDTOResult);
             }
@@ -107,9 +111,14 @@ export default class RobotTypeService implements IRobotTypeService {
             robotType.type = type.getValue();
             robotType.brand = brand.getValue();
             robotType.model = model.getValue();
+            
+            const tasksAllowed = await this.convertToTaskTypeArray(robotTypeDTO.tasksAllowed);
 
-            const ta = await this.convertToTaskTypeArray(robotTypeDTO.tasksAvailable);
-            robotType.tasksAvailable = ta;
+            if (tasksAllowed.isFailure) {
+                return Result.fail<IRobotTypeDTO>(tasksAllowed.errorValue());
+            }
+
+            robotType.tasksAllowed = tasksAllowed.getValue();
 
             await this.robotTypeRepo.save(robotType);
 
@@ -136,18 +145,17 @@ export default class RobotTypeService implements IRobotTypeService {
         }
     }
 
-    private async convertToTaskTypeArray(taskIds: string[]): Promise<TaskType[]> {
-        const taskTypes: TaskType[] = [];
+    private async convertToTaskTypeArray(taskIds: string[]): Promise<Result<TaskType[]>> {
+        const taskTypes= [];
 
-        forEach(taskIds, async taskId => {
+        for (const taskId of taskIds) {
             const taskType = await this.taskTypeRepo.findByDomainId(taskId);
+            if (taskType === null) {
+                return Result.fail<TaskType[]>(`TaskType ${taskId} not found`);
+            }
             taskTypes.push(taskType);
-        });
-
-        if (taskTypes === null) {
-            return [];
-        } else {
-            return taskTypes;
         }
+
+        return Result.ok<TaskType[]>(taskTypes);
     }
 }

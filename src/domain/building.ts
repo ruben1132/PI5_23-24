@@ -22,7 +22,7 @@ export class Building extends AggregateRoot<BuildingProps> {
     }
 
     get buildingId(): BuildingId {
-        return new BuildingId(this.buildingId.toValue());
+        return new BuildingId(this.id.toValue());
     }
 
     get code(): BuildingCode {

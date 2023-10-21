@@ -19,7 +19,7 @@ export class Task extends AggregateRoot<TaskProps> {
     }
 
     get taskId(): TaskId {
-        return new TaskId(this.taskId.toValue());
+        return new TaskId(this.id.toValue());
     }
 
     get designation(): string {

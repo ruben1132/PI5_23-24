@@ -20,8 +20,13 @@ export class PassageMap extends Mapper<Passage> {
     }
 
     public static toDomain(passage: any | Model<IPassagePersistence & Document>): Passage {
+        
         const passageOrError = Passage.create(
-            passage,
+            {
+                designation: passage.designation,
+                fromFloor: passage.fromFloor,
+                toFloor: passage.toFloor
+            },
             new UniqueEntityID(passage.domainId)
         );
 

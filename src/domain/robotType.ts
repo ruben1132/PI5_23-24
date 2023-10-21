@@ -14,7 +14,7 @@ interface RobotTypeProps {
     type: RobotTypeType;
     brand: RobotTypeBrand;
     model: RobotTypeModel;
-    tasksAvailable: TaskType[];
+    tasksAllowed: TaskType[];
 }
 
 export class RobotType extends AggregateRoot<RobotTypeProps> {
@@ -50,12 +50,12 @@ export class RobotType extends AggregateRoot<RobotTypeProps> {
         this.props.model = value;
     }
 
-    get tasksAvailable(): TaskType[] {
-        return this.props.tasksAvailable;
+    get tasksAllowed(): TaskType[] {
+        return this.props.tasksAllowed;
     }
 
-    set tasksAvailable(value: TaskType[]) {
-        this.props.tasksAvailable = value;
+    set tasksAllowed(value: TaskType[]) {
+        this.props.tasksAllowed = value;
     }
 
     private constructor(props: RobotTypeProps, id?: UniqueEntityID) {
@@ -67,7 +67,7 @@ export class RobotType extends AggregateRoot<RobotTypeProps> {
             { argument: props.type, argumentName: 'type' },
             { argument: props.brand, argumentName: 'brand' },
             { argument: props.model, argumentName: 'model' },
-            { argument: props.tasksAvailable, argumentName: 'tasksAvailable' },
+            { argument: props.tasksAllowed, argumentName: 'tasksAllowed' },
         ];
         const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
@@ -75,12 +75,12 @@ export class RobotType extends AggregateRoot<RobotTypeProps> {
             return Result.fail<RobotType>(guardResult.message)
         }
 
-        if (props.tasksAvailable.length === 0) {
-            return Result.fail<RobotType>("tasksAvailable is empty")
+        if (props.tasksAllowed.length === 0) {
+            return Result.fail<RobotType>("tasksAllowed is empty")
         }
 
         const robotType = new RobotType(
-            { type: props.type, brand: props.brand, model: props.model, tasksAvailable: props.tasksAvailable },
+            { type: props.type, brand: props.brand, model: props.model, tasksAllowed: props.tasksAllowed },
             id,
         );
 

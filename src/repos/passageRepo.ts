@@ -41,10 +41,7 @@ export default class PassageRepo implements IPassageRepo {
         try {
             if (passageDocument === null) {
                 const rawPassage: any = PassageMap.toPersistence(passage);
-
                 const passageCreated = await this.passageSchema.create(rawPassage);
-
-                // console.log(passageCreated);
 
                 return PassageMap.toDomain(passageCreated);
             } else {
@@ -97,11 +94,9 @@ export default class PassageRepo implements IPassageRepo {
 
                 return passagesWithCustomFloorData.map((passage) => PassageMap.toDomain(passage));
             } else {
-                console.log("No matching data found.");
                 return [];
             }
         } catch (error) {
-            console.error("Error during aggregation:", error);
             return [];
         }
     }
@@ -132,8 +127,6 @@ export default class PassageRepo implements IPassageRepo {
             if (passagesWithFloorData) {
                 // Map the raw MongoDB documents to your custom Passage objects
                 const passagesWithCustomFloorData = passagesWithFloorData.map((passage) => {
-                    //console.log(first.toString());
-                    //console.log(passage.fromFloorData[0].building);
                     // Convert the 'fromFloorData' and 'toFloorData' fields to custom Floor objects
                     if( (passage.fromFloorData[0].building.code.toString() === first && passage.toFloorData[0].building.code.toString() === second) 
                     ||  (passage.fromFloorData[0].building.code.toString() === second && passage.toFloorData[0].building.code.toString() === first)){
@@ -152,11 +145,9 @@ export default class PassageRepo implements IPassageRepo {
 
                 return passagesWithCustomFloorData.map((passage) => PassageMap.toDomain(passage));
             } else {
-                console.log("No matching data found.");
                 return [];
             }
         } catch (error) {
-            console.error("Error during aggregation:", error);
             return [];
         }
     }

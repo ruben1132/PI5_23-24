@@ -19,7 +19,7 @@ export class ElevatorMap extends Mapper<Elevator> {
     });
     
     return {
-      domainId: elevator.domainId.toString(),
+      domainId: elevator.elevatorDomainId.toString(),
       designation: elevator.elevatorDesignation.value,
       floorsAllowed: floorsAllowed,
     } as IElevatorDTO;
@@ -40,7 +40,7 @@ export class ElevatorMap extends Mapper<Elevator> {
 
   public static toPersistence (elevator: Elevator): any {
     return {
-      domainId: elevator.domainId.toString(),
+      domainId: elevator.elevatorDomainId.toString(),
       designation: elevator.elevatorDesignation.value,
       floorsAllowed: elevator.floorsAllowed
     }
