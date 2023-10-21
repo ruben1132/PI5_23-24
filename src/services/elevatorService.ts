@@ -36,19 +36,18 @@ export default class ElevatorService implements IElevatorService {
     public async createElevator(elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
         try {
 
-            let floorsAllowed: Floor[];
-            elevatorDTO.floorsAllowed.forEach(async floorId => {
+            let fAllowed: Floor[] = [];
+
+            for (const floorId of elevatorDTO.floorsAllowed) {
                 // check if floor exists
                 const floorOrError = await this.getFloor(floorId);
                 if (floorOrError.isFailure) {
                     return Result.fail<IElevatorDTO>(floorOrError.errorValue());
-                }else {
-                    const floor = floorOrError.getValue();
-                    console.log(floor);
-                    //floorsAllowed.push(floor);
-                    //floorsAllowed.
+                } else {
+                    fAllowed.push(floorOrError.getValue());
                 }
-            });
+            }
+            
 
             const designation = await ElevatorDesignation.create(elevatorDTO.designation);
             if (designation.isFailure) {
@@ -58,9 +57,9 @@ export default class ElevatorService implements IElevatorService {
             const elevatorOrError = await Elevator.create(
                 {
                     designation: designation.getValue(),
-                    floorsAllowed: floorsAllowed
+                    floorsAllowed: fAllowed
                 }
-            );
+            );            
 
             if (elevatorOrError.isFailure) {
                 return Result.fail<IElevatorDTO>(elevatorOrError.errorValue());
@@ -70,49 +69,13 @@ export default class ElevatorService implements IElevatorService {
 
             await this.elevatorRepo.save(elevatorResult);
 
+            
             const elevatorDTOResult = ElevatorMap.toDTO(elevatorResult);
             return Result.ok<IElevatorDTO>(elevatorDTOResult)
         } catch (e) {
             throw e;
         }
     }
-
-    /*public async updateBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
-        try {
-            const building = await this.buildingRepo.findByDomainId(buildingDTO.id);
-
-            if (building === null) {
-                return Result.fail<IBuildingDTO>("Building not found");
-            }
-
-            const code = await BuildingCode.create(buildingDTO.code);
-            if (code.isFailure) {
-                return Result.fail<IBuildingDTO>(code.errorValue());
-            }
-
-            const name = await BuildingName.create(buildingDTO.name);
-            if (name.isFailure) {
-                return Result.fail<IBuildingDTO>(name.errorValue());
-            }
-
-            const dimensions = await BuildingDimensions.create(buildingDTO.dimensions);
-            if (dimensions.isFailure) {
-                return Result.fail<IBuildingDTO>(dimensions.errorValue());
-            }
-
-            building.code = code.getValue();
-            building.name = name.getValue();
-            building.dimensions = dimensions.getValue();
-
-            await this.buildingRepo.save(building);
-            const buildingDTOResult = BuildingMap.toDTO(building) as IBuildingDTO;
-
-            return Result.ok<IBuildingDTO>(buildingDTOResult)
-
-        } catch (e) {
-            throw e;
-        }
-    }*/
 
     public async deleteElevator(elevatorId: string): Promise<Result<void>> {
         try {

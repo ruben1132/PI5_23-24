@@ -10,18 +10,18 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import { ElevatorDesignation } from "../domain/valueObj/elevatorDesignation";
 
 export class ElevatorMap extends Mapper<Elevator> {
-  
-  public static toDTO( elevator: Elevator): IElevatorDTO {
-    let floorsAllowed: string[];
-    elevator.floorsAllowed.forEach(floor => {
-      const floorId = floor.id.toString();
-      floorsAllowed.push(floorId);
-    });
-    
+
+  public static toDTO(elevator: Elevator): IElevatorDTO {
+    let fAllowed: string[] = [];
+
+    for (const floor of elevator.floorsAllowed) {
+      fAllowed.push(floor.domainId.toString());
+    }
+
     return {
       domainId: elevator.elevatorDomainId.toString(),
       designation: elevator.elevatorDesignation.value,
-      floorsAllowed: floorsAllowed,
+      floorsAllowed: fAllowed,
     } as IElevatorDTO;
   }
 
@@ -32,17 +32,17 @@ export class ElevatorMap extends Mapper<Elevator> {
       designation: elevatorDesignationOrError.getValue(),
       floorsAllowed: elevator.floorsAllowed
     }, new UniqueEntityID(elevator.domainId));
-    
+
     elevatorOrError.isFailure ? console.log(elevatorOrError.error) : '';
 
     return elevatorOrError.isSuccess ? elevatorOrError.getValue() : null;
   }
 
-  public static toPersistence (elevator: Elevator): any {
+  public static toPersistence(elevator: Elevator): any {
     return {
       domainId: elevator.elevatorDomainId.toString(),
       designation: elevator.elevatorDesignation.value,
-      floorsAllowed: elevator.floorsAllowed
+      floorsAllowed: elevator.floorsAllowed.map(floor => floor.id.toString())
     }
   }
 }

@@ -3,7 +3,7 @@ import { Service, Inject } from 'typedi';
 import IElevatorRepo from '../services/IRepos/IElevatorRepo';
 import { Elevator } from '../domain/elevator';
 import { ElevatorId } from '../domain/valueObj/elevatorId';
-import { ElevatorMap } from "../mappers/ElevatorMap"; 
+import { ElevatorMap } from "../mappers/ElevatorMap";
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IElevatorPersistence } from '../dataschema/IElevatorPersistence';
@@ -12,7 +12,7 @@ import { IElevatorPersistence } from '../dataschema/IElevatorPersistence';
 export default class ElevatorRepo implements IElevatorRepo {
     private models: any;
 
-    constructor(@Inject('elevatorSchema') private elevatorSchema: Model<IElevatorPersistence & Document>) {}
+    constructor(@Inject('elevatorSchema') private elevatorSchema: Model<IElevatorPersistence & Document>) { }
 
     private createBaseQuery(): any {
         return {
@@ -40,8 +40,16 @@ export default class ElevatorRepo implements IElevatorRepo {
             if (elevatorDocument === null) {
                 const rawElevator: any = ElevatorMap.toPersistence(elevator);
                 const elevatorCreated = await this.elevatorSchema.create(rawElevator);
+
                 return ElevatorMap.toDomain(elevatorCreated);
             } else {
+
+
+                let fAllowed: string[] = [];
+
+                for (const floor of elevator.floorsAllowed) {
+                    fAllowed.push(floor.domainId.toString());
+                }
 
                 let floorsAllowed: string[];
                 elevator.floorsAllowed.forEach(floor => {
@@ -61,40 +69,88 @@ export default class ElevatorRepo implements IElevatorRepo {
     }
 
     public async findByDomainId(elevatorId: ElevatorId | string): Promise<Elevator> {
-        const query = { domainId: elevatorId };
-        const elevatorRecord = await this.elevatorSchema.findOne(query as FilterQuery<IElevatorPersistence & Document>);
+        try {
+            const pipeline = [
+                {
+                    $match: { domainId: elevatorId } 
+                },
+                {
+                    $lookup: {
+                        from: 'floors', // Name of the "tasktypes" collection
+                        localField: 'floorsAllowed', // Field in the "robotType" collection
+                        foreignField: 'domainId', // Field in the "tasktypes" collection
+                        as: 'floorsAllowed'
+                    },
 
-        if (elevatorRecord != null) {
-            return ElevatorMap.toDomain(elevatorRecord);
-        } else return null;
+                },
+            ];
+
+            const elevatorsWithFloorsData = await this.elevatorSchema.aggregate(pipeline);
+
+            if (elevatorsWithFloorsData != null) {
+                return ElevatorMap.toDomain(elevatorsWithFloorsData[0]);
+            }
+
+            return null;
+        } catch (error) {
+            return null;
+        }
     }
 
     public async findByIds(elevatorsIds: ElevatorId[] | string[]): Promise<Elevator[]> {
-        const query = { domainId: { $in: elevatorsIds } };
-        const elevatorRecord = await this.elevatorSchema.find(query as FilterQuery<IElevatorPersistence & Document>);
+        try {
+            const pipeline = [
+                {
+                    $match: {  domainId: { $in: elevatorsIds }  } 
+                },
+                {
+                    $lookup: {
+                        from: 'floors', // Name of the "tasktypes" collection
+                        localField: 'floorsAllowed', // Field in the "robotType" collection
+                        foreignField: 'domainId', // Field in the "tasktypes" collection
+                        as: 'floorsAllowed'
+                    },
 
-        if (elevatorRecord != null) {
-            return elevatorRecord.map((elevator) => ElevatorMap.toDomain(elevator));
+                },
+            ];
+
+            const elevatorsWithFloorsData = await this.elevatorSchema.aggregate(pipeline);
+
+            if (elevatorsWithFloorsData != null) {
+                return elevatorsWithFloorsData.map((elevator) => ElevatorMap.toDomain(elevator));
+            }
+
+            return null;
+        } catch (error) {
+            return null;
         }
-
-        return null;
     }
 
     public async getElevators(): Promise<Elevator[]> {
-        const elevatorRecord = await this.elevatorSchema.find({});
+        try {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'floors', // Name of the "tasktypes" collection
+                        localField: 'floorsAllowed', // Field in the "robotType" collection
+                        foreignField: 'domainId', // Field in the "tasktypes" collection
+                        as: 'floorsAllowed'
+                    },
 
-        if (elevatorRecord != null) {
-            return elevatorRecord.map((elevator) => ElevatorMap.toDomain(elevator));
-        } else return null;
-    }
+                },
+            ];
 
-    public async getElevatorById(elevatorId: ElevatorId | string): Promise<Elevator> {
-        const query = { domainId: elevatorId };
-        const elevatorRecord = await this.elevatorSchema.findOne(query as FilterQuery<IElevatorPersistence & Document>);
+            const elevatorsWithFloorsData = await this.elevatorSchema.aggregate(pipeline);
 
-        if (elevatorRecord != null) {
-            return ElevatorMap.toDomain(elevatorRecord);
-        } else return null;
+            if (elevatorsWithFloorsData != null) {
+                return elevatorsWithFloorsData.map((elevator) => ElevatorMap.toDomain(elevator));
+            }
+
+            return [];
+        } catch (error) {
+            return [];
+        }
+
     }
 
     public async deleteElevator(elevatorId: ElevatorId | string): Promise<boolean> {
