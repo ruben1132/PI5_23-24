@@ -44,7 +44,7 @@ export default (app: Router) => {
         '',
         celebrate({
             body: Joi.object({
-                id: Joi.string().required(),
+                domainId: Joi.string().required(),
                 designation: Joi.string().required(),
                 fromFloor: Joi.string().required(),
                 toFloor: Joi.string().required(),

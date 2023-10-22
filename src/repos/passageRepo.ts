@@ -236,11 +236,65 @@ export default class PassageRepo implements IPassageRepo {
 
 
     public async findByDomainId(passageId: PassageId | string): Promise<Passage> {
-        const query = { domainId: passageId };
-        const passageRecord = await this.passageSchema.findOne(query as FilterQuery<IPassagePersistence & Document>);
+        const pipeline = [
+            {
+                $match: { domainId: passageId }
+            },
+            {
+                $lookup: {
+                    from: 'floors',
+                    localField: 'fromFloor',
+                    foreignField: 'domainId',
+                    as: 'fromFloor'
+                }
+            },
+            {
+                $unwind: '$fromFloor'
+            },
+            {
+                $lookup: {
+                    from: 'floors',
+                    localField: 'toFloor',
+                    foreignField: 'domainId',
+                    as: 'toFloor'
+                }
+            },
+            {
+                $unwind: '$toFloor'
+            },
+            {
+                $lookup: {
+                    from: 'buildings',
+                    localField: 'fromFloor.building',
+                    foreignField: 'domainId',
+                    as: 'fromBuilding'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$fromBuilding',
+                }
+            },
+            {
+                $lookup: {
+                    from: 'buildings',
+                    localField: 'toFloor.building',
+                    foreignField: 'domainId',
+                    as: 'toBuilding'
+                }
+            },
+            {
+                $unwind: {
+                    path: '$toBuilding',
+                }
+            }
+        ];
 
-        if (passageRecord != null) {
-            return PassageMap.toDomain(passageRecord);
+        const passagesWithFloorData = await this.passageSchema.aggregate(pipeline);
+
+        if (passagesWithFloorData != null) {
+
+            return  PassageMap.toDomain(passagesWithFloorData[0]);
         }
 
         return null;
