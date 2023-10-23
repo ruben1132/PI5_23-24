@@ -7,6 +7,8 @@ import IRobotService from '../services/IServices/IRobotService';
 import IRobotDTO from '../dto/IRobotDTO';
 
 import { Result } from "../core/logic/Result";
+import { ParamsDictionary } from 'express-serve-static-core';
+import { ParsedQs } from 'qs';
 
 @Service()
 export default class RobotController implements IRobotController /* TODO: extends ../core/infra/BaseController */ {
@@ -31,6 +33,22 @@ export default class RobotController implements IRobotController /* TODO: extend
         }
     };
 
+    public async inhibitRobot(req: Request, res: Response, next: NextFunction) {
+        try {
+            const robotId = req.body.robotId;
+            const robotOrError = await this.robotServiceInstance.inhibitRobot(robotId as string) as Result<IRobotDTO>;
+
+            if (robotOrError.isFailure) {
+                return res.status(400).send({ error: robotOrError.errorValue() });
+            }
+
+            const RobotDTO = robotOrError.getValue();
+            return res.json(RobotDTO).status(201);
+        }
+        catch (e) {
+            return next(e);
+        }
+    }
 
     public async getRobots(req: Request, res: Response, next: NextFunction) {
         try {

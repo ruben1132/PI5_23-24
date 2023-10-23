@@ -18,11 +18,8 @@ import { RobotType } from '../domain/robotType';
 
 import IRobotTypeRepo from './IRepos/IRobotTypeRepo';
 
-import { TaskType } from '../domain/taskType';
-
 import ITaskTypeRepo from './IRepos/ITaskTypeRepo';
 
-import { forEach } from 'lodash';
 @Service()
 export default class RobotService implements IRobotService {
     constructor(
@@ -89,6 +86,38 @@ export default class RobotService implements IRobotService {
             console.log('robotDTOResult', robotDTOResult);
 
             return Result.ok<IRobotDTO>(robotDTOResult);
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    public async  inhibitRobot(robotId: string): Promise<Result<IRobotDTO>> {
+        // check if robot exists
+        const robot = await this.robotRepo.findByDomainId(robotId);
+
+        if (robot === null) {
+            return Result.fail<IRobotDTO>('Robot not found');
+        }
+
+        robot.state = RobotState.create(false).getValue();
+
+        await this.robotRepo.save(robot);
+
+        const robotDTOResult = RobotMap.toDTO(robot) as IRobotDTO;
+
+        return Result.ok<IRobotDTO>(robotDTOResult);
+    }
+
+    public async getRobots(): Promise<Result<Array<IRobotDTO>>> {
+        try {
+            const robots = await this.robotRepo.getRobots();
+
+            if (robots === null) {
+                return Result.fail<Array<IRobotDTO>>('Robots not found');
+            } else {
+                const robotsDTOResult = robots.map(robot => RobotMap.toDTO(robot) as IRobotDTO);
+                return Result.ok<Array<IRobotDTO>>(robotsDTOResult);
+            }
         } catch (e) {
             throw e;
         }
@@ -162,22 +191,6 @@ export default class RobotService implements IRobotService {
             } else {
                 const robots = await this.robotRepo.deleteRobot(robotId);
                 return Result.ok<void>();
-            }
-        } catch (e) {
-            throw e;
-        }
-    }
-    public async getRobots(): Promise<Result<Array<IRobotDTO>>> {
-        try {
-            const robots = await this.robotRepo.getRobots();
-
-            if (robots === null) {
-                return Result.fail<Array<IRobotDTO>>('Robots not found');
-            } else {
-                const robotsDTOResult = robots.map(robot => RobotMap.toDTO(robot) as IRobotDTO);
-
-                console.log('robotsDTOResult', robotsDTOResult);
-                return Result.ok<Array<IRobotDTO>>(robotsDTOResult);
             }
         } catch (e) {
             throw e;

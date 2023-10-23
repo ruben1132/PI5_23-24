@@ -22,8 +22,8 @@ export class RobotType extends AggregateRoot<RobotTypeProps> {
         return this._id;
     }
 
-    get robotTypeId(): RobotTypeId {
-        return new RobotTypeId(this.robotTypeId.toValue());
+    get domainId(): RobotTypeId {
+        return new RobotTypeId(this.id.toValue());
     }
 
     get type(): RobotTypeType {

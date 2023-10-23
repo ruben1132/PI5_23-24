@@ -1,4 +1,3 @@
-import { Container } from 'typedi';
 
 import { Mapper } from '../core/infra/Mapper';
 
@@ -10,7 +9,6 @@ import { Robot } from '../domain/robot';
 
 import { UniqueEntityID } from '../core/domain/UniqueEntityID';
 
-import BuildingRepo from '../repos/buildingRepo';
 
 import { RobotIdentification } from '../domain/valueObj/robotIdentification';
 import { RobotNickname } from '../domain/valueObj/robotNickname';
@@ -25,7 +23,7 @@ export class RobotMap extends Mapper<Robot> {
             domainId: robot.id.toString(),
             identification: robot.identification.value,
             nickname: robot.nickname.value,
-            robotType: { id: robot.robotType.id.toValue(), name: robot.robotType.type.value },
+            robotType: { id: robot.robotType.domainId.toString(), name: robot.robotType.type.value },
             serialNumber: robot.serialNumber.value,
             description: robot.description.value,
             state: robot.state.value,
