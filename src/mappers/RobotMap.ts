@@ -49,8 +49,6 @@ export class RobotMap extends Mapper<Robot> {
             new UniqueEntityID(robot.domainId),
         );
 
-        // console.log(RobotOrError);
-
         RobotOrError.isFailure ? console.log(RobotOrError.errorValue()) : '';
 
         return RobotOrError.isSuccess ? RobotOrError.getValue() : null;
