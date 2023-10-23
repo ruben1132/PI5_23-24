@@ -86,6 +86,23 @@ export default class RobotService implements IRobotService {
         }
     }
 
+    public async  inhibitRobot(robotId: string): Promise<Result<IRobotDTO>> {
+        // check if robot exists
+        const robot = await this.robotRepo.findByDomainId(robotId);
+        
+        if (robot === null) {
+            return Result.fail<IRobotDTO>('Robot not found');
+        }
+
+        robot.state = RobotState.create(false).getValue();
+        
+        await this.robotRepo.save(robot);
+
+        const robotDTOResult = RobotMap.toDTO(robot) as IRobotDTO;
+
+        return Result.ok<IRobotDTO>(robotDTOResult);
+    }
+    
     public async getRobots(): Promise<Result<Array<IRobotDTO>>> {
         try {
             const robots = await this.robotRepo.getRobots();

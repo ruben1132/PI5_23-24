@@ -90,12 +90,31 @@ export default class RobotRepo implements IRobotRepo {
     }
 
     public async findByDomainId(robotId: RobotId | string): Promise<Robot> {
-        const query = { domainId: robotId };
+        console.log(robotId);
+        
+        const pipeline = [
+            {
+                $match: { domainId: robotId }
+            },
+            {
+                $lookup: {
+                    from: 'robottypes',
+                    localField: 'robotType',
+                    foreignField: 'domainId', 
+                    as: 'robotType'
+                }
+            },
+            {
+                $unwind: '$robotType'
+            }
+        ];
 
-        const robotRecord = await this.robotSchema.findOne(query as FilterQuery<IRobotPersistence & Document>);
+        const robotsWithBuildings = await this.robotSchema.aggregate(pipeline);
 
-        if (robotRecord != null) {
-            return RobotMap.toDomain(robotRecord);
+        console.log(robotsWithBuildings);
+        
+        if (robotsWithBuildings != null && robotsWithBuildings.length > 0) {
+            return RobotMap.toDomain(robotsWithBuildings[0]);
         }
 
         return null;

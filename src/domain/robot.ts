@@ -14,8 +14,6 @@ import { RobotType } from './robotType';
 
 
 interface RobotProps {
-    // TODO:
-
     identification: RobotIdentification;
     nickname: RobotNickname;
     robotType: RobotType;

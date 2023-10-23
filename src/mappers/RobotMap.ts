@@ -1,4 +1,3 @@
-import { Container } from 'typedi';
 
 import { Mapper } from '../core/infra/Mapper';
 
@@ -10,7 +9,6 @@ import { Robot } from '../domain/robot';
 
 import { UniqueEntityID } from '../core/domain/UniqueEntityID';
 
-import BuildingRepo from '../repos/buildingRepo';
 
 import { RobotIdentification } from '../domain/valueObj/robotIdentification';
 import { RobotNickname } from '../domain/valueObj/robotNickname';

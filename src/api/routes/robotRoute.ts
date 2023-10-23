@@ -28,6 +28,16 @@ export default (app: Router) => {
         (req, res, next) => ctrl.createRobot(req, res, next),
     );
 
+    route.patch(
+        '',
+        celebrate({
+            body: Joi.object({
+                robotId: Joi.string().required(),
+            }),
+        }),
+        (req, res, next) => ctrl.inhibitRobot(req, res, next),
+    );
+
     route.get('', (req, res, next) => ctrl.getRobots(req, res, next));
 
 
