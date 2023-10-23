@@ -19,12 +19,11 @@ import { RobotType } from '../domain/robotType';
 
 export class RobotMap extends Mapper<Robot> {
     public static toDTO(robot: Robot): IRobotDTO {
-        console.log('robot', robot);
         return {
             domainId: robot.id.toString(),
             identification: robot.identification.value,
             nickname: robot.nickname.value,
-            robotType: { id: robot.robotType.id.toValue(), name: robot.robotType.type.value },
+            robotType: { id: robot.robotType.domainId.toString(), name: robot.robotType.type.value },
             serialNumber: robot.serialNumber.value,
             description: robot.description.value,
             state: robot.state.value,

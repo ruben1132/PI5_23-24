@@ -44,13 +44,14 @@ export default class RobotRepo implements IRobotRepo {
 
                 return RobotMap.toDomain(robotCreated);
             } else {
+                
                 robotDocument.identification = robot.identification.value;
                 robotDocument.nickname = robot.nickname.value;
-                robotDocument.robotType = robot.robotType.id.toString();
+                robotDocument.robotType = robot.robotType.domainId.toString();
                 robotDocument.serialNumber = robot.serialNumber.value;
                 robotDocument.description = robot.description.value;
                 robotDocument.state = robot.state.value;
-
+                
                 await robotDocument.save();
 
                 return robot;
@@ -90,7 +91,6 @@ export default class RobotRepo implements IRobotRepo {
     }
 
     public async findByDomainId(robotId: RobotId | string): Promise<Robot> {
-        console.log(robotId);
         
         const pipeline = [
             {
@@ -111,7 +111,6 @@ export default class RobotRepo implements IRobotRepo {
 
         const robotsWithBuildings = await this.robotSchema.aggregate(pipeline);
 
-        console.log(robotsWithBuildings);
         
         if (robotsWithBuildings != null && robotsWithBuildings.length > 0) {
             return RobotMap.toDomain(robotsWithBuildings[0]);

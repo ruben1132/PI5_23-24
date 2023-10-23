@@ -1,6 +1,15 @@
 import { Robot } from "../../../src/domain/robot";
 import { TaskType } from "../../../src/domain/taskType";
 import { expect } from 'chai';
+import { RobotState } from "../../../src/domain/valueObj/robotState";
+import { RobotIdentification } from "../../../src/domain/valueObj/robotIdentification";
+import { RobotNickname } from "../../../src/domain/valueObj/robotNickname";
+import { RobotType } from "../../../src/domain/robotType";
+import { RobotSerialNumber } from "../../../src/domain/valueObj/robotSerialNumber";
+import { RobotDescription } from "../../../src/domain/valueObj/robotDescription";
+import { RobotTypeType } from "../../../src/domain/valueObj/robotTypeType";
+import { RobotTypeBrand } from "../../../src/domain/valueObj/robotTypeBrand";
+import { RobotTypeModel } from "../../../src/domain/valueObj/robotTypeModel";
 
 describe("Robot", () => {
     const taskType1 = TaskType.create({
@@ -18,9 +27,18 @@ describe("Robot", () => {
     it("should create a robot with the correct properties", () => {
 
         const robotOrError = Robot.create({
-            state: true,
-            designation: "Robot 1",
-            taskTypesAllowed: taskTypesAllowed,
+            identification: RobotIdentification.create("Robot 1").getValue(),
+            nickname: RobotNickname.create("Robot 1").getValue(),
+            robotType: RobotType.create({
+                type: RobotTypeType.create("Type 1").getValue(),
+                brand: RobotTypeBrand.create("Brand 1").getValue(),
+                model: RobotTypeModel.create("Model 1").getValue(),
+                tasksAllowed: taskTypesAllowed,
+            }).getValue(),
+            serialNumber: RobotSerialNumber.create("Robot 1").getValue(),
+            description: RobotDescription.create("Robot 1").getValue(),
+            state: RobotState.create(true).getValue(),
+            
         });
         const robot = robotOrError.getValue();
 
