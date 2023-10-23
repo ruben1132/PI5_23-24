@@ -8,17 +8,32 @@ const RobotSchema = new mongoose.Schema(
             type: String,
             unique: true
         },
-        designation: {
+        identification: {
             type: String,
-            required: true
+            required: true,
+            unique: true
+        },
+        nickname: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        robotType: {
+            type: String,
+            required: true,
+        },
+        serialNumber: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        description: {
+            type: String,
+            required: true,
         },
         state: {
             type: Boolean,
-            required: [true, 'Please enter a designation']
-        },
-        taskTypesAllowed: {
-            type: [String],
-            required: true
+            required: true,
         },
     },
     { timestamps: true },

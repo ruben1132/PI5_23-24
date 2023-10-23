@@ -1,7 +1,9 @@
 export interface IRobotPersistence {
-	_id: string;
-    designation: string; 
+    identification: string;
+    nickname: string;
+    robotType: string;
+    serialNumber: string;
+    description: string;
     state: boolean;
-    taskTypesAllowed: [string];
 }
-  
+

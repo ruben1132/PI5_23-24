@@ -67,7 +67,6 @@ describe('FloorMap', () => {
 
     const fmRoom1 = FloorMapRoom.create({
         room: room1,
-        pos: floorMapPosition,
         dimensions: FloorMapDimensions.create({
             startX: 1,
             startY: 1,
@@ -78,11 +77,6 @@ describe('FloorMap', () => {
 
     const fmRoom2 = FloorMapRoom.create({
         room: room2,
-        pos: FloorMapPosition.create({
-            posX: 0,
-            posY: 0,
-            direction: FloorMapDirection.create('norte').getValue(),
-        }).getValue(),
         dimensions: FloorMapDimensions.create({
             startX: 1,
             startY: 1,

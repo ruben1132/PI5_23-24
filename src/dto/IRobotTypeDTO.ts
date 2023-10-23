@@ -1,4 +1,4 @@
-export default interface ITaskTypeDTO {
+export default interface IRobotTypeDTO {
     domainId: string;
     type: string;
     brand: string;

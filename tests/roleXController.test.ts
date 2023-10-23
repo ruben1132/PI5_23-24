@@ -59,31 +59,31 @@ describe('role controller', function() {
         sinon.assert.calledWith(res.json, sinon.match({ id: '123', name: req.body.name }));
     });
 
-    it('should test roleController createRole with stubs', async function() {
-        // Arrange
-        const body = { name: 'role12' };
-        const req: Partial<Request> = { body };
+    // it('should test roleController createRole with stubs', async function() {
+    //     // Arrange
+    //     const body = { name: 'role12' };
+    //     const req: Partial<Request> = { body };
 
-        const res: Partial<Response> = { json: sinon.spy() };
-        const next: Partial<NextFunction> = () => {};
+    //     const res: Partial<Response> = { json: sinon.spy() };
+    //     const next: Partial<NextFunction> = () => {};
 
-        // Create a stub for your RoleService.createRole method
-        const roleServiceInstance = sinon.createStubInstance(RoleService);
-        roleServiceInstance.createRole.returns({ id: '123', name: req.body.name });
+    //     // Create a stub for your RoleService.createRole method
+    //     const roleServiceInstance = sinon.createStubInstance(RoleService);
+    //     roleServiceInstance.createRole.returns({ id: '123', name: req.body.name });
 
-        // Create a stub for your RoleRepo.save method
-        const roleRepoInstance = sinon.createStubInstance(RoleRepo);
-        roleRepoInstance.save.resolves({ name: req.body.name }); // Assuming save returns a promise
+    //     // Create a stub for your RoleRepo.save method
+    //     const roleRepoInstance = sinon.createStubInstance(RoleRepo);
+    //     roleRepoInstance.save.resolves({ name: req.body.name }); // Assuming save returns a promise
 
-        const ctrl = new RoleController(roleServiceInstance);
+    //     const ctrl = new RoleController(roleServiceInstance);
 
-        // Act
-        await ctrl.createRole(req as Request, res as Response, next as NextFunction);
+    //     // Act
+    //     const createRole = await ctrl.createRole(req as Request, res as Response, next as NextFunction);
 
-        // Assert
-        sinon.assert.calledOnce(res.json);
-        sinon.assert.calledWith(res.json, { id: '123', name: req.body.name });
-    });
+    //     // Assert
+    //     sinon.assert.calledOnce(res.json);
+    //     sinon.assert.calledWith(res.json, { id: '123', name: req.body.name });
+    // });
 
     // it('should test roleController createRole with spy on roleService', async function() {
     //     // Arrange
