@@ -87,6 +87,7 @@ export class Robot extends AggregateRoot<RobotProps> {
         const guardedProps = [
             { argument: props.identification, argumentName: 'identification' },
             { argument: props.robotType, argumentName: 'robotType' },
+            { argument: props.nickname, argumentName: 'nickname' },
             { argument: props.serialNumber, argumentName: 'serialNumber' },
             { argument: props.description, argumentName: 'description' },
             { argument: props.state, argumentName: 'state' },
