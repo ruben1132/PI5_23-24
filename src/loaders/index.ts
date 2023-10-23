@@ -121,6 +121,11 @@ export default async ({ expressApp }) => {
         path: config.controllers.room.path,
     };
 
+    const robotController = {
+        name: config.controllers.robot.name,
+        path: config.controllers.robot.path,
+    };
+
     // ******************* REPO *******************
     const roleRepo = {
         name: config.repos.role.name,
@@ -172,6 +177,11 @@ export default async ({ expressApp }) => {
         path: config.repos.robotType.path,
     };
 
+    const robotRepo = {
+        name: config.repos.robot.name,
+        path: config.repos.robot.path,
+    };
+
     // ******************* SERVICES *******************
     const roleService = {
         name: config.services.role.name,
@@ -197,7 +207,7 @@ export default async ({ expressApp }) => {
         name: config.services.passage.name,
         path: config.services.passage.path,
     };
-    
+
     const elevatorService = {
         name: config.services.elevator.name,
         path: config.services.elevator.path,
@@ -218,6 +228,11 @@ export default async ({ expressApp }) => {
         path: config.services.room.path,
     };
 
+    const robotService = {
+        name: config.services.robot.name,
+        path: config.services.robot.path,
+    };
+
     await dependencyInjectorLoader({
         mongoConnection,
         schemas: [
@@ -234,6 +249,7 @@ export default async ({ expressApp }) => {
             buildingSchema,
             taskTypeSchema,
             robotTypeSchema,
+            robotSchema
         ],
         controllers: [
             roleController,
@@ -245,6 +261,7 @@ export default async ({ expressApp }) => {
             taskTypeController,
             robotTypeController,
             roomController,
+            robotController,
         ],
         repos: [
             roleRepo,
@@ -257,6 +274,7 @@ export default async ({ expressApp }) => {
             elevatorRepo,
             taskTypeRepo,
             robotTypeRepo,
+            robotRepo,
         ],
         services: [
             roleService,
@@ -268,6 +286,7 @@ export default async ({ expressApp }) => {
             taskTypeService,
             robotTypeService,
             roomService,
+            robotService,
         ],
     });
     Logger.info('✌️ Schemas, Controllers, Repositories, Services, etc. loaded');

@@ -10,6 +10,7 @@ import taskType from './routes/taskTypeRoute';
 import robotType from './routes/robotTypeRoute';
 import roomRoute from './routes/roomRoute';
 import floorMapRoute from './routes/floorMapRoute';
+import robotRoute from './routes/robotRoute';
 
 export default () => {
 	const app = Router();
@@ -25,6 +26,7 @@ export default () => {
     taskType(app);
     robotType(app);
 	roomRoute(app);
+    robotRoute(app);
 
 	return app
 }

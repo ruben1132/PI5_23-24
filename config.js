@@ -76,6 +76,10 @@ export default {
             name: 'RoomController',
             path: '../controllers/roomController',
         },
+        robot: {
+            name: 'RobotController',
+            path: '../controllers/robotController',
+        },
     },
 
     repos: {
@@ -119,6 +123,10 @@ export default {
             name: 'RobotTypeRepo',
             path: '../repos/robotTypeRepo',
         },
+        robot: {
+            name: 'RobotRepo',
+            path: '../repos/robotRepo',
+        },
     },
 
     services: {
@@ -157,6 +165,10 @@ export default {
         room: {
             name: 'RoomService',
             path: '../services/roomService',
+        },
+        robot: {
+            name: 'RobotService',
+            path: '../services/robotService',
         },
     },
 
