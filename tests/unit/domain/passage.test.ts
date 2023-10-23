@@ -1,7 +1,5 @@
 import { Passage } from "../../../src/domain/passage";
 import { Floor } from "../../../src/domain/floor";
-import { PassageId } from "../../../src/domain/valueObj/passageId";
-import { FloorNumber } from "../../../src/domain/valueObj/floorNumber";
 import { FloorInformation } from "../../../src/domain/valueObj/floorInformation";
 import { Building } from "../../../src/domain/building";
 import { BuildingCode } from "../../../src/domain/valueObj/buildingCode";
