@@ -44,14 +44,14 @@ export default class RobotRepo implements IRobotRepo {
 
                 return RobotMap.toDomain(robotCreated);
             } else {
-                
+
                 robotDocument.identification = robot.identification.value;
                 robotDocument.nickname = robot.nickname.value;
                 robotDocument.robotType = robot.robotType.domainId.toString();
                 robotDocument.serialNumber = robot.serialNumber.value;
                 robotDocument.description = robot.description.value;
                 robotDocument.state = robot.state.value;
-                
+
                 await robotDocument.save();
 
                 return robot;
@@ -66,29 +66,21 @@ export default class RobotRepo implements IRobotRepo {
             const pipeline = [
                 {
                     $lookup: {
-                        from: 'RobotType', // The name of the RobotType collection
+                        from: 'robottypes', // The name of the RobotType collection
                         localField: 'robotType', // Field in the Robot collection
                         foreignField: 'domainId', // Field in the RobotType collection
-                        as: 'robotTypeData' // Alias for the joined data
+                        as: 'robotType' // Alias for the joined data
                     }
                 },
                 {
-                    $unwind: {
-                        path: '$robotTypeData',
-                        preserveNullAndEmptyArrays: true
-                    }
+                    $unwind: '$robotType'
                 }
             ];
 
             const robotsWithTaskTypeData = await this.robotSchema.aggregate(pipeline);
 
-            // console.log('robotsWithTaskTypeData', robotsWithTaskTypeData);
-
             if (robotsWithTaskTypeData) {
                 const robotPromisses = robotsWithTaskTypeData.map(robot => RobotMap.toDomain(robot));
-
-                // console.log('robotPromisses', robotPromisses);
-
                 return Promise.all(robotPromisses);
             } else {
                 return [];
@@ -99,7 +91,7 @@ export default class RobotRepo implements IRobotRepo {
     }
 
     public async findByDomainId(robotId: RobotId | string): Promise<Robot> {
-        
+
         const pipeline = [
             {
                 $match: { domainId: robotId }
@@ -108,7 +100,7 @@ export default class RobotRepo implements IRobotRepo {
                 $lookup: {
                     from: 'robottypes',
                     localField: 'robotType',
-                    foreignField: 'domainId', 
+                    foreignField: 'domainId',
                     as: 'robotType'
                 }
             },
@@ -119,7 +111,7 @@ export default class RobotRepo implements IRobotRepo {
 
         const robotsWithBuildings = await this.robotSchema.aggregate(pipeline);
 
-        
+
         if (robotsWithBuildings != null && robotsWithBuildings.length > 0) {
             return RobotMap.toDomain(robotsWithBuildings[0]);
         }
@@ -129,6 +121,8 @@ export default class RobotRepo implements IRobotRepo {
 
     public async deleteRobot(robotId: string): Promise<boolean> {
         try {
+
+            // console.log('robotId', robotId);
             const query = { domainId: robotId };
             const robotRecord = await this.robotSchema.findOne(query as FilterQuery<IRobotPersistence & Document>);
 

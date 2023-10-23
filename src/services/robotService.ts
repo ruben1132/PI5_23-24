@@ -184,7 +184,7 @@ export default class RobotService implements IRobotService {
 
     public async deleteRobot(robotId: string): Promise<Result<void>> {
         try {
-            const robot = await this.robotTypeRepo.findByDomainId(robotId);
+            const robot = await this.robotRepo.findByDomainId(robotId);
 
             if (robot === null) {
                 return Result.fail<void>('Robot not found');
