@@ -175,6 +175,8 @@ export default class RobotService implements IRobotService {
                 return Result.fail<Array<IRobotDTO>>('Robots not found');
             } else {
                 const robotsDTOResult = robots.map(robot => RobotMap.toDTO(robot) as IRobotDTO);
+
+                console.log('robotsDTOResult', robotsDTOResult);
                 return Result.ok<Array<IRobotDTO>>(robotsDTOResult);
             }
         } catch (e) {

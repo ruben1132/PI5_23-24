@@ -21,7 +21,6 @@ import { RobotType } from '../domain/robotType';
 
 export class RobotMap extends Mapper<Robot> {
     public static toDTO(robot: Robot): IRobotDTO {
-        console.log('robot', robot);
         return {
             domainId: robot.id.toString(),
             identification: robot.identification.value,
@@ -51,6 +50,8 @@ export class RobotMap extends Mapper<Robot> {
             },
             new UniqueEntityID(robot.domainId),
         );
+
+        // console.log(RobotOrError);
 
         RobotOrError.isFailure ? console.log(RobotOrError.errorValue()) : '';
 

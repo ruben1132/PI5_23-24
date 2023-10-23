@@ -61,32 +61,40 @@ export default class RobotRepo implements IRobotRepo {
     }
 
     public async getRobots(): Promise<Array<Robot>> {
-        //     try {
-        //         const pipeline = [
-        //             {
-        //                 $lookup: {
-        //                     from: 'tasktypes', // Name of the "tasktypes" collection
-        //                     localField: 'tasksAllowed', // Field in the "robot" collection
-        //                     foreignField: 'domainId', // Field in the "tasktypes" collection
-        //                     as: 'tasksAllowed',
-        //                 },
-        //             },
-        //         ];
+        try {
+            const pipeline = [
+                {
+                    $lookup: {
+                        from: 'RobotType', // The name of the RobotType collection
+                        localField: 'robotType', // Field in the Robot collection
+                        foreignField: 'domainId', // Field in the RobotType collection
+                        as: 'robotTypeData' // Alias for the joined data
+                    }
+                },
+                {
+                    $unwind: {
+                        path: '$robotTypeData',
+                        preserveNullAndEmptyArrays: true
+                    }
+                }
+            ];
 
-        //         const robotsWithTaskTypeData = await this.robotSchema.aggregate(pipeline);
+            const robotsWithTaskTypeData = await this.robotSchema.aggregate(pipeline);
 
-        //         if (robotsWithTaskTypeData) {
-        //             const robotPromisses = robotsWithTaskTypeData.map(robot => RobotMap.toDomain(robot));
+            // console.log('robotsWithTaskTypeData', robotsWithTaskTypeData);
 
-        //             return Promise.all(robotPromisses);
-        //         } else {
-        //             return [];
-        //         }
-        //     } catch (error) {
-        //         return [];
-        //     }
+            if (robotsWithTaskTypeData) {
+                const robotPromisses = robotsWithTaskTypeData.map(robot => RobotMap.toDomain(robot));
 
-        return [];
+                // console.log('robotPromisses', robotPromisses);
+
+                return Promise.all(robotPromisses);
+            } else {
+                return [];
+            }
+        } catch (error) {
+            return [];
+        }
     }
 
     public async findByDomainId(robotId: RobotId | string): Promise<Robot> {
