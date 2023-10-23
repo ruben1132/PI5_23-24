@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { celebrate, Joi } from 'celebrate';
 
 import { Container } from 'typedi';
-import IRobotTypeController from '../../controllers/IControllers/IRobotTypeController';
+import IRobotController from '../../controllers/IControllers/IRobotController';
 
 import config from '../../../config';
 
@@ -11,7 +11,7 @@ const route = Router();
 export default (app: Router) => {
     app.use('/robots', route);
 
-    const ctrl = Container.get(config.controllers.robot.name) as IRobotTypeController;
+    const ctrl = Container.get(config.controllers.robot.name) as IRobotController;
 
     route.post(
         '',
@@ -25,11 +25,11 @@ export default (app: Router) => {
                 state: Joi.boolean().required(),
             }),
         }),
-        (req, res, next) => ctrl.createRobotType(req, res, next),
+        (req, res, next) => ctrl.createRobot(req, res, next),
     );
 
-    route.get('', (req, res, next) => ctrl.getRobotTypes(req, res, next));
+    route.get('', (req, res, next) => ctrl.getRobots(req, res, next));
 
 
-    route.delete('/:id', (req, res, next) => ctrl.deleteRobotType(req, res, next));
+    route.delete('/:id', (req, res, next) => ctrl.deleteRobot(req, res, next));
 };
