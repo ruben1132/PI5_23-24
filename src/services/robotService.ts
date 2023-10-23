@@ -16,21 +16,31 @@ import { RobotDescription } from '../domain/valueObj/robotDescription';
 import { RobotState } from '../domain/valueObj/robotState';
 import { RobotType } from '../domain/robotType';
 
-import { TaskType } from '../domain/taskType';
+import IRobotTypeRepo from './IRepos/IRobotTypeRepo';
 
 import ITaskTypeRepo from './IRepos/ITaskTypeRepo';
 
-import { forEach } from 'lodash';
 @Service()
 export default class RobotService implements IRobotService {
     constructor(
         @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
         @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
         @Inject(config.repos.taskType.name) private taskTypeRepo: ITaskTypeRepo,
+        @Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo,
     ) {}
 
     public async createRobot(robotDTO: IRobotDTO): Promise<Result<IRobotDTO>> {
         try {
+
+            // check if robotType exists
+            let robotType: RobotType;
+            const robotTypeOrError = await this.getRobotType(robotDTO.robotType as any);
+            if (robotTypeOrError.isFailure) {
+                return Result.fail<IRobotDTO>(robotTypeOrError.errorValue());
+            } else {
+                robotType = robotTypeOrError.getValue();
+            }
+
             const identification = await RobotIdentification.create(robotDTO.identification);
             if (identification.isFailure) {
                 return Result.fail<IRobotDTO>(identification.errorValue());
@@ -39,12 +49,6 @@ export default class RobotService implements IRobotService {
             const nickname = await RobotNickname.create(robotDTO.nickname);
             if (nickname.isFailure) {
                 return Result.fail<IRobotDTO>(nickname.errorValue());
-            }
-
-
-            const type = await RobotType.create(robotDTO.robotType.id as any);
-            if (type.isFailure) {
-                return Result.fail<IRobotDTO>(type.errorValue());
             }
 
             const serialNumber = await RobotSerialNumber.create(robotDTO.serialNumber);
@@ -65,7 +69,7 @@ export default class RobotService implements IRobotService {
             const robotOrError = await Robot.create({
                 identification: identification.getValue(),
                 nickname: nickname.getValue(),
-                robotType: type.getValue(),
+                robotType: robotType,
                 serialNumber: serialNumber.getValue(),
                 description: description.getValue(),
                 state: state.getValue(),
@@ -74,11 +78,12 @@ export default class RobotService implements IRobotService {
             if (robotOrError.isFailure) {
                 return Result.fail<IRobotDTO>(robotOrError.errorValue());
             }
-
             const robotResult = robotOrError.getValue();
             await this.robotRepo.save(robotResult);
 
             const robotDTOResult = RobotMap.toDTO(robotResult);
+
+            console.log('robotDTOResult', robotDTOResult);
 
             return Result.ok<IRobotDTO>(robotDTOResult);
         } catch (e) {
@@ -122,6 +127,15 @@ export default class RobotService implements IRobotService {
         try {
             const robot = await this.robotRepo.findByDomainId(robotDTO.domainId);
 
+            // check if robotType exists
+            let robotType: RobotType;
+            const robotTypeOrError = await this.getRobotType(robotDTO.robotType.id);
+            if (robotTypeOrError.isFailure) {
+                return Result.fail<IRobotDTO>(robotTypeOrError.errorValue());
+            } else {
+                robotType = robotTypeOrError.getValue();
+            }
+
             if (robot === null) {
                 return Result.fail<IRobotDTO>('Robot not found');
             }
@@ -134,11 +148,6 @@ export default class RobotService implements IRobotService {
             const nickname = await RobotNickname.create(robotDTO.nickname);
             if (nickname.isFailure) {
                 return Result.fail<IRobotDTO>(nickname.errorValue());
-            }
-
-            const type = await RobotType.create(robotDTO.robotType.id as any);
-            if (type.isFailure) {
-                return Result.fail<IRobotDTO>(type.errorValue());
             }
 
             const serialNumber = await RobotSerialNumber.create(robotDTO.serialNumber);
@@ -158,7 +167,7 @@ export default class RobotService implements IRobotService {
 
             robot.identification = identification.getValue();
             robot.nickname = nickname.getValue();
-            robot.robotType = type.getValue();
+            robot.robotType = robotType;
             robot.serialNumber = serialNumber.getValue();
             robot.description = description.getValue();
             robot.state = state.getValue();
@@ -175,7 +184,7 @@ export default class RobotService implements IRobotService {
 
     public async deleteRobot(robotId: string): Promise<Result<void>> {
         try {
-            const robot = await this.robotRepo.findByDomainId(robotId);
+            const robot = await this.robotTypeRepo.findByDomainId(robotId);
 
             if (robot === null) {
                 return Result.fail<void>('Robot not found');
@@ -185,6 +194,17 @@ export default class RobotService implements IRobotService {
             }
         } catch (e) {
             throw e;
+        }
+    }
+
+    private async getRobotType(robotTypeId: string): Promise<Result<RobotType>> {
+        const robotType = await this.robotTypeRepo.findByDomainId(robotTypeId);
+        const found = !!robotType;
+
+        if (found) {
+            return Result.ok<RobotType>(robotType);
+        } else {
+            return Result.fail<RobotType>("Couldn't find robotType by id=" + robotTypeId);
         }
     }
 }

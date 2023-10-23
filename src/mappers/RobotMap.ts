@@ -19,11 +19,12 @@ import { RobotType } from '../domain/robotType';
 
 export class RobotMap extends Mapper<Robot> {
     public static toDTO(robot: Robot): IRobotDTO {
+        console.log('robot', robot);
         return {
             domainId: robot.id.toString(),
             identification: robot.identification.value,
             nickname: robot.nickname.value,
-            robotType: { id: robot.robotType.id.toString(), name: robot.robotType.type.value },
+            robotType: { id: robot.robotType.id.toValue(), name: robot.robotType.type.value },
             serialNumber: robot.serialNumber.value,
             description: robot.description.value,
             state: robot.state.value,
@@ -33,7 +34,6 @@ export class RobotMap extends Mapper<Robot> {
     public static toDomain(robot: any | Model<IRobotPersistence & Document>): Robot {
         const robotIdentificationOrError = RobotIdentification.create(robot.identification);
         const robotNicknameOrError = RobotNickname.create(robot.nickname);
-        const robotTypeOrError = RobotType.create(robot.robotType);
         const robotSerialNumberOrError = RobotSerialNumber.create(robot.serialNumber);
         const robotDescriptionOrError = RobotDescription.create(robot.description);
         const robotStateOrError = RobotState.create(robot.state);
@@ -42,7 +42,7 @@ export class RobotMap extends Mapper<Robot> {
             {
                 identification: robotIdentificationOrError.getValue(),
                 nickname: robotNicknameOrError.getValue(),
-                robotType: robotTypeOrError.getValue(),
+                robotType: robot.robotType,
                 serialNumber: robotSerialNumberOrError.getValue(),
                 description: robotDescriptionOrError.getValue(),
                 state: robotStateOrError.getValue(),
@@ -50,7 +50,7 @@ export class RobotMap extends Mapper<Robot> {
             new UniqueEntityID(robot.domainId),
         );
 
-        RobotOrError.isFailure ? console.log(RobotOrError.error) : '';
+        RobotOrError.isFailure ? console.log(RobotOrError.errorValue()) : '';
 
         return RobotOrError.isSuccess ? RobotOrError.getValue() : null;
     }
@@ -60,7 +60,7 @@ export class RobotMap extends Mapper<Robot> {
             domainId: robot.id.toString(),
             identification: robot.identification.value,
             nickname: robot.nickname.value,
-            robotType: { id: robot.robotType.id.toString(), name: robot.robotType.type.value },
+            robotType: robot.robotType.id.toValue(),
             serialNumber: robot.serialNumber.value,
             description: robot.description.value,
             state: robot.state.value,
