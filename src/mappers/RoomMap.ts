@@ -16,7 +16,7 @@ export class RoomMap extends Mapper<Room> {
         return {
             domainId: room.id.toString(),
             number: room.number.value,
-            floor: room.floor.domainId.toString(),
+            floor: room.floor.toString(),
         } as IRoomDTO;
     }
 
@@ -40,7 +40,7 @@ export class RoomMap extends Mapper<Room> {
         return {
             domainId: room.id.toString(),
             number: room.number.value,
-            floor: room.floor.id.toString(),
+            floor: room.floor.toString(),
         }
     }
 }

@@ -3,15 +3,14 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import { Guard } from "../core/logic/Guard";
 
 import { Result } from "../core/logic/Result";
-import { Floor } from "./floor";
 import { ElevatorId } from "./valueObj/elevatorId";
 import { ElevatorDesignation } from "./valueObj/elevatorDesignation";
 
-import IElevatorDTO from "../dto/IElevatorDTO"; 
+import { FloorId } from "./valueObj/floorId";
 
 interface ElevatorProps {
     designation: ElevatorDesignation;
-    floorsAllowed: Floor[];
+    floorsAllowed: FloorId[];
 }
 
 export class Elevator extends AggregateRoot<ElevatorProps> {
@@ -19,7 +18,7 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
         return this._id;
     }
 
-    get elevatorDomainId(): ElevatorId {
+    get domainId(): ElevatorId {
         return new ElevatorId(this.id.toValue());
     }
 
@@ -27,7 +26,7 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
         return this.props.designation
     }
 
-    get floorsAllowed(): Floor[] {
+    get floorsAllowed(): FloorId[] {
         return this.props.floorsAllowed
     }
 

@@ -8,6 +8,7 @@ import { FloorId } from "./valueObj/floorId";
 import { FloorNumber } from "./valueObj/floorNumber";
 import { FloorInformation } from "./valueObj/floorInformation";
 import { Guard } from "../core/logic/Guard";
+import { BuildingId } from "./valueObj/buildingId";
 
 
 
@@ -16,7 +17,7 @@ import { Guard } from "../core/logic/Guard";
 interface FloorProps {
     number: number; 
     information: FloorInformation; //TODO: criar um value obj para designacoes/informacoes (meter um max de chars por exemplo)
-    building: Building;
+    building: BuildingId;
 }
 
 export class Floor extends AggregateRoot<FloorProps> {
@@ -44,11 +45,11 @@ export class Floor extends AggregateRoot<FloorProps> {
         this.props.information = value;
     }
 
-    get building(): Building {
+    get building(): BuildingId {
         return this.props.building;
     }
 
-    set building(value: Building) {
+    set building(value: BuildingId) {
         this.props.building = value;
     }
 

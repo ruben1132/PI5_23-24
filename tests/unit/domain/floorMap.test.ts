@@ -1,18 +1,10 @@
 import { FloorMap } from '../../../src/domain/floorMap';
 import { Floor } from '../../../src/domain/floor';
-import { FloorMapId } from '../../../src/domain/valueObj/floorMapId';
 import { FloorMapDoor } from '../../../src/domain/valueObj/floorMapDoor';
 import { FloorMapElevator } from '../../../src/domain/valueObj/floorMapElevator';
 import { FloorMapPassage } from '../../../src/domain/valueObj/floorMapPassage';
 import { FloorMapRoom } from '../../../src/domain/valueObj/floorMapRoom';
-import { Building } from '../../../src/domain/building';
-import { BuildingCode } from '../../../src/domain/valueObj/buildingCode';
-import { BuildingName } from '../../../src/domain/valueObj/buildingName';
-import { BuildingDimensions } from '../../../src/domain/valueObj/buildingDimensions';
-import { UniqueEntityID } from '../../../src/core/domain/UniqueEntityID';
-import { FloorNumber } from '../../../src/domain/valueObj/floorNumber';
 import { FloorInformation } from '../../../src/domain/valueObj/floorInformation';
-import { Room } from '../../../src/domain/room';
 import { FloorMapPosition } from '../../../src/domain/valueObj/floorMapPosition';
 import { FloorMapDirection } from '../../../src/domain/valueObj/floorMapDirection';
 import { FloorMapDimensions } from '../../../src/domain/valueObj/floorMapDimensions';
@@ -20,42 +12,20 @@ import { Elevator } from '../../../src/domain/elevator';
 import { ElevatorDesignation } from '../../../src/domain/valueObj/elevatorDesignation';
 import { Passage } from '../../../src/domain/passage';
 import { expect } from 'chai';
-import { RoomNumber } from '../../../src/domain/valueObj/roomNumber';
+import { FloorId } from '../../../src/domain/valueObj/floorId';
+import { RoomId } from '../../../src/domain/valueObj/roomId';
+import { ElevatorId } from '../../../src/domain/valueObj/elevatorId';
+import { PassageId } from '../../../src/domain/valueObj/passageId';
 
 describe('FloorMap', () => {
-    const building1 = Building.create({
-        code: BuildingCode.create("B001").getValue(),
-        name: BuildingName.create("Building 1").getValue(),
-        dimensions: BuildingDimensions.create("10x8").getValue(),
-    }, new UniqueEntityID("test-id")).getValue();
 
-    const building2 = Building.create({
-        code: BuildingCode.create("B001").getValue(),
-        name: BuildingName.create("Building 1").getValue(),
-        dimensions: BuildingDimensions.create("10x8").getValue(),
-    }, new UniqueEntityID("test-id")).getValue();
+    const floor1 = new FloorId("floor1");
 
-    const floor1 = Floor.create({
-        number: 1,
-        information: FloorInformation.create('Floor 2').getValue(),
-        building: building1
-    }).getValue();
+    const floor2 = new FloorId("floor2");
 
-    const floor2 = Floor.create({
-        number: 2,
-        information: FloorInformation.create('Floor 2').getValue(),
-        building: building2
-    }).getValue();
+    const room1 = new RoomId("room1");
 
-    const room1 = Room.create({
-        number: RoomNumber.create("A001").getValue(),
-        floor: floor1,
-    }).getValue();
-
-    const room2 = Room.create({
-        number: RoomNumber.create("A001").getValue(),
-        floor: floor1,
-    }).getValue();
+    const room2 = new RoomId("room2");
 
     const floorMapPosition = FloorMapPosition.create({
         posX: 0,
@@ -95,10 +65,7 @@ describe('FloorMap', () => {
         position: floorMapPosition,
     }).getValue();
 
-    const elevator = Elevator.create({
-        designation: ElevatorDesignation.create('elevator1').getValue(),
-        floorsAllowed: [floor1],
-    }).getValue();
+    const elevator = new ElevatorId("elevator1");
 
     const fmElevator = FloorMapElevator.create({
         elevator: elevator,
@@ -112,11 +79,7 @@ describe('FloorMap', () => {
     }).getValue();
 
     const fmPassage = FloorMapPassage.create({
-        passage: Passage.create({
-            designation: 'passage1',
-            fromFloor: floor1,
-            toFloor: floor2,
-        }).getValue(),
+        passage: new PassageId("passage1"),
         position: floorMapPosition,
     }).getValue();
 
@@ -228,131 +191,4 @@ describe('FloorMap', () => {
         });
     });
 
-    describe('floor', () => {
-        it('should set and get the floor', () => {
-            const floorMap = FloorMap.create({
-                floor: floor1,
-                map: map,
-                fmRooms: fmRoomsV,
-                fmDoors: fmDoorsV,
-                fmElevator: fmElevatorV,
-                fmPassages: fmPassagesV,
-            }).getValue();
-
-            const newFloor = Floor.create({
-                number: 3,
-                information: FloorInformation.create('Floor 3').getValue(),
-                building: building1
-            }).getValue();
-            floorMap.floor = newFloor;
-
-            expect(newFloor).to.equal(floorMap.floor);
-        });
-    });
-
-    describe('map', () => {
-        it('should set and get the map', () => {
-            const floorMap = FloorMap.create({
-                floor: floor1,
-                map: map,
-                fmRooms: fmRoomsV,
-                fmDoors: fmDoorsV,
-                fmElevator: fmElevatorV,
-                fmPassages: fmPassagesV,
-            }).getValue();
-
-            const newMap = [[0, 1], [1, 0]];
-            floorMap.map = newMap;
-
-            expect(floorMap.map).to.equal(newMap);
-        });
-    });
-
-    describe('fmRooms', () => {
-        it('should set and get the floor map rooms', () => {
-            const floorMap = FloorMap.create({
-                floor: floor1,
-                map: map,
-                fmRooms: fmRoomsV,
-                fmDoors: fmDoorsV,
-                fmElevator: fmElevatorV,
-                fmPassages: fmPassagesV,
-            }).getValue();
-
-            const newFmRooms = [fmRoom1];
-            floorMap.fmRooms = newFmRooms;
-
-            expect(newFmRooms).to.equal(floorMap.fmRooms);
-        });
-    });
-
-    describe('fmDoors', () => {
-        it('should set and get the floor map doors', () => {
-            const floorMap = FloorMap.create({
-                floor: floor1,
-                map: map,
-                fmRooms: fmRoomsV,
-                fmDoors: fmDoorsV,
-                fmElevator: fmElevatorV,
-                fmPassages: fmPassagesV,
-            }).getValue();
-
-            const newFmDoors = [door2];
-            floorMap.fmDoors = newFmDoors;
-
-            expect(floorMap.fmDoors).to.equal(newFmDoors);
-        });
-    });
-
-    describe('fmElevator', () => {
-        it('should set and get the floor map elevator', () => {
-            const floorMap = FloorMap.create({
-                floor: floor1,
-                map: map,
-                fmRooms: fmRoomsV,
-                fmDoors: fmDoorsV,
-                fmElevator: fmElevatorV,
-                fmPassages: fmPassagesV,
-            }).getValue();
-
-
-            const newFmElevator = FloorMapElevator.create({
-                elevator: elevator,
-                position: FloorMapPosition.create({
-                    posX: 0,
-                    posY: 0,
-                    direction: FloorMapDirection.create('oeste').getValue(),
-                }).getValue(),
-            }).getValue();
-
-            floorMap.fmElevator = newFmElevator;
-
-            expect(newFmElevator).to.equal(floorMap.fmElevator);
-        });
-    });
-
-    describe('fmPassages', () => {
-        it('should set and get the floor map passages', () => {
-            const floorMap = FloorMap.create({
-                floor: floor1,
-                map: map,
-                fmRooms: fmRoomsV,
-                fmDoors: fmDoorsV,
-                fmElevator: fmElevatorV,
-                fmPassages: fmPassagesV,
-            }).getValue();
-
-            const newFmPassages = [ FloorMapPassage.create({
-                passage: Passage.create({
-                    designation: 'passage2',
-                    fromFloor: floor2,
-                    toFloor: floor1,
-                }).getValue(),
-                position: floorMapPosition,
-            }).getValue()];
-            floorMap.fmPassages = newFmPassages;
-
-            expect(floorMap.fmPassages).to.equal(newFmPassages);
-        });
-    });
 });

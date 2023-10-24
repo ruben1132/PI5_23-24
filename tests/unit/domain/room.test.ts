@@ -9,20 +9,11 @@ import { BuildingDimensions } from "../../../src/domain/valueObj/buildingDimensi
 import { FloorNumber } from "../../../src/domain/valueObj/floorNumber";
 import { FloorInformation } from "../../../src/domain/valueObj/floorInformation";
 import { expect } from 'chai';
+import { FloorId } from "../../../src/domain/valueObj/floorId";
 
 describe('Room', () => {
 
-    const building = Building.create({
-        code: BuildingCode.create("B001").getValue(),
-        name: BuildingName.create("Building 1").getValue(),
-        dimensions: BuildingDimensions.create("10x8").getValue(),
-    }, new UniqueEntityID("test-id")).getValue();
-
-    const floor = Floor.create({
-        number: 2,
-        information: FloorInformation.create('Floor 2').getValue(),
-        building: building
-    }).getValue();
+    const floor = new FloorId("1");
 
     describe('create', () => {
         it('should fail if no room number is provided', () => {

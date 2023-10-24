@@ -8,8 +8,8 @@ import IFloorService from './IServices/IFloorService';
 import { Result } from "../core/logic/Result";
 import { FloorMap } from "../mappers/FloorMap";
 import { Building } from '../domain/building';
-import { FloorNumber } from '../domain/valueObj/floorNumber';
 import { FloorInformation } from '../domain/valueObj/floorInformation';
+import { BuildingId } from '../domain/valueObj/buildingId';
 
 @Service()
 export default class FloorService implements IFloorService {
@@ -39,7 +39,7 @@ export default class FloorService implements IFloorService {
             const floorOrError = await Floor.create({
                 number: floorDTO.number,
                 information: information.getValue(),
-                building: building
+                building: new BuildingId(building.buildingId.toString())
             });
 
             if (floorOrError.isFailure) {
@@ -102,6 +102,21 @@ export default class FloorService implements IFloorService {
         }
     }
 
+    public async getFloorsWithPassages(): Promise<Result<Array<IFloorDTO>>> {
+        try {
+            const floors = await this.floorRepo.getFloorsWithPassages();
+
+            if (floors === null) {
+                return Result.fail<Array<IFloorDTO>>("Floors not found");
+            } else {
+                const floorsDTOResult = floors.map(floor => FloorMap.toDTO(floor) as IFloorDTO);
+                return Result.ok<Array<IFloorDTO>>(floorsDTOResult);
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+
     public async updateFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
         try {
             const floor = await this.floorRepo.findByDomainId(floorDTO.domainId);
@@ -123,7 +138,7 @@ export default class FloorService implements IFloorService {
 
             floor.number = floorDTO.number;
             floor.information = information.getValue();
-            floor.building = building;
+            floor.building = building.buildingId;
 
             await this.floorRepo.save(floor);
 

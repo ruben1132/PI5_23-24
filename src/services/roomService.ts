@@ -37,7 +37,7 @@ export default class RoomService implements IRoomService {
 
             const roomOrError = await Room.create({
                 number: roomNum.getValue(),
-                floor: floor,
+                floor: floor.domainId,
             });
 
             if (roomOrError.isFailure) {

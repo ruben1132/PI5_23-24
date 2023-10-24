@@ -8,9 +8,7 @@ import { Floor } from "../domain/floor";
 
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
-import { FloorNumber } from "../domain/valueObj/floorNumber";
 import { FloorInformation } from "../domain/valueObj/floorInformation";
-import { Building } from "../domain/building";
 
 export class FloorMap extends Mapper<Floor> {
 
@@ -20,7 +18,7 @@ export class FloorMap extends Mapper<Floor> {
             domainId: floor.id.toString(),
             number: floor.number,
             information: floor.information.value,
-            building: floor.building.id.toValue()
+            building: floor.building.toString()
         } as IFloorDTO;
     }
 
@@ -48,7 +46,7 @@ export class FloorMap extends Mapper<Floor> {
             domainId: floor.id.toString(),
             number: floor.number,
             information: floor.information.value,
-            building: floor.building.id
+            building: floor.building.toString()
         }
     }
 }

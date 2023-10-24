@@ -2,20 +2,20 @@ import { ValueObject } from "../../core/domain/ValueObject";
 import { Result } from "../../core/logic/Result";
 import { Guard } from "../../core/logic/Guard";
 import { FloorMapPosition } from "./floorMapPosition";
-import { Elevator } from "../elevator";
+import { ElevatorId } from "./elevatorId";
 
 interface FloorMapElevatorProps {
-    elevator: Elevator;
+    elevator: ElevatorId;
     position: FloorMapPosition;
 }
 
 export class FloorMapElevator extends ValueObject<FloorMapElevatorProps> {
 
-    get elevator(): Elevator {
+    get elevator(): ElevatorId {
         return this.props.elevator;
     }
 
-    set elevator(value: Elevator) {
+    set elevator(value: ElevatorId) {
         this.props.elevator = value;
     }
 

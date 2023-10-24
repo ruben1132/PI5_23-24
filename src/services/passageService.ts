@@ -38,8 +38,8 @@ export default class PassageService implements IPassageService {
             }
             
             const passageOrError = await Passage.create({
-                fromFloor: fromFloor,
-                toFloor: toFloor,
+                fromFloor: fromFloor.domainId,
+                toFloor: toFloor.domainId,
                 designation: passageDTO.designation
             });
 
@@ -78,6 +78,7 @@ export default class PassageService implements IPassageService {
     public async getPassagesBetweenBuildings(first: string, second: string): Promise<Result<Array<IPassageDTO>>> {
         try {
             const passages = await this.passageRepo.getPassagesBetweenBuildings(first, second);
+
             
             if (passages === null) {
                 return Result.fail<Array<IPassageDTO>>("Passages not found");
@@ -129,8 +130,8 @@ export default class PassageService implements IPassageService {
                 toFloor = toOrError.getValue();
             }
 
-            passage.toFloor = toFloor;
-            passage.toFloor = toFloor;
+            passage.toFloor = toFloor.domainId;
+            passage.toFloor = toFloor.domainId;
             passage.designation = passageDTO.designation;
 
             await this.passageRepo.save(passage);

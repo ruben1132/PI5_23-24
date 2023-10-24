@@ -2,20 +2,20 @@ import { ValueObject } from "../../core/domain/ValueObject";
 import { Result } from "../../core/logic/Result";
 import { Guard } from "../../core/logic/Guard";
 import { Room } from "../room";
-import { FloorMapPosition } from "./floorMapPosition";
 import { FloorMapDimensions } from "./floorMapDimensions";
+import { RoomId } from "./roomId";
 
 interface FloorMapRoomProps {
-    room: Room;
+    room: RoomId;
     dimensions: FloorMapDimensions;
 }
 
 export class FloorMapRoom extends ValueObject<FloorMapRoomProps> {
-    get room(): Room {
+    get room(): RoomId {
         return this.props.room;
     }
 
-    set room(value: Room) {
+    set room(value: RoomId) {
         this.props.room = value;
     }
 

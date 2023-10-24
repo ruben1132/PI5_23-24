@@ -3,20 +3,19 @@ import { UniqueEntityID } from '../core/domain/UniqueEntityID';
 import { Guard } from '../core/logic/Guard';
 
 import { Result } from '../core/logic/Result';
-import { TaskType } from './taskType';
 import { RobotId } from './valueObj/robotId';
 import { RobotIdentification } from './valueObj/robotIdentification';
 import { RobotNickname } from './valueObj/robotNickname';
 import { RobotSerialNumber } from './valueObj/robotSerialNumber';
 import { RobotDescription } from './valueObj/robotDescription';
 import { RobotState } from './valueObj/robotState';
-import { RobotType } from './robotType';
+import { RobotTypeId } from './valueObj/robotTypeId';
 
 
 interface RobotProps {
     identification: RobotIdentification;
     nickname: RobotNickname;
-    robotType: RobotType;
+    robotType: RobotTypeId;
     serialNumber: RobotSerialNumber;
     description: RobotDescription;
     state: RobotState;
@@ -47,11 +46,11 @@ export class Robot extends AggregateRoot<RobotProps> {
         this.props.nickname = value;
     }
 
-    get robotType(): RobotType {
+    get robotType(): RobotTypeId {
         return this.props.robotType;
     }
 
-    set robotType(value: RobotType) {
+    set robotType(value: RobotTypeId) {
         this.props.robotType = value;
     }
 

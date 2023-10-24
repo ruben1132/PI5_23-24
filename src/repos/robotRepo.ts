@@ -2,10 +2,8 @@ import { Service, Inject } from 'typedi';
 
 import IRobotRepo from '../services/IRepos/IRobotRepo';
 import { Robot } from '../domain/robot';
-import { Building } from '../domain/building';
 import { RobotId } from '../domain/valueObj/robotId';
 import { RobotMap } from '../mappers/RobotMap';
-import { BuildingMap } from '../mappers/BuildingMap';
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IRobotPersistence } from '../dataschema/IRobotPersistence';
@@ -14,7 +12,7 @@ import { IRobotPersistence } from '../dataschema/IRobotPersistence';
 export default class RobotRepo implements IRobotRepo {
     private models: any;
 
-    constructor(@Inject('robotSchema') private robotSchema: Model<IRobotPersistence & Document>) {}
+    constructor(@Inject('robotSchema') private robotSchema: Model<IRobotPersistence & Document>) { }
 
     private createBaseQuery(): any {
         return {
@@ -47,7 +45,7 @@ export default class RobotRepo implements IRobotRepo {
 
                 robotDocument.identification = robot.identification.value;
                 robotDocument.nickname = robot.nickname.value;
-                robotDocument.robotType = robot.robotType.domainId.toString();
+                robotDocument.robotType = robot.robotType.toString();
                 robotDocument.serialNumber = robot.serialNumber.value;
                 robotDocument.description = robot.description.value;
                 robotDocument.state = robot.state.value;
@@ -61,27 +59,12 @@ export default class RobotRepo implements IRobotRepo {
         }
     }
 
-    public async getRobots(): Promise<Array<Robot>> {
+    public async getRobots(): Promise<Robot[]> {
         try {
-            const pipeline = [
-                {
-                    $lookup: {
-                        from: 'robottypes', // The name of the RobotType collection
-                        localField: 'robotType', // Field in the Robot collection
-                        foreignField: 'domainId', // Field in the RobotType collection
-                        as: 'robotType' // Alias for the joined data
-                    }
-                },
-                {
-                    $unwind: '$robotType'
-                }
-            ];
+            const robots = await this.robotSchema.find({});
 
-            const robotsWithTaskTypeData = await this.robotSchema.aggregate(pipeline);
-
-            if (robotsWithTaskTypeData) {
-                const robotPromisses = robotsWithTaskTypeData.map(robot => RobotMap.toDomain(robot));
-                return Promise.all(robotPromisses);
+            if (robots) {
+                return robots.map((passage) => RobotMap.toDomain(passage));
             } else {
                 return [];
             }
@@ -91,32 +74,19 @@ export default class RobotRepo implements IRobotRepo {
     }
 
     public async findByDomainId(robotId: RobotId | string): Promise<Robot> {
+        try {
+            const robot = await this.robotSchema.findOne({ domainId: robotId });
 
-        const pipeline = [
-            {
-                $match: { domainId: robotId }
-            },
-            {
-                $lookup: {
-                    from: 'robottypes',
-                    localField: 'robotType',
-                    foreignField: 'domainId',
-                    as: 'robotType'
-                }
-            },
-            {
-                $unwind: '$robotType'
+
+            if (robot != null) {
+                return RobotMap.toDomain(robot);
             }
-        ];
 
-        const robotsWithBuildings = await this.robotSchema.aggregate(pipeline);
+            return null;
 
-
-        if (robotsWithBuildings != null && robotsWithBuildings.length > 0) {
-            return RobotMap.toDomain(robotsWithBuildings[0]);
+        } catch (error) {
+            return null;
         }
-
-        return null;
     }
 
     public async deleteRobot(robotId: string): Promise<boolean> {

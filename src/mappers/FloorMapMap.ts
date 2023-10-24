@@ -14,7 +14,7 @@ export class FloorMapMap extends Mapper<FloorMap> {
         const restOfProps = this.mapObjs(floorMap);
 
         return {
-            floor: floorMap.floor.domainId.toValue(),
+            floor: floorMap.floor.toString(),
             map: floorMap.map,
             ...restOfProps
         } as IFloorMapDTO;
@@ -37,7 +37,7 @@ export class FloorMapMap extends Mapper<FloorMap> {
 
         return {
             domainId: fm.id.toString(),
-            floor: fm.floor.domainId.toValue(),
+            floor: fm.floor.toString(),
             map: fm.map,
             ...restOfProps
         }
@@ -48,7 +48,7 @@ export class FloorMapMap extends Mapper<FloorMap> {
         return {
             fmRooms: fm.fmRooms.map(fR => {
                 return {
-                    roomId: fR.room.id.toValue(),
+                    roomId: fR.room.toValue(),
                     startX: fR.dimensions.startX,
                     startY: fR.dimensions.startY,
                     endX: fR.dimensions.endX,
@@ -64,14 +64,14 @@ export class FloorMapMap extends Mapper<FloorMap> {
                 }
             }),
             fmElevator: {
-                elevatorId: fm.fmElevator.elevator.id.toValue(),
+                elevatorId: fm.fmElevator.elevator.toValue(),
                 positionX: fm.fmElevator.position.posX,
                 positionY: fm.fmElevator.position.posY,
                 direction: fm.fmElevator.position.direction.value
             },
             fmPassages: fm.fmPassages.map(x => {
                 return {
-                    passageId: x.passage.passageId.toValue(),
+                    passageId: x.passage.toValue(),
                     positionX: x.position.posX,
                     positionY: x.position.posY,
                     direction: x.position.direction.value

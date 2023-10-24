@@ -9,6 +9,7 @@ export default interface IFloorRepo extends Repo<Floor> {
     findByDomainId(floorId: FloorId | string): Promise<Floor>;
     getFloors(): Promise<Floor[]>;
     getFloorsByBuildingId(buildingId: string): Promise<Floor[]>;
+    getFloorsWithPassages(): Promise<Floor[]>;
     getBuildingsByFloorRange(min: number, max: number): Promise<Building[]>;
 
     deleteFloor(floorId: string): Promise<Boolean>;
