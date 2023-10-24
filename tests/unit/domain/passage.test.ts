@@ -7,32 +7,12 @@ import { BuildingName } from "../../../src/domain/valueObj/buildingName";
 import { BuildingDimensions } from "../../../src/domain/valueObj/buildingDimensions";
 import { UniqueEntityID } from "../../../src/core/domain/UniqueEntityID";
 import { expect } from 'chai';
+import { FloorId } from "../../../src/domain/valueObj/floorId";
 
 describe('Passage', () => {
-    const building1 = Building.create({
-        code: BuildingCode.create("B001").getValue(),
-        name: BuildingName.create("Building 1").getValue(),
-        dimensions: BuildingDimensions.create("10x8").getValue(),
-    }, new UniqueEntityID("test-id")).getValue();
 
-    const building2 = Building.create({
-        code: BuildingCode.create("B001").getValue(),
-        name: BuildingName.create("Building 1").getValue(),
-        dimensions: BuildingDimensions.create("10x8").getValue(),
-    }, new UniqueEntityID("test-id")).getValue();
-
-    const fromFloor = Floor.create({
-        number: 2,
-        information: FloorInformation.create('Floor 2').getValue(),
-        building: building1
-    }).getValue();
-
-    const toFloor = Floor.create({
-        number: 2,
-        information: FloorInformation.create('Floor 2').getValue(),
-        building: building2
-    }).getValue();
-
+    const fromFloor = new FloorId('1');
+    const toFloor = new FloorId('2');
     const designation = 'Passage 1';
 
     describe('create', () => {

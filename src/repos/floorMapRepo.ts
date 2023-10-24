@@ -33,7 +33,7 @@ export default class FloorMapRepo implements IFloorMapRepo {
     }
 
     public async save(floorMap: FloorMap): Promise<FloorMap> {
-        const query = { floor: floorMap.floor.id };
+        const query = { floor: floorMap.floor.toString() };
 
         // looks for a floorMap with the same floor id
         const floorMapDocument = await this.floorMapSchema.findOne(query);
@@ -49,7 +49,7 @@ export default class FloorMapRepo implements IFloorMapRepo {
 
                const fmPersistence=  FloorMapMap.toPersistence(floorMap);
 
-                floorMapDocument.floor = floorMap.floor.domainId.toValue().toString();
+                floorMapDocument.floor = floorMap.floor.toString();
                 floorMapDocument.map = floorMap.map;
                 floorMapDocument.fmRooms = fmPersistence.fmRooms;
                 floorMapDocument.fmDoors = fmPersistence.fmDoors;

@@ -46,7 +46,7 @@ export default class RoomRepo implements IRoomRepo {
         return RoomMap.toDomain(roomCreated);
       } else {
         roomDocument.number = room.number.value;
-        roomDocument.floor = room.floor.id.toString();
+        roomDocument.floor = room.floor.toString();
         await roomDocument.save();
 
         return room;
@@ -57,72 +57,31 @@ export default class RoomRepo implements IRoomRepo {
   }
 
   public async findByDomainId(roomId: RoomId | string): Promise<Room> {
-    const roomWithFloor = await this.roomSchema.aggregate([
-      {
-        $match: { domainId: roomId }
-      },
-      {
-        $lookup: {
-          from: 'floors',
-          localField: 'floor', 
-          foreignField: 'domainId', 
-          as: 'floor'
-        }
-      },
-      {
-        $unwind: '$floor'
-      }
-    ]);
+    const room = await this.roomSchema.findOne({ domainId: roomId });
 
-    if (roomWithFloor != null) {
-      return RoomMap.toDomain(roomWithFloor[0]);
+    if (room != null) {
+      return RoomMap.toDomain(room);
     }
 
       return null;
   }
 
-  public async findByIds(roomsIds: RoomId[] | string[]): Promise<Room[]> {
+  public async findByIds(roomIds: RoomId[] | string[]): Promise<Room[]> {
 
-    const roomsWithFloors = await this.roomSchema.aggregate([
-      {
-        $match: { domainId: { $in: roomsIds } }
-      },
-      {
-        $lookup: {
-          from: 'floors', 
-          localField: 'floor',
-          foreignField: 'domainId', 
-          as: 'floor'
-        }
-      },
-      {
-        $unwind: '$floor'
-      }
-    ]);
+    const rooms = await this.roomSchema.find({ domainId: { $in: roomIds } });
 
-    if (roomsWithFloors != null) {
-      return roomsWithFloors.map((room) => RoomMap.toDomain(room));
+    if (rooms != null && rooms.length > 0) {
+      return rooms.map((room) => RoomMap.toDomain(room));
     }
 
     return null;
   }
 
   public async getRooms(): Promise<Room[]> {
-    const roomsWithFloors = await this.roomSchema.aggregate([
-      {
-        $lookup: {
-          from: 'floors', 
-          localField: 'floor',
-          foreignField: 'domainId', 
-          as: 'floor'
-        }
-      },
-      {
-        $unwind: '$floor'
-      }
-    ]);
-    if (roomsWithFloors != null) {
-      return roomsWithFloors.map((room) => RoomMap.toDomain(room));
+    const rooms = await this.roomSchema.find({});
+
+    if (rooms != null) {
+      return rooms.map((room) => RoomMap.toDomain(room));
     }
     else
       return null;

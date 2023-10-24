@@ -10,7 +10,6 @@ import { TaskType } from '../domain/taskType';
 
 import { UniqueEntityID } from '../core/domain/UniqueEntityID';
 
-import BuildingRepo from '../repos/buildingRepo';
 
 export class TaskTypeMap extends Mapper<TaskType> {
     public static toDTO(taskType: TaskType): ITaskTypeDTO {

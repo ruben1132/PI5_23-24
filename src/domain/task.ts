@@ -3,14 +3,14 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
 import { TaskId } from "./valueObj/taskId";
-import { TaskType } from "./taskType";
-import { Robot } from "./robot";
 import { Guard } from "../core/logic/Guard";
+import { TaskTypeId } from "./valueObj/taskTypeId";
+import { RobotId } from "./valueObj/robotId";
 
 interface TaskProps {
     designation: string; // TODO: criar um value obj para designacoes (meter um max de chars por exemplo)
-    type: TaskType;
-    assigned: Robot;
+    type: TaskTypeId;
+    assigned: RobotId;
 }
 
 export class Task extends AggregateRoot<TaskProps> {
@@ -26,11 +26,11 @@ export class Task extends AggregateRoot<TaskProps> {
         return this.props.designation;
     }
 
-    get assigned(): Robot {
+    get assigned(): RobotId {
         return this.props.assigned;
     }
 
-    get type(): TaskType {
+    get type(): TaskTypeId {
         return this.props.type;
     }
 

@@ -21,7 +21,7 @@ export class UserMap extends Mapper<User> {
       lastName: user.lastName,
       email: user.email.value,
       password: "",
-      role: user.role.id.toString()
+      role: user.role.toString()
     } as IUserDTO;
   }
 
@@ -29,14 +29,13 @@ export class UserMap extends Mapper<User> {
     const userEmailOrError = UserEmail.create(raw.email);
     const userPasswordOrError = UserPassword.create({value: raw.password, hashed: true});
     const repo = Container.get(RoleRepo);
-    const role = await repo.findByDomainId(raw.role);
 
     const userOrError = User.create({
       firstName: raw.firstName,
       lastName: raw.lastName,
       email: userEmailOrError.getValue(),
       password: userPasswordOrError.getValue(),
-      role: role,
+      role: raw.role,
     }, new UniqueEntityID(raw.domainId))
 
     userOrError.isFailure ? console.log(userOrError.error) : '';
@@ -51,7 +50,7 @@ export class UserMap extends Mapper<User> {
       password: user.password.value,
       firstName: user.firstName,
       lastName: user.lastName,
-      role: user.role.id.toValue(),
+      role: user.role.toString(),
     }
     return a;
   }

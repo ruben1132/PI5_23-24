@@ -78,7 +78,7 @@ export default class UserService implements IUserService {
         firstName: userDTO.firstName,
         lastName: userDTO.lastName,
         email: email,
-        role: role,
+        role: role.domainId,
         password: password,
       });
 

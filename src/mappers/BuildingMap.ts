@@ -33,7 +33,7 @@ export class BuildingMap extends Mapper<Building> {
       dimensions: buildingDimensionsOrError.getValue(),
     }, new UniqueEntityID(building.domainId));
     
-    buildingOrError.isFailure ? console.log(buildingOrError.error) : '';
+    buildingOrError.isFailure ? console.log(buildingOrError.errorValue()) : '';
 
     return buildingOrError.isSuccess ? buildingOrError.getValue() : null;
   }

@@ -133,7 +133,7 @@ export default class FloorMapService implements IFloorMapService {
             }
 
             const floorMapOrError = await FloorMap.create({
-                floor: floor,
+                floor: floor.domainId,
                 map: floorMapDTO.map,
                 fmRooms: fmRooms,
                 fmElevator: fmElevatorOrError.getValue(),

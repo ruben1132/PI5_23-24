@@ -1,44 +1,14 @@
 import { Task } from "../../../src/domain/task";
-import { TaskType } from "../../../src/domain/taskType";
-import { Robot } from "../../../src/domain/robot";
 import { expect } from 'chai';
-import { RobotIdentification } from "../../../src/domain/valueObj/robotIdentification";
-import { RobotNickname } from "../../../src/domain/valueObj/robotNickname";
-import { RobotType } from "../../../src/domain/robotType";
-import { RobotTypeType } from "../../../src/domain/valueObj/robotTypeType";
-import { RobotTypeBrand } from "../../../src/domain/valueObj/robotTypeBrand";
-import { RobotTypeModel } from "../../../src/domain/valueObj/robotTypeModel";
-import { RobotSerialNumber } from "../../../src/domain/valueObj/robotSerialNumber";
-import { RobotDescription } from "../../../src/domain/valueObj/robotDescription";
-import { RobotState } from "../../../src/domain/valueObj/robotState";
+
+import { RobotId } from "../../../src/domain/valueObj/robotId";
+import { TaskTypeId } from "../../../src/domain/valueObj/taskTypeId";
 
 describe("Task", () => {
 
-    const taskType1 = TaskType.create({
-        name: "Task Type 1",
-        description: "Task Type 1 Description",
-    }).getValue();
-
-    const taskType2 = TaskType.create({
-        name: "Task Type 2",
-        description: "Task Type 2 Description",
-    }).getValue();
-
-    const taskTypesAllowed = [taskType1, taskType2];
+    const taskType1 = new TaskTypeId("type1");
     
-    const robot = Robot.create({
-        identification: RobotIdentification.create("R001").getValue(),
-        nickname: RobotNickname.create("Robot 1").getValue(),
-        robotType:  RobotType.create({
-            type: RobotTypeType.create("type1").getValue(),
-            brand: RobotTypeBrand.create("Brand 1").getValue(),
-            model: RobotTypeModel.create("Model 1").getValue(),
-            tasksAllowed: taskTypesAllowed,
-        }).getValue(),
-        serialNumber: RobotSerialNumber.create("123").getValue(),
-        description: RobotDescription.create("Robot 1").getValue(),
-        state: RobotState.create(true).getValue(),
-    }).getValue();
+    const robot = new RobotId("robot1");
 
     it("should create a task", () => {
         const taskProps = {

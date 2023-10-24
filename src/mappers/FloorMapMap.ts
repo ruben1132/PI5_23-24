@@ -14,7 +14,7 @@ export class FloorMapMap extends Mapper<FloorMap> {
         const restOfProps = this.mapObjs(floorMap);
 
         return {
-            floor: floorMap.floor.domainId.toValue(),
+            floor: floorMap.floor.toString(),
             map: floorMap.map,
             ...restOfProps
         } as IFloorMapDTO;
@@ -37,7 +37,7 @@ export class FloorMapMap extends Mapper<FloorMap> {
 
         return {
             domainId: fm.id.toString(),
-            floor: fm.floor.domainId.toValue(),
+            floor: fm.floor.toString(),
             map: fm.map,
             ...restOfProps
         }

@@ -102,8 +102,12 @@ export default class PassageRepo implements IPassageRepo {
                     $match: {
                         $or: [
                             {
-                                'fromFloorData.building': { $in: [from, to] },
-                                'toFloorData.building': { $in: [from, to] }
+                                'fromFloorData.building': from,
+                                'toFloorData.building': to
+                            },
+                            {
+                                'fromFloorData.building': to,
+                                'toFloorData.building': from
                             }
                         ]
                     }

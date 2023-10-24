@@ -13,7 +13,7 @@ export class Role extends AggregateRoot<RoleProps> {
     return this._id;
   }
 
-  get roleId (): RoleId {
+  get domainId (): RoleId {
     return new RoleId(this.id.toValue());
   }
 

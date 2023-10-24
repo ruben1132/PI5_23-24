@@ -64,7 +64,7 @@ export class Passage extends AggregateRoot<PassageProps> {
         }
 
         // doesnt allow to create a passage for the same floor
-        if (propss.fromFloor === propss.toFloor) {
+        if (propss.fromFloor.toString() === propss.toFloor.toString()) {
             return Result.fail<Passage>('The passage must be between different floors and buildings')
         }
 

@@ -3,13 +3,13 @@ import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 import { Guard } from "../core/logic/Guard";
 
 import { Result } from "../core/logic/Result";
-import { Floor } from "./floor";
+import { FloorId } from "./valueObj/floorId";
 import { RoomId } from "./valueObj/roomId";
 import { RoomNumber } from "./valueObj/roomNumber";
 
 interface RoomProps {
     number: RoomNumber; 
-    floor: Floor;
+    floor: FloorId;
 }
 
 export class Room extends AggregateRoot<RoomProps> {
@@ -29,11 +29,11 @@ export class Room extends AggregateRoot<RoomProps> {
         this.props.number = value;
     }
 
-    get floor(): Floor {
+    get floor(): FloorId {
         return this.props.floor;
     }
 
-    set floor(value: Floor) {
+    set floor(value: FloorId) {
         this.props.floor = value;
     }
     private constructor(props: RoomProps, domainId?: UniqueEntityID) {

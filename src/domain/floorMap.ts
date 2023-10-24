@@ -2,16 +2,16 @@ import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
-import { Floor } from "./floor";
 import { FloorMapId } from "./valueObj/floorMapId";
 import { FloorMapDoor } from "./valueObj/floorMapDoor";
 import { FloorMapElevator } from "./valueObj/floorMapElevator";
 import { FloorMapPassage } from "./valueObj/floorMapPassage";
 import { FloorMapRoom } from "./valueObj/floorMapRoom";
 import { Guard } from "../core/logic/Guard";
+import { FloorId } from "./valueObj/floorId";
 
 interface FloorMapProps {
-    floor: Floor; 
+    floor: FloorId; 
     map: number[][]; 
     fmRooms: FloorMapRoom[];
     fmDoors: FloorMapDoor[]; 
@@ -24,15 +24,15 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
         return this._id;
     }
 
-    get floorMapId(): FloorMapId {
+    get domainId(): FloorMapId {
         return new FloorMapId(this.id.toValue());
     }
 
-    set floor(value: Floor) {
+    set floor(value: FloorId) {
         this.props.floor = value;
     }
 
-    get floor(): Floor {
+    get floor(): FloorId {
         return this.props.floor;
     }
 

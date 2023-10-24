@@ -3,6 +3,7 @@ import { Role } from "../../../src/domain/role";
 import { UserEmail } from "../../../src/domain/valueObj/userEmail";
 import { UserPassword } from "../../../src/domain/valueObj/userPassword";
 import { expect } from 'chai';
+import { RoleId } from "../../../src/domain/valueObj/roleId";
 
 describe('User', () => {
     const validUserProps = {
@@ -13,9 +14,7 @@ describe('User', () => {
             value: 'password123',
             hashed: false
         }).getValue(),
-        role: Role.create({
-            name: 'user',
-        }).getValue()
+        role: new RoleId('admin')
     };
 
     describe('create', () => {
