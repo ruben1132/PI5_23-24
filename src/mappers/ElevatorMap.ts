@@ -15,11 +15,11 @@ export class ElevatorMap extends Mapper<Elevator> {
     let fAllowed: string[] = [];
 
     for (const floor of elevator.floorsAllowed) {
-      fAllowed.push(floor.domainId.toString());
+      fAllowed.push(floor.toString());
     }
 
     return {
-      domainId: elevator.elevatorDomainId.toString(),
+      domainId: elevator.domainId.toString(),
       designation: elevator.elevatorDesignation.value,
       floorsAllowed: fAllowed,
     } as IElevatorDTO;
@@ -40,9 +40,9 @@ export class ElevatorMap extends Mapper<Elevator> {
 
   public static toPersistence(elevator: Elevator): any {
     return {
-      domainId: elevator.elevatorDomainId.toString(),
+      domainId: elevator.domainId.toString(),
       designation: elevator.elevatorDesignation.value,
-      floorsAllowed: elevator.floorsAllowed.map(floor => floor.id.toString())
+      floorsAllowed: elevator.floorsAllowed.map(floor => floor.toString())
     }
   }
 }

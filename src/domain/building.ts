@@ -5,7 +5,6 @@ import { Result } from "../core/logic/Result";
 import { BuildingId } from "./valueObj/buildingId";
 import { Guard } from "../core/logic/Guard";
 
-import IBuildingDTO from "../dto/IBuildingDTO"; // TODO: criar o DTO
 import { BuildingCode } from "./valueObj/buildingCode";
 import { BuildingName } from "./valueObj/buildingName";
 import { BuildingDimensions } from "./valueObj/buildingDimensions";
@@ -53,7 +52,6 @@ export class Building extends AggregateRoot<BuildingProps> {
         super(props, id);
     }
 
-    // TODO: implementar regras de negocio na criacao de uma building
     public static create(props: BuildingProps, id?: UniqueEntityID): Result<Building> {
 
         const guardedProps = [

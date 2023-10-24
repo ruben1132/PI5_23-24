@@ -2,15 +2,15 @@ import { Building } from "../../../src/domain/building";
 import { BuildingCode } from "../../../src/domain/valueObj/buildingCode";
 import { BuildingName } from "../../../src/domain/valueObj/buildingName";
 import { BuildingDimensions } from "../../../src/domain/valueObj/buildingDimensions";
-import { UniqueEntityID } from "../../../src/core/domain/UniqueEntityID";
 import { expect } from 'chai';
+import { BuildingId } from "../../../src/domain/valueObj/buildingId";
 
 describe("Building", () => {
     it("should create a building with valid properties", () => {
         const buildingCode = BuildingCode.create("B001").getValue();
         const buildingName = BuildingName.create("Building 1").getValue();
         const buildingDimensions = BuildingDimensions.create("10x8").getValue();
-        const buildingId = new UniqueEntityID();
+        const buildingId = new BuildingId("buildingId");
 
         const buildingOrError = Building.create(
             {

@@ -7,7 +7,6 @@ import IBuildingRepo from './IRepos/IBuildingRepo';
 import IRobotService from './IServices/IRobotService';
 import { Result } from '../core/logic/Result';
 import { RobotMap } from '../mappers/RobotMap';
-import { Building } from '../domain/building';
 
 import { RobotIdentification } from '../domain/valueObj/robotIdentification';
 import { RobotNickname } from '../domain/valueObj/robotNickname';
@@ -19,13 +18,12 @@ import { RobotType } from '../domain/robotType';
 import IRobotTypeRepo from './IRepos/IRobotTypeRepo';
 
 import ITaskTypeRepo from './IRepos/ITaskTypeRepo';
+import { RobotId } from '../domain/valueObj/robotId';
 
 @Service()
 export default class RobotService implements IRobotService {
     constructor(
         @Inject(config.repos.robot.name) private robotRepo: IRobotRepo,
-        @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
-        @Inject(config.repos.taskType.name) private taskTypeRepo: ITaskTypeRepo,
         @Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo,
     ) {}
 
@@ -34,7 +32,7 @@ export default class RobotService implements IRobotService {
 
             // check if robotType exists
             let robotType: RobotType;
-            const robotTypeOrError = await this.getRobotType(robotDTO.robotType as any);
+            const robotTypeOrError = await this.getRobotType(robotDTO.robotType);
             if (robotTypeOrError.isFailure) {
                 return Result.fail<IRobotDTO>(robotTypeOrError.errorValue());
             } else {
@@ -69,7 +67,7 @@ export default class RobotService implements IRobotService {
             const robotOrError = await Robot.create({
                 identification: identification.getValue(),
                 nickname: nickname.getValue(),
-                robotType: robotType,
+                robotType: robotType.domainId,
                 serialNumber: serialNumber.getValue(),
                 description: description.getValue(),
                 state: state.getValue(),
@@ -129,7 +127,7 @@ export default class RobotService implements IRobotService {
 
             // check if robotType exists
             let robotType: RobotType;
-            const robotTypeOrError = await this.getRobotType(robotDTO.robotType.id);
+            const robotTypeOrError = await this.getRobotType(robotDTO.robotType);
             if (robotTypeOrError.isFailure) {
                 return Result.fail<IRobotDTO>(robotTypeOrError.errorValue());
             } else {
@@ -167,7 +165,7 @@ export default class RobotService implements IRobotService {
 
             robot.identification = identification.getValue();
             robot.nickname = nickname.getValue();
-            robot.robotType = robotType;
+            robot.robotType = robotType.domainId;
             robot.serialNumber = serialNumber.getValue();
             robot.description = description.getValue();
             robot.state = state.getValue();

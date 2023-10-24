@@ -52,7 +52,7 @@ export default class FloorRepo implements IFloorRepo {
             } else {
                 floorDocument.number = floor.number;
                 floorDocument.information = floor.information.value;
-                floorDocument.building = floor.building.id.toString();
+                floorDocument.building = floor.building.toString();
 
                 await floorDocument.save();
 

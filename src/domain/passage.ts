@@ -4,12 +4,13 @@ import { Guard } from "../core/logic/Guard";
 
 import { Result } from "../core/logic/Result";
 import { Floor } from "./floor";
+import { FloorId } from "./valueObj/floorId";
 import { PassageId } from "./valueObj/passageId";
 
 interface PassageProps {
     designation: string;
-    fromFloor: Floor;
-    toFloor: Floor;
+    fromFloor: FloorId;
+    toFloor: FloorId;
 }
 
 export class Passage extends AggregateRoot<PassageProps> {
@@ -17,7 +18,7 @@ export class Passage extends AggregateRoot<PassageProps> {
         return this._id;
     }
 
-    get passageId(): PassageId {
+    get domainId(): PassageId {
         return new PassageId(this.id.toValue());
     }
 
@@ -29,19 +30,19 @@ export class Passage extends AggregateRoot<PassageProps> {
         this.props.designation = value;
     }
 
-    get fromFloor(): Floor {
+    get fromFloor(): FloorId {
         return this.props.fromFloor;
     }
 
-    set fromFloor(value: Floor) {
+    set fromFloor(value: FloorId) {
         this.props.fromFloor = value;
     }
 
-    get toFloor(): Floor {
+    get toFloor(): FloorId {
         return this.props.toFloor;
     }
 
-    set toFloor(value: Floor) {
+    set toFloor(value: FloorId) {
         this.props.toFloor = value;
     }
 
@@ -62,16 +63,9 @@ export class Passage extends AggregateRoot<PassageProps> {
             return Result.fail<Passage>(guardResult.message)
         }
 
-        // doesnt allow to create a passage for the same building
+        // doesnt allow to create a passage for the same floor
         if (propss.fromFloor === propss.toFloor) {
             return Result.fail<Passage>('The passage must be between different floors and buildings')
-        }
-
-        // console.log( propss.fromFloor);
-        // console.log( propss.toFloor.building);
-        
-        if (propss.fromFloor.building === propss.toFloor.building) {
-            return Result.fail<Passage>('The passage must be between different buildings')
         }
 
         const passage = new Passage({ designation: propss.designation, fromFloor: propss.fromFloor, toFloor: propss.toFloor }, id);

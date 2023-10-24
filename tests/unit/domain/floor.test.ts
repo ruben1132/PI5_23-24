@@ -1,19 +1,10 @@
 import { Floor } from "../../../src/domain/floor";
-import { Building } from "../../../src/domain/building";
-import { FloorNumber } from "../../../src/domain/valueObj/floorNumber";
 import { FloorInformation } from "../../../src/domain/valueObj/floorInformation";
 import { UniqueEntityID } from "../../../src/core/domain/UniqueEntityID";
-import { BuildingCode } from "../../../src/domain/valueObj/buildingCode";
-import { BuildingName } from "../../../src/domain/valueObj/buildingName";
-import { BuildingDimensions } from "../../../src/domain/valueObj/buildingDimensions";
 import { expect } from 'chai';
 
 describe('Floor', () => {
-  const building = Building.create({
-    code: BuildingCode.create("B001").getValue(),
-    name: BuildingName.create("Building 1").getValue(),
-    dimensions: BuildingDimensions.create("10x8").getValue(),
-}, new UniqueEntityID("test-id")).getValue();
+  const buildingId = new UniqueEntityID("test-id");
 
   const floorNumber =  1;
   const floorInformation =  FloorInformation.create('Information about the floor').getValue();
@@ -22,7 +13,7 @@ describe('Floor', () => {
     const floorOrError = Floor.create({
       number: floorNumber,
       information: floorInformation,
-      building: building
+      building: buildingId
     });
 
     expect(floorOrError.isSuccess).to.be.true;
@@ -31,14 +22,14 @@ describe('Floor', () => {
 
     expect(floor.number).to.equal(floorNumber);
     expect(floor.information).to.equal(floorInformation);
-    expect(floor.building).to.equal(building);
+    expect(floor.building).to.equal(buildingId);
   });
 
   it('should fail to create a new floor if number is not provided', () => {
     const floorOrError = Floor.create({
       number: null,
       information: floorInformation,
-      building: building
+      building: buildingId
     });
 
     expect(floorOrError.isFailure).to.be.true;
@@ -49,7 +40,7 @@ describe('Floor', () => {
     const floorOrError = Floor.create({
       number: floorNumber,
       information: null,
-      building: building
+      building: buildingId
     });
 
     expect(floorOrError.isFailure).to.be.true;

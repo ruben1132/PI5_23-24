@@ -14,8 +14,8 @@ export class PassageMap extends Mapper<Passage> {
         return {
             domainId: passage.id.toString(),
             designation: passage.designation,
-            fromFloor: passage.fromFloor.domainId.toString(),
-            toFloor: passage.toFloor.domainId.toString()
+            fromFloor: passage.fromFloor.toString(),
+            toFloor: passage.toFloor.toString()
         } as IPassageDTO;
     }
 
@@ -40,8 +40,8 @@ export class PassageMap extends Mapper<Passage> {
         return {
             domainId: passage.id.toString(),
             designation: passage.designation,
-            fromFloor: passage.fromFloor.id.toString(),
-            toFloor: passage.toFloor.id
+            fromFloor: passage.fromFloor.toString(),
+            toFloor: passage.toFloor.toString()
         }
     }
 }

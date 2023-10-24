@@ -87,7 +87,7 @@ export default class FloorMapService implements IFloorMapService {
                 const room = rooms.find(room => room.id.toString() === fmRoom.roomId);
                 const dimensions = FloorMapDimensions.create({ startX: fmRoom.startX, startY: fmRoom.startY, endX: fmRoom.endX, endY: fmRoom.endY }).getValue();
 
-                return FloorMapRoom.create({ room: room, dimensions: dimensions }).getValue();
+                return FloorMapRoom.create({ room: room.domainId, dimensions: dimensions }).getValue();
             });
 
             // check if created all the fmRooms
@@ -108,7 +108,7 @@ export default class FloorMapService implements IFloorMapService {
 
             // create fmElevator
             const fmElevatorOrError = await FloorMapElevator.create({
-                elevator: elevator,
+                elevator: elevator.domainId,
                 position: FloorMapPosition.create({
                     posX: floorMapDTO.fmElevator.positionX,
                     posY: floorMapDTO.fmElevator.positionY,
@@ -124,7 +124,7 @@ export default class FloorMapService implements IFloorMapService {
             const fmPassages = floorMapDTO.fmPassages.map(fmPassage => {
                 const passage = passages.find(passage => passage.id.toString() === fmPassage.passageId);
                 const position = FloorMapPosition.create({ posX: fmPassage.positionX, posY: fmPassage.positionY, direction: FloorMapDirection.create(fmPassage.direction).getValue() }).getValue();
-                return FloorMapPassage.create({  passage: passage, position: position }).getValue();
+                return FloorMapPassage.create({  passage: passage.domainId, position: position }).getValue();
             });
 
             // check if created all the fmPassages

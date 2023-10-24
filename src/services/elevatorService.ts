@@ -9,6 +9,7 @@ import IElevatorService from './IServices/IElevatorService';
 import { Result } from "../core/logic/Result";
 import { ElevatorMap } from "../mappers/ElevatorMap";
 import { ElevatorDesignation } from '../domain/valueObj/elevatorDesignation';
+import { FloorId } from '../domain/valueObj/floorId';
 
 @Service()
 export default class ElevatorService implements IElevatorService {
@@ -36,7 +37,7 @@ export default class ElevatorService implements IElevatorService {
     public async createElevator(elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
         try {
 
-            let fAllowed: Floor[] = [];
+            let fAllowed: FloorId[] = [];
 
             for (const floorId of elevatorDTO.floorsAllowed) {
                 // check if floor exists
@@ -44,7 +45,7 @@ export default class ElevatorService implements IElevatorService {
                 if (floorOrError.isFailure) {
                     return Result.fail<IElevatorDTO>(floorOrError.errorValue());
                 } else {
-                    fAllowed.push(floorOrError.getValue());
+                    fAllowed.push(floorOrError.getValue().domainId);
                 }
             }
             

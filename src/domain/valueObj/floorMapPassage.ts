@@ -1,21 +1,21 @@
 import { ValueObject } from "../../core/domain/ValueObject";
 import { Result } from "../../core/logic/Result";
 import { Guard } from "../../core/logic/Guard";
-import { Passage } from "../passage";
 import { FloorMapPosition } from "./floorMapPosition";
+import { PassageId } from "./passageId";
 
 interface FloorMapPassageProps {
-    passage: Passage;
+    passage: PassageId;
     position: FloorMapPosition;
 }
 
 export class FloorMapPassage extends ValueObject<FloorMapPassageProps> {
  
-    get passage(): Passage {
+    get passage(): PassageId {
         return this.props.passage;
     }
 
-    set passage(value: Passage) {
+    set passage(value: PassageId) {
         this.props.passage = value;
     }
 

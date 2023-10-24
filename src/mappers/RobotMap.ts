@@ -15,7 +15,6 @@ import { RobotNickname } from '../domain/valueObj/robotNickname';
 import { RobotSerialNumber } from '../domain/valueObj/robotSerialNumber';
 import { RobotDescription } from '../domain/valueObj/robotDescription';
 import { RobotState } from '../domain/valueObj/robotState';
-import { RobotType } from '../domain/robotType';
 
 export class RobotMap extends Mapper<Robot> {
     public static toDTO(robot: Robot): IRobotDTO {
@@ -23,7 +22,7 @@ export class RobotMap extends Mapper<Robot> {
             domainId: robot.id.toString(),
             identification: robot.identification.value,
             nickname: robot.nickname.value,
-            robotType: { id: robot.robotType.domainId.toString(), name: robot.robotType.type.value },
+            robotType: robot.robotType.toString(),
             serialNumber: robot.serialNumber.value,
             description: robot.description.value,
             state: robot.state.value,
@@ -59,7 +58,7 @@ export class RobotMap extends Mapper<Robot> {
             domainId: robot.id.toString(),
             identification: robot.identification.value,
             nickname: robot.nickname.value,
-            robotType: robot.robotType.id.toValue(),
+            robotType: robot.robotType.toString(),
             serialNumber: robot.serialNumber.value,
             description: robot.description.value,
             state: robot.state.value,

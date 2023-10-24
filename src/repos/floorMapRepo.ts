@@ -2,7 +2,6 @@ import { Service, Inject } from 'typedi';
 
 import IFloorMapRepo from "../services/IRepos/IFloorMapRepo";
 import { FloorMap } from "../domain/floorMap";
-import { Building } from "../domain/building";
 import { FloorMapId } from "../domain/valueObj/floorMapId";
 import { FloorMapMap } from "../mappers/FloorMapMap";
 
