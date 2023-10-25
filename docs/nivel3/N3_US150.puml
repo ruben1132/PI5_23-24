@@ -18,12 +18,11 @@ activate Ctrl
 Ctrl -> Srv: createBuilding(buildingDTO)
 activate Srv
 
-create Domain
 Srv -> Domain: create
-
 
 Srv -> Repo: save(building)
 activate Repo
+Repo --> Srv: building
 deactivate Repo
 
 Srv -> Map: toDTO(building)
@@ -36,7 +35,7 @@ Srv --> Ctrl: buildingDTO
 Ctrl --> API: status code 201
 deactivate Ctrl
 
-API --> SPA: sucesso
+API --> SPA: success
 deactivate API
 deactivate SPA
 @enduml
