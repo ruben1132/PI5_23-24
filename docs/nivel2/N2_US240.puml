@@ -1,0 +1,25 @@
+@startuml
+
+actor Actor as Actor
+participant "SPA" as Container <<Container (C4)>>
+participant "GestaoInfoAPI" as API <<Container (C4)>>
+
+Actor -> Container: Criar passagem entre edifícios
+Container --> Actor: Requesita informação para a passagem
+
+Actor -> Container: Envia dados da passagem
+Container -> API: POST (/api/passages)
+
+API -> API: Valida edifícios e passagem
+
+alt valida edifícios e passagem
+
+    API -> API: Cria passagem
+    API -> Container: Retorna informação da passagem
+    Container --> Actor: Retorna informação da passagem
+else edifícios ou passagem inválidos
+    API -> Container: Retorna erro
+    Container --> Actor: Retorna erro
+end
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+
+actor Actor as Actor
+participant "SPA" as Container <<Container (C4)>>
+participant "GestaoInfoAPI" as API <<Container (C4)>>
+
+Actor -> Container: Pretende editar as informações de um edifício
+Container --> Actor: Mostra informações atuais do edifício
+
+Actor -> Container: Envia dados atualizados
+
+Container -> API: PUT(/api/buildings/:id)
+API -> API: Atualiza informações do edifício
+
+alt sucesso case
+    API -> Container: Resposta de sucesso
+    Container --> Actor: Mostra mensagem de sucesso
+else erro case
+    API -> Container: Resposta de erro
+    Container -> Container: Mostra mensagem de erro
+end
+
+@enduml

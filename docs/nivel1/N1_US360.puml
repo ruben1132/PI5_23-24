@@ -1,0 +1,18 @@
+@startuml
+
+actor Actor as Actor
+participant "robDroneGo:robDroneGo" as Container <<Container (C4)>>
+
+Actor -> Container: Criar novo robo
+Container --> Actor: Requesita dados do novo robo
+
+Actor -> Container: Envia dados do novo robo
+Container -> Container: Cria novo robo
+
+alt sucesso na criação
+    Container --> Actor: Retorna sucesso na criação
+else falha na criação
+    Container --> Actor: Retorna falha na criação
+end
+
+@enduml
