@@ -2,20 +2,20 @@
 
 actor Actor as Actor
 participant "SPA" as Container <<Container (C4)>>
-participant "GestaoInfo" as Armazem <<Container (C4)>>
+participant "GestaoInfoAPI" as API <<Container (C4)>>
 
 Actor -> Container: Pretende listar todos os pisos de um edifício
 Container --> Actor: Requisita o id do edifício
 
 Actor -> Container: Envia o id do edifício
 Container -> Container: Valida o id do edifício
-    Container -> Armazem: Requisita todos os pisos do edifício
+    Container -> API: Requisita todos os pisos do edifício
 
 alt sucesso na obtenção do id do edifício
-    Armazem --> Container: Retorna todos os pisos do edifício
+    API --> Container: Retorna todos os pisos do edifício
     Container --> Actor: Retorna todos os pisos do edifício
 else id do edifício inválido
-    Armazem --> Container: Retorna erro
+    API --> Container: Retorna erro
     Container --> Actor: Retorna erro
 end
 

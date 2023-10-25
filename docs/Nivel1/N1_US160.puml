@@ -4,7 +4,7 @@ actor "Gestor de campus" as Actor
 participant "robDroneGo:robDroneGo" as Container <<Container (C4)>>
 
 Actor -> Container: editar edifícios
-Container --> Actor: requesita que selecione o edifício a ser editado
+Container --> Actor: requisita que selecione o edifício a ser editado
 Actor -> Container: edita os dados do edifício
 
 alt sucesso na a criar o edifício

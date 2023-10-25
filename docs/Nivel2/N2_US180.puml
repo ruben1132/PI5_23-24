@@ -2,18 +2,18 @@
 
 actor Actor as Actor
 participant "SPA" as Container <<Container (C4)>>
-participant "GestaoInfo" as Armazem <<Container (C4)>>
+participant "API" as API <<Container (C4)>>
 
 Actor -> Container: Pretende listar edifícios com mínimo e máximo de andares
 Container --> Actor: Requesita mínimo e máximo de andares
 
-    Container -> Armazem: get(/api/buildings?min=MIN&max=MAX)
+    Container -> API: get(/api/buildings?min=MIN&max=MAX)
 
 alt sucesso na requisição
-    Armazem --> Container: Devolve edifícios com mínimo e máximo de andares
+    API --> Container: Devolve edifícios com mínimo e máximo de andares
     Container --> Actor: Devolve edifícios com mínimo e máximo de andares
 else falha na requisição
-    Armazem --> Container: Devolve mensagem de erro
+    API --> Container: Devolve mensagem de erro
     Container --> Actor: Devolve mensagem de erro
 end
 
