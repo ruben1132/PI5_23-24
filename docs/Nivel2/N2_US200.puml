@@ -2,7 +2,7 @@
 
 actor Actor as Actor
 participant "SPA" as Container <<Container (C4)>>
-participant "Armazem" as Armazem <<Container (C4)>>
+participant "GestaoInfo" as Armazem <<Container (C4)>>
 
 Actor -> Container: Pretende editar as informações de um edifício
 Container --> Actor: Mostra informações atuais do edifício

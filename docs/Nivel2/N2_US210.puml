@@ -2,7 +2,7 @@
 
 actor Actor as Actor
 participant "SPA" as Container <<Container (C4)>>
-participant "Armazem" as Armazem <<Container (C4)>>
+participant "GestaoInfo" as Armazem <<Container (C4)>>
 
 Actor -> Container: Pretende listar todos os pisos de um edifício
 Container --> Actor: Requisita o id do edifício
