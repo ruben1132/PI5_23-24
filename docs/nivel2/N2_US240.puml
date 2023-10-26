@@ -5,7 +5,7 @@ participant "SPA" as Container <<Container (C4)>>
 participant "GestaoInfoAPI" as API <<Container (C4)>>
 
 Actor -> Container: Criar passagem entre edifícios
-Container --> Actor: Requesita informação para a passagem
+Container --> Actor: Requisita informação para a passagem
 
 Actor -> Container: Envia dados da passagem
 Container -> API: POST (/api/passages)

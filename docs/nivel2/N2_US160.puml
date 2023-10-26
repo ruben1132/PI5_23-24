@@ -5,7 +5,7 @@ participant "SPA" as Container <<Container (C4)>>
 participant "GestaoInfoAPI" as API <<Container (C4)>>
 
 Actor -> Container:  editar edifícios
-Container --> Actor: requesita os dados do edifício
+Container --> Actor: requisita os dados do edifício
 Actor --> Container: edita os dados do edifício
 Container -> API: put(/api/buildings)
 
