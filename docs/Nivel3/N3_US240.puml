@@ -1,0 +1,46 @@
+@startuml
+participant SPA
+participant "GestaoInfoAPI" as API
+participant "PassageController" as Ctrl
+participant "PassageService" as Srv
+participant "PassageRepo" as Repo
+participant "BuildingRepo" as Repo2
+participant "PassageMapper" as Map
+participant "PassageDTO" as DTO
+participant "Passage" as Domain
+
+activate SPA
+SPA -> API: post(/api/passages)
+activate API
+
+API -> Ctrl: post
+activate Ctrl
+
+Ctrl -> Srv: createPassage(passageDTO)
+activate Srv
+
+Srv -> Repo2: findByDomainId(passage.buildingId)
+activate Repo2
+Repo2 --> Srv: passage
+deactivate Repo2
+
+Srv -> Domain: create
+Srv -> Repo: save(passage)
+activate Repo
+Repo --> Srv: passage
+deactivate Repo
+
+Srv -> Map: toDTO(passage)
+activate Map
+Map --> Srv: passageDTO
+deactivate Map
+
+Srv --> Ctrl: passageDTO
+
+Ctrl --> API: status code 201
+deactivate Ctrl
+
+API --> SPA: success
+deactivate API
+deactivate SPA
+@enduml
