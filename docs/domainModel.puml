@@ -33,6 +33,13 @@ package "<<aggregate>> Floor"{
     }
 }
 
+package "<<aggregate>> FloorMap"{
+    entity FloorMap <<entity>>{
+        map
+        doors
+    }
+}
+
 package "<<aggregate>> Room"{
     entity Room <<entity>>{
         number
@@ -41,13 +48,12 @@ package "<<aggregate>> Room"{
 
 package "<<aggregate>> Passage"{
     entity Passage <<entity>>{
-
+        designation
     }
 }
 
 
 package "<<aggregate>> User"{
-
     entity User <<entity>><<root>>{
         firstName
         lastName
@@ -55,69 +61,86 @@ package "<<aggregate>> User"{
         password
         role
     }
-
-    entity NormalUser <<entity>>{
-
-    }
-    entity SysAdmin <<entity>>{
-
-    }
-    entity FleetManager <<entity>>{
-
-    }
-    entity CampusManager <<entity>>{
-
-    }
-
 }
 
 package "<<aggregate>> Robot"{
-
     entity Robot <<entity>><<root>>{
-
+        identification
+        nickname
+        serialNumber
+        description
+        state
     }
-
 }
 
-package "<<aggregate>> Drone"{
-
-    entity Drone <<entity>><<root>>{
-
+package "<<aggregate>> RobotType"{
+    entity RobotType <<entity>><<root>>{
+        type
+        brand
+        model
+        tasksAllowed
     }
-
 }
+
+package "<<aggregate>> Role"{
+    entity Role <<entity>><<root>>{
+        name
+    }
+}
+
+' package "<<aggregate>> Drone"{
+
+'     entity Drone <<entity>><<root>>{
+
+'     }
+
+' }
 
 package "<<aggregate>> Task"{
-
     entity Task <<entity>><<root>>{
-        type
         designation
     }
+}
 
+package "<<aggregate>> TaskType"{
+    entity TaskType <<entity>><<root>>{
+        name
+        designation
+    }
 }
 
 ' connections
+'user
+User "*" --- "1" Role: has >
+
 ' building
 Floor "*" --- "1" Building: is associated >
 Elevator "1" --- "1" Building: is associated >
 
 ' floor
 Room "*" --- "1" Floor: is on >
+
+'passage
 Passage "*" --- "1" Floor: connects >
 
 ' task
 Task "*" --- "1" Robot: is associated >
-Task "*" --- "1" Drone: is associated >
-Task "*" --- "1" Building: is associated >
-Task "*" --- "1" Floor: is associated >
-Task "*" --- "1" Room: is associated >
-Task "*" --- "1" User: is requested by >
+Task "*" --- "1" TaskType: has a >
 
-'hierarchy
-NormalUser ---|> User
-SysAdmin ---|> User
-FleetManager ---|> User
-CampusManager ---|> User
+' robot
+Robot "*" --- "1" RobotType: has a >
+
+' robotType
+RobotType "*" --- "*" TaskType: is allowed >
+
+' floorMap
+FloorMap "*" --- "1" Floor: is associated >
+FloorMap "*" --- "*" Passage: has associated>
+FloorMap "*" --- "*" Room: has associated >
+FloorMap "*" --- "1" Elevator: has associated >
+
+' 
+
 
 
 @enduml

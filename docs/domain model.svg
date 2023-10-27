@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1248px" preserveAspectRatio="none" style="width:1538px;height:1248px;background:#DDDDDD;" version="1.1" viewBox="0 0 1538 1248" width="1538px" zoomAndPan="magnify"><defs/><g><rect fill="#DDDDDD" height="26.2969" id="_title" rx="3.5" ry="3.5" style="stroke:none;stroke-width:1.0;" width="120" x="702" y="5"/><text fill="#000000" font-family="Arial" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="110" x="707" y="22.9951">domain model</text><!--MD5=[a8c72dcb0993599bf4f10d1dea215f72]
+cluster <<aggregate>> Building--><g id="cluster_&lt;&lt;aggregate&gt;&gt; Building"><path d="M141.5,1050.5703 L357.5,1050.5703 A5.25,5.25 0 0 1 361,1054.0703 L368,1075.1953 L367.5,1075.1953 A3.5,3.5 0 0 1 371,1078.6953 L371,1238.0703 A3.5,3.5 0 0 1 367.5,1241.5703 L141.5,1241.5703 A3.5,3.5 0 0 1 138,1238.0703 L138,1054.0703 A3.5,3.5 0 0 1 141.5,1050.5703 " fill="none" style="stroke:#454645;stroke-width:1.0;"/><line style="stroke:#454645;stroke-width:1.0;" x1="138" x2="368" y1="1075.1953" y2="1075.1953"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="217" x="142" y="1067.4219">&lt;&lt;aggregate&gt;&gt; Building</text></g><!--MD5=[552743ef28a091b760e47982fc011aa3]
+cluster <<aggregate>> Elevator--><g id="cluster_&lt;&lt;aggregate&gt;&gt; Elevator"><path d="M9.5,413.5703 L229.5,413.5703 A5.25,5.25 0 0 1 233,417.0703 L240,438.1953 L239.5,438.1953 A3.5,3.5 0 0 1 243,441.6953 L243,582.0703 A3.5,3.5 0 0 1 239.5,585.5703 L9.5,585.5703 A3.5,3.5 0 0 1 6,582.0703 L6,417.0703 A3.5,3.5 0 0 1 9.5,413.5703 " fill="none" style="stroke:#454645;stroke-width:1.0;"/><line style="stroke:#454645;stroke-width:1.0;" x1="6" x2="240" y1="438.1953" y2="438.1953"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="221" x="10" y="430.4219">&lt;&lt;aggregate&gt;&gt; Elevator</text></g><!--MD5=[972ad7949a9b66febc90916d5366d5d5]
+cluster <<aggregate>> Floor--><g id="cluster_&lt;&lt;aggregate&gt;&gt; Floor"><path d="M362.5,755.5703 L554.5,755.5703 A5.25,5.25 0 0 1 558,759.0703 L565,780.1953 L564.5,780.1953 A3.5,3.5 0 0 1 568,783.6953 L568,905.0703 A3.5,3.5 0 0 1 564.5,908.5703 L362.5,908.5703 A3.5,3.5 0 0 1 359,905.0703 L359,759.0703 A3.5,3.5 0 0 1 362.5,755.5703 " fill="none" style="stroke:#454645;stroke-width:1.0;"/><line style="stroke:#454645;stroke-width:1.0;" x1="359" x2="565" y1="780.1953" y2="780.1953"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="193" x="363" y="772.4219">&lt;&lt;aggregate&gt;&gt; Floor</text></g><!--MD5=[694fada2faad76cd5474a8fa28ab5a81]
+cluster <<aggregate>> FloorMap--><g id="cluster_&lt;&lt;aggregate&gt;&gt; FloorMap"><path d="M248.5,81.0703 L477.5,81.0703 A5.25,5.25 0 0 1 481,84.5703 L488,105.6953 L487.5,105.6953 A3.5,3.5 0 0 1 491,109.1953 L491,230.5703 A3.5,3.5 0 0 1 487.5,234.0703 L248.5,234.0703 A3.5,3.5 0 0 1 245,230.5703 L245,84.5703 A3.5,3.5 0 0 1 248.5,81.0703 " fill="none" style="stroke:#454645;stroke-width:1.0;"/><line style="stroke:#454645;stroke-width:1.0;" x1="245" x2="488" y1="105.6953" y2="105.6953"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="230" x="249" y="97.9219">&lt;&lt;aggregate&gt;&gt; FloorMap</text></g><!--MD5=[d6fe9085a7737064546745b532b972c1]
+cluster <<aggregate>> Room--><g id="cluster_&lt;&lt;aggregate&gt;&gt; Room"><path d="M432.5,432.0703 L630.5,432.0703 A5.25,5.25 0 0 1 634,435.5703 L641,456.6953 L640.5,456.6953 A3.5,3.5 0 0 1 644,460.1953 L644,563.5703 A3.5,3.5 0 0 1 640.5,567.0703 L432.5,567.0703 A3.5,3.5 0 0 1 429,563.5703 L429,435.5703 A3.5,3.5 0 0 1 432.5,432.0703 " fill="none" style="stroke:#454645;stroke-width:1.0;"/><line style="stroke:#454645;stroke-width:1.0;" x1="429" x2="641" y1="456.6953" y2="456.6953"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="199" x="433" y="448.9219">&lt;&lt;aggregate&gt;&gt; Room</text></g><!--MD5=[adb50b40acd14a448a7dcdf1cde7ec0f]
+cluster <<aggregate>> Passage--><g id="cluster_&lt;&lt;aggregate&gt;&gt; Passage"><path d="M671.5,432.0703 L893.5,432.0703 A5.25,5.25 0 0 1 897,435.5703 L904,456.6953 L903.5,456.6953 A3.5,3.5 0 0 1 907,460.1953 L907,563.5703 A3.5,3.5 0 0 1 903.5,567.0703 L671.5,567.0703 A3.5,3.5 0 0 1 668,563.5703 L668,435.5703 A3.5,3.5 0 0 1 671.5,432.0703 " fill="none" style="stroke:#454645;stroke-width:1.0;"/><line style="stroke:#454645;stroke-width:1.0;" x1="668" x2="904" y1="456.6953" y2="456.6953"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="223" x="672" y="448.9219">&lt;&lt;aggregate&gt;&gt; Passage</text></g><!--MD5=[597c9b6a35d8038d4b40fd8870ba90aa]
+cluster <<aggregate>> User--><g id="cluster_&lt;&lt;aggregate&gt;&gt; User"><path d="M933.5,43.5703 L1122.5,43.5703 A5.25,5.25 0 0 1 1126,47.0703 L1133,68.1953 L1132.5,68.1953 A3.5,3.5 0 0 1 1136,71.6953 L1136,268.0703 A3.5,3.5 0 0 1 1132.5,271.5703 L933.5,271.5703 A3.5,3.5 0 0 1 930,268.0703 L930,47.0703 A3.5,3.5 0 0 1 933.5,43.5703 " fill="none" style="stroke:#454645;stroke-width:1.0;"/><line style="stroke:#454645;stroke-width:1.0;" x1="930" x2="1133" y1="68.1953" y2="68.1953"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="190" x="934" y="60.4219">&lt;&lt;aggregate&gt;&gt; User</text></g><!--MD5=[01eb8843a2efdc6cc1edec43f7cf28d8]
+cluster <<aggregate>> Robot--><g id="cluster_&lt;&lt;aggregate&gt;&gt; Robot"><path d="M1161.5,385.5703 L1362.5,385.5703 A5.25,5.25 0 0 1 1366,389.0703 L1373,410.1953 L1372.5,410.1953 A3.5,3.5 0 0 1 1376,413.6953 L1376,610.0703 A3.5,3.5 0 0 1 1372.5,613.5703 L1161.5,613.5703 A3.5,3.5 0 0 1 1158,610.0703 L1158,389.0703 A3.5,3.5 0 0 1 1161.5,385.5703 " fill="none" style="stroke:#454645;stroke-width:1.0;"/><line style="stroke:#454645;stroke-width:1.0;" x1="1158" x2="1373" y1="410.1953" y2="410.1953"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="202" x="1162" y="402.4219">&lt;&lt;aggregate&gt;&gt; Robot</text></g><!--MD5=[3bb2aa52ebe2f06a68e37f5462fdaaae]
+cluster <<aggregate>> RobotType--><g id="cluster_&lt;&lt;aggregate&gt;&gt; RobotType"><path d="M1124.5,727.5703 L1368.5,727.5703 A5.25,5.25 0 0 1 1372,731.0703 L1379,752.1953 L1378.5,752.1953 A3.5,3.5 0 0 1 1382,755.6953 L1382,933.0703 A3.5,3.5 0 0 1 1378.5,936.5703 L1124.5,936.5703 A3.5,3.5 0 0 1 1121,933.0703 L1121,731.0703 A3.5,3.5 0 0 1 1124.5,727.5703 " fill="none" style="stroke:#454645;stroke-width:1.0;"/><line style="stroke:#454645;stroke-width:1.0;" x1="1121" x2="1379" y1="752.1953" y2="752.1953"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="245" x="1125" y="744.4219">&lt;&lt;aggregate&gt;&gt; RobotType</text></g><!--MD5=[8bf04b3c4da9e67679ec743f35a21dff]
+cluster <<aggregate>> Role--><g id="cluster_&lt;&lt;aggregate&gt;&gt; Role"><path d="M934.5,423.0703 L1120.5,423.0703 A5.25,5.25 0 0 1 1124,426.5703 L1131,447.6953 L1130.5,447.6953 A3.5,3.5 0 0 1 1134,451.1953 L1134,572.5703 A3.5,3.5 0 0 1 1130.5,576.0703 L934.5,576.0703 A3.5,3.5 0 0 1 931,572.5703 L931,426.5703 A3.5,3.5 0 0 1 934.5,423.0703 " fill="none" style="stroke:#454645;stroke-width:1.0;"/><line style="stroke:#454645;stroke-width:1.0;" x1="931" x2="1131" y1="447.6953" y2="447.6953"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="187" x="935" y="439.9219">&lt;&lt;aggregate&gt;&gt; Role</text></g><!--MD5=[4872a9da4fd8f336f0ba764de7d956d3]
+cluster <<aggregate>> Task--><g id="cluster_&lt;&lt;aggregate&gt;&gt; Task"><path d="M1256.5,81.0703 L1446.5,81.0703 A5.25,5.25 0 0 1 1450,84.5703 L1457,105.6953 L1456.5,105.6953 A3.5,3.5 0 0 1 1460,109.1953 L1460,230.5703 A3.5,3.5 0 0 1 1456.5,234.0703 L1256.5,234.0703 A3.5,3.5 0 0 1 1253,230.5703 L1253,84.5703 A3.5,3.5 0 0 1 1256.5,81.0703 " fill="none" style="stroke:#454645;stroke-width:1.0;"/><line style="stroke:#454645;stroke-width:1.0;" x1="1253" x2="1457" y1="105.6953" y2="105.6953"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="191" x="1257" y="97.9219">&lt;&lt;aggregate&gt;&gt; Task</text></g><!--MD5=[103473c696684f85aeb70145708b48e7]
+cluster <<aggregate>> TaskType--><g id="cluster_&lt;&lt;aggregate&gt;&gt; TaskType"><path d="M1284.5,1060.0703 L1517.5,1060.0703 A5.25,5.25 0 0 1 1521,1063.5703 L1528,1084.6953 L1527.5,1084.6953 A3.5,3.5 0 0 1 1531,1088.1953 L1531,1228.5703 A3.5,3.5 0 0 1 1527.5,1232.0703 L1284.5,1232.0703 A3.5,3.5 0 0 1 1281,1228.5703 L1281,1063.5703 A3.5,3.5 0 0 1 1284.5,1060.0703 " fill="none" style="stroke:#454645;stroke-width:1.0;"/><line style="stroke:#454645;stroke-width:1.0;" x1="1281" x2="1528" y1="1084.6953" y2="1084.6953"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="234" x="1285" y="1076.9219">&lt;&lt;aggregate&gt;&gt; TaskType</text></g><!--MD5=[8560f289a30852a9f75d64e53f926853]
+class Building--><g id="elem_Building"><rect codeLine="11" fill="#FFDA29" height="137.75" id="Building" rx="3.5" ry="3.5" style="stroke:#454645;stroke-width:0.5;" width="100" x="204" y="1087.5703"/><ellipse cx="219" cy="1120.5078" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M222.5781,1126.5078 L215.3125,1126.5078 L215.3125,1114.8359 L222.5781,1114.8359 L222.5781,1116.8672 L217.625,1116.8672 L217.625,1119.3828 L222.1094,1119.3828 L222.1094,1121.4141 L217.625,1121.4141 L217.625,1124.4766 L222.5781,1124.4766 L222.5781,1126.5078 Z " fill="#000000"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="231" y="1107.4219">«entity»</text><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="58" x="238" y="1126.0469">«root»</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="60" x="237" y="1144.6719">Building</text><line style="stroke:#454645;stroke-width:0.5;" x1="205" x2="303" y1="1153.4453" y2="1153.4453"/><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="38" x="210" y="1172.2969">code</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="43" x="210" y="1190.9219">name</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="88" x="210" y="1209.5469">dimensions</text><line style="stroke:#454645;stroke-width:0.5;" x1="205" x2="303" y1="1217.3203" y2="1217.3203"/></g><!--MD5=[93e485d66e62470c0e68a81214641dfb]
+class Elevator--><g id="elem_Elevator"><rect codeLine="21" fill="#FFDA29" height="119.125" id="Elevator" rx="3.5" ry="3.5" style="stroke:#454645;stroke-width:0.5;" width="116" x="80" y="450.5703"/><ellipse cx="102.2" cy="483.5078" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M105.7781,489.5078 L98.5125,489.5078 L98.5125,477.8359 L105.7781,477.8359 L105.7781,479.8672 L100.825,479.8672 L100.825,482.3828 L105.3094,482.3828 L105.3094,484.4141 L100.825,484.4141 L100.825,487.4766 L105.7781,487.4766 L105.7781,489.5078 Z " fill="#000000"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="115.8" y="470.4219">«entity»</text><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="58" x="122.8" y="489.0469">«root»</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="63" x="120.3" y="507.6719">Elevator</text><line style="stroke:#454645;stroke-width:0.5;" x1="81" x2="195" y1="516.4453" y2="516.4453"/><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="89" x="86" y="535.2969">designation</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="104" x="86" y="553.9219">floorsAllowed</text><line style="stroke:#454645;stroke-width:0.5;" x1="81" x2="195" y1="561.6953" y2="561.6953"/></g><!--MD5=[b098efa4dd65edfeebe973e4edec7c36]
+class Floor--><g id="elem_Floor"><rect codeLine="29" fill="#FFDA29" height="100.5" id="Floor" rx="3.5" ry="3.5" style="stroke:#454645;stroke-width:0.5;" width="101" x="413.5" y="792.5703"/><ellipse cx="428.95" cy="816.1953" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M432.5281,822.1953 L425.2625,822.1953 L425.2625,810.5234 L432.5281,810.5234 L432.5281,812.5547 L427.575,812.5547 L427.575,815.0703 L432.0594,815.0703 L432.0594,817.1016 L427.575,817.1016 L427.575,820.1641 L432.5281,820.1641 L432.5281,822.1953 Z " fill="#000000"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="441.05" y="812.4219">«entity»</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="39" x="457.55" y="831.0469">Floor</text><line style="stroke:#454645;stroke-width:0.5;" x1="414.5" x2="513.5" y1="839.8203" y2="839.8203"/><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="61" x="419.5" y="858.6719">number</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="89" x="419.5" y="877.2969">information</text><line style="stroke:#454645;stroke-width:0.5;" x1="414.5" x2="513.5" y1="885.0703" y2="885.0703"/></g><!--MD5=[f0b6ff306d626678ada6234da29b66ba]
+class FloorMap--><g id="elem_FloorMap"><rect codeLine="36" fill="#FFDA29" height="100.5" id="FloorMap" rx="3.5" ry="3.5" style="stroke:#454645;stroke-width:0.5;" width="103" x="316.5" y="118.0703"/><ellipse cx="331.5" cy="141.6953" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M335.0781,147.6953 L327.8125,147.6953 L327.8125,136.0234 L335.0781,136.0234 L335.0781,138.0547 L330.125,138.0547 L330.125,140.5703 L334.6094,140.5703 L334.6094,142.6016 L330.125,142.6016 L330.125,145.6641 L335.0781,145.6641 L335.0781,147.6953 Z " fill="#000000"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="345" y="137.9219">«entity»</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="71" x="345.5" y="156.5469">FloorMap</text><line style="stroke:#454645;stroke-width:0.5;" x1="317.5" x2="418.5" y1="165.3203" y2="165.3203"/><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="34" x="322.5" y="184.1719">map</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="46" x="322.5" y="202.7969">doors</text><line style="stroke:#454645;stroke-width:0.5;" x1="317.5" x2="418.5" y1="210.5703" y2="210.5703"/></g><!--MD5=[d218c48b946d362ff1ecd879cabebcad]
+class Room--><g id="elem_Room"><rect codeLine="43" fill="#FFDA29" height="81.875" id="Room" rx="3.5" ry="3.5" style="stroke:#454645;stroke-width:0.5;" width="100" x="448" y="469.0703"/><ellipse cx="463" cy="492.6953" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M466.5781,498.6953 L459.3125,498.6953 L459.3125,487.0234 L466.5781,487.0234 L466.5781,489.0547 L461.625,489.0547 L461.625,491.5703 L466.1094,491.5703 L466.1094,493.6016 L461.625,493.6016 L461.625,496.6641 L466.5781,496.6641 L466.5781,498.6953 Z " fill="#000000"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="475" y="488.9219">«entity»</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="46" x="488" y="507.5469">Room</text><line style="stroke:#454645;stroke-width:0.5;" x1="449" x2="547" y1="516.3203" y2="516.3203"/><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="61" x="454" y="535.1719">number</text><line style="stroke:#454645;stroke-width:0.5;" x1="449" x2="547" y1="542.9453" y2="542.9453"/></g><!--MD5=[941b7aeffb035281a8311db077b9e408]
+class Passage--><g id="elem_Passage"><rect codeLine="49" fill="#FFDA29" height="81.875" id="Passage" rx="3.5" ry="3.5" style="stroke:#454645;stroke-width:0.5;" width="101" x="684.5" y="469.0703"/><ellipse cx="699.95" cy="492.6953" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M703.5281,498.6953 L696.2625,498.6953 L696.2625,487.0234 L703.5281,487.0234 L703.5281,489.0547 L698.575,489.0547 L698.575,491.5703 L703.0594,491.5703 L703.0594,493.6016 L698.575,493.6016 L698.575,496.6641 L703.5281,496.6641 L703.5281,498.6953 Z " fill="#000000"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="712.05" y="488.9219">«entity»</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="65" x="715.55" y="507.5469">Passage</text><line style="stroke:#454645;stroke-width:0.5;" x1="685.5" x2="784.5" y1="516.3203" y2="516.3203"/><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="89" x="690.5" y="535.1719">designation</text><line style="stroke:#454645;stroke-width:0.5;" x1="685.5" x2="784.5" y1="542.9453" y2="542.9453"/></g><!--MD5=[3fd616f346a44cd59a91eb10b19e157c]
+class User--><g id="elem_User"><rect codeLine="56" fill="#FFDA29" height="175" id="User" rx="3.5" ry="3.5" style="stroke:#454645;stroke-width:0.5;" width="100" x="983" y="80.5703"/><ellipse cx="998" cy="113.5078" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1001.5781,119.5078 L994.3125,119.5078 L994.3125,107.8359 L1001.5781,107.8359 L1001.5781,109.8672 L996.625,109.8672 L996.625,112.3828 L1001.1094,112.3828 L1001.1094,114.4141 L996.625,114.4141 L996.625,117.4766 L1001.5781,117.4766 L1001.5781,119.5078 Z " fill="#000000"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="1010" y="100.4219">«entity»</text><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="58" x="1017" y="119.0469">«root»</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="37" x="1027.5" y="137.6719">User</text><line style="stroke:#454645;stroke-width:0.5;" x1="984" x2="1082" y1="146.4453" y2="146.4453"/><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="76" x="989" y="165.2969">firstName</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="72" x="989" y="183.9219">lastName</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="39" x="989" y="202.5469">email</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="77" x="989" y="221.1719">password</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="29" x="989" y="239.7969">role</text><line style="stroke:#454645;stroke-width:0.5;" x1="984" x2="1082" y1="247.5703" y2="247.5703"/></g><!--MD5=[60fb4f72b7635aa97affd2efc062a79f]
+class Robot--><g id="elem_Robot"><rect codeLine="66" fill="#FFDA29" height="175" id="Robot" rx="3.5" ry="3.5" style="stroke:#454645;stroke-width:0.5;" width="115" x="1218.5" y="422.5703"/><ellipse cx="1240.25" cy="455.5078" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1243.8281,461.5078 L1236.5625,461.5078 L1236.5625,449.8359 L1243.8281,449.8359 L1243.8281,451.8672 L1238.875,451.8672 L1238.875,454.3828 L1243.3594,454.3828 L1243.3594,456.4141 L1238.875,456.4141 L1238.875,459.4766 L1243.8281,459.4766 L1243.8281,461.5078 Z " fill="#000000"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="1253.75" y="442.4219">«entity»</text><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="58" x="1260.75" y="461.0469">«root»</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="47" x="1266.25" y="479.6719">Robot</text><line style="stroke:#454645;stroke-width:0.5;" x1="1219.5" x2="1332.5" y1="488.4453" y2="488.4453"/><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="97" x="1224.5" y="507.2969">identification</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="74" x="1224.5" y="525.9219">nickname</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="103" x="1224.5" y="544.5469">serialNumber</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="86" x="1224.5" y="563.1719">description</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="39" x="1224.5" y="581.7969">state</text><line style="stroke:#454645;stroke-width:0.5;" x1="1219.5" x2="1332.5" y1="589.5703" y2="589.5703"/></g><!--MD5=[ccfa383e5efe879a22324d26e60c61a8]
+class RobotType--><g id="elem_RobotType"><rect codeLine="76" fill="#FFDA29" height="156.375" id="RobotType" rx="3.5" ry="3.5" style="stroke:#454645;stroke-width:0.5;" width="116" x="1233" y="764.5703"/><ellipse cx="1248" cy="797.5078" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1251.5781,803.5078 L1244.3125,803.5078 L1244.3125,791.8359 L1251.5781,791.8359 L1251.5781,793.8672 L1246.625,793.8672 L1246.625,796.3828 L1251.1094,796.3828 L1251.1094,798.4141 L1246.625,798.4141 L1246.625,801.4766 L1251.5781,801.4766 L1251.5781,803.5078 Z " fill="#000000"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="1268" y="784.4219">«entity»</text><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="58" x="1275" y="803.0469">«root»</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="84" x="1262" y="821.6719">RobotType</text><line style="stroke:#454645;stroke-width:0.5;" x1="1234" x2="1348" y1="830.4453" y2="830.4453"/><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="34" x="1239" y="849.2969">type</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="46" x="1239" y="867.9219">brand</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="47" x="1239" y="886.5469">model</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="101" x="1239" y="905.1719">tasksAllowed</text><line style="stroke:#454645;stroke-width:0.5;" x1="1234" x2="1348" y1="912.9453" y2="912.9453"/></g><!--MD5=[a3638c1e5b65d287ecad7f06f5c0f212]
+class Role--><g id="elem_Role"><rect codeLine="85" fill="#FFDA29" height="100.5" id="Role" rx="3.5" ry="3.5" style="stroke:#454645;stroke-width:0.5;" width="100" x="983" y="460.0703"/><ellipse cx="998" cy="493.0078" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1001.5781,499.0078 L994.3125,499.0078 L994.3125,487.3359 L1001.5781,487.3359 L1001.5781,489.3672 L996.625,489.3672 L996.625,491.8828 L1001.1094,491.8828 L1001.1094,493.9141 L996.625,493.9141 L996.625,496.9766 L1001.5781,496.9766 L1001.5781,499.0078 Z " fill="#000000"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="1010" y="479.9219">«entity»</text><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="58" x="1017" y="498.5469">«root»</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="33" x="1029.5" y="517.1719">Role</text><line style="stroke:#454645;stroke-width:0.5;" x1="984" x2="1082" y1="525.9453" y2="525.9453"/><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="43" x="989" y="544.7969">name</text><line style="stroke:#454645;stroke-width:0.5;" x1="984" x2="1082" y1="552.5703" y2="552.5703"/></g><!--MD5=[b34797a66dc35cbf1d65f7e3ca75530e]
+class Task--><g id="elem_Task"><rect codeLine="99" fill="#FFDA29" height="100.5" id="Task" rx="3.5" ry="3.5" style="stroke:#454645;stroke-width:0.5;" width="101" x="1305.5" y="118.0703"/><ellipse cx="1320.95" cy="151.0078" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1324.5281,157.0078 L1317.2625,157.0078 L1317.2625,145.3359 L1324.5281,145.3359 L1324.5281,147.3672 L1319.575,147.3672 L1319.575,149.8828 L1324.0594,149.8828 L1324.0594,151.9141 L1319.575,151.9141 L1319.575,154.9766 L1324.5281,154.9766 L1324.5281,157.0078 Z " fill="#000000"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="1333.05" y="137.9219">«entity»</text><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="58" x="1340.05" y="156.5469">«root»</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="36" x="1351.05" y="175.1719">Task</text><line style="stroke:#454645;stroke-width:0.5;" x1="1306.5" x2="1405.5" y1="183.9453" y2="183.9453"/><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="89" x="1311.5" y="202.7969">designation</text><line style="stroke:#454645;stroke-width:0.5;" x1="1306.5" x2="1405.5" y1="210.5703" y2="210.5703"/></g><!--MD5=[88ee21eff3843b66d49ba6da731dc29a]
+class TaskType--><g id="elem_TaskType"><rect codeLine="105" fill="#FFDA29" height="119.125" id="TaskType" rx="3.5" ry="3.5" style="stroke:#454645;stroke-width:0.5;" width="105" x="1317.5" y="1097.0703"/><ellipse cx="1332.5" cy="1130.0078" fill="#ADD1B2" rx="11" ry="11" style="stroke:#181818;stroke-width:1.0;"/><path d="M1336.0781,1136.0078 L1328.8125,1136.0078 L1328.8125,1124.3359 L1336.0781,1124.3359 L1336.0781,1126.3672 L1331.125,1126.3672 L1331.125,1128.8828 L1335.6094,1128.8828 L1335.6094,1130.9141 L1331.125,1130.9141 L1331.125,1133.9766 L1336.0781,1133.9766 L1336.0781,1136.0078 Z " fill="#000000"/><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="72" x="1347" y="1116.9219">«entity»</text><text fill="#000000" font-family="Arial" font-size="16" font-weight="bold" lengthAdjust="spacing" textLength="58" x="1354" y="1135.5469">«root»</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="73" x="1346.5" y="1154.1719">TaskType</text><line style="stroke:#454645;stroke-width:0.5;" x1="1318.5" x2="1421.5" y1="1162.9453" y2="1162.9453"/><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="43" x="1323.5" y="1181.7969">name</text><text fill="#454645" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="89" x="1323.5" y="1200.4219">designation</text><line style="stroke:#454645;stroke-width:0.5;" x1="1318.5" x2="1421.5" y1="1208.1953" y2="1208.1953"/></g><!--MD5=[70c37dc9bfbc8656942103c36f1181e4]
+link User to Role--><g id="link_User_Role"><path codeLine="113" d="M1033,255.7503 C1033,320.4803 1033,406.6203 1033,459.9203 " fill="none" id="User-Role" style="stroke:#454645;stroke-width:2.5;"/><polygon fill="#000000" points="1039,334.8828,1042.5267,324.0287,1035.4733,324.0287,1039,334.8828" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="28" x="1050" y="334.4219">has</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="1024.6813" y="278.331">*</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="10" x="1022.2969" y="448.4627">1</text></g><!--MD5=[9bd558bda1c2c091fafbb27e99354104]
+link Floor to Building--><g id="link_Floor_Building"><path codeLine="116" d="M430.96,892.6603 C395.67,945.0903 339.49,1028.5503 299.92,1087.3503 " fill="none" id="Floor-Building" style="stroke:#454645;stroke-width:2.5;"/><polygon fill="#000000" points="371.6498,998.8604,380.6361,991.8251,374.7847,987.8867,371.6498,998.8604" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="100" x="386" y="999.4219">is associated</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="417.7512" y="915.8302">*</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="10" x="294.3956" y="1075.6944">1</text></g><!--MD5=[1dd60bc0b0635924addc1af56fecdedc]
+link Elevator to Building--><g id="link_Elevator_Building"><path codeLine="117" d="M145.66,569.6703 C148.92,599.5203 152,636.4203 152,669.5703 C152,669.5703 152,669.5703 152,994.5703 C152,1037.4203 178.1,1078.1203 203.9,1107.8703 " fill="none" id="Elevator-Building" style="stroke:#454645;stroke-width:2.5;"/><polygon fill="#000000" points="158.6455,848.848,160.984,837.6775,153.9715,838.4363,158.6455,848.848" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="100" x="169" y="848.4219">is associated</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="10" x="135.9676" y="592.4827">1</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="10" x="186.1516" y="1096.6693">1</text></g><!--MD5=[92d0919ae475adb8a5bbe41b23e4e52c]
+link Room to Floor--><g id="link_Room_Floor"><path codeLine="120" d="M493.86,551.2703 C487.62,611.9903 475.79,726.9803 469.04,792.5403 " fill="none" id="Room-Floor" style="stroke:#454645;stroke-width:2.5;"/><polygon fill="#000000" points="487.386,676.8513,492.0049,666.4151,484.9885,665.6933,487.386,676.8513" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="37" x="499" y="676.4219">is on</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="484.6136" y="573.8662">*</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="10" x="459.0459" y="780.731">1</text></g><!--MD5=[b799bec8400e9de87652545c025c9ef0]
+link Passage to Floor--><g id="link_Passage_Floor"><path codeLine="123" d="M702.04,551.2703 C652.25,611.9903 557.96,726.9803 504.21,792.5403 " fill="none" id="Passage-Floor" style="stroke:#454645;stroke-width:2.5;"/><polygon fill="#000000" points="613.1957,675.5225,622.8049,669.3653,617.3506,664.8931,613.1957,675.5225" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="72" x="628" y="676.4219">connects</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="688.3805" y="573.8662">*</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="10" x="499.3815" y="780.731">1</text></g><!--MD5=[96e927cd17b3c7404e5e35cb8257ec10]
+link Task to Robot--><g id="link_Task_Robot"><path codeLine="126" d="M1332.79,218.1603 C1320.22,246.8203 1305.55,284.0403 1297,318.5703 C1288.72,352.0003 1283.7,389.5303 1280.66,422.3903 " fill="none" id="Task-Robot" style="stroke:#454645;stroke-width:2.5;"/><polygon fill="#000000" points="1301.5161,334.6964,1307.6177,325.0517,1300.7834,323.3073,1301.5161,334.6964" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="100" x="1314" y="334.4219">is associated</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="1320.9636" y="241.3302">*</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="10" x="1270.6297" y="410.6591">1</text></g><!--MD5=[8d0d839979bc5a6cc84fbc9930d69b0d]
+link Task to TaskType--><g id="link_Task_TaskType"><path codeLine="127" d="M1398.5,218.3403 C1419.75,247.9803 1441,287.6003 1441,327.5703 C1441,327.5703 1441,327.5703 1441,994.5703 C1441,1030.4603 1426.04,1067.3303 1409.86,1096.7103 " fill="none" id="Task-TaskType" style="stroke:#454645;stroke-width:2.5;"/><polygon fill="#000000" points="1447.0776,676.8823,1450.4636,665.9835,1443.4108,666.0747,1447.0776,676.8823" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="42" x="1458" y="676.4219">has a</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="1395.9141" y="241.5355">*</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="10" x="1404.1086" y="1085.2">1</text></g><!--MD5=[ca76a5cd1232cecc0d7d3307256b492c]
+link Robot to RobotType--><g id="link_Robot_RobotType"><path codeLine="130" d="M1279.94,597.9003 C1282.28,649.5403 1285.23,714.4803 1287.49,764.3303 " fill="none" id="Robot-RobotType" style="stroke:#454645;stroke-width:2.5;"/><polygon fill="#000000" points="1289.2719,676.8766,1292.3031,665.8739,1285.2569,666.1935,1289.2719,676.8766" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="42" x="1300" y="676.4219">has a</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="1271.9352" y="620.4929">*</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="10" x="1276.6789" y="752.8787">1</text></g><!--MD5=[edabc3ddf355f16d97a14c7b9ad15af5]
+link RobotType to TaskType--><g id="link_RobotType_TaskType"><path codeLine="133" d="M1304.79,920.8403 C1309.94,947.2103 1316.2,976.8003 1323,1003.5703 C1330.88,1034.6303 1341.27,1068.7503 1350.28,1096.7803 " fill="none" id="RobotType-TaskType" style="stroke:#454645;stroke-width:2.5;"/><polygon fill="#000000" points="1330.5019,999.6918,1331.1993,988.3004,1324.3705,990.0661,1330.5019,999.6918" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="74" x="1340" y="999.4219">is allowed</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="1297.6925" y="943.7486">*</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="1339.3891" y="1085.2786">*</text></g><!--MD5=[206fa9b3c04110117f1f8516819db6ee]
+link FloorMap to Floor--><g id="link_FloorMap_Floor"><path codeLine="136" d="M332.14,218.1903 C313.68,248.2403 295,288.3403 295,327.5703 C295,327.5703 295,327.5703 295,671.5703 C295,739.4003 363.51,789.7803 413.29,817.4203 " fill="none" id="FloorMap-Floor" style="stroke:#454645;stroke-width:2.5;"/><polygon fill="#000000" points="301.8052,516.3285,303.8434,505.0993,296.8538,506.0459,301.8052,516.3285" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="100" x="312" y="515.9219">is associated</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="318.5347" y="241.3644">*</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="10" x="395.4558" y="809.4783">1</text></g><!--MD5=[ce768380d1ad336f1a9344a9edab092b]
+link FloorMap to Passage--><g id="link_FloorMap_Passage"><path codeLine="137" d="M419.73,201.5403 C463.05,229.8903 525.43,273.4603 574,318.5703 C624.93,365.8703 675.28,428.7403 705.76,469.0603 " fill="none" id="FloorMap-Passage" style="stroke:#454645;stroke-width:2.5;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="129" x="595" y="334.4219">has associated&gt;</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="427.567" y="201.8418">*</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="692.0469" y="457.3809">*</text></g><!--MD5=[b23986c00f7705e8c413e72749b44d63]
+link FloorMap to Room--><g id="link_FloorMap_Room"><path codeLine="138" d="M386.76,218.1503 C412.64,285.8203 458.78,406.5003 482.69,469.0403 " fill="none" id="FloorMap-Room" style="stroke:#454645;stroke-width:2.5;"/><polygon fill="#000000" points="440.1429,334.4871,439.5605,323.0893,432.9723,325.6084,440.1429,334.4871" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="116" x="449" y="334.4219">has associated</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="380.8356" y="241.3188">*</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="471.3711" y="457.3574">*</text></g><!--MD5=[9c54caedea38a8e7518e040a805471e2]
+link FloorMap to Elevator--><g id="link_FloorMap_Elevator"><path codeLine="139" d="M316.3,185.4603 C260.13,206.3603 173.32,248.4503 135,318.5703 C113.11,358.6203 115.69,410.8503 122.72,450.4903 " fill="none" id="FloorMap-Elevator" style="stroke:#454645;stroke-width:2.5;"/><polygon fill="#000000" points="137.461,333.728,146.711,327.0431,141.0152,322.8828,137.461,333.728" style="stroke:#000000;stroke-width:1.0;"/><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="116" x="152" y="334.4219">has associated</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="8" x="300.4672" y="183.5005">*</text><text fill="#000000" font-family="Arial" font-size="16" lengthAdjust="spacing" textLength="10" x="110.1216" y="438.5871">1</text></g><!--MD5=[db1e2103cbf73adc22b1cf95222c7257]
+@startuml domain model
+skinparam DefaultFontName Arial
+skinparam DefaultFontSize 16
+skinparam DefaultFontStyle bold
+skinparam ArrowThickness 2.5
+!theme toy
+
+title domain model
+
+package "<<aggregate>> Building"{
+
+    entity Building <<entity>><<root>>{
+        code
+        name
+        dimensions
+    }
+
+}
+
+package "<<aggregate>> Elevator"{
+
+    entity Elevator <<entity>><<root>>{
+        designation
+        floorsAllowed
+    }
+
+}
+
+package "<<aggregate>> Floor"{
+    entity Floor <<entity>>{
+        number
+        information
+    }
+}
+
+package "<<aggregate>> FloorMap"{
+    entity FloorMap <<entity>>{
+        map
+        doors
+    }
+}
+
+package "<<aggregate>> Room"{
+    entity Room <<entity>>{
+        number
+    }
+}
+
+package "<<aggregate>> Passage"{
+    entity Passage <<entity>>{
+        designation
+    }
+}
+
+
+package "<<aggregate>> User"{
+    entity User <<entity>><<root>>{
+        firstName
+        lastName
+        email
+        password
+        role
+    }
+}
+
+package "<<aggregate>> Robot"{
+    entity Robot <<entity>><<root>>{
+        identification
+        nickname
+        serialNumber
+        description
+        state
+    }
+}
+
+package "<<aggregate>> RobotType"{
+    entity RobotType <<entity>><<root>>{
+        type
+        brand
+        model
+        tasksAllowed
+    }
+}
+
+package "<<aggregate>> Role"{
+    entity Role <<entity>><<root>>{
+        name
+    }
+}
+
+' package "<<aggregate>> Drone"{
+
+'     entity Drone <<entity>><<root>>{
+
+'     }
+
+' }
+
+package "<<aggregate>> Task"{
+    entity Task <<entity>><<root>>{
+        designation
+    }
+}
+
+package "<<aggregate>> TaskType"{
+    entity TaskType <<entity>><<root>>{
+        name
+        designation
+    }
+}
+
+' connections
+'user
+User "*" - - - "1" Role: has >
+
+' building
+Floor "*" - - - "1" Building: is associated >
+Elevator "1" - - - "1" Building: is associated >
+
+' floor
+Room "*" - - - "1" Floor: is on >
+
+'passage
+Passage "*" - - - "1" Floor: connects >
+
+' task
+Task "*" - - - "1" Robot: is associated >
+Task "*" - - - "1" TaskType: has a >
+
+' robot
+Robot "*" - - - "1" RobotType: has a >
+
+' robotType
+RobotType "*" - - - "*" TaskType: is allowed >
+
+' floorMap
+FloorMap "*" - - - "1" Floor: is associated >
+FloorMap "*" - - - "*" Passage: has associated>
+FloorMap "*" - - - "*" Room: has associated >
+FloorMap "*" - - - "1" Elevator: has associated >
+
+' 
+
+
+
+@enduml
+
+@startuml domain model
+skinparam DefaultFontName Arial
+skinparam DefaultFontSize 16
+skinparam DefaultFontStyle bold
+skinparam ArrowThickness 2.5
+skinparam BackgroundColor DDDDDD
+skinparam shadowing false
+skinparam RoundCorner 7
+skinparam ArrowColor 454645
+skinparam FontColor 454645
+skinparam SequenceLifeLineBorderColor 454645
+skinparam SequenceGroupHeaderFontColor 454645
+skinparam SequenceGroupFontColor 454645
+skinparam SequenceGroupBorderColor 454645
+skinparam SequenceGroupBorderThickness 1
+
+skinparam sequenceDivider {
+    BorderColor 454645
+    BorderThickness 1
+    FontColor 454645
+}
+
+skinparam participant {
+    BackgroundColor FF6F61
+    BorderColor 454645
+    FontColor White
+    BorderThickness 1.5
+}
+
+skinparam database {
+    BackgroundColor 98DDDE
+    BorderColor 454645
+    FontColor 454645
+}
+
+skinparam entity {
+    BackgroundColor FFDA29
+    BorderColor 454645
+    FontColor 454645
+}
+
+skinparam note {
+    BackgroundColor LightGreen
+    BorderColor 454645
+    FontColor 454645
+    BorderThickness 1
+}
+
+skinparam actor {
+    BackgroundColor 454645
+    BorderColor 454645
+    FontColor 454645
+}
+
+skinparam boundary {
+    BackgroundColor FFDA29
+    BorderColor 454645
+    FontColor 454645
+}
+
+skinparam control {
+    BackgroundColor FFDA29
+    BorderColor 454645
+    FontColor 454645
+}
+
+skinparam collections {
+    BackgroundColor FF6F61
+    BorderColor 454645
+    FontColor 454645
+    BorderThickness 1.5
+}
+
+skinparam queue {
+    BackgroundColor FF6F61
+    BorderColor 454645
+    FontColor FFF
+    BorderThickness 1.5
+}
+
+title domain model
+
+package "<<aggregate>> Building"{
+
+    entity Building <<entity>><<root>>{
+        code
+        name
+        dimensions
+    }
+
+}
+
+package "<<aggregate>> Elevator"{
+
+    entity Elevator <<entity>><<root>>{
+        designation
+        floorsAllowed
+    }
+
+}
+
+package "<<aggregate>> Floor"{
+    entity Floor <<entity>>{
+        number
+        information
+    }
+}
+
+package "<<aggregate>> FloorMap"{
+    entity FloorMap <<entity>>{
+        map
+        doors
+    }
+}
+
+package "<<aggregate>> Room"{
+    entity Room <<entity>>{
+        number
+    }
+}
+
+package "<<aggregate>> Passage"{
+    entity Passage <<entity>>{
+        designation
+    }
+}
+
+
+package "<<aggregate>> User"{
+    entity User <<entity>><<root>>{
+        firstName
+        lastName
+        email
+        password
+        role
+    }
+}
+
+package "<<aggregate>> Robot"{
+    entity Robot <<entity>><<root>>{
+        identification
+        nickname
+        serialNumber
+        description
+        state
+    }
+}
+
+package "<<aggregate>> RobotType"{
+    entity RobotType <<entity>><<root>>{
+        type
+        brand
+        model
+        tasksAllowed
+    }
+}
+
+package "<<aggregate>> Role"{
+    entity Role <<entity>><<root>>{
+        name
+    }
+}
+
+
+
+
+
+package "<<aggregate>> Task"{
+    entity Task <<entity>><<root>>{
+        designation
+    }
+}
+
+package "<<aggregate>> TaskType"{
+    entity TaskType <<entity>><<root>>{
+        name
+        designation
+    }
+}
+
+User "*" - - - "1" Role: has >
+
+Floor "*" - - - "1" Building: is associated >
+Elevator "1" - - - "1" Building: is associated >
+
+Room "*" - - - "1" Floor: is on >
+
+Passage "*" - - - "1" Floor: connects >
+
+Task "*" - - - "1" Robot: is associated >
+Task "*" - - - "1" TaskType: has a >
+
+Robot "*" - - - "1" RobotType: has a >
+
+RobotType "*" - - - "*" TaskType: is allowed >
+
+FloorMap "*" - - - "1" Floor: is associated >
+FloorMap "*" - - - "*" Passage: has associated>
+FloorMap "*" - - - "*" Room: has associated >
+FloorMap "*" - - - "1" Elevator: has associated >
+
+
+
+
+@enduml
+
+PlantUML version 1.2022.7(Mon Aug 22 18:01:30 WEST 2022)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
