@@ -6,6 +6,11 @@ import IFloorMapController from '../../controllers/IControllers/IFloorMapControl
 
 import config from '../../../config';
 
+import multer from 'multer';
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
 const route = Router();
 
 export default (app: Router) => {
@@ -15,42 +20,7 @@ export default (app: Router) => {
 
     route.patch(
         '',
-        celebrate({
-            body: Joi.object({
-                floor: Joi.string().required(),
-                map: Joi.array().required(),
-                fmRooms: Joi.array().items(
-                    Joi.object({
-                        roomId: Joi.string().required(),
-                        startX: Joi.number().required(),
-                        startY: Joi.number().required(),
-                        endX: Joi.number().required(),
-                        endY: Joi.number().required(),
-                    }),
-                ),
-                fmDoors: Joi.array().items(
-                    Joi.object({
-                        positionX: Joi.number().required(),
-                        positionY: Joi.number().required(),
-                        direction: Joi.string().required(),
-                    }),
-                ),
-                fmElevator: Joi.object({
-                    elevatorId: Joi.string().required(),
-                    positionX: Joi.number().required(),
-                    positionY: Joi.number().required(),
-                    direction: Joi.string().required(),
-                }),
-                fmPassages: Joi.array().items(
-                    Joi.object({
-                        passageId: Joi.string().required(),
-                        positionX: Joi.number().required(),
-                        positionY: Joi.number().required(),
-                        direction: Joi.string().required(),
-                    }),
-                ),
-            }),
-        }),
+        upload.single('jsonFile'),                 
         (req, res, next) => ctrl.createFloorMap(req, res, next),
     );
 
