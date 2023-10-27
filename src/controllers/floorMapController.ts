@@ -14,7 +14,7 @@ export default class FloorMapController implements IFloorMapController /* TODO: 
         @Inject(config.services.floorMap.name) private floorMapServiceInstance: IFloorMapService
     ) { }
 
-    public async createFloorMap(req: Request, res: Response, next: NextFunction) {
+    public async createFloorMap(req: Request & { file: any }, res: Response, next: NextFunction) {
         
         try {
             const jsonContent = JSON.parse(req.file.buffer.toString());

@@ -90,11 +90,9 @@ export default class TaskTypeRepo implements ITaskTypeRepo {
         return null;
     }
 
-    public async findByIds(rolesIds: TaskTypeId[] | string[]): Promise<TaskType[]> {
-        const query = { domainId: { $in: rolesIds } };
+    public async findByIds(taskTYpeIds: TaskTypeId[] | string[]): Promise<TaskType[]> {
+        const query = { domainId: { $in: taskTYpeIds } };
         const taskTypeRecord = await this.taskTypeSchema.find(query as FilterQuery<ITaskTypePersistence & Document>);
-
-        console.log("ddd");
         
         if (taskTypeRecord != null) {
             return taskTypeRecord.map((taskType) => TaskTypeMap.toDomain(taskType));

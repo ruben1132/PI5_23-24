@@ -1,5 +1,3 @@
-import { Container } from 'typedi';
-
 import { Mapper } from '../core/infra/Mapper';
 
 import { Document, Model } from 'mongoose';
@@ -10,20 +8,18 @@ import { RobotType } from '../domain/robotType';
 
 import { UniqueEntityID } from '../core/domain/UniqueEntityID';
 
-import BuildingRepo from '../repos/buildingRepo';
 import { RobotTypeType } from '../domain/valueObj/robotTypeType';
 import { RobotTypeBrand } from '../domain/valueObj/robotTypeBrand';
 import { RobotTypeModel } from '../domain/valueObj/robotTypeModel';
 
 export class RobotTypeMap extends Mapper<RobotType> {
-    public static toDTO(robotType: RobotType): IRobotTypeDTO {
-
+    public static toDTO(robotType: RobotType): IRobotTypeDTO {        
         return {
             domainId: robotType.id.toString(),
             type: robotType.type.value,
             brand: robotType.brand.value,
             model: robotType.model.value,
-            tasksAllowed: robotType.tasksAllowed.map((taskType) => { return taskType.domainId.toString() })
+            tasksAllowed: robotType.tasksAllowed.map((taskType) => { return taskType.toString() })
             ,
         } as IRobotTypeDTO;
     }
@@ -39,7 +35,7 @@ export class RobotTypeMap extends Mapper<RobotType> {
                 type: type.getValue(),
                 brand: brand.getValue(),
                 model: model.getValue(),
-                tasksAllowed: robotType.tasksAllowed as any,
+                tasksAllowed: robotType.tasksAllowed
             },
             new UniqueEntityID(robotType.domainId),
         );
@@ -55,7 +51,7 @@ export class RobotTypeMap extends Mapper<RobotType> {
             type: robotType.type.value,
             brand: robotType.brand.value,
             model: robotType.model.value,
-            tasksAllowed: robotType.tasksAllowed.map((taskType) => { return taskType.id.toString() })
+            tasksAllowed: robotType.tasksAllowed.map((taskType) => { return taskType.toString() })
         };
     }
 }

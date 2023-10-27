@@ -10,6 +10,7 @@ import { BuildingMap } from "../mappers/BuildingMap";
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IRobotTypePersistence } from '../dataschema/IRobotTypePersistence';
 import { TaskType } from '../domain/taskType';
+import { TaskTypeId } from '../domain/valueObj/taskTypeId';
 
 
 @Service()
@@ -54,8 +55,7 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
                 robotTypeDocument.brand = robotType.brand.value;
                 robotTypeDocument.model = robotType.model.value;
 
-                const tasksAllowed = await this.convertArrayToArrayString(robotType.tasksAllowed);
-                robotTypeDocument.tasksAllowed = tasksAllowed;
+                robotTypeDocument.tasksAllowed = await this.convertArrayToArrayString(robotType.tasksAllowed);
 
                 await robotTypeDocument.save();
 
@@ -66,31 +66,10 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
         }
     }
 
-    public async getRobotTypes(): Promise<Array<RobotType>> {
+    public async getRobotTypes(): Promise<RobotType[]> {
         try {
-            const pipeline = [
-                {
-                    $lookup: {
-                        from: 'tasktypes', // Name of the "tasktypes" collection
-                        localField: 'tasksAllowed', // Field in the "robotType" collection
-                        foreignField: 'domainId', // Field in the "tasktypes" collection
-                        as: 'tasksAllowed'
-                    },
-                  
-                },
-            ];
-
-            const robotTypesWithTaskTypeData = await this.robotTypeSchema.aggregate(pipeline);
-
-            if (robotTypesWithTaskTypeData) {
-                
-                const robotTypePromisses = robotTypesWithTaskTypeData.map((robotType) => RobotTypeMap.toDomain(robotType));
-                
-                return Promise.all(robotTypePromisses);
-
-            } else {
-                return [];
-            }
+            const robotTypesWithTaskTypeData = await this.robotTypeSchema.find({});
+            return robotTypesWithTaskTypeData.map((robotType) => RobotTypeMap.toDomain(robotType));
         } catch (error) {
             return [];
         }
@@ -125,11 +104,11 @@ export default class RobotTypeRepo implements IRobotTypeRepo {
         }
     }
 
-    public async convertArrayToArrayString(array: TaskType[]): Promise<string[]> {
+    public async convertArrayToArrayString(array: TaskTypeId[]): Promise<string[]> {
 
-        const arrayString: Array<string> = [];
+        const arrayString: string[] = [];
         array.forEach(element => {
-            arrayString.push(element.id.toString());
+            arrayString.push(element.toString());
         });
 
         return arrayString;
