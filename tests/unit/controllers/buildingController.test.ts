@@ -38,7 +38,7 @@ describe('Building Controller', function () {
         sinon.stub(service, "createBuilding").resolves(Result.ok<IBuildingDTO>({
             "id": "123",
             "code": req.body.code,
-            "dimensions": req.body.description, "name": req.body.name
+            "dimensions": req.body.dimensions, "name": req.body.name
         }
         ));
 
@@ -53,7 +53,7 @@ describe('Building Controller', function () {
             sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
                 "id": "123",
                 "code": req.body.code,
-                "description": req.body.description,
+                "dimensions": req.body.dimensions,
                 "name": req.body.name
             }));
 

@@ -1,150 +1,195 @@
-// import 'reflect-metadata';
+import 'reflect-metadata';
 
-// import * as sinon from 'sinon';
-// import { Response, Request, NextFunction } from 'express';
-// import { Container } from 'typedi';
-// import { Result } from '../src/core/logic/Result';
-// import IBuildingService from '../src/services/IServices/IBuildingService';
-// import BuildingController from '../src/controllers/buildingController';
-// import IBuildingDTO from '../src/dto/IBuildingDTO';
-// import { Building } from '../src/domain/building';
+import * as sinon from 'sinon';
+import { Response, Request, NextFunction } from 'express';
+import { Container } from 'typedi';
+import { Result } from '../../src/core/logic/Result';
+import IBuildingService from "../../src/services/IServices/IBuildingService";
+import BuildingController from "../../src/controllers/buildingController";
+import BuildingService from "../../src/services/buildingService";
+import BuildingRepo from "../../src/repos/buildingRepo";
+import { Building } from '../../src/domain/building';
+import IBuildingDTO from '../../src/dto/IBuildingDTO';
+import { SinonSpy } from 'sinon';
+import { UniqueEntityID } from '../../src/core/domain/UniqueEntityID';
+import BuildingSchema from '../../src/persistence/schemas/buildingSchema';
+import FloorRepo from '../../src/repos/floorRepo';
 
-// import BuildingRepo from '../src/repos/buildingRepo';
+describe('Building X Controller', function () {
+    const sandbox = sinon.createSandbox();
 
-// import BuildingService from '../src/services/buildingService';
+    let buildingSchema: typeof BuildingSchema;
+    let buildingRepo: BuildingRepo;
+    let floorRepo: FloorRepo;
+    let buildingService: BuildingService;
 
-// describe('building controller', function() {
-//     const sandbox = sinon.createSandbox();
+    beforeEach(function () {
+        Container.reset();
+        buildingSchema = BuildingSchema;
 
-//     beforeEach(function() {
-//         Container.reset();
-//         const buildingSchemaInstance = require('../src/persistence/schemas/buildingSchema').default;
-//         Container.set('buildingSchema', buildingSchemaInstance);
+        buildingRepo = new BuildingRepo(buildingSchema);
+        buildingService = new BuildingService(buildingRepo, floorRepo);
+    });
 
-//         const buildingRepoClass = require('../src/repos/buildingRepo').default;
-//         const buildingRepoInstance = Container.get(buildingRepoClass);
-//         Container.set('BuildingRepo', buildingRepoInstance);
+    afterEach(function () {
+        sandbox.restore();
+    });
 
-//         const buildingServiceClass = require('../src/services/buildingService').default;
-//         const buildingServiceInstance = Container.get(buildingServiceClass);
-//         Container.set('BuildingService', buildingServiceInstance);
-//     });
+    it('buildingController unit test using buildingService stub', async function () {
+        // Arrange
+        let body = { "code": 'A', "dimensions": '10x10', "name": 'Building A' };
+        let req: Partial<Request> = {};
+        req.body = body;
+        let res: Partial<Response> = {
+            json: sinon.spy() as SinonSpy<[any?]>
+        };
+        let next: Partial<NextFunction> = () => { };
 
-//     afterEach(function() {
-//         sandbox.restore();
-//     });
+        sinon.stub(buildingService, "createBuilding").returns(Promise.resolve(Result.ok<IBuildingDTO>({
+            "id": "123",
+            "code": req.body.code,
+            "dimensions": req.body.dimensions, "name": req.body.name
+        })));
 
-//     it('buildingController unit test using buildingService stub', async function() {
-//         // Arrange
-//         const body = { name: 'building12' };
-//         const req: Partial<Request> = {};
-//         req.body = body;
-//         const res: Partial<Response> = {
-//             json: sinon.spy(),
-//         };
-//         const next: Partial<NextFunction> = () => {};
+        const ctrl = new BuildingController(buildingService as IBuildingService);
 
-//         const buildingServiceInstance = Container.get('BuildingService');
-//         sinon.stub(buildingServiceInstance, 'createBuilding').returns(
-//             Result.ok<IBuildingDTO>({ "id": "123", "name": req.body.name, "code": req.body.code, "dimensions": req.body.dimensions }),
-//         );
+        // Act
+        await ctrl.createBuilding(<Request>req, <Response>res, <NextFunction>next);
 
-//         const ctrl = new BuildingController(buildingServiceInstance as IBuildingService);
+        // Assert
+        sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
+        sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
+            "id": "123",
+            "code": req.body.code,
+            "dimensions": req.body.dimensions, "name": req.body.name
+        }));
+    });
 
-//         // Act
-//         await ctrl.createBuilding(<Request>req, <Response>res, <NextFunction>next);
 
-//         // Assert
-//         sinon.assert.calledOnce(res.json);
-//         sinon.assert.calledWith(res.json, sinon.match({ "id": "123", "name": req.body.name, "code": req.body.code, "dimensions": req.body.dimensions }));
-//     });
+    it('buildingController unit test using buildingService stub', async function () {
+        // Arrange
+        let body = { "code": 'A', "dimensions": '10x10', "name": 'Building A' };
+        let req: Partial<Request> = {};
+        req.body = body;
+        let res: Partial<Response> = {
+            json: sinon.spy() as SinonSpy<[any?]>
+        };
+        let next: Partial<NextFunction> = () => { };
 
-//     // it('should test buildingController createBuilding with stubs', async function() {
-//     //     // Arrange
-//     //     const body = { name: 'building12' };
-//     //     const req: Partial<Request> = { body };
+        sinon.stub(buildingService, "createBuilding").returns(Promise.resolve(Result.ok<IBuildingDTO>({
+            "id": "123",
+            "code": req.body.code,
+            "dimensions": req.body.dimensions, "name": req.body.name
+        })));
 
-//     //     const res: Partial<Response> = { json: sinon.spy() };
-//     //     const next: Partial<NextFunction> = () => {};
+        const ctrl = new BuildingController(buildingService as IBuildingService);
 
-//     //     // Create a stub for your BuildingService.createBuilding method
-//     //     const buildingServiceInstance = sinon.createStubInstance(BuildingService);
-//     //     buildingServiceInstance.createBuilding.returns({ "id": "123", "name": req.body.name, "code": req.body.code, "dimensions": req.body.dimensions });
+        // Act
+        await ctrl.createBuilding(<Request>req, <Response>res, <NextFunction>next);
 
-//     //     // Create a stub for your BuildingRepo.save method
-//     //     const buildingRepoInstance = sinon.createStubInstance(BuildingRepo);
-//     //     buildingRepoInstance.save.resolves({ name: req.body.name }); // Assuming save returns a promise
+        // Assert
+        sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
+        sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
+            "id": "123",
+            "code": req.body.code,
+            "dimensions": req.body.dimensions, "name": req.body.name
+        }));
+    });
 
-//     //     const ctrl = new BuildingController(buildingServiceInstance);
+    it('buildingController + buildingService integration test using buildingRepoistory and Building stubs', async function () {
+        // Arrange	
+        let body = { "code": 'A', "dimensions": '10x10', "name": 'Building A' };
+        let req: Partial<Request> = {};
+        req.body = body;
 
-//     //     // Act
-//     //     const createBuilding = await ctrl.createBuilding(req as Request, res as Response, next as NextFunction);
+        let res: Partial<Response> = {
+            json: sinon.spy()
+        };
+        let next: Partial<NextFunction> = () => { };
 
-//     //     // Assert
-//     //     sinon.assert.calledOnce(res.json);
-//     //     sinon.assert.calledWith(res.json, { "id": "123", "name": req.body.name, "code": req.body.code, "dimensions": req.body.dimensions });
-//     // });
+        const b = Building.create({ "code": req.body.code, "dimensions": req.body.dimensions, "name": req.body.name }, new UniqueEntityID("123"));
 
-//     // it('should test buildingController createBuilding with spy on buildingService', async function() {
-//     //     // Arrange
-//     //     const body = { name: 'building12' };
-//     //     const req: Partial<Request> = { body };
+        sinon.stub(buildingRepo, "save").returns(new Promise<Building>((resolve, reject) => {
+            resolve(b.getValue())
+        }));
 
-//     //     const res: Partial<Response> = { json: sinon.spy() };
-//     //     const next: Partial<NextFunction> = () => {};
 
-//     //     // Create an instance of your BuildingService
-//     //     const buildingServiceInstance = new BuildingService(BuildingRepo as any);
+        const ctrl = new BuildingController(buildingService as IBuildingService);
 
-//     //     // Spy on the createBuilding method of the actual service
-//     //     const buildingServiceSpy = sinon.spy(buildingServiceInstance, 'createBuilding');
+        // Act
+        await ctrl.createBuilding(<Request>req, <Response>res, <NextFunction>next);
 
-//     //     const ctrl = new BuildingController(buildingServiceInstance as any);
+        // Assert
+        sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
+        sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({ "name": req.body.name, "code": req.body.code, "dimensions": req.body.dimensions }));
+    });
 
-//     //     // Act
-//     //     await ctrl.createBuilding(req as Request, res as Response, next as NextFunction);
 
-//     //     // Assert
-//     //     sinon.assert.calledOnce(res.json);
-//     //     sinon.assert.calledWith(res.json, { "id": "123", "name": req.body.name, "code": req.body.code, "dimensions": req.body.dimensions });
+    it('buildingController + buildingService integration test using spy on buildingService', async function () {
+        // Arrange
+        let body = { "code": 'A', "dimensions": '10x10', "name": 'Building A' };
+        let req: Partial<Request> = {};
+        req.body = body;
 
-//     //     // Ensure the createBuilding method of the service is called
-//     //     sinon.assert.calledOnce(buildingServiceSpy);
-//     //     sinon.assert.calledWith(buildingServiceSpy, { name: req.body.name });
-//     // });
+        let res: Partial<Response> = {
+            json: sinon.spy()
+        };
+        let next: Partial<NextFunction> = () => { };
 
-//     it('buildingController unit test using buildingService mock', async function() {
-//         // Arrange
-//         const body = { name: 'building12' };
-//         const req: Partial<Request> = {};
-//         req.body = body;
+        sinon.stub(buildingRepo, "save").returns(new Promise<Building>((resolve, reject) => {
+            resolve(Building.create({ "code": req.body.code, "dimensions": req.body.dimensions, "name": req.body.name }, new UniqueEntityID("123")).getValue())
+        }));
 
-//         const res: Partial<Response> = {
-//             json: sinon.spy(),
-//         };
-//         const next: Partial<NextFunction> = () => {};
 
-//         const buildingServiceInstance = Container.get('BuildingService');
-//         const buildingServiceMock = sinon.mock(buildingServiceInstance, 'createBuilding');
-//         buildingServiceMock
-//             .expects('createBuilding')
-//             .once()
-//             .withArgs(sinon.match({ name: req.body.name }))
-//             .returns(
-//                 Result.ok<IBuildingDTO>({ "id": "123", "name": req.body.name, "code": req.body.code, "dimensions": req.body.dimensions }),
-//             );
+        const buildingServiceSpy = sinon.spy(buildingService, "createBuilding");
 
-//         const ctrl = new BuildingController(buildingServiceInstance as IBuildingService);
+        const ctrl = new BuildingController(buildingService as IBuildingService);
 
-//         // Act
-//         await ctrl.createBuilding(<Request>req, <Response>res, <NextFunction>next);
+        // Act
+        await ctrl.createBuilding(<Request>req, <Response>res, <NextFunction>next);
 
-//         // Assert
-//         buildingServiceMock.verify();
-//         sinon.assert.calledOnce(res.json);
-//         sinon.assert.calledWith(res.json, sinon.match({ "id": "123", "name": req.body.name, "code": req.body.code, "dimensions": req.body.dimensions }));
-//     });
-// });
+        // Assert
+        sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
+        sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({ "name": req.body.name, "code": req.body.code, "dimensions": req.body.dimensions }));
+        sinon.assert.calledOnce(buildingServiceSpy);
+        //sinon.assert.calledTwice(buildingServiceSpy);
+        sinon.assert.calledWith(buildingServiceSpy, sinon.match({ "name": req.body.name, "code": req.body.code, "dimensions": req.body.dimensions }));
+    });
 
-// //             );
-// //
+    it('buildingController unit test using buildingService mock', async function () {
+        // Arrange
+        let body = { "code": 'A', "dimensions": '10x10', "name": 'Building A' };
+        let req: Partial<Request> = {};
+        req.body = body;
+
+        let res: Partial<Response> = {
+            json: sinon.spy() as SinonSpy<[any?]>
+        };
+        let next: Partial<NextFunction> = () => { };
+
+        const buildingServiceMock = sinon.mock(buildingService)
+        buildingServiceMock.expects("createBuilding")
+            .once()
+            .withArgs(sinon.match({ name: req.body.name }))
+            .returns(Result.ok<IBuildingDTO>({
+                "id": "123",
+                "code": req.body.code,
+                "dimensions": req.body.dimensions, "name": req.body.name
+            }));
+
+        const ctrl = new BuildingController(buildingService as IBuildingService);
+
+        // Act
+        await ctrl.createBuilding(<Request>req, <Response>res, <NextFunction>next);
+
+        // Assert
+        buildingServiceMock.verify();
+        sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
+        sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
+            "id": "123",
+            "code": req.body.code,
+            "dimensions": req.body.dimensions, "name": req.body.name
+        }));
+    });
+});
+

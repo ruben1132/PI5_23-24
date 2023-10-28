@@ -13,21 +13,20 @@ import IRoleDTO from '../../src/dto/IRoleDTO';
 import { SinonSpy } from 'sinon';
 import { UniqueEntityID } from '../../src/core/domain/UniqueEntityID';
 import RoleSchema from '../../src/persistence/schemas/roleSchema';
-import { RoleId } from '../../src/domain/valueObj/roleId';
 
 describe('Role X Controller', function () {
     const sandbox = sinon.createSandbox();
 
-    let roleSchemaInstance: typeof RoleSchema;
-    let roleRepoInstance: RoleRepo;
-    let roleServiceInstance: RoleService;
+    let roleSchema: typeof RoleSchema;
+    let roleRepo: RoleRepo;
+    let roleService: RoleService;
 
     beforeEach(function () {
         Container.reset();
-        roleSchemaInstance = RoleSchema;
+        roleSchema = RoleSchema;
 
-        roleRepoInstance = new RoleRepo(roleSchemaInstance);
-        roleServiceInstance = new RoleService(roleRepoInstance);
+        roleRepo = new RoleRepo(roleSchema);
+        roleService = new RoleService(roleRepo);
     });
 
     afterEach(function () {
@@ -44,9 +43,9 @@ describe('Role X Controller', function () {
         };
         let next: Partial<NextFunction> = () => { };
 
-        sinon.stub(roleServiceInstance, "createRole").returns(Promise.resolve(Result.ok<IRoleDTO>({ "id": "123", "name": req.body.name })));
+        sinon.stub(roleService, "createRole").returns(Promise.resolve(Result.ok<IRoleDTO>({ "id": "123", "name": req.body.name })));
 
-        const ctrl = new RoleController(roleServiceInstance as IRoleService);
+        const ctrl = new RoleController(roleService as IRoleService);
 
         // Act
         await ctrl.createRole(<Request>req, <Response>res, <NextFunction>next);
@@ -67,9 +66,9 @@ describe('Role X Controller', function () {
         };
         let next: Partial<NextFunction> = () => { };
 
-        sinon.stub(roleServiceInstance, "createRole").returns(Promise.resolve(Result.ok<IRoleDTO>({ "id": "123", "name": req.body.name })));
+        sinon.stub(roleService, "createRole").returns(Promise.resolve(Result.ok<IRoleDTO>({ "id": "123", "name": req.body.name })));
 
-        const ctrl = new RoleController(roleServiceInstance as IRoleService);
+        const ctrl = new RoleController(roleService as IRoleService);
 
         // Act
         await ctrl.createRole(<Request>req, <Response>res, <NextFunction>next);
@@ -94,11 +93,11 @@ describe('Role X Controller', function () {
            
         sinon.stub(Role, "create").returns(Result.ok(r.getValue()));
 
-        sinon.stub(roleRepoInstance, "save").returns(new Promise<Role>((resolve, reject) => {
+        sinon.stub(roleRepo, "save").returns(new Promise<Role>((resolve, reject) => {
             resolve(Role.create({ "name": req.body.name }, new UniqueEntityID("123")).getValue())
         }));
 
-        const ctrl = new RoleController(roleServiceInstance as IRoleService);
+        const ctrl = new RoleController(roleService as IRoleService);
 
         // Act
         await ctrl.createRole(<Request>req, <Response>res, <NextFunction>next);
@@ -120,14 +119,14 @@ describe('Role X Controller', function () {
         };
 		let next: Partial<NextFunction> = () => {};
 		
-        sinon.stub(roleRepoInstance, "save").returns(new Promise<Role>((resolve, reject) => {
+        sinon.stub(roleRepo, "save").returns(new Promise<Role>((resolve, reject) => {
             resolve(Role.create({ "name": req.body.name }, new UniqueEntityID("123")).getValue())
         }));
 
 
-		const roleServiceSpy = sinon.spy(roleServiceInstance, "createRole");
+		const roleServiceSpy = sinon.spy(roleService, "createRole");
 
-		const ctrl = new RoleController(roleServiceInstance as IRoleService);
+		const ctrl = new RoleController(roleService as IRoleService);
 
 		// Act
 		await ctrl.createRole(<Request>req, <Response>res, <NextFunction>next);
@@ -151,13 +150,13 @@ describe('Role X Controller', function () {
         };
         let next: Partial<NextFunction> = () => { };
 
-        const roleServiceMock = sinon.mock(roleServiceInstance)
+        const roleServiceMock = sinon.mock(roleService)
         roleServiceMock.expects("createRole")
             .once()
             .withArgs(sinon.match({ name: req.body.name }))
             .returns(Result.ok<IRoleDTO>({ "id": "123", "name": req.body.name }));
 
-        const ctrl = new RoleController(roleServiceInstance as IRoleService);
+        const ctrl = new RoleController(roleService as IRoleService);
 
         // Act
         await ctrl.createRole(<Request>req, <Response>res, <NextFunction>next);
