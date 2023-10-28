@@ -172,7 +172,7 @@ Para modelar/representar visualmente, tanto o que foi implementado como as ideia
 
 ## Nível 3 (GestaoInfo)
 ### Vista Lógica
-TBD
+![N3_VL](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel3/N3_VL.svg)
 
 ### Vista de Processos
 #### SSD US150
@@ -232,4 +232,4 @@ TBD
 
 ### Vista Física
 
-![N3_VL](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel3/N3_VF.svg)
+![N3_VF](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel3/N3_VF.svg)

@@ -5,16 +5,7 @@
 	- [Nível 2](#nível-2)
 		- [Vista Lógica - Vista de Implementação](#vista-lógica---vista-de-implementação-1)
 		- [Vista de Implementação - Vista Física](#vista-de-implementação---vista-física-1)
-	- [Nível 3 (MDR)](#nível-3-mdr)
-		- [Vista Lógica - Vista de Implementação](#vista-lógica---vista-de-implementação-2)
-		- [Vista de Implementação - Vista Física](#vista-de-implementação---vista-física-2)
-	- [Nível 3 (UI)](#nível-3-ui)
-		- [Vista Lógica - Vista de Implementação](#vista-lógica---vista-de-implementação-3)
-		- [Vista de Implementação - Vista Física](#vista-de-implementação---vista-física-3)
-	- [Nível 3 (MDV)](#nível-3-mdv)
-		- [Vista Lógica - Vista de Implementação](#vista-lógica---vista-de-implementação-4)
-		- [Vista de Implementação - Vista Física](#vista-de-implementação---vista-física-4)
-	- [Nível 3 (Planeamento)](#nível-3-planeamento)
+	- [Nível 3 (GestaoInfo)](#nível-3-gestaoInfo)
 		- [Vista Lógica - Vista de Implementação](#vista-lógica---vista-de-implementação-5)
 		- [Vista de Implementação - Vista Física](#vista-de-implementação---vista-física-5)
 
@@ -23,45 +14,24 @@
 
 ## Nível 1
 ### Vista Lógica - Vista de Implementação
+![N1_VL_VI](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel1/N1_VL_VI.svg)
 
-n/a
 
 ### Vista de Implementação - Vista Física
+![N1_VI_VF](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel1/N1_VI_VF.svg)
 
-n/a
 
 ## Nível 2
-### Vista Lógica - Vista de Implementação 
-
-![N2-VLxVI](diagramas/nivel2/N2-VLxVI.png)
-
-### Vista de Implementação - Vista Física
-![N2-VIxVF](diagramas/nivel2/N2-VIxVF.png)
-
-## Nível 3 (MDR)
 ### Vista Lógica - Vista de Implementação
-TBD
+![N2_VL_VI](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel1/N2_VL_VI.svg)
 
 ### Vista de Implementação - Vista Física
-TBD
+![N2_VI_VF](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel2/N2_VI_VF.svg)
 
-## Nível 3 (UI)
-### Vista Lógica - Vista de Implementação
-TBD
-
-### Vista de Implementação - Vista Física
-TBD
-
-## Nível 3 (MDV)
-### Vista Lógica - Vista de Implementação
-TBD
+## Nível 3 (GestaoInfo)
+### Vista Lógica
+![N3_VL_VI](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel3/N3_VL_VI.svg)
 
 ### Vista de Implementação - Vista Física
-TBD
+![N3_VI_VF](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel3/N3_VI_VF.svg)
 
-## Nível 3 (Planeamento)
-### Vista Lógica - Vista de Implementação
-TBD
-
-### Vista de Implementação - Vista Física
-TBD
