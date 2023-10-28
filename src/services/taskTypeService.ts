@@ -13,7 +13,6 @@ import { Building } from '../domain/building';
 export default class TaskTypeService implements ITaskTypeService {
     constructor(
         @Inject(config.repos.taskType.name) private taskTypeRepo: ITaskTypeRepo,
-        @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo
     ) { }
 
 

@@ -22,7 +22,6 @@ import { TaskTypeId } from '../domain/valueObj/taskTypeId';
 export default class RobotTypeService implements IRobotTypeService {
     constructor(
         @Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo,
-        @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
         @Inject(config.repos.taskType.name) private taskTypeRepo: ITaskTypeRepo,
     ) { }
 

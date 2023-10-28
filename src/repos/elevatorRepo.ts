@@ -76,7 +76,7 @@ export default class ElevatorRepo implements IElevatorRepo {
         }
     }
 
-    public async findByIds(elevatorIds: ElevatorId[] | string[]): Promise<Elevator[] | null> {
+    public async findByIds(elevatorIds: ElevatorId[] | string[]): Promise<Elevator[]> {
         try {
             const elevators = await this.elevatorSchema.find({ domainId: { $in: elevatorIds } });
 
@@ -84,10 +84,9 @@ export default class ElevatorRepo implements IElevatorRepo {
                 return elevators.map((elevator) => ElevatorMap.toDomain(elevator));
             }
 
-            return null;
+            return [];
         } catch (error) {
-            // Lide com o erro aqui, se necessário
-            return null;
+            return [];
         }
     }
     public async getElevators(): Promise<Elevator[]> {
@@ -104,7 +103,7 @@ export default class ElevatorRepo implements IElevatorRepo {
             return [];
         }
     }
-    
+
     public async deleteElevator(elevatorId: ElevatorId | string): Promise<boolean> {
         const query = { domainId: elevatorId };
         const elevatorRecord = await this.elevatorSchema.findOne(query as FilterQuery<IElevatorPersistence & Document>);

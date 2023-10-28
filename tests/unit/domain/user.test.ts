@@ -143,10 +143,10 @@ describe('User', () => {
         });
 
         it('should fail to create an empty role', () => {
-            const invalidEmail = Role.create({ name: '' });
+            const invalidRole = Role.create({ name: '' });
 
-            expect(invalidEmail.isFailure).to.be.true;
-            expect('Must provide a role name').to.be.equal(invalidEmail.errorValue());
+            expect(invalidRole.isFailure).to.be.true;
+            expect('Must provide a role name').to.be.equal(invalidRole.errorValue());
         });
 
 
