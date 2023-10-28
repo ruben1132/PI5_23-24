@@ -5,17 +5,12 @@ import { RobotTypeType } from '../../../src/domain/valueObj/robotTypeType';
 import { TaskType } from '../../../src/domain/taskType';
 import { UniqueEntityID } from '../../../src/core/domain/UniqueEntityID';
 import { expect } from 'chai';
+import { TaskTypeId } from '../../../src/domain/valueObj/taskTypeId';
 
 describe('RobotType', () => {
-    const taskType1 = TaskType.create({
-        name: "Task Type 1",
-        description: "Task Type 1 Description",
-    }).getValue();
+    const taskType1 = new TaskTypeId("taskType1");
 
-    const taskType2 = TaskType.create({
-        name: "Task Type 2",
-        description: "Task Type 2 Description",
-    }).getValue();
+    const taskType2 =  new TaskTypeId("taskType2");
 
     const tasksAllowed = [taskType1, taskType2];
 
