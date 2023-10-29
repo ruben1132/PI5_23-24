@@ -26,7 +26,7 @@ _ [Views](#views)
 ## Diagrama de Domínio
 ![Diagrama de Domínio](https://github.com/ruben1132/PI5_23-24/blob/main/docs/domain%20model.svg)
 
-## Diagrama de Systema
+## Diagrama de Sistema
 ![Diagrama de Systema](https://github.com/ruben1132/PI5_23-24/blob/main/docs/system_diagram.svg)
 
 # Views
