@@ -1,97 +1,243 @@
-# Bulletproof Node.js architecture 🛡️
+## Contents
+_ [System Overview](#System_Overview)
+_ [Views](#views)
+	_ [Introduction](#introduction)
+	_ [Nível 1](#nível_1)
+		_ [Vista Lógica](#vista_lógica)
+		_ [Vista de Processos](#vista_de_processos)
+			_ [SSD US1](#ssd_us1)
+			_ [SSD US2](#ssd_us2)
+			_ [(outros SSD arquiteturalmente relevantes)](#outros_ssd_arquiteturalmente_relevantes)
+	_ [Nível 2](#nível_2)
+		_ [Vista Lógica](#vista_lógica_1)
+		_ [Vista de Processos](#vista_de_processos_1)
+			_ [SSD US13 (Porquê esta US?)](#ssd_us13_porquê_esta_us)
+			_ [(outros SSD arquiteturalmente relevantes)](#outros_ssd_arquiteturalmente_relevantes_1)
+		_ [Vista de Implementação](#vista_de_implementação)
+		_ [Vista Física](#vista_física)
+	_ [Nível 3 (GestaoInfo)](#nível_3_planeamento)
+		_ [Vista Lógica](#vista_lógica_5)
+		_ [Vista de Processos](#vista_de_processos_5)
+		_ [Vista de Implementação](#vista_de_implementação_4)
+		_ [Vista Física](#vista_física_4)
 
-This is the example repository from the blog post ['Bulletproof node.js project architecture'](https://softwareontheroad.com/ideal-nodejs-project-structure?utm_source=github&utm_medium=readme)
+## System Overview
+![Diagrama de Systema](./docs/system_diagram.svg)
 
-Please read the blog post in order to have a good understanding of the server architecture.
-
-Also, I added lots of comments to the code that are not in the blog post, because they explain the implementation and the reason behind the choices of libraries and some personal opinions and some bad jokes.
-
-The API by itself doesn't do anything fancy, it's just a user CRUD with authentication capabilities.
-Maybe we can transform this into something useful, a more advanced example, just open an issue and let's discuss the future of the repo.
-
-## Development
-
-We use `node` version `18.18.0`
-
-```
-nvm install 18.18.0
-```
-
-```
-nvm use 18.18.0
-```
-
-The first time, you will need to run
-
-```
-npm install
-```
-
-Then just start the server with 
-
-```
-npm run start
-```
-It uses nodemon for livereloading :peace-fingers:
-
-# API Validation
- 
- By using celebrate the req.body schema becomes clary defined at route level, so even frontend devs can read what an API endpoint expects without need to writting a documentation that can get outdated quickly.
-
- ```js
- route.post('/signup', 
-  celebrate({
-    body: Joi.object({
-      name: Joi.string().required(),
-      email: Joi.string().required(),
-      password: Joi.string().required(),
-    }),
-  }),
-  controller.signup)
- ```
-
- **Example error**
-
- ```json
- {
-  "errors": {
-    "message": "child \"email\" fails because [\"email\" is required]"
-  }
- } 
- ```
-
-[Read more about celebrate here](https://github.com/arb/celebrate) and [the Joi validation API](https://github.com/hapijs/joi/blob/v15.0.1/API.md)
-
-# Roadmap
-- [x] API Validation layer (Celebrate+Joi)
-- [ ] Unit tests examples
-- [ ] [Cluster mode](https://softwareontheroad.com/nodejs-scalability-issues?utm_source=github&utm_medium=readme)
-- [x] The logging _'layer'_ 
-- [ ] Add ageda dashboard
-- [x] Continuous integration with CircleCI 😍
-- [ ] Deploys script and docs for AWS Elastic Beanstalk and Heroku
-- [ ] Integration test with newman 😉
-- [ ] Instructions on typescript debugging with VSCode
+## Diagrama de Domínio
+![Diagrama de Domínio](./docs/domain%20model.svg)
 
 
-# FAQ 
+# Views
 
- ## Where should I put the FrontEnd code? Is this a good backend for Angular or React or Vue or _whatever_ ?
+## Introduction
+Será adotada a combinação de dois modelos de representação arquitetural: C4 e 4+1.
 
-  [It's not a good idea to have node.js serving static assets a.k.a the frontend](https://softwareontheroad.com/nodejs-scalability-issues?utm_source=github&utm_medium=readme)
+O Modelo de Vistas 4+1 [[Krutchen_1995]](References.md#Kruchten_1995) propõe a descrição do sistema através de vistas complementares permitindo assim analisar separadamente os requisitos dos vários stakeholders do software, tais como utilizadores, administradores de sistemas, project managers, arquitetos e programadores. As vistas são deste modo definidas da seguinte forma:
 
-  Also, I don't wanna take part in frontend frameworks wars 😅
+_ Vista lógica: relativa aos aspetos do software visando responder aos desafios do negócio;
+_ Vista de processos: relativa ao fluxo de processos ou interações no sistema;
+_ Vista de desenvolvimento: relativa à organização do software no seu ambiente de desenvolvimento;
+_ Vista física: relativa ao mapeamento dos vários componentes do software em hardware, i.e. onde é executado o software;
+_ Vista de cenários: relativa à associação de processos de negócio com atores capazes de os espoletar.
 
-  Just use the frontend framework you like the most _or hate the less_ it will work 😁
+O Modelo C4 [[Brown_2020]](References.md#Brown_2020)[[C4_2020]](References.md#C4_2020) defende a descrição do software através de quatro níveis de abstração: sistema, contentor, componente e código. Cada nível adota uma granularidade mais fina que o nível que o antecede, dando assim acesso a mais detalhe de uma parte mais pequena do sistema. Estes níveis podem ser equiparáveis a mapas, e.g. a vista de sistema corresponde ao globo, a vista de contentor corresponde ao mapa de cada continente, a vista de componentes ao mapa de cada país e a vista de código ao mapa de estradas e bairros de cada cidade.
+Diferentes níveis permitem contar histórias diferentes a audiências distintas.
 
- ## Don't you think you can add X layer to do Y? Why do you still use express if the Serverless Framework is better and it's more reliable?
+Os níveis encontram_se definidos da seguinte forma:
+_ Nível 1: Descrição (enquadramento) do sistema como um todo;
+_ Nível 2: Descrição de contentores do sistema;
+_ Nível 3: Descrição de componentes dos contentores;
+_ Nível 4: Descrição do código ou partes mais pequenas dos componentes (e como tal, não será abordado neste DAS/SAD).
 
-  I know this is not a perfect architecture but it's the most scalable that I know with less code and headache that I know.
+Pode_se dizer que estes dois modelos se expandem ao longo de eixos distintos, sendo que o Modelo C4 apresenta o sistema com diferentes níveis de detalhe e o Modelo de Vista 4+1 apresenta o sistema de diferentes perspetivas. Ao combinar os dois modelos torna_se possível representar o sistema de diversas perspetivas, cada uma com vários níveis de detalhe.
 
-  It's meant for small startups or one-developer army projects.
+Para modelar/representar visualmente, tanto o que foi implementado como as ideias e alternativas consideradas, recorre_se à Unified Modeling Language (UML) [[UML_2020]](References.md#UML_2020) [[UMLDiagrams_2020]](References.md#UMLDiagrams_2020).
 
-  I know if you start moving layers into another technology, you will end up with your business/domain logic into npm packages, your routing layer will be pure AWS Lambda functions and your data layer a combination of DynamoDB, Redis, maybe redshift, and Agolia.
+## Nível 1
+### Vista Lógica
 
-  Take a deep breath and go slowly, let the business grow and then scale up your product. You will need a team and talented developers anyway.
+![N1_VL](./docs/nivel1/N1_VL.svg)
 
-  
+### Vista de Processos
+#### SSD US150
+![N1_VP_US150](./docs/nivel1/N1_US150.svg)
+
+#### SSD US160
+![N1_VP_US160](./docs/nivel1/N1_US160.svg)
+
+#### SSD US170
+![N1_VP_US170](./docs/nivel1/N1_US170.svg)
+
+#### SSD US180
+![N1_VP_US180](./docs/nivel1/N1_US180.svg)
+
+#### SSD US190
+![N1_VP_US190](./docs/nivel1/N1_US190.svg)
+
+#### SSD US200
+![N1_VP_US200](./docs/nivel1/N1_US200.svg)
+
+#### SSD US210
+![N1_VP_US210](./docs/nivel1/N1_US210.svg)
+
+#### SSD US220
+![N1_VP_US220](./docs/nivel1/N1_US220.svg)
+
+#### SSD US230
+![N1_VP_US230](./docs/nivel1/N1_US230.svg)
+
+#### SSD US240
+![N1_VP_US240](./docs/nivel1/N1_US240.svg)
+
+#### SSD US250
+![N1_VP_US250](./docs/nivel1/N1_US250.svg)
+
+#### SSD US260
+![N1_VP_US260](./docs/nivel1/N1_US260.svg)
+
+#### SSD US270
+![N1_VP_US270](./docs/nivel1/N1_US270.svg)
+
+#### SSD US310
+![N1_VP_US310](./docs/nivel1/N1_US310.svg)
+
+#### SSD US350
+![N1_VP_US350](./docs/nivel1/N1_US350.svg)
+
+#### SSD US360
+![N1_VP_US360](./docs/nivel1/N1_US360.svg)
+
+#### SSD US370
+![N1_VP_US370](./docs/nivel1/N1_US370.svg)
+
+
+## Nível 2
+### Vista Lógica
+
+![N2_VL](./docs/nivel2/N2_VL.svg)
+
+### Vista de Processos
+
+#### SSD US150
+![N2_VP_US150](./docs/nivel2/N2_US150.svg)
+
+#### SSD US160
+![N2_VP_US160](./docs/nivel2/N2_US160.svg)
+
+#### SSD US170
+![N2_VP_US170](./docs/nivel2/N2_US170.svg)
+
+#### SSD US180
+![N2_VP_US180](./docs/nivel2/N2_US180.svg)
+
+#### SSD US190
+![N2_VP_US190](./docs/nivel2/N2_US190.svg)
+
+#### SSD US200
+![N2_VP_US200](./docs/nivel2/N2_US200.svg)
+
+#### SSD US210
+![N2_VP_US210](./docs/nivel2/N2_US210.svg)
+
+#### SSD US220
+![N2_VP_US220](./docs/nivel2/N2_US220.svg)
+
+#### SSD US230
+![N2_VP_US230](./docs/nivel2/N2_US230.svg)
+
+#### SSD US240
+![N2_VP_US240](./docs/nivel2/N2_US240.svg)
+
+#### SSD US250
+![N2_VP_US250](./docs/nivel2/N2_US250.svg)
+
+#### SSD US260
+![N2_VP_US260](./docs/nivel2/N2_US260.svg)
+
+#### SSD US270
+![N2_VP_US270](./docs/nivel2/N2_US270.svg)
+
+#### SSD US310
+![N2_VP_US310](./docs/nivel2/N2_US310.svg)
+
+#### SSD US350
+![N2_VP_US350](./docs/nivel2/N2_US350.svg)
+
+#### SSD US360
+![N2_VP_US360](./docs/nivel2/N2_US360.svg)
+
+#### SSD US370
+![N2_VP_US370](./docs/nivel2/N2_US370.svg)
+
+
+### Vista de Implementação
+![N2_VL](./docs/nivel2/N2_VI.svg)
+
+### Vista Física
+
+![N2_VL](./docs/nivel2/N2_VF.svg)
+
+## Nível 3 (GestaoInfo)
+### Vista Lógica
+![N3_VL](./docs/nivel3/N3_VL.svg)
+
+### Vista de Processos
+#### SSD US150
+![N3_VP_US150](./docs/nivel3/N3_US150.svg)
+
+#### SSD US160
+![N3_VP_US160](./docs/nivel3/N3_US160.svg)
+
+#### SSD US170
+![N3_VP_US170](./docs/nivel3/N3_US170.svg)
+
+#### SSD US180
+![N3_VP_US180](./docs/nivel3/N3_US180.svg)
+
+#### SSD US190
+![N3_VP_US190](./docs/nivel3/N3_US190.svg)
+
+#### SSD US200
+![N3_VP_US200](./docs/nivel3/N3_US200.svg)
+
+#### SSD US210
+![N3_VP_US210](./docs/nivel3/N3_US210.svg)
+
+#### SSD US220
+![N3_VP_US220](./docs/nivel3/N3_US220.svg)
+
+#### SSD US230
+![N3_VP_US230](./docs/nivel3/N3_US230.svg)
+
+#### SSD US240
+![N3_VP_US240](./docs/nivel3/N3_US240.svg)
+
+#### SSD US250
+![N3_VP_US250](./docs/nivel3/N3_US250.svg)
+
+#### SSD US260
+![N3_VP_US260](./docs/nivel3/N3_US260.svg)
+
+#### SSD US270
+![N3_VP_US270](./docs/nivel3/N3_US270.svg)
+
+#### SSD US310
+![N3_VP_US310](./docs/nivel3/N3_US310.svg)
+
+#### SSD US350
+![N3_VP_US350](./docs/nivel3/N3_US350.svg)
+
+#### SSD US360
+![N3_VP_US360](./docs/nivel3/N3_US360.svg)
+
+#### SSD US370
+![N3_VP_US370](./docs/nivel3/N3_US370.svg)
+
+
+### Vista de Implementação
+![N3_VL](./docs/nivel3/N3_VI.svg)
+
+### Vista Física
+
+![N3_VF](./docs/nivel3/N3_VF.svg)

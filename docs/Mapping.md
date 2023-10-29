@@ -14,24 +14,24 @@
 
 ## Nível 1
 ### Vista Lógica - Vista de Implementação
-![N1_VL_VI](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel1/N1_VL_VI.svg)
+![N1_VL_VI](./nivel1/N1_VL_VI.svg)
 
 
 ### Vista de Implementação - Vista Física
-![N1_VI_VF](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel1/N1_VI_VF.svg)
+![N1_VI_VF](./nivel1/N1_VI_VF.svg)
 
 
 ## Nível 2
 ### Vista Lógica - Vista de Implementação
-![N2_VL_VI](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel2/N2_VL_VI.svg)
+![N2_VL_VI](./nivel2/N2_VL_VI.svg)
 
 ### Vista de Implementação - Vista Física
-![N2_VI_VF](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel2/N2_VI_VF.svg)
+![N2_VI_VF](./nivel2/N2_VI_VF.svg)
 
 ## Nível 3 (GestaoInfo)
 ### Vista Lógica
-![N3_VL_VI](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel3/N3_VL_VI.svg)
+![N3_VL_VI](./nivel3/N3_VL_VI.svg)
 
 ### Vista de Implementação - Vista Física
-![N3_VI_VF](https://github.com/ruben1132/PI5_23-24/blob/main/docs/Nivel3/N3_VI_VF.svg)
+![N3_VI_VF](./nivel3/N3_VI_VF.svg)
 
