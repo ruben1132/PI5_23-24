@@ -1,6 +1,7 @@
 	## Contents
 _ [Views](#views)
 	_ [Introduction](#introduction)
+    _ [System Overview](#System_Overview)
 	_ [Nível 1](#nível_1)
 		_ [Vista Lógica](#vista_lógica)
 		_ [Vista de Processos](#vista_de_processos)
@@ -45,6 +46,14 @@ _ Nível 4: Descrição do código ou partes mais pequenas dos componentes (e co
 Pode_se dizer que estes dois modelos se expandem ao longo de eixos distintos, sendo que o Modelo C4 apresenta o sistema com diferentes níveis de detalhe e o Modelo de Vista 4+1 apresenta o sistema de diferentes perspetivas. Ao combinar os dois modelos torna_se possível representar o sistema de diversas perspetivas, cada uma com vários níveis de detalhe.
 
 Para modelar/representar visualmente, tanto o que foi implementado como as ideias e alternativas consideradas, recorre_se à Unified Modeling Language (UML) [[UML_2020]](References.md#UML_2020) [[UMLDiagrams_2020]](References.md#UMLDiagrams_2020).
+
+## System Overview
+
+### Diagrama de Domínio
+![Diagrama de Domínio](https://github.com/ruben1132/PI5_23-24/blob/main/docs/domain%20model.svg)
+
+### Diagrama de Systema
+![Diagrama de Systema](https://github.com/ruben1132/PI5_23-24/blob/main/docs/system_diagram.svg)
 
 ## Nível 1
 ### Vista Lógica

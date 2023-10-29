@@ -9,37 +9,37 @@ import RoleRepo from '../../../src/repos/roleRepo';
 import RoleSchema from '../../../src/persistence/schemas/roleSchema';
 import { SinonSpy } from 'sinon';
 
-describe('Role Controller', function () {
-
+describe('Role Controller', function() {
     let roleRepo: RoleRepo;
     let service: RoleService;
 
-    beforeEach(function () {
+    beforeEach(function() {
         roleRepo = new RoleRepo(RoleSchema);
         service = new RoleService(roleRepo);
     });
 
-    afterEach(function () {
+    afterEach(function() {
         sinon.restore();
     });
-    it('roleController unit test using roleService stub', async function () {
 
+    it('roleController unit test using roleService stub (createRole())', async function() {
         // Arrange
-        let body = {
-            "name": "Example9"
+        const body = {
+            name: 'Example9',
         };
-        let req: Partial<Request> = {};
+        const req: Partial<Request> = {};
         req.body = body;
-        let res: Partial<Response> = {
-            json: sinon.spy() as SinonSpy<[any?]>
+        const res: Partial<Response> = {
+            json: sinon.spy() as SinonSpy<[any?]>,
         };
-        let next: Partial<NextFunction> = () => { };
+        const next: Partial<NextFunction> = () => {};
 
-        sinon.stub(service, "createRole").resolves(Result.ok<IRoleDTO>({
-            "id": "123",
-            "name": req.body.name
-        }
-        ));
+        sinon.stub(service, 'createRole').resolves(
+            Result.ok<IRoleDTO>({
+                id: '123',
+                name: req.body.name,
+            }),
+        );
 
         const ctrl = new RoleController(service);
 
@@ -49,11 +49,13 @@ describe('Role Controller', function () {
         try {
             // Assert
             sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
-            sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
-                "id": "123",
-                "name": req.body.name
-            }));
-
+            sinon.assert.calledWith(
+                res.json as SinonSpy<[any?]>,
+                sinon.match({
+                    id: '123',
+                    name: req.body.name,
+                }),
+            );
         } catch (error) {
             console.log(error);
 
@@ -61,9 +63,49 @@ describe('Role Controller', function () {
         }
 
         sinon.restore();
-
-
-
     });
-});
 
+    // it('roleController unit test using roleService stub (updateRole())', async function() {
+    //     // Arrange
+    //     const body = {
+    //         id: '123',
+    //         name: 'Example9',
+    //     };
+    //     const req: Partial<Request> = {};
+    //     req.body = body;
+    //     const res: Partial<Response> = {
+    //         json: sinon.spy() as SinonSpy<[any?]>,
+    //     };
+    //     const next: Partial<NextFunction> = () => {};
+
+    //     sinon.stub(service, 'updateRole').resolves(
+    //         Result.ok<IRoleDTO>({
+    //             id: '123',
+    //             name: req.body.name,
+    //         }),
+    //     );
+
+    //     const ctrl = new RoleController(service);
+
+    //     // Act
+    //     await ctrl.updateRole(<Request>req, <Response>res, <NextFunction>next);
+
+    //     try {
+    //         // Assert
+    //         sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
+    //         sinon.assert.calledWith(
+    //             res.json as SinonSpy<[any?]>,
+    //             sinon.match({
+    //                 id: '123',
+    //                 name: req.body.name,
+    //             }),
+    //         );
+    //     } catch (error) {
+    //         console.log(error);
+
+    //         throw error;
+    //     }
+
+    //     sinon.restore();
+    // });
+});

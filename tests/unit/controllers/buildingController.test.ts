@@ -10,11 +10,10 @@ import FloorRepo from '../../../src/repos/floorRepo';
 import BuildingSchema from '../../../src/persistence/schemas/buildingSchema';
 import { SinonSpy } from 'sinon';
 
-describe('Building Controller', function () {
-
+describe('Building Controller', function() {
     let buildingRepo: BuildingRepo;
     let floorRepo: FloorRepo;
-    let service : BuildingService;
+    let service: BuildingService;
 
     beforeEach(function() {
         buildingRepo = new BuildingRepo(BuildingSchema);
@@ -24,23 +23,24 @@ describe('Building Controller', function () {
     afterEach(function() {
         sinon.restore();
     });
-    it('buildingController unit test using buildingService stub', async function () {
-
+    it('buildingController unit test using buildingService stub', async function() {
         // Arrange
-        let body = { "code": 'A', "dimensions": '10x10', "name": 'Building A' };
-        let req: Partial<Request> = {};
+        const body = { code: 'A', dimensions: '10x10', name: 'Building A' };
+        const req: Partial<Request> = {};
         req.body = body;
-        let res: Partial<Response> = {
-            json: sinon.spy() as SinonSpy<[any?]>
+        const res: Partial<Response> = {
+            json: sinon.spy() as SinonSpy<[any?]>,
         };
-        let next: Partial<NextFunction> = () => { };
+        const next: Partial<NextFunction> = () => {};
 
-        sinon.stub(service, "createBuilding").resolves(Result.ok<IBuildingDTO>({
-            "id": "123",
-            "code": req.body.code,
-            "dimensions": req.body.description, "name": req.body.name
-        }
-        ));
+        sinon.stub(service, 'createBuilding').resolves(
+            Result.ok<IBuildingDTO>({
+                id: '123',
+                code: req.body.code,
+                dimensions: req.body.description,
+                name: req.body.name,
+            }),
+        );
 
         const ctrl = new BuildingController(service);
 
@@ -50,23 +50,23 @@ describe('Building Controller', function () {
         try {
             // Assert
             sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
-            sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
-                "id": "123",
-                "code": req.body.code,
-                "description": req.body.description,
-                "name": req.body.name
-            }));
-
+            sinon.assert.calledWith(
+                res.json as SinonSpy<[any?]>,
+                sinon.match({
+                    id: '123',
+                    code: req.body.code,
+                    description: req.body.description,
+                    name: req.body.name,
+                }),
+            );
         } catch (error) {
             console.log(error);
-            
+
             throw error;
         }
 
         sinon.restore();
-
-        
-
     });
-});
 
+
+});
