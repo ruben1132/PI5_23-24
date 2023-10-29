@@ -33,14 +33,12 @@ describe('Building Controller', function() {
         };
         const next: Partial<NextFunction> = () => {};
 
-        sinon.stub(service, 'createBuilding').resolves(
-            Result.ok<IBuildingDTO>({
-                id: '123',
-                code: req.body.code,
-                dimensions: req.body.description,
-                name: req.body.name,
-            }),
-        );
+        sinon.stub(service, "createBuilding").resolves(Result.ok<IBuildingDTO>({
+            "id": "123",
+            "code": req.body.code,
+            "dimensions": req.body.dimensions, "name": req.body.name
+        }
+        ));
 
         const ctrl = new BuildingController(service);
 
@@ -50,15 +48,13 @@ describe('Building Controller', function() {
         try {
             // Assert
             sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
-            sinon.assert.calledWith(
-                res.json as SinonSpy<[any?]>,
-                sinon.match({
-                    id: '123',
-                    code: req.body.code,
-                    description: req.body.description,
-                    name: req.body.name,
-                }),
-            );
+            sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
+                "id": "123",
+                "code": req.body.code,
+                "dimensions": req.body.dimensions,
+                "name": req.body.name
+            }));
+
         } catch (error) {
             console.log(error);
 
