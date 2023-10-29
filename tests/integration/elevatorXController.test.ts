@@ -109,7 +109,7 @@ describe('Elevator X Controller', function () {
     });
 
     it('elevatorController + elevatorService integration test using elevatorRepoistory and Elevator stubs', async function () {
-        // Arrange	
+        // Arrange
         let body = {
             "designation": "Elevator Z elevator",
             "floorsAllowed": [

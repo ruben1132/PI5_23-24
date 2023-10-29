@@ -101,7 +101,7 @@ describe('Passage X Controller', function () {
     });
 
     it('passageController + passageService integration test using passageRepoistory and Passage stubs', async function () {
-        // Arrange	
+        // Arrange
         let body = { "designation": "test", "fromFloor": "93984d2c-508d-4bf1-9114-41be04b7eab6", "toFloor": "69e977aa-c930-4fa7-9aeb-3ca7aefb5aab" };
         let req: Partial<Request> = {};
         req.body = body;
