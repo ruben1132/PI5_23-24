@@ -1,6 +1,6 @@
-# AIT
+# RobDroneGo
 
-Esta wiki é o Software Architecture Document (SAD)/Documento de Arquitetura de Software (DAS) da aplicação solicitada pela Autoridade Intermunicipal de Transportes (AIT), e desenvolvida no contexto do 5º semestre da LEI em 2020-2021 com o apoio da empresa [OPT – Optimização e Planeamento de Transportes, S.A.](http://opt.pt/)
+Esta wiki é o Software Architecture Document (SAD)/Documento de Arquitetura de Software (DAS) da aplicação desenvolvida no contexto do 5º semestre da LEI em 2023-2024.
 
 Este DAS é constituído por:
 
@@ -11,4 +11,3 @@ Este DAS é constituído por:
 - [Referenced Materials](References.md)
 - [Glossary and Acronyms](Gloassary&Acronyms.md)
 
-NB: Este DAS é baseado em [Software+Architecture+Documentation+Template](https://wiki.sei.cmu.edu/confluence/display/SAD/Software+Architecture+Documentation+Template)
