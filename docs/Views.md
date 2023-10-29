@@ -21,13 +21,12 @@ _ [Views](#views)
 		_ [Vista de Implementação](#vista_de_implementação_4)
 		_ [Vista Física](#vista_física_4)
 
-# System Overview
+## System Overview
+![Diagrama de Systema](https://github.com/ruben1132/PI5_23-24/blob/main/docs/system_diagram.svg)
 
 ## Diagrama de Domínio
 ![Diagrama de Domínio](https://github.com/ruben1132/PI5_23-24/blob/main/docs/domain%20model.svg)
 
-## Diagrama de Sistema
-![Diagrama de Systema](https://github.com/ruben1132/PI5_23-24/blob/main/docs/system_diagram.svg)
 
 # Views
 
