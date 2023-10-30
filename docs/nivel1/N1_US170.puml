@@ -1,9 +1,0 @@
-@startuml
-
-actor Actor as Actor
-participant "robDroneGo:robDroneGo" as Container <<Container (C4)>>
-
-Actor -> Container: listar todos os edifícios
-Container --> Actor: devolve todos os edifícios
-
-@enduml

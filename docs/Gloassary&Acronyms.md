@@ -1,2 +1,0 @@
-# Glossary and Acronyms
-TBD

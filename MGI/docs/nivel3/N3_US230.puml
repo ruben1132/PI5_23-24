@@ -1,0 +1,61 @@
+@startuml
+participant SPA
+participant "GestaoInfoAPI" as API
+participant "FloorMapController" as Ctrl
+participant "FloorMapService" as Srv
+participant "FloorMapRepo" as Repo
+participant "FloorRepo" as RepoF
+participant "RoomRepo" as RepoR
+participant "ElevatorRepo" as RepoE
+participant "PassageRepo" as RepoP
+participant "FloorMapMapper" as Map
+participant "FloorMapDTO" as DTO
+participant "FloorMap" as Domain
+
+activate SPA
+SPA -> API: patch(/api/floorMap)
+activate API
+
+API -> Ctrl: patch
+activate Ctrl
+
+Ctrl -> Srv: createFloorMap(floorMapDTO)
+activate Srv
+
+Srv -> RepoF: findById(floorMapDTO.floorId)
+activate RepoF
+deactivate RepoF
+
+Srv -> RepoR: findByIds(floorMapDTO.roomIds)
+activate RepoR
+deactivate RepoR
+
+Srv -> RepoE: findById(floorMapDTO.elevatorId)
+activate RepoE
+deactivate RepoE
+
+Srv -> RepoP: findByIds(floorMapDTO.passageIds)
+activate RepoP
+deactivate RepoP
+
+Srv -> Domain: create
+
+Srv -> Repo: save(floorMap)
+activate Repo
+Repo --> Srv: floorMap
+deactivate Repo
+
+Srv -> Map: toDTO(floorMap)
+activate Map
+Map --> Srv: floorMapDTO
+deactivate Map
+
+Srv --> Ctrl: floorMapDTO
+
+Ctrl --> API: status code 201
+deactivate Ctrl
+
+API --> SPA: success
+deactivate API
+deactivate SPA
+@enduml

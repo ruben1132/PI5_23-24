@@ -22,10 +22,10 @@ _ [Views](#views)
 		_ [Vista Física](#vista_física_4)
 
 ## System Overview
-![Diagrama de Systema](./docs/system_diagram.svg)
+![Diagrama de Systema](./MGI/docs/system_diagram.svg)
 
 ## Diagrama de Domínio
-![Diagrama de Domínio](./docs/domain%20model.svg)
+![Diagrama de Domínio](./MGI/docs/domain%20model.svg)
 
 
 # Views
@@ -57,187 +57,187 @@ Para modelar/representar visualmente, tanto o que foi implementado como as ideia
 ## Nível 1
 ### Vista Lógica
 
-![N1_VL](./docs/nivel1/N1_VL.svg)
+![N1_VL](./MGI/docs/nivel1/N1_VL.svg)
 
 ### Vista de Processos
 #### SSD US150
-![N1_VP_US150](./docs/nivel1/N1_US150.svg)
+![N1_VP_US150](./MGI/docs/nivel1/N1_US150.svg)
 
 #### SSD US160
-![N1_VP_US160](./docs/nivel1/N1_US160.svg)
+![N1_VP_US160](./MGI/docs/nivel1/N1_US160.svg)
 
 #### SSD US170
-![N1_VP_US170](./docs/nivel1/N1_US170.svg)
+![N1_VP_US170](./MGI/docs/nivel1/N1_US170.svg)
 
 #### SSD US180
-![N1_VP_US180](./docs/nivel1/N1_US180.svg)
+![N1_VP_US180](./MGI/docs/nivel1/N1_US180.svg)
 
 #### SSD US190
-![N1_VP_US190](./docs/nivel1/N1_US190.svg)
+![N1_VP_US190](./MGI/docs/nivel1/N1_US190.svg)
 
 #### SSD US200
-![N1_VP_US200](./docs/nivel1/N1_US200.svg)
+![N1_VP_US200](./MGI/docs/nivel1/N1_US200.svg)
 
 #### SSD US210
-![N1_VP_US210](./docs/nivel1/N1_US210.svg)
+![N1_VP_US210](./MGI/docs/nivel1/N1_US210.svg)
 
 #### SSD US220
-![N1_VP_US220](./docs/nivel1/N1_US220.svg)
+![N1_VP_US220](./MGI/docs/nivel1/N1_US220.svg)
 
 #### SSD US230
-![N1_VP_US230](./docs/nivel1/N1_US230.svg)
+![N1_VP_US230](./MGI/docs/nivel1/N1_US230.svg)
 
 #### SSD US240
-![N1_VP_US240](./docs/nivel1/N1_US240.svg)
+![N1_VP_US240](./MGI/docs/nivel1/N1_US240.svg)
 
 #### SSD US250
-![N1_VP_US250](./docs/nivel1/N1_US250.svg)
+![N1_VP_US250](./MGI/docs/nivel1/N1_US250.svg)
 
 #### SSD US260
-![N1_VP_US260](./docs/nivel1/N1_US260.svg)
+![N1_VP_US260](./MGI/docs/nivel1/N1_US260.svg)
 
 #### SSD US270
-![N1_VP_US270](./docs/nivel1/N1_US270.svg)
+![N1_VP_US270](./MGI/docs/nivel1/N1_US270.svg)
 
 #### SSD US310
-![N1_VP_US310](./docs/nivel1/N1_US310.svg)
+![N1_VP_US310](./MGI/docs/nivel1/N1_US310.svg)
 
 #### SSD US350
-![N1_VP_US350](./docs/nivel1/N1_US350.svg)
+![N1_VP_US350](./MGI/docs/nivel1/N1_US350.svg)
 
 #### SSD US360
-![N1_VP_US360](./docs/nivel1/N1_US360.svg)
+![N1_VP_US360](./MGI/docs/nivel1/N1_US360.svg)
 
 #### SSD US370
-![N1_VP_US370](./docs/nivel1/N1_US370.svg)
+![N1_VP_US370](./MGI/docs/nivel1/N1_US370.svg)
 
 
 ## Nível 2
 ### Vista Lógica
 
-![N2_VL](./docs/nivel2/N2_VL.svg)
+![N2_VL](./MGI/docs/nivel2/N2_VL.svg)
 
 ### Vista de Processos
 
 #### SSD US150
-![N2_VP_US150](./docs/nivel2/N2_US150.svg)
+![N2_VP_US150](./MGI/docs/nivel2/N2_US150.svg)
 
 #### SSD US160
-![N2_VP_US160](./docs/nivel2/N2_US160.svg)
+![N2_VP_US160](./MGI/docs/nivel2/N2_US160.svg)
 
 #### SSD US170
-![N2_VP_US170](./docs/nivel2/N2_US170.svg)
+![N2_VP_US170](./MGI/docs/nivel2/N2_US170.svg)
 
 #### SSD US180
-![N2_VP_US180](./docs/nivel2/N2_US180.svg)
+![N2_VP_US180](./MGI/docs/nivel2/N2_US180.svg)
 
 #### SSD US190
-![N2_VP_US190](./docs/nivel2/N2_US190.svg)
+![N2_VP_US190](./MGI/docs/nivel2/N2_US190.svg)
 
 #### SSD US200
-![N2_VP_US200](./docs/nivel2/N2_US200.svg)
+![N2_VP_US200](./MGI/docs/nivel2/N2_US200.svg)
 
 #### SSD US210
-![N2_VP_US210](./docs/nivel2/N2_US210.svg)
+![N2_VP_US210](./MGI/docs/nivel2/N2_US210.svg)
 
 #### SSD US220
-![N2_VP_US220](./docs/nivel2/N2_US220.svg)
+![N2_VP_US220](./MGI/docs/nivel2/N2_US220.svg)
 
 #### SSD US230
-![N2_VP_US230](./docs/nivel2/N2_US230.svg)
+![N2_VP_US230](./MGI/docs/nivel2/N2_US230.svg)
 
 #### SSD US240
-![N2_VP_US240](./docs/nivel2/N2_US240.svg)
+![N2_VP_US240](./MGI/docs/nivel2/N2_US240.svg)
 
 #### SSD US250
-![N2_VP_US250](./docs/nivel2/N2_US250.svg)
+![N2_VP_US250](./MGI/docs/nivel2/N2_US250.svg)
 
 #### SSD US260
-![N2_VP_US260](./docs/nivel2/N2_US260.svg)
+![N2_VP_US260](./MGI/docs/nivel2/N2_US260.svg)
 
 #### SSD US270
-![N2_VP_US270](./docs/nivel2/N2_US270.svg)
+![N2_VP_US270](./MGI/docs/nivel2/N2_US270.svg)
 
 #### SSD US310
-![N2_VP_US310](./docs/nivel2/N2_US310.svg)
+![N2_VP_US310](./MGI/docs/nivel2/N2_US310.svg)
 
 #### SSD US350
-![N2_VP_US350](./docs/nivel2/N2_US350.svg)
+![N2_VP_US350](./MGI/docs/nivel2/N2_US350.svg)
 
 #### SSD US360
-![N2_VP_US360](./docs/nivel2/N2_US360.svg)
+![N2_VP_US360](./MGI/docs/nivel2/N2_US360.svg)
 
 #### SSD US370
-![N2_VP_US370](./docs/nivel2/N2_US370.svg)
+![N2_VP_US370](./MGI/docs/nivel2/N2_US370.svg)
 
 
 ### Vista de Implementação
-![N2_VL](./docs/nivel2/N2_VI.svg)
+![N2_VL](./MGI/docs/nivel2/N2_VI.svg)
 
 ### Vista Física
 
-![N2_VL](./docs/nivel2/N2_VF.svg)
+![N2_VL](./MGI/docs/nivel2/N2_VF.svg)
 
 ## Nível 3 (GestaoInfo)
 ### Vista Lógica
-![N3_VL](./docs/nivel3/N3_VL.svg)
+![N3_VL](./MGI/docs/nivel3/N3_VL.svg)
 
 ### Vista de Processos
 #### SSD US150
-![N3_VP_US150](./docs/nivel3/N3_US150.svg)
+![N3_VP_US150](./MGI/docs/nivel3/N3_US150.svg)
 
 #### SSD US160
-![N3_VP_US160](./docs/nivel3/N3_US160.svg)
+![N3_VP_US160](./MGI/docs/nivel3/N3_US160.svg)
 
 #### SSD US170
-![N3_VP_US170](./docs/nivel3/N3_US170.svg)
+![N3_VP_US170](./MGI/docs/nivel3/N3_US170.svg)
 
 #### SSD US180
-![N3_VP_US180](./docs/nivel3/N3_US180.svg)
+![N3_VP_US180](./MGI/docs/nivel3/N3_US180.svg)
 
 #### SSD US190
-![N3_VP_US190](./docs/nivel3/N3_US190.svg)
+![N3_VP_US190](./MGI/docs/nivel3/N3_US190.svg)
 
 #### SSD US200
-![N3_VP_US200](./docs/nivel3/N3_US200.svg)
+![N3_VP_US200](./MGI/docs/nivel3/N3_US200.svg)
 
 #### SSD US210
-![N3_VP_US210](./docs/nivel3/N3_US210.svg)
+![N3_VP_US210](./MGI/docs/nivel3/N3_US210.svg)
 
 #### SSD US220
-![N3_VP_US220](./docs/nivel3/N3_US220.svg)
+![N3_VP_US220](./MGI/docs/nivel3/N3_US220.svg)
 
 #### SSD US230
-![N3_VP_US230](./docs/nivel3/N3_US230.svg)
+![N3_VP_US230](./MGI/docs/nivel3/N3_US230.svg)
 
 #### SSD US240
-![N3_VP_US240](./docs/nivel3/N3_US240.svg)
+![N3_VP_US240](./MGI/docs/nivel3/N3_US240.svg)
 
 #### SSD US250
-![N3_VP_US250](./docs/nivel3/N3_US250.svg)
+![N3_VP_US250](./MGI/docs/nivel3/N3_US250.svg)
 
 #### SSD US260
-![N3_VP_US260](./docs/nivel3/N3_US260.svg)
+![N3_VP_US260](./MGI/docs/nivel3/N3_US260.svg)
 
 #### SSD US270
-![N3_VP_US270](./docs/nivel3/N3_US270.svg)
+![N3_VP_US270](./MGI/docs/nivel3/N3_US270.svg)
 
 #### SSD US310
-![N3_VP_US310](./docs/nivel3/N3_US310.svg)
+![N3_VP_US310](./MGI/docs/nivel3/N3_US310.svg)
 
 #### SSD US350
-![N3_VP_US350](./docs/nivel3/N3_US350.svg)
+![N3_VP_US350](./MGI/docs/nivel3/N3_US350.svg)
 
 #### SSD US360
-![N3_VP_US360](./docs/nivel3/N3_US360.svg)
+![N3_VP_US360](./MGI/docs/nivel3/N3_US360.svg)
 
 #### SSD US370
-![N3_VP_US370](./docs/nivel3/N3_US370.svg)
+![N3_VP_US370](./MGI/docs/nivel3/N3_US370.svg)
 
 
 ### Vista de Implementação
-![N3_VL](./docs/nivel3/N3_VI.svg)
+![N3_VL](./MGI/docs/nivel3/N3_VI.svg)
 
 ### Vista Física
 
-![N3_VF](./docs/nivel3/N3_VF.svg)
+![N3_VF](./MGI/docs/nivel3/N3_VF.svg)

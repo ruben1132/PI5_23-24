@@ -1,0 +1,23 @@
+@startuml
+
+actor Actor as Actor
+participant "SPA" as Container <<Container (C4)>>
+participant "GestaoInfoAPI" as API <<Container (C4)>>
+
+Actor -> Container: Criar elevador num edifício
+
+Container --> Actor: Requisita informação para o elevador
+
+Actor --> Container: Envia dados do elevador
+
+Container -> API: post(/api/elevators)
+
+API --> Container: status code
+
+alt 200
+    Container --> Actor: Devolve o elevador criado
+else 400
+    Container --> Actor: Devolve mensagem de erro
+end
+
+@enduml

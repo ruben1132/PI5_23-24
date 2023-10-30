@@ -1,0 +1,19 @@
+@startuml
+
+actor Actor as Actor
+participant "robDroneGo:robDroneGo" as Container <<Container (C4)>>
+
+Actor -> Container: Pretende listar todos os pisos de um edifício
+Container --> Actor: Requisita o id do edifício
+
+Actor -> Container: Envia o id do edifício
+Container -> Container: Valida o id do edifício
+
+alt sucesso na obtenção do id do edifício
+    Container --> Actor: Retorna todos os pisos do edifício
+else id do edifício inválido
+    Container --> Actor: Retorna erro
+end
+
+
+@enduml
