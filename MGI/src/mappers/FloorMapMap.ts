@@ -16,7 +16,11 @@ export class FloorMapMap extends Mapper<FloorMap> {
         return {
             floor: floorMap.floor.toString(),
             map: floorMap.map,
-            ...restOfProps
+            ...restOfProps,
+            wallTexture: floorMap.wallTexture,
+            groundTexture: floorMap.groundTexture,
+            doorTexture: floorMap.doorTexture,
+            elevatorTexture: floorMap.elevatorTexture
         } as IFloorMapDTO;
     }
 
@@ -39,7 +43,11 @@ export class FloorMapMap extends Mapper<FloorMap> {
             domainId: fm.id.toString(),
             floor: fm.floor.toString(),
             map: fm.map,
-            ...restOfProps
+            ...restOfProps,
+            wallTexture: fm.wallTexture,
+            groundTexture: fm.groundTexture,
+            doorTexture: fm.doorTexture,
+            elevatorTexture: fm.elevatorTexture
         }
     }
 

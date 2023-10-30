@@ -26,12 +26,8 @@ export default interface IFloorMapDTO {
         positionY: number;
         direction: string;
     }[];
-    wallTexture: {
-        textureName: string;
-        // texture: Buffer;
-    };
-    groundTexture: {
-        textureName: string;
-        // texture: Buffer;
-    };
+    wallTexture: string;
+    groundTexture: string;
+    doorTexture: string;
+    elevatorTexture: string;
 }

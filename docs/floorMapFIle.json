@@ -53,5 +53,9 @@
             "positionY": 6,
             "direction": "norte"
         }
-    ]
+    ],
+    "wallTexture": "../texture",
+    "groundTexture": "../texture",
+    "doorTexture": "../texture",
+    "elevatorTexture": "../texture"
 }

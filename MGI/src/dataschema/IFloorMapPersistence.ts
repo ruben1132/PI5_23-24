@@ -27,5 +27,10 @@ export interface IFloorMapPersistence {
         positionY: number;
         direction: string;
     }[];
+    wallTexture: string;
+    groundTexture: string;
+    doorTexture: string;
+    elevatorTexture: string;
+
 }
 

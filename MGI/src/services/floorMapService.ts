@@ -138,7 +138,11 @@ export default class FloorMapService implements IFloorMapService {
                 fmRooms: fmRooms,
                 fmElevator: fmElevatorOrError.getValue(),
                 fmPassages: fmPassages,
-                fmDoors: fmDoors
+                fmDoors: fmDoors,
+                wallTexture: floorMapDTO.wallTexture,
+                groundTexture: floorMapDTO.groundTexture,
+                doorTexture: floorMapDTO.doorTexture,
+                elevatorTexture: floorMapDTO.elevatorTexture
             });
 
 

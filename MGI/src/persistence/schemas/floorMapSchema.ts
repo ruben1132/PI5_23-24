@@ -30,7 +30,7 @@ const fmPassageSchema = new mongoose.Schema({
 });
 
 
-const FloorMapSchemaSchema = new mongoose.Schema(
+const FloorMap = new mongoose.Schema(
     {
         domainId: {
             type: String,
@@ -67,10 +67,32 @@ const FloorMapSchemaSchema = new mongoose.Schema(
             required: [true, 'Please select existing passages'],
         },
 
+        wallTexture: {
+            type: String,
+            required: [true, 'Please enter the wall texture'],
+        },
+
+        groundTexture: {
+            type: String,
+            required: [true, 'Please enter the ground texture'],
+        },
+
+        doorTexture: {
+            type: String,
+            required: [true, 'Please enter the door texture'],
+        },
+
+        elevatorTexture: {
+            type: String,
+            required: [true, 'Please enter the elevator texture'],
+        },
+
+
+
     },
     { timestamps: true },
 );
 
-export default mongoose.model<IFloorMapPersistence & mongoose.Document>('FloorMapSchema', FloorMapSchemaSchema);
+export default mongoose.model<IFloorMapPersistence & mongoose.Document>('FloorMap', FloorMap);
 
 
