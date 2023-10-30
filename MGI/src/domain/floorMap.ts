@@ -9,6 +9,7 @@ import { FloorMapPassage } from "./valueObj/floorMapPassage";
 import { FloorMapRoom } from "./valueObj/floorMapRoom";
 import { Guard } from "../core/logic/Guard";
 import { FloorId } from "./valueObj/floorId";
+import { TextureId } from "./valueObj/textureId";
 
 interface FloorMapProps {
     floor: FloorId; 
@@ -17,6 +18,8 @@ interface FloorMapProps {
     fmDoors: FloorMapDoor[]; 
     fmElevator: FloorMapElevator; 
     fmPassages: FloorMapPassage[];
+    wallTexture: TextureId;
+    groundTexture: TextureId;
 }
 
 export class FloorMap extends AggregateRoot<FloorMapProps> {
@@ -76,6 +79,22 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
         this.props.fmPassages = value;
     }
 
+    get wallTexture(): TextureId {
+        return this.props.wallTexture;
+    }
+
+    set wallTexture(value: TextureId) {
+        this.props.wallTexture = value;
+    }
+
+    get groundTexture(): TextureId {
+        return this.props.groundTexture;
+    }
+
+    set groundTexture(value: TextureId) {
+        this.props.groundTexture = value;
+    }
+
     private constructor(props: FloorMapProps, id?: UniqueEntityID) {
         super(props, id);
     }
@@ -89,6 +108,8 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
             { argument: props.fmDoors, argumentName: 'fmDoors' },
             { argument: props.fmElevator, argumentName: 'fmElevator' },
             { argument: props.fmPassages, argumentName: 'fmPassages' },
+            { argument: props.wallTexture, argumentName: 'wallTexture' },
+            { argument: props.groundTexture, argumentName: 'groundTexture' },
         ];
 
         const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
