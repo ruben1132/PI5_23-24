@@ -12,7 +12,6 @@ import Link from "next/link";
 interface SidebarProps {
   isOpen: boolean;
   toggle: () => void;
-  children: React.ReactNode; // Define children prop here
 }
 
 function Sidebar(props: SidebarProps) {
@@ -27,13 +26,16 @@ function Sidebar(props: SidebarProps) {
         >
           <FontAwesomeIcon icon={faTimes} pull="right" size="xs" />
         </Button>
-        <h3>RoboDroneGO</h3>
+        <h3>RobDroneGo</h3>
       </div>
 
       <Nav className="flex-column pt-2">
         {[
-          { name: "Lobbies", link: "/lobby/" },
-          { name: "Profile", link: "/profile/idExample" },
+          { name: "Buildings", link: "/building/" },
+          { name: "Floors", link: "/floor/" },
+          { name: "Passages", link: "/passage/" },
+          { name: "Rooms", link: "/room/" },
+          { name: "Elevators", link: "/elevator/" },
         ].map((page, index) => (
           <Link href={page.link} key={index}>
             <Nav.Item className="active">
