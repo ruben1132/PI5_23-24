@@ -2,9 +2,23 @@
 
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Button } from "react-bootstrap";
 import classNames from "classnames";
+import config from "../../../config";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import {
+  faBuilding,
+  faLayerGroup,
+  faLink,
+  faRobot,
+  faListCheck,
+  faUser,
+  faMap,
+  faUsers,
+  faElevator,
+  faGear
+} from "@fortawesome/free-solid-svg-icons";
 
 // nextjs
 import Link from "next/link";
@@ -13,6 +27,20 @@ interface SidebarProps {
   isOpen: boolean;
   toggle: () => void;
 }
+
+const sideBarIcons = {
+  buildings: faBuilding,
+  floors: faLayerGroup,
+  passages: faLink,
+  robots: faRobot,
+  robottypes: faGear,
+  tasktypes: faGear,
+  tasks: faListCheck,
+  users: faUser,
+  floormaps: faMap,
+  roles: faUsers,
+  elevators: faElevator,
+};
 
 function Sidebar(props: SidebarProps) {
   return (
@@ -30,20 +58,20 @@ function Sidebar(props: SidebarProps) {
       </div>
 
       <Nav className="flex-column pt-2">
-        {[
-          { name: "Buildings", link: "/building/" },
-          { name: "Floors", link: "/floor/" },
-          { name: "Passages", link: "/passage/" },
-          { name: "Rooms", link: "/room/" },
-          { name: "Elevators", link: "/elevator/" },
-        ].map((page, index) => (
-          <Link href={page.link} key={index}>
-            <Nav.Item className="active">
-              <FontAwesomeIcon icon={faHome} className="mr-2" />
-              {page.name}
-            </Nav.Item>
-          </Link>
-        ))}
+        {config.types.map(
+          (page: { routeName: string; displayName: string;}, index: number
+          ) => (
+            <Link href={page.routeName} key={index}>
+              <Nav.Item className="active">
+                <FontAwesomeIcon
+                  icon={sideBarIcons[page.routeName as keyof typeof sideBarIcons]}
+                  className="mr-2"
+                />
+                {page.displayName}
+              </Nav.Item>
+            </Link>
+          )
+        )}
       </Nav>
     </div>
   );

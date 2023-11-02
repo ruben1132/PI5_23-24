@@ -69,6 +69,10 @@
     transition: .2s;
 }
 
+.nav-link a{
+    text-decoration: none;
+}
+
 .nav-item .svg-inline--fa {
     color: inherit;
 }
