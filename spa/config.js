@@ -1,5 +1,5 @@
 export default {
-  types: [
+  routes: [
     {
       routeName: "buildings",
       displayName: "Buildings",

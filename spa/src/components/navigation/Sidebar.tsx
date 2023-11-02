@@ -58,7 +58,7 @@ function Sidebar(props: SidebarProps) {
       </div>
 
       <Nav className="flex-column pt-2">
-        {config.types.map(
+        {config.routes.map(
           (page: { routeName: string; displayName: string;}, index: number
           ) => (
             <Link href={page.routeName} key={index}>
