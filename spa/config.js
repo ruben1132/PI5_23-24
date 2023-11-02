@@ -1,16 +1,56 @@
 export default {
   types: [
-    { routeName: "buildings", displayName: "Buildings"},
-    { routeName: "floors", displayName: "Floors" },
-    { routeName: "passages", displayName: "Passages" },
-    { routeName: "robots", displayName: "Robots" },
-    { routeName: "robottypes", displayName: "Robot Types" },
-    { routeName: "tasks", displayName: "Tasks" },
-    { routeName: "tasktypes", displayName: "Task Types" },
-    { routeName: "users", displayName: "Users" },
-    // { routeName: "floormaps", displayName: "Floor Maps" },
-    { routeName: "roles", displayName: "Roles" },
-    { routeName: "elevators", displayName: "Elevators" },
+    {
+      routeName: "buildings",
+      displayName: "Buildings",
+      permissions: ["gestor campus"],
+    },
+    {
+      routeName: "floors",
+      displayName: "Floors",
+      permissions: ["gestor campus"],
+    },
+    {
+      routeName: "passages",
+      displayName: "Passages",
+      permissions: ["gestor campus"],
+    },
+    {
+      routeName: "robots",
+      displayName: "Robots",
+      permissions: ["gestor frota"],
+    },
+    {
+      routeName: "robottypes",
+      displayName: "Robot Types",
+      permissions: ["gestor frota"],
+    },
+    {
+      routeName: "tasks",
+      displayName: "Tasks",
+      permissions: ["utente"],
+    },
+    {
+      routeName: "tasktypes",
+      displayName: "Task Types",
+      permissions: ["gestor frota"],
+    },
+    {
+      routeName: "users",
+      displayName: "Users",
+      permissions: ["admin"],
+    },
+    // { routeName: "floormaps", displayName: "Floor Maps" , permissions: ["gestor campus"]},
+    {
+      routeName: "roles",
+      displayName: "Roles",
+      permissions: ["admin"],
+    },
+    {
+      routeName: "elevators",
+      displayName: "Elevators",
+      permissions: ["gestor campus"],
+    },
   ],
 
   mgiAPI: {
