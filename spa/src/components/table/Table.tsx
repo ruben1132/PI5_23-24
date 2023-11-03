@@ -3,12 +3,13 @@
 import Table from "react-bootstrap/Table";
 import { useFetchData, useModal } from "../../util/customHooks";
 import { useState } from "react";
-import { RenderFilteredModal } from "../modals/RenderFilteredModal";
+import Modal  from "../modals/Modal";
 import MeekoLoader from "../loaders/MeekoLoader";
 
 interface Props {
   type: string;
   routeToFetch: string;
+  routeToPush: string;
   children?: React.ReactNode;
 }
 
@@ -33,10 +34,10 @@ function ContentTable(props: Props) {
   return (
     <>
       {contentModal.show && (
-        <RenderFilteredModal
+        <Modal
           action={"edit"}
-          type={props.type}
-          item={itemClicked}
+          item={{value: itemClicked, type: props.type}}
+          route={{api: props.routeToFetch, push: props.routeToPush}}
           fade={false}
           show={contentModal.show}
           close={contentModal.handleClose}

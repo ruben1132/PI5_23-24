@@ -73,19 +73,20 @@ export function useFormNumberInput(initialValue: number) {
 }
 
 // hook to update data
-export function useUpdateData(initialValue: any, r: string) {
+export function useSubmitData(initialValue: any, r: string, t: string) {
   const [value, setValue] = useState(initialValue);
   const [route] = useState<string>(r);
+  const [type] = useState<string>(t);
 
   function handleChange(e: any) {
     setValue(e);
   }
 
-  async function update(): Promise<boolean> {
+  async function submit(): Promise<boolean> {
     // API - update
     try {
       const response = await fetch(route, {
-        method: "PUT",
+        method: type,
         headers: {
           "Content-Type": "application/json",
         },
@@ -106,13 +107,12 @@ export function useUpdateData(initialValue: any, r: string) {
   return {
     value,
     handleChange,
-    update,
+    submit,
   };
 }
 
 // hook to fetch and handle data
 export function useFetchData(r: string) {
-
   const [route] = useState<string>(r);
 
   const { data, error, isLoading } = useSWR(route, fetcher);

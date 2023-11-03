@@ -11,20 +11,22 @@ import {
 } from "@/util/customHooks";
 
 interface Props {
-  item: any;
+  item: {
+    value: any;
+    type: string;
+  };
   onUpdate: (item: any) => void;
 }
 
 export default function EditBuildingForm(props: Props) {
-  const buildingName = useFormStringInput(props.item?.name);
-  const buildingCode = useFormStringInput(props.item?.code);
-  const buildingDimensions = useFormStringInput(props.item?.dimensions);
+  const buildingName = useFormStringInput(props.item.value?.name);
+  const buildingCode = useFormStringInput(props.item.value?.code);
+  const buildingDimensions = useFormStringInput(props.item.value?.dimensions);
 
   const sendDataToParent = () => {  
-    console.log(props.item);
     
     let item: any = {};
-    item.id = props.item?.id;
+    item.id = props.item.value?.id;
     item.name = buildingName.value;
     item.code = buildingCode.value;
     item.dimensions = buildingDimensions.value;
@@ -46,7 +48,7 @@ export default function EditBuildingForm(props: Props) {
             <Form.Control
               type="text"
               placeholder="building's name..."
-              defaultValue={props.item?.name}
+              defaultValue={props.item.value?.name}
               onChange={buildingName.handleChange}
             />
           </Form.Group>
@@ -57,7 +59,7 @@ export default function EditBuildingForm(props: Props) {
             <Form.Control
               type="text"
               placeholder="building's code..."
-              defaultValue={props.item?.code}
+              defaultValue={props.item.value?.code}
               onChange={buildingCode.handleChange}
             />
           </Form.Group>
@@ -70,7 +72,7 @@ export default function EditBuildingForm(props: Props) {
             <Form.Control
               type="text"
               placeholder="building's code..."
-              defaultValue={props.item?.dimensions}
+              defaultValue={props.item.value?.dimensions}
               onChange={buildingDimensions.handleChange}
             />
           </Form.Group>

@@ -10,8 +10,9 @@ export default async function Buildings() {
       <ContentTable
         type="building"
         routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings}
+        routeToPush={"/buildings/"}
       >
-        <AddButton type="building" />
+        <AddButton type="building" apiRoute={config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings} />
       </ContentTable>
     </div>
   );

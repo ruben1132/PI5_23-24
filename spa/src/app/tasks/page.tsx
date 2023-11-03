@@ -2,27 +2,6 @@ import ContentTable from "@/components/table/Table";
 import config from "../../../config";
 import AddButton from "@/components/AddButton";
 
-async function getData() {
-  try {
-    // call api
-    const response = await fetch(
-      config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks,
-      { cache: "no-store" }
-    );
-
-    if (response.status !== 200) {
-      // This will activate the closest `error.tsx` Error Boundary TODO: criar a pagina do error
-      throw new Error("Failed to fetch data");
-    }
-
-    return response.json();
-  } catch (error) {
-    console.log(error);
-
-    return [];
-  }
-}
-
 export default async function Tasks() {
   const data = await getData();
 
@@ -33,8 +12,9 @@ export default async function Tasks() {
       <ContentTable
         type="task"
         routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks}
+        routeToPush={"/tasks/"}
       >
-        <AddButton type="task" />
+        <AddButton type="task" apiRoute={config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks} />
       </ContentTable>
     </div>
   );

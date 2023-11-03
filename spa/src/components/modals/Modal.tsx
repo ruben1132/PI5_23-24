@@ -2,32 +2,39 @@
 
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import config from "../../../config";
-import EditBuildingForm from "../forms/EditBuildingForm";
+import { RenderFilteredForm } from "../forms/RenderFilteredForm";
 import { useRouter } from "next/navigation";
 
 // custom hooks
-import { useUpdateData } from "../../util/customHooks";
+import { useSubmitData } from "../../util/customHooks";
 
 interface Props {
   action: string;
   fade: boolean;
   show: boolean;
-  item: any;
+  item: {
+    value: any;
+    type: string;
+  };
+  route: {
+    api: string;
+    push: string;
+  };
   close: () => void;
   onUpdate: () => void;
 }
 
 export default function BuildingModal(props: Props) {
-  const buildingForm = useUpdateData(
+  const buildingForm = useSubmitData(
     props.item,
-    config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings
+    props.route.api,
+    props.action === "edit" ? "PUT" : "POST"
   );
   const router = useRouter();
 
   // updates the building and refreshes the table
   const updateBuilding = async () => {
-    let res = await buildingForm.update();
+    let res = await buildingForm.submit();
 
     if (!res) {
       // TODO: show alert
@@ -48,12 +55,17 @@ export default function BuildingModal(props: Props) {
     <Modal size="lg" onHide={props.close} show={props.show}>
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {props.item ? "Building " + props.item.name : "Add Building"}
+          {props.item.value
+            ? props.item.type + " " + props.item.value.name
+            : "Add " + props.item.type}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <EditBuildingForm
-          item={props.item ? props.item : null}
+        <RenderFilteredForm
+          item={{
+            value: props.item.value ? props.item.value : null,
+            type: props.item.type,
+          }}
           onUpdate={buildingForm.handleChange}
         />
       </Modal.Body>
@@ -62,7 +74,9 @@ export default function BuildingModal(props: Props) {
           <>
             <Button
               variant="warning"
-              onClick={() => router.push("/buildings/" + props.item.id)}
+              onClick={() =>
+                router.push(props.route.push + props.item.value.id)
+              }
             >
               full page
             </Button>
@@ -71,7 +85,9 @@ export default function BuildingModal(props: Props) {
             </Button>
           </>
         ) : (
-          <Button variant="success" onClick={createBuilding}>Add</Button>
+          <Button variant="success" onClick={createBuilding}>
+            Add
+          </Button>
         )}
       </Modal.Footer>
     </Modal>
