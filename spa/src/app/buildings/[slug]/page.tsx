@@ -3,6 +3,8 @@
 import EditBuildingForm from "@/components/forms/EditBuildingForm";
 import config from "../../../../config";
 import { useFetchData, useUpdateData } from "@/util/customHooks";
+import Button from "react-bootstrap/Button";
+import MeekoLoader from "@/components/loaders/MeekoLoader";
 
 interface Props {
   params: { slug: string };
@@ -19,6 +21,8 @@ export default function Page({ params }: Props) {
 
   // updates the building and refreshes the table
   const updateBuilding = async () => {
+    console.log(buildingForm.value);
+    
     let res = await buildingForm.update();
 
     if (!res) {
@@ -30,13 +34,21 @@ export default function Page({ params }: Props) {
     // TODO: show alert
   };
 
+
+  if (useFetchdata.isError) return <div>failed to load</div>;
+  if (useFetchdata.isLoading) return <MeekoLoader />;
+
   return (
     <>
       <div>
         <p>Building: {params.slug}</p>
       </div>
 
-      <EditBuildingForm item={buildingForm.value} onUpdate={updateBuilding} />
+      <EditBuildingForm item={useFetchdata.data} onUpdate={buildingForm.handleChange} />
+      <br />
+      <Button variant="success" onClick={updateBuilding}>
+        Update
+      </Button>
     </>
   );
 }

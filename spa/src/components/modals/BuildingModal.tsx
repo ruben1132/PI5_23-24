@@ -71,7 +71,7 @@ export default function BuildingModal(props: Props) {
             </Button>
           </>
         ) : (
-          <Button variant="success" onClick={createBuilding}></Button>
+          <Button variant="success" onClick={createBuilding}>Add</Button>
         )}
       </Modal.Footer>
     </Modal>

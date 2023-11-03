@@ -20,7 +20,9 @@ export default function EditBuildingForm(props: Props) {
   const buildingCode = useFormStringInput(props.item?.code);
   const buildingDimensions = useFormStringInput(props.item?.dimensions);
 
-  const sendDataToParent = () => {
+  const sendDataToParent = () => {  
+    console.log(props.item);
+    
     let item: any = {};
     item.id = props.item?.id;
     item.name = buildingName.value;
