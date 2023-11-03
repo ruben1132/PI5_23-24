@@ -36,6 +36,17 @@ export default (app: Router) => {
         (req, res, next) => ctrl.getBuildingsByFloorRange(req, res, next),
     );
 
+    route.get(
+        '/:id',
+        celebrate({
+            params: Joi.object({
+                id: Joi.string().required(),
+            }),
+        }),
+        (req, res, next) => ctrl.getBuildingById(req, res, next),
+    );
+
+
     route.get('', (req, res, next) => ctrl.getBuildings(req, res, next));
 
     route.put(
