@@ -60,7 +60,7 @@ function Sidebar(props: SidebarProps) {
         {config.routes.map(
           (page: { routeName: string; displayName: string;}, index: number
           ) => (
-            <Link href={page.routeName} key={index}>
+            <Link href={"/" + page.routeName} key={index}>
               <Nav.Item className="active">
                 <FontAwesomeIcon
                   icon={sideBarIcons[page.routeName as keyof typeof sideBarIcons]}

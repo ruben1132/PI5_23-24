@@ -25,21 +25,21 @@ export default {
       displayName: "Robot Types",
       permissions: ["gestor frota"],
     },
-    {
-      routeName: "tasks",
-      displayName: "Tasks",
-      permissions: ["utente"],
-    },
+    // {
+    //   routeName: "tasks",
+    //   displayName: "Tasks",
+    //   permissions: ["utente"],
+    // },
     {
       routeName: "tasktypes",
       displayName: "Task Types",
       permissions: ["gestor frota"],
     },
-    {
-      routeName: "users",
-      displayName: "Users",
-      permissions: ["admin"],
-    },
+    // {
+    //   routeName: "users",
+    //   displayName: "Users",
+    //   permissions: ["admin"],
+    // },
     // { 
     //   routeName: "floormaps", 
     //   displayName: "Floor Maps" , 

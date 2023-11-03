@@ -29,8 +29,10 @@ export default async function Rooms() {
     <div>
       <p>Rooms</p>
 
+     
+      <ContentTable type="room"   routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms}>
       <AddButton type="room" />
-      <ContentTable type="room"  data={data} />
+      </ContentTable>
     </div>
   );
 }

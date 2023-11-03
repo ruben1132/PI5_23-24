@@ -1,7 +1,8 @@
-import { useState, ChangeEvent } from "react";
-import config from "../../config";
+import { useState, ChangeEvent, useEffect } from "react";
+import useSWR, { mutate } from "swr";
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-// Hook for opening and closing modals
+// hook for opening and closing modals
 export function useModal(initialValue: boolean) {
   const [show, setShow] = useState(initialValue);
 
@@ -20,7 +21,7 @@ export function useModal(initialValue: boolean) {
   };
 }
 
-// Hook for string input in forms
+// hook for string input
 export function useFormStringInput(initialValue: string) {
   const [value, setValue] = useState(initialValue);
 
@@ -44,7 +45,7 @@ export function useFormStringInput(initialValue: string) {
   };
 }
 
-// Hook for number input in forms
+// hook for number input
 export function useFormNumberInput(initialValue: number) {
   const [value, setValue] = useState(initialValue || 1);
 
@@ -71,14 +72,16 @@ export function useFormNumberInput(initialValue: number) {
   };
 }
 
-export function useForm(initialValue: any) {
+// hook to update data
+export function useUpdateData(initialValue: any, r: string) {
   const [value, setValue] = useState(initialValue);
+  const [route] = useState<string>(r);
 
   function handleChange(e: any) {
     setValue(e);
   }
 
-  async function update(route: string): Promise<boolean> {
+  async function update(): Promise<boolean> {
     // API - update
     try {
       const response = await fetch(route, {
@@ -104,5 +107,24 @@ export function useForm(initialValue: any) {
     value,
     handleChange,
     update,
+  };
+}
+
+// hook to fetch and handle data
+export function useFetchData(r: string) {
+
+  const [route] = useState<string>(r);
+
+  const { data, error, isLoading } = useSWR(route, fetcher);
+
+  const revalidate = () => {
+    mutate(route);
+  };
+
+  return {
+    data,
+    isLoading,
+    isError: error,
+    revalidate,
   };
 }

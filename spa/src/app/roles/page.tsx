@@ -29,8 +29,12 @@ export default async function Roles() {
     <div>
       <p>Roles</p>
 
-      <AddButton type="role" />
-      <ContentTable type="role"  data={data} />
+      <ContentTable
+        type="role"
+        routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.roles}
+      >
+        <AddButton type="role" />
+      </ContentTable>
     </div>
   );
 }

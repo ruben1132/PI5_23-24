@@ -6,7 +6,8 @@ async function getData() {
   try {
     // call api
     const response = await fetch(
-      config.mgiAPI.baseUrl + config.mgiAPI.routes.users,{ cache: 'no-store' }
+      config.mgiAPI.baseUrl + config.mgiAPI.routes.users,
+      { cache: "no-store" }
     );
 
     if (response.status !== 200) {
@@ -29,8 +30,12 @@ export default async function Users() {
     <div>
       <p>Users</p>
 
-      <AddButton type="user" />
-      <ContentTable type="user" data={data} />
+      <ContentTable
+        type="user"
+        routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.users}
+      >
+        <AddButton type="user" />
+      </ContentTable>
     </div>
   );
 }

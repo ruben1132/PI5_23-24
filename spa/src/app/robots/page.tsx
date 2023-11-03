@@ -29,8 +29,9 @@ export default async function Robots() {
     <div>
       <p>Robots</p>
 
+      <ContentTable type="robot"   routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.robots} >
       <AddButton type="robot" />
-      <ContentTable type="robot"  data={data} />
+      </ContentTable>
     </div>
   );
 }

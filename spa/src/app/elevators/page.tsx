@@ -6,7 +6,8 @@ async function getData() {
   try {
     // call api
     const response = await fetch(
-      config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators,{ cache: 'no-store' }
+      config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators,
+      { cache: "no-store" }
     );
 
     if (response.status !== 200) {
@@ -29,8 +30,12 @@ export default async function Elevators() {
     <div>
       <p>Elevators</p>
 
-      <AddButton type="elevator" />
-      <ContentTable type="elevator"  data={data} />
+      <ContentTable
+        type="elevator"
+        routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators}
+      >
+        <AddButton type="elevator" />
+      </ContentTable>
     </div>
   );
 }
