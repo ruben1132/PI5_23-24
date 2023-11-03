@@ -6,7 +6,7 @@ async function getData() {
   try {
     // call api
     const response = await fetch(
-      config.mgiAPI.baseUrl + config.mgiAPI.routes.robots
+      config.mgiAPI.baseUrl + config.mgiAPI.routes.robots,{ cache: 'no-store' }
     );
 
     if (response.status !== 200) {
@@ -30,7 +30,7 @@ export default async function Robots() {
       <p>Robots</p>
 
       <AddButton type="robot" />
-      <ContentTable data={data} />
+      <ContentTable type="robot"  data={data} />
     </div>
   );
 }

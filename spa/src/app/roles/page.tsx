@@ -30,7 +30,7 @@ export default async function Roles() {
       <p>Roles</p>
 
       <AddButton type="role" />
-      <ContentTable data={data} />
+      <ContentTable type="role"  data={data} />
     </div>
   );
 }

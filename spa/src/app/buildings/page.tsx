@@ -6,12 +6,12 @@ async function getData() {
   try {
     // call api
     const response = await fetch(
-      config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings
+      config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings,{ cache: 'no-store' }
     );
 
     if (response.status !== 200) {
-      // This will activate the closest `error.tsx` Error Boundary TODO: criar a pagina do error
-      throw new Error("Failed to fetch data");
+      // TODO: show alert
+      return [];
     }
 
     return response.json();
@@ -30,7 +30,7 @@ export default async function Buildings() {
       <p>Buildings</p>
 
       <AddButton type="building" />
-      <ContentTable data={data} />
+      <ContentTable type="building" data={data} />
     </div>
   );
 }

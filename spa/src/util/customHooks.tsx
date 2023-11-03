@@ -1,4 +1,5 @@
 import { useState, ChangeEvent } from "react";
+import config from "../../config";
 
 // Hook for opening and closing modals
 export function useModal(initialValue: boolean) {
@@ -67,5 +68,41 @@ export function useFormNumberInput(initialValue: number) {
     handleOnChange,
     handleLoad,
     handleReset,
+  };
+}
+
+export function useForm(initialValue: any) {
+  const [value, setValue] = useState(initialValue);
+
+  function handleChange(e: any) {
+    setValue(e);
+  }
+
+  async function update(route: string): Promise<boolean> {
+    // API - update
+    try {
+      const response = await fetch(route, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(value),
+      });
+
+      if (response.status !== 201) {
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  return {
+    value,
+    handleChange,
+    update,
   };
 }

@@ -6,7 +6,7 @@ async function getData() {
   try {
     // call api
     const response = await fetch(
-      config.mgiAPI.baseUrl + config.mgiAPI.routes.passages
+      config.mgiAPI.baseUrl + config.mgiAPI.routes.passages,{ cache: 'no-store' }
     );
 
     if (response.status !== 200) {
@@ -30,7 +30,7 @@ export default async function Passages() {
       <p>Passages</p>
 
       <AddButton type="passage" />
-      <ContentTable data={data} />
+      <ContentTable type="passage"  data={data} />
     </div>
   );
 }

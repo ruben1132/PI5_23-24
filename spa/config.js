@@ -40,7 +40,11 @@ export default {
       displayName: "Users",
       permissions: ["admin"],
     },
-    // { routeName: "floormaps", displayName: "Floor Maps" , permissions: ["gestor campus"]},
+    // { 
+    //   routeName: "floormaps", 
+    //   displayName: "Floor Maps" , 
+    //   permissions: ["gestor campus"]
+    // },
     {
       routeName: "roles",
       displayName: "Roles",
@@ -67,6 +71,7 @@ export default {
       floormaps: "floormaps/",
       roles: "roles/",
       elevators: "elevators/",
+      rooms: "rooms/",
     },
   },
 };

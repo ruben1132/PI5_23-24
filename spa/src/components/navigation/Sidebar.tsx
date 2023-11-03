@@ -6,7 +6,6 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Nav, Button } from "react-bootstrap";
 import classNames from "classnames";
 import config from "../../../config";
-import { library } from "@fortawesome/fontawesome-svg-core";
 import {
   faBuilding,
   faLayerGroup,

@@ -6,7 +6,7 @@ async function getData() {
   try {
     // call api
     const response = await fetch(
-      config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks
+      config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks,{ cache: 'no-store' }
     );
 
     if (response.status !== 200) {
@@ -30,7 +30,7 @@ export default async function Tasks() {
       <p>Tasks</p>
 
       <AddButton type="task" />
-      <ContentTable data={data} />
+      <ContentTable type="task"  data={data} />
     </div>
   );
 }

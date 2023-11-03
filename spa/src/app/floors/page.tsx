@@ -6,7 +6,7 @@ async function getData() {
   try {
     // call api
     const response = await fetch(
-      config.mgiAPI.baseUrl + config.mgiAPI.routes.floors
+      config.mgiAPI.baseUrl + config.mgiAPI.routes.floors,{ cache: 'no-store' }
     );
 
     if (response.status !== 200) {
@@ -30,7 +30,7 @@ export default async function Floors() {
       <p>Floors</p>
 
       <AddButton type="floor" />
-      <ContentTable data={data} />
+      <ContentTable type="floor"  data={data} />
     </div>
   );
 }
