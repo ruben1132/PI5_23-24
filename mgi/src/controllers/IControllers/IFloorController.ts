@@ -6,7 +6,7 @@ export default interface IFloorController {
     getFloorsByBuildingId(req: Request, res: Response, next: NextFunction);
     getFloorsWithPassages(req: Request, res: Response, next: NextFunction);
     updateFloor(req: Request, res: Response, next: NextFunction);
-    
+    getFloorById(req: Request, res: Response, next: NextFunction);
     //   getFloorById(req: Request, res: Response, next: NextFunction);
     deleteFloor(req: Request, res: Response, next: NextFunction);
 }
