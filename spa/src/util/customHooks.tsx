@@ -1,6 +1,8 @@
 import { useState, ChangeEvent, useEffect } from "react";
 import useSWR, { mutate } from "swr";
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+import axios from 'axios'
+
+const fetcher = (url: string) => axios(url).then(res => res.data);
 
 // hook for opening and closing modals
 export function useModal(initialValue: boolean) {
@@ -85,12 +87,12 @@ export function useSubmitData(initialValue: any, r: string, t: string) {
   async function submit(): Promise<boolean> {
     // API - update
     try {
-      const response = await fetch(route, {
+      const response = await axios(route, {
         method: type,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(value),
+        data: value,
       });
 
       if (response.status === 201 || response.status === 200) {
