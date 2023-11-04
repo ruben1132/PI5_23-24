@@ -1,5 +1,5 @@
 export default interface IPassageDTO {
-    domainId: string;
+    id: string;
     designation: string; 
     fromFloor: string;
     toFloor: string;

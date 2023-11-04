@@ -15,7 +15,7 @@ import { RobotTypeModel } from '../domain/valueObj/robotTypeModel';
 export class RobotTypeMap extends Mapper<RobotType> {
     public static toDTO(robotType: RobotType): IRobotTypeDTO {        
         return {
-            domainId: robotType.id.toString(),
+            id: robotType.id.toString(),
             type: robotType.type.value,
             brand: robotType.brand.value,
             model: robotType.model.value,

@@ -15,7 +15,7 @@ export function RenderFilteredForm(props: Props) {
         case "building":
           return (
             <BuildingForm
-              item={{ value: props.item.value, type: props.item.type }}
+              item={{ value: props.item.value }}
               onUpdate={props.onUpdate}
             />
           );

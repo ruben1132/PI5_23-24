@@ -32,7 +32,7 @@ export default (app: Router) => {
         '',
         celebrate({
             body: Joi.object({
-                robotId: Joi.string().required(),
+                id: Joi.string().required(),
             }),
         }),
         (req, res, next) => ctrl.inhibitRobot(req, res, next),

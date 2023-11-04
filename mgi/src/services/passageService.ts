@@ -107,7 +107,7 @@ export default class PassageService implements IPassageService {
 
     public async updatePassage(passageDTO: IPassageDTO): Promise<Result<IPassageDTO>> {
         try {
-            const passage = await this.passageRepo.findByDomainId(passageDTO.domainId);
+            const passage = await this.passageRepo.findByDomainId(passageDTO.id);
 
             if (passage === null) {
                 return Result.fail<IPassageDTO>("Passage not found");

@@ -14,7 +14,7 @@ export class RoomMap extends Mapper<Room> {
     public static toDTO(room: Room): IRoomDTO {
         
         return {
-            domainId: room.id.toString(),
+            id: room.id.toString(),
             number: room.number.value,
             floor: room.floor.toString(),
         } as IRoomDTO;

@@ -123,7 +123,7 @@ export default class RobotService implements IRobotService {
 
     public async updateRobot(robotDTO: IRobotDTO): Promise<Result<IRobotDTO>> {
         try {
-            const robot = await this.robotRepo.findByDomainId(robotDTO.domainId);
+            const robot = await this.robotRepo.findByDomainId(robotDTO.id);
 
             // check if robotType exists
             let robotType: RobotType;

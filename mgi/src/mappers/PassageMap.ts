@@ -12,7 +12,7 @@ export class PassageMap extends Mapper<Passage> {
 
     public static toDTO(passage: Passage): IPassageDTO {
         return {
-            domainId: passage.id.toString(),
+            id: passage.id.toString(),
             designation: passage.designation,
             fromFloor: passage.fromFloor.toString(),
             toFloor: passage.toFloor.toString()

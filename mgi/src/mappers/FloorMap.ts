@@ -15,7 +15,7 @@ export class FloorMap extends Mapper<Floor> {
     public static toDTO(floor: Floor): IFloorDTO {
 
         return {
-            domainId: floor.id.toString(),
+            id: floor.id.toString(),
             number: floor.number,
             information: floor.information.value,
             building: floor.building.toString()

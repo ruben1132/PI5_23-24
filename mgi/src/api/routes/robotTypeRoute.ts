@@ -32,7 +32,7 @@ export default (app: Router) => {
     //     '',
     //     celebrate({
     //         body: Joi.object({
-    //             domainId: Joi.string().required(),
+    //             id: Joi.string().required(),
     //             type: Joi.string().required(),
     //             brand: Joi.string().required(),
     //             model: Joi.string().required(),

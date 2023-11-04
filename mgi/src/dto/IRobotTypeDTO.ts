@@ -1,5 +1,5 @@
 export default interface IRobotTypeDTO {
-    domainId: string;
+    id: string;
     type: string;
     brand: string;
     model: string;

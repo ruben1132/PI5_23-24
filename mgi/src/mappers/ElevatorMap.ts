@@ -19,7 +19,7 @@ export class ElevatorMap extends Mapper<Elevator> {
     }
 
     return {
-      domainId: elevator.domainId.toString(),
+      id: elevator.domainId.toString(),
       designation: elevator.elevatorDesignation.value,
       floorsAllowed: fAllowed,
     } as IElevatorDTO;

@@ -1,5 +1,5 @@
 export default interface IRoomDTO {
-    domainId: string;
+    id: string;
     number: string;
     floor: string;
 }

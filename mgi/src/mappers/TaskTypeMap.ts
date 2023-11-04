@@ -14,7 +14,7 @@ import { UniqueEntityID } from '../core/domain/UniqueEntityID';
 export class TaskTypeMap extends Mapper<TaskType> {
     public static toDTO(taskType: TaskType): ITaskTypeDTO {
         return {
-            domainId: taskType.id.toString(),
+            id: taskType.id.toString(),
             name: taskType.name.toString(),
             description: taskType.description.toString(),
         } as ITaskTypeDTO;

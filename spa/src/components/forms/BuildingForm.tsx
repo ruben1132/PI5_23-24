@@ -1,21 +1,19 @@
 "use client";
 
-import React, {useEffect } from "react";
+import React, { useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 // custom hooks
-import {
-  useFormStringInput,
-} from "@/util/customHooks";
+import { useFormStringInput } from "@/util/customHooks";
+import { Building } from "@/models/Building";
 
 interface Props {
   item: {
-    value: any;
-    type: string;
+    value: Building;
   };
-  onUpdate: (item: any) => void;
+  onUpdate: (item: Building) => void;
 }
 
 export default function EditBuildingForm(props: Props) {
@@ -23,9 +21,8 @@ export default function EditBuildingForm(props: Props) {
   const buildingCode = useFormStringInput(props.item.value?.code);
   const buildingDimensions = useFormStringInput(props.item.value?.dimensions);
 
-  const sendDataToParent = () => {  
-    
-    let item: any = {};
+  const sendDataToParent = () => {
+    let item: Building = { ...props.item.value };
     item.id = props.item.value?.id;
     item.name = buildingName.value;
     item.code = buildingCode.value;

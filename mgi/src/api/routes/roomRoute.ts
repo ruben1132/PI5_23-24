@@ -30,7 +30,7 @@ export default (app: Router) => {
         '',
         celebrate({
             body: Joi.object({
-                domainId: Joi.string().required(),
+                id: Joi.string().required(),
                 building: Joi.string().required(),
                 number: Joi.number().required(),
                 information: Joi.string().required(),

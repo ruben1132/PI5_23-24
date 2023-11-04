@@ -19,7 +19,7 @@ import { RobotState } from '../domain/valueObj/robotState';
 export class RobotMap extends Mapper<Robot> {
     public static toDTO(robot: Robot): IRobotDTO {
         return {
-            domainId: robot.id.toString(),
+            id: robot.id.toString(),
             identification: robot.identification.value,
             nickname: robot.nickname.value,
             robotType: robot.robotType.toString(),
