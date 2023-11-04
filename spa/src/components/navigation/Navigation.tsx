@@ -15,7 +15,7 @@ interface NavigationProps {
 
 export default function Navigation({ children }: NavigationProps) {
   // Moblie first
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   // const [isMobile, setIsMobile] = useState(true)
   const [previousWidth, setPreviousWidth] = useState(-1);
 
