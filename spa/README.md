@@ -1,3 +1,4 @@
+## Main technology 
 - nextjs
 - reactjs
 - react bootstrap
