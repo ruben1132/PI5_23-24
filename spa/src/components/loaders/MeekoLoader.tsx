@@ -9,7 +9,7 @@ export default function MeekoLoader() {
         <div className={styles.loaderContainer}>
           <Image
             src="/meeko.png"
-            width={80}
+            width={90}
             height={100}
             alt="Meeko"
             className={styles.spinImage} // Pass the class name

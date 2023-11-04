@@ -1,6 +1,6 @@
 import ContentTable from "@/components/table/Table";
 import config from "../../../config";
-import AddButton from "@/components/AddButton";
+
 
 export default async function Robots() {
 
@@ -12,9 +12,7 @@ export default async function Robots() {
         type="robot"
         routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.robots}
         routeToPush={"/robots/"}
-      >
-        <AddButton type="robot" apiRoute={config.mgiAPI.baseUrl + config.mgiAPI.routes.robots} />
-      </ContentTable>
+        />
     </div>
   );
 }

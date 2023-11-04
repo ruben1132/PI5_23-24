@@ -1,9 +1,8 @@
 import ContentTable from "@/components/table/Table";
 import config from "../../../config";
-import AddButton from "@/components/AddButton";
+
 
 export default async function Tasktypes() {
-  const data = await getData();
 
   return (
     <div>
@@ -13,9 +12,7 @@ export default async function Tasktypes() {
         type="tasktype"
         routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.tasktypes}
         routeToPush={"/tasktypes/"}
-      >
-        <AddButton type="tasktype" apiRoute={config.mgiAPI.baseUrl + config.mgiAPI.routes.tasktypes} />
-      </ContentTable>
+        />
     </div>
   );
 }
