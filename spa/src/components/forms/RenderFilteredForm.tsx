@@ -9,7 +9,6 @@ interface Props {
 }
 
 export function RenderFilteredForm(props: Props) {
-  
   const filterForm = () => {
     {
       switch (props.item.type.toLocaleLowerCase()) {

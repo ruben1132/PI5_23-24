@@ -16,7 +16,7 @@ export default function AddButton(props: Props) {
     <>
       {contentModal.show && (
         <Modal
-          action="add"
+          action={"add"}
           item={{value: {}, type: props.type}}
           route={{api: props.apiRoute, push: ""}}
           fade={false}
@@ -25,9 +25,9 @@ export default function AddButton(props: Props) {
           onUpdate={() => {}}
         />
       )}
-      <Button variant="success" onClick={contentModal.handleOpen}>
+      {/* <Button variant="success" onClick={contentModal.handleOpen}>
         Add {props.type}
-      </Button>
+      </Button> */}
     </>
   );
 }

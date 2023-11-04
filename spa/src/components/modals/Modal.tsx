@@ -33,7 +33,7 @@ export default function BuildingModal(props: Props) {
   const router = useRouter();
 
   // updates the building and refreshes the table
-  const updateBuilding = async () => {
+  const submitData = async () => {
     let res = await buildingForm.submit();
 
     if (!res) {
@@ -49,14 +49,13 @@ export default function BuildingModal(props: Props) {
     props.close();
   };
 
-  const createBuilding = async () => {};
 
   return (
     <Modal size="lg" onHide={props.close} show={props.show}>
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
-          {props.item.value
-            ? props.item.type + " " + props.item.value.name
+          {props.action === "edit"
+            ? "Edit" + props.item.type + " " + props.item.value.name
             : "Add " + props.item.type}
         </Modal.Title>
       </Modal.Header>
@@ -80,12 +79,12 @@ export default function BuildingModal(props: Props) {
             >
               full page
             </Button>
-            <Button variant="primary" onClick={updateBuilding}>
+            <Button variant="primary" onClick={submitData}>
               Update
             </Button>
           </>
         ) : (
-          <Button variant="success" onClick={createBuilding}>
+          <Button variant="success" onClick={submitData}>
             Add
           </Button>
         )}

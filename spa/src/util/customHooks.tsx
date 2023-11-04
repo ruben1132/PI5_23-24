@@ -93,7 +93,9 @@ export function useSubmitData(initialValue: any, r: string, t: string) {
         body: JSON.stringify(value),
       });
 
-      if (response.status !== 201) {
+      if (response.status === 201 || response.status === 200) {
+        return true;
+      } else {
         return false;
       }
 

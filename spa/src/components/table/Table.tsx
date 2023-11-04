@@ -3,8 +3,9 @@
 import Table from "react-bootstrap/Table";
 import { useFetchData, useModal } from "../../util/customHooks";
 import { useState } from "react";
-import Modal  from "../modals/Modal";
+import Modal from "../modals/Modal";
 import MeekoLoader from "../loaders/MeekoLoader";
+import Button from "react-bootstrap/Button";
 
 interface Props {
   type: string;
@@ -17,6 +18,7 @@ function ContentTable(props: Props) {
   const contentModal = useModal(false);
   const [itemClicked, setItemClicked] = useState<any>(null);
   const useFetchdata = useFetchData(props.routeToFetch);
+  const [modalType, setModalType] = useState<string>("add");
 
   if (useFetchdata.isError) return <div>failed to load</div>;
   if (useFetchdata.isLoading) return <MeekoLoader />;
@@ -27,25 +29,36 @@ function ContentTable(props: Props) {
 
   const handleRowClick = (item: any) => {
     setItemClicked(item);
-
+    setModalType("edit");
     contentModal.handleOpen();
   };
+
+  const handleAddButtonClick = () => {
+    setModalType("add");
+    setItemClicked({});
+    contentModal.handleOpen();
+  }
 
   return (
     <>
       {contentModal.show && (
         <Modal
-          action={"edit"}
-          item={{value: itemClicked, type: props.type}}
-          route={{api: props.routeToFetch, push: props.routeToPush}}
+          action={modalType}
+          item={{ value: itemClicked, type: props.type }}
+          route={{ api: props.routeToFetch, push: props.routeToPush }}
           fade={false}
           show={contentModal.show}
           close={contentModal.handleClose}
           onUpdate={useFetchdata.revalidate}
         />
       )}
-      
-      {props.children}
+
+      <Button
+        variant="success"
+        onClick={handleAddButtonClick}
+      >
+        Add {props.type}
+      </Button>
 
       <Table striped>
         <thead>

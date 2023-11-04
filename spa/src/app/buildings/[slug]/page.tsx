@@ -22,7 +22,6 @@ export default function Page({ params }: Props) {
 
   // updates the building and refreshes the table
   const updateBuilding = async () => {
-
     let res = await buildingForm.submit();
 
     if (!res) {
@@ -44,7 +43,7 @@ export default function Page({ params }: Props) {
       </div>
 
       <EditBuildingForm
-        item={useFetchdata.data}
+        item={{ value: useFetchdata.data, type: "building" }}
         onUpdate={buildingForm.handleChange}
       />
       <br />
