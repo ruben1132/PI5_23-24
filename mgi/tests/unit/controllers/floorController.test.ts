@@ -3,7 +3,7 @@ import * as sinon from 'sinon';
 import { Response, Request, NextFunction } from 'express';
 import { Result } from '../../../src/core/logic/Result';
 import FloorController from '../../../src/controllers/floorController';
-import IFloorDTO from '../../../src/dto/IFloorDTO';
+import {IFloorDTO} from '../../../src/dto/IFloorDTO';
 import FloorService from '../../../src/services/floorService';
 import FloorRepo from '../../../src/repos/floorRepo';
 import BuildingRepo from '../../../src/repos/buildingRepo';

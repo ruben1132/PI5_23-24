@@ -2,17 +2,11 @@ import { AggregateRoot } from "../core/domain/AggregateRoot";
 import { UniqueEntityID } from "../core/domain/UniqueEntityID";
 
 import { Result } from "../core/logic/Result";
-import { Building } from "./building";
 import { FloorId } from "./valueObj/floorId";
 
-import { FloorNumber } from "./valueObj/floorNumber";
 import { FloorInformation } from "./valueObj/floorInformation";
 import { Guard } from "../core/logic/Guard";
 import { BuildingId } from "./valueObj/buildingId";
-
-
-
-// import IFloorDTO from "../dto/IFloorDTO"; // TODO: criar o DTO
 
 interface FloorProps {
     number: number; 

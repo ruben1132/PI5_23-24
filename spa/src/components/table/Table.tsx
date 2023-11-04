@@ -6,6 +6,7 @@ import { useState } from "react";
 import Modal from "../modals/Modal";
 import MeekoLoader from "../loaders/MeekoLoader";
 import Button from "react-bootstrap/Button";
+import RowItem from "./RowItem";
 
 interface Props {
   type: string;
@@ -24,7 +25,7 @@ function ContentTable(props: Props) {
   if (useFetchdata.isLoading) return <MeekoLoader />;
 
   const filteredColumns = Object.keys(useFetchdata.data[0]).filter(
-    (column: string) => column !== "id" && column !== "domainId"
+    (column: string) => column !== "id"
   );
 
   const handleRowClick = (item: any) => {
@@ -37,7 +38,7 @@ function ContentTable(props: Props) {
     setModalType("add");
     setItemClicked({});
     contentModal.handleOpen();
-  }
+  };
 
   return (
     <>
@@ -53,10 +54,7 @@ function ContentTable(props: Props) {
         />
       )}
 
-      <Button
-        variant="success"
-        onClick={handleAddButtonClick}
-      >
+      <Button variant="success" onClick={handleAddButtonClick}>
         Add {props.type}
       </Button>
 
@@ -75,8 +73,8 @@ function ContentTable(props: Props) {
               onClick={() => handleRowClick(item)}
               style={{ cursor: "pointer" }}
             >
-              {filteredColumns?.map((column: string, index: number) => (
-                <td key={index}>{item[column]}</td>
+              {filteredColumns?.map((column: string, jindex: number) => (
+                <RowItem key={jindex} index={jindex} type={props.type} item={item[column]} />
               ))}
             </tr>
           ))}

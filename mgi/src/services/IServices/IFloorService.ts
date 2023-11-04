@@ -1,13 +1,13 @@
 import { Result } from "../../core/logic/Result";
-import IFloorDTO from "../../dto/IFloorDTO";
+import {IFloorDTO, IFloorWithBuildingDTO} from "../../dto/IFloorDTO";
 
 export default interface IFloorService {
 
   createFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>>;
-  getFloors (): Promise<Result<Array<IFloorDTO>>>;
+  getFloors (): Promise<Result<Array<IFloorWithBuildingDTO>>>;
   getFloorsByBuildingId(buildingId: string): Promise<Result<IFloorDTO[]>>;
   getFloorsWithPassages(): Promise<Result<Array<IFloorDTO>>>;
-  getFloorById(floorId: string): Promise<Result<IFloorDTO>>;
+  getFloorById(floorId: string): Promise<Result<IFloorWithBuildingDTO>>;
   updateFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>>;
   deleteFloor(floorId: string): Promise<Result<void>>;
 }

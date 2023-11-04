@@ -1,12 +1,12 @@
 import { Service, Inject } from 'typedi';
-import config from "../../config";
-import IFloorDTO from '../dto/IFloorDTO';
-import { Floor } from "../domain/floor";
+import config from '../../config';
+import { IFloorDTO, IFloorWithBuildingDTO } from '../dto/IFloorDTO';
+import { Floor } from '../domain/floor';
 import IFloorRepo from './IRepos/IFloorRepo';
 import IBuildingRepo from './IRepos/IBuildingRepo';
 import IFloorService from './IServices/IFloorService';
-import { Result } from "../core/logic/Result";
-import { FloorMap } from "../mappers/FloorMap";
+import { Result } from '../core/logic/Result';
+import { FloorMap } from '../mappers/FloorMap';
 import { Building } from '../domain/building';
 import { FloorInformation } from '../domain/valueObj/floorInformation';
 import { BuildingId } from '../domain/valueObj/buildingId';
@@ -15,13 +15,11 @@ import { BuildingId } from '../domain/valueObj/buildingId';
 export default class FloorService implements IFloorService {
     constructor(
         @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
-        @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo
-    ) { }
-
+        @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
+    ) {}
 
     public async createFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
         try {
-
             // check if building exists
             let building: Building;
             const buildingOrError = await this.getBuilding(floorDTO.building);
@@ -39,7 +37,7 @@ export default class FloorService implements IFloorService {
             const floorOrError = await Floor.create({
                 number: floorDTO.number,
                 information: information.getValue(),
-                building: new BuildingId(building.buildingId.toString())
+                building: new BuildingId(building.buildingId.toString()),
             });
 
             if (floorOrError.isFailure) {
@@ -52,36 +50,52 @@ export default class FloorService implements IFloorService {
 
             const floorDTOResult = FloorMap.toDTO(floorResult);
 
-            return Result.ok<IFloorDTO>(floorDTOResult)
+            return Result.ok<IFloorDTO>(floorDTOResult);
         } catch (e) {
             throw e;
         }
     }
 
-    public async getFloors(): Promise<Result<Array<IFloorDTO>>> {
+    public async getFloors(): Promise<Result<Array<IFloorWithBuildingDTO>>> {
         try {
             const floors = await this.floorRepo.getFloors();
 
             if (floors === null) {
-                return Result.fail<Array<IFloorDTO>>("Floors not found");
+                return Result.fail<Array<IFloorWithBuildingDTO>>('Floors not found');
             } else {
-                const floorsDTOResult = floors.map(floor => FloorMap.toDTO(floor) as IFloorDTO);
-                return Result.ok<Array<IFloorDTO>>(floorsDTOResult);
+                // Collect building IDs from the floors
+                const buildingIds = floors.map(floor => floor.building.toString());
+
+                // Use buildingRepo to fetch all buildings
+                const buildings = await this.buildingRepo.findByDomainIds(buildingIds);
+
+                // Create a mapping of buildingId to building data
+                const buildingMap = new Map<string, Building>();
+                buildings.forEach(building => buildingMap.set(building.id.toString(), building));
+
+                // Map floors to DTOs with building information
+                const floorsDTOResult = floors.map(floor => {
+                    const building = buildingMap.get(floor.building.toString());
+                    return FloorMap.toDTOWtiBuilding(floor, building) as IFloorWithBuildingDTO;
+                });
+
+                return Result.ok<Array<IFloorWithBuildingDTO>>(floorsDTOResult);
             }
         } catch (e) {
             throw e;
         }
     }
 
-    public async getFloorById(floorId: string): Promise<Result<IFloorDTO>> {
+    public async getFloorById(floorId: string): Promise<Result<IFloorWithBuildingDTO>> {
         try {
             const floor = await this.floorRepo.findByDomainId(floorId);
+            const building = (await this.getBuilding(floor.building.toString())).getValue();
 
             if (floor === null) {
-                return Result.fail<IFloorDTO>("Floor not found");
+                return Result.fail<IFloorWithBuildingDTO>('Floor not found');
             } else {
-                const floorDTOResult = FloorMap.toDTO(floor) as IFloorDTO;
-                return Result.ok<IFloorDTO>(floorDTOResult);
+                const floorDTOResult = FloorMap.toDTOWtiBuilding(floor, building) as IFloorWithBuildingDTO;
+                return Result.ok<IFloorWithBuildingDTO>(floorDTOResult);
             }
         } catch (e) {
             throw e;
@@ -93,7 +107,7 @@ export default class FloorService implements IFloorService {
             const floors = await this.floorRepo.getFloorsByBuildingId(buildingId);
 
             if (floors === null) {
-                return Result.fail<IFloorDTO[]>("Floors not found");
+                return Result.fail<IFloorDTO[]>('Floors not found');
             } else {
                 const floorsDTOResult = floors.map(floor => FloorMap.toDTO(floor) as IFloorDTO);
                 return Result.ok<IFloorDTO[]>(floorsDTOResult);
@@ -105,7 +119,6 @@ export default class FloorService implements IFloorService {
 
     // check if building exists
     private async getBuilding(buildingId: string): Promise<Result<Building>> {
-
         const building = await this.buildingRepo.findByDomainId(buildingId);
         const found = !!building;
 
@@ -121,7 +134,7 @@ export default class FloorService implements IFloorService {
             const floors = await this.floorRepo.getFloorsWithPassages();
 
             if (floors === null) {
-                return Result.fail<Array<IFloorDTO>>("Floors not found");
+                return Result.fail<Array<IFloorDTO>>('Floors not found');
             } else {
                 const floorsDTOResult = floors.map(floor => FloorMap.toDTO(floor) as IFloorDTO);
                 return Result.ok<Array<IFloorDTO>>(floorsDTOResult);
@@ -136,7 +149,7 @@ export default class FloorService implements IFloorService {
             const floor = await this.floorRepo.findByDomainId(floorDTO.id);
 
             if (floor === null) {
-                return Result.fail<IFloorDTO>("Floor not found");
+                return Result.fail<IFloorDTO>('Floor not found');
             }
 
             const information = await FloorInformation.create(floorDTO.information);
@@ -146,9 +159,8 @@ export default class FloorService implements IFloorService {
 
             const building = await this.buildingRepo.findByDomainId(floorDTO.building);
             if (building === null) {
-                return Result.fail<IFloorDTO>("Building not found");
+                return Result.fail<IFloorDTO>('Building not found');
             }
-
 
             floor.number = floorDTO.number;
             floor.information = information.getValue();
@@ -158,7 +170,7 @@ export default class FloorService implements IFloorService {
 
             const floorDTOResult = FloorMap.toDTO(floor) as IFloorDTO;
 
-            return Result.ok<IFloorDTO>(floorDTOResult)
+            return Result.ok<IFloorDTO>(floorDTOResult);
         } catch (e) {
             throw e;
         }
@@ -169,15 +181,13 @@ export default class FloorService implements IFloorService {
             const floor = await this.floorRepo.findByDomainId(floorId);
 
             if (floor === null) {
-                return Result.fail<void>("Floor not found");
-            }
-            else {
+                return Result.fail<void>('Floor not found');
+            } else {
                 const floors = await this.floorRepo.deleteFloor(floorId);
-                return Result.ok<void>()
+                return Result.ok<void>();
             }
         } catch (e) {
             throw e;
         }
     }
-
 }
