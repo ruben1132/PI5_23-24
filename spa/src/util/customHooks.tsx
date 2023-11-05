@@ -1,8 +1,7 @@
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent } from "react";
 import useSWR, { mutate } from "swr";
-import axios from 'axios'
-
-const fetcher = (url: string) => axios(url).then(res => res.data);
+import axios from "axios";
+import { fetcher } from "./swrFetcher";
 
 // hook for opening and closing modals
 export function useModal(initialValue: boolean) {
@@ -47,12 +46,35 @@ export function useFormStringInput(initialValue: string) {
   };
 }
 
+export function useFormSelectBox(initialValue: string) {
+  const [value, setValue] = useState(initialValue);
+
+  function handleChange(e: ChangeEvent<HTMLSelectElement>) {
+    setValue(e.target.value);
+  }
+
+  function handleLoad(e: string) {
+    setValue(e);
+  }
+
+  function handleReset() {
+    setValue("");
+  }
+
+  return {
+    value,
+    handleLoad,
+    handleChange,
+    handleReset,
+  };
+}
+
 // hook for number input
 export function useFormNumberInput(initialValue: number) {
   const [value, setValue] = useState(initialValue || 1);
 
   // Handler for onChange of the input
-  function handleOnChange(e: ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setValue(Number(e.target.value));
   }
 
@@ -68,7 +90,7 @@ export function useFormNumberInput(initialValue: number) {
 
   return {
     value,
-    handleOnChange,
+    handleChange,
     handleLoad,
     handleReset,
   };

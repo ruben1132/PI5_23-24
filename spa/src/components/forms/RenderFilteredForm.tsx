@@ -1,4 +1,5 @@
 import BuildingForm from "./BuildingForm";
+import FloorForm from "./FloorForm";
 
 interface Props {
   item: {
@@ -15,6 +16,13 @@ export function RenderFilteredForm(props: Props) {
         case "building":
           return (
             <BuildingForm
+              item={{ value: props.item.value }}
+              onUpdate={props.onUpdate}
+            />
+          );
+        case "floor":
+          return (
+            <FloorForm
               item={{ value: props.item.value }}
               onUpdate={props.onUpdate}
             />

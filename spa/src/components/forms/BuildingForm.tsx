@@ -16,7 +16,7 @@ interface Props {
   onUpdate: (item: Building) => void;
 }
 
-export default function EditBuildingForm(props: Props) {
+export default function BuildingForm(props: Props) {
   const buildingName = useFormStringInput(props.item.value?.name);
   const buildingCode = useFormStringInput(props.item.value?.code);
   const buildingDimensions = useFormStringInput(props.item.value?.dimensions);

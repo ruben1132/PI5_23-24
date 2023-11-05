@@ -13,7 +13,9 @@ export default function RowItem(props: Props) {
       switch (props.type.toLocaleLowerCase()) {
         case "floor":
           return (
-            <td key={props.index}>{props.item.code + " " + props.item.name}</td>
+            <td key={props.index}>
+              {props.item.code + " - " + props.item.name}
+            </td>
           );
         case "robottype":
           return (
@@ -27,12 +29,16 @@ export default function RowItem(props: Props) {
           );
 
         default:
-          return <td key={props.index}>no row handler for this item dummy :p create one! :D</td>;
+          return (
+            <td key={props.index}>
+              no row handler for this item dummy :p create one! :D
+            </td>
+          );
       }
     }
 
-    if(typeof props.item === 'boolean'){
-      return <td key={props.index}>{props.item ? 'Enabled' : 'Disabled'}</td>;
+    if (typeof props.item === "boolean") {
+      return <td key={props.index}>{props.item ? "Enabled" : "Disabled"}</td>;
     }
 
     return <td key={props.index}>{props.item}</td>;

@@ -55,7 +55,7 @@ export default function BuildingModal(props: Props) {
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
           {props.action === "edit"
-            ? "Edit" + props.item.type + " " + props.item.value.name
+            ? "Edit " + props.item.type + " " + props.item.value.name
             : "Add " + props.item.type}
         </Modal.Title>
       </Modal.Header>

@@ -1,6 +1,6 @@
 "use client";
 
-import EditBuildingForm from "@/components/forms/BuildingForm";
+import BuildingForm from "@/components/forms/BuildingForm";
 import config from "../../../../config";
 import { useFetchData, useSubmitData } from "@/util/customHooks";
 import Button from "react-bootstrap/Button";
@@ -42,8 +42,8 @@ export default function Page({ params }: Props) {
         <p>Building: {params.slug}</p>
       </div>
 
-      <EditBuildingForm
-        item={{ value: useFetchdata.data, type: "building" }}
+      <BuildingForm
+        item={{ value: useFetchdata.data }}
         onUpdate={buildingForm.handleChange}
       />
       <br />
