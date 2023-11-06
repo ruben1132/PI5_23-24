@@ -19,7 +19,7 @@ jobs:
           SFTP_SERVER="vsgate-ssh.dei.isep.ipp.pt"
           SFTP_PORT="10655"
           SFTP_USERNAME="root"
-          SFTP_PRIVATE_KEY: ${{ secrets.SFTP_PRIVATE_KEY }}
+          SFTP_PRIVATE_KEY="${{ secrets.SFTP_PRIVATE_KEY }}" # Correct syntax for referencing a secret
 
           # Save SFTP private key to a file and set permissions
           echo "$SFTP_PRIVATE_KEY" > sftp_key
