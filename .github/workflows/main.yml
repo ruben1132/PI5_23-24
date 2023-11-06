@@ -22,8 +22,8 @@ jobs:
           FTP_PASSWORD="root"
 
           # Install lftp
-          apt-get update
-          apt-get -y install lftp
+          sudo apt-get update
+          sudo apt-get -y install lftp
 
           # Use lftp to mirror the local directory to the FTP server
           lftp -e "set ftp:port $FTP_PORT; mirror --reverse --delete --verbose . /home/ubuntu/API; exit" -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER"
@@ -40,7 +40,7 @@ jobs:
           chmod 600 ssh_key
 
           # SSH into the server and execute commands
-          ssh -i ssh_key "$SSH_USERNAME@$SERVER_IP" "npm i && npm start"
+          ssh -i ssh_key "$SSH_USERNAME@$SERVER_IP" "sudo npm i && sudo npm start"
 
           # Cleanup (remove the private key)
           rm ssh_key
