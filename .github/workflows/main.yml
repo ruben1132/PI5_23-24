@@ -16,7 +16,7 @@ jobs:
       - name: Deploy to SFTP
         run: |
           # Replace these variables with your FTP server details
-          SFTP_SERVER="sftp://vsgate-ssh.dei.isep.ipp.pt"
+          SFTP_SERVER="vsgate-ssh.dei.isep.ipp.pt"
           SFTP_PORT="10655"
           SFTP_USERNAME="root"
           SFTP_PRIVATE_KEY: ${{ secrets.SFTP_PRIVATE_KEY }}
