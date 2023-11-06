@@ -1,6 +1,6 @@
 import Image from "next/image";
-import styles from "./meeko-loader.module.css"; // Import the CSS module
-import Container from 'react-bootstrap/Container';
+import styles from "./meeko-loader.module.css";
+import Container from "react-bootstrap/Container";
 
 export default function MeekoLoader() {
   return (
@@ -12,12 +12,12 @@ export default function MeekoLoader() {
             width={90}
             height={100}
             alt="Meeko"
-            className={styles.spinImage} // Pass the class name
+            className={styles.spinImage}
           />
           <p>
-            Oh! Don't mind me here!
+            Oh! Don&apos;t mind me here!
             <br />
-            I'm just making u company while we wait for this to load!{" "}
+            I&apos;m just making u company while we wait for this to load!
           </p>
         </div>
       </Container>
