@@ -18,16 +18,17 @@ jobs:
       - name: Execute SSH Commands
         run: |
           # Replace these variables with your SSH and server details
-          SSH_PRIVATE_KEY= "${{ secrets.SSH_PRIVATE_KEY }}"
-          SSH_USERNAME= "root"
-          SERVER_IP= "vsgate-ssh.dei.isep.ipp.pt:10655"
+          SERVER_IP="vsgate-ssh.dei.isep.ipp.pt"
+          SSH_PORT="10655"  # Replace with your desired SSH port
+          SSH_USERNAME="root"
+          SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY }}"
 
           # Save SSH private key to a file and set permissions
           echo "$SSH_PRIVATE_KEY" > ssh_key
           chmod 600 ssh_key
 
           # SSH into the server and execute commands
-          ssh -i ssh_key "$SSH_USERNAME@$SERVER_IP" "sudo npm i && sudo npm start"
+          ssh -i ssh_key -p $SSH_PORT "$SSH_USERNAME@$SERVER_IP" "sudo npm i && sudo npm start"
 
           # Cleanup (remove the private key)
           rm ssh_key
