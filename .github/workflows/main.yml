@@ -16,7 +16,8 @@ jobs:
       - name: Deploy to FTP
         run: |
           # Replace these variables with your FTP server details
-          FTP_SERVER="ftp://vsgate-ssh.dei.isep.ipp.pt:10655"
+          FTP_SERVER="sftp://vsgate-ssh.dei.isep.ipp.pt"
+          FTP_PORT=10655
           FTP_USERNAME="root"
           FTP_PASSWORD="root"
 
@@ -25,7 +26,7 @@ jobs:
           apt-get -y install lftp
 
           # Use lftp to mirror the local directory to the FTP server
-          lftp -e "mirror --reverse --delete --verbose . /home/ubuntu/API; exit" -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER"
+          lftp -e "set ftp:port $FTP_PORT; mirror --reverse --delete --verbose . /home/ubuntu/API; exit" -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER"
 
       - name: Execute SSH Commands
         run: |
