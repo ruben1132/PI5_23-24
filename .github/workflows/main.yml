@@ -1,0 +1,45 @@
+name: Deploy and Execute Commands
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_and_execute:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to FTP
+        run: |
+          # Replace these variables with your FTP server details
+          FTP_SERVER="ftp://vsgate-ssh.dei.isep.ipp.pt:10655"
+          FTP_USERNAME="root"
+          FTP_PASSWORD="root"
+
+          # Install lftp
+          apt-get update
+          apt-get -y install lftp
+
+          # Use lftp to mirror the local directory to the FTP server
+          lftp -e "mirror --reverse --delete --verbose . /home/ubuntu; exit" -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER"
+
+      - name: Execute SSH Commands
+        run: |
+          # Replace these variables with your SSH and server details
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_USERNAME: root
+          SERVER_IP: vsgate-ssh.dei.isep.ipp.pt:10655
+
+          # Save SSH private key to a file and set permissions
+          echo "$SSH_PRIVATE_KEY" > ssh_key
+          chmod 600 ssh_key
+
+          # SSH into the server and execute commands
+          ssh -i ssh_key "$SSH_USERNAME@$SERVER_IP" "npm i && npm start"
+
+          # Cleanup (remove the private key)
+          rm ssh_key
