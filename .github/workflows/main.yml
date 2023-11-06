@@ -23,7 +23,7 @@ jobs:
           SSH_HOST_KEY=$(ssh-keyscan -p $SSH_PORT $SERVER_IP)
   
           # Add the host key to the known hosts file
-          echo "$SSH_HOST_KEY" >> $HOME/.ssh/known_hosts
+          echo "$SSH_HOST_KEY" >> .github/workflows/known_hosts
   
       - name: Execute SSH Commands
         run: |
