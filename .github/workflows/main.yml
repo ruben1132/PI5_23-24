@@ -25,7 +25,7 @@ jobs:
           apt-get -y install lftp
 
           # Use lftp to mirror the local directory to the FTP server
-          lftp -e "mirror --reverse --delete --verbose . /home/ubuntu; exit" -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER"
+          lftp -e "mirror --reverse --delete --verbose . /home/ubuntu/API; exit" -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER"
 
       - name: Execute SSH Commands
         run: |
