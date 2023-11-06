@@ -39,7 +39,7 @@ jobs:
           chmod 600 sftp_key
 
           # Use sftp to transfer files to the SFTP server
-          sftp -i sftp_key -oPort=$SFTP_PORT -oUserKnownHostsFile=~/.ssh/known_hosts "$SFTP_USERNAME@$SFTP_SERVER" <<EOF
+          sftp -i sftp_key -oPort=$SFTP_PORT -oUserKnownHostsFile=.github/workflows/known_hosts "$SFTP_USERNAME@$SFTP_SERVER" <<EOF
           put -r * /home/ubuntu/API
           bye
           EOF
