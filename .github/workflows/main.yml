@@ -28,7 +28,7 @@ jobs:
           chmod 600 ssh_key
       
           # Accept the SSH host key and add it to the known hosts file
-          ssh-keyscan -p $SSH_PORT "$SERVER_IP" >> .github/workflows/known_hosts
+          ssh-keyscan -p $SSH_PORT "$SERVER_IP" >> $HOME/.ssh/known_hosts
       
           # SSH into the server and execute commands
           ssh -i ssh_key -p $SSH_PORT "$SSH_USERNAME@$SERVER_IP" "sudo npm i && sudo npm start"
