@@ -24,7 +24,7 @@ jobs:
           SSH_HOST_KEY=$(ssh-keyscan -p $SSH_PORT $SSH_SERVER)
 
           # Add the host key to the known hosts file
-          echo "$SSH_HOST_KEY" >> $HOME/.ssh/known_hosts
+          echo "$SSH_HOST_KEY" >> .ssh/known_hosts
 
       - name: Deploy to SFTP
         run: |
