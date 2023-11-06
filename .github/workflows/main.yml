@@ -13,38 +13,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Accept SSH Host Key
+
+
+      - name: Execute SSH Commands
         run: |
-          # Replace these variables with your SSH server details
-          SSH_SERVER="vsgate-ssh.dei.isep.ipp.pt"
-          SSH_PORT="10655"
-          SSH_USERNAME="root"
+          # Replace these variables with your SSH and server details
+          SSH_PRIVATE_KEY: "${{ secrets.SSH_PRIVATE_KEY }}"
+          SSH_USERNAME: "root"
+          SERVER_IP: "vsgate-ssh.dei.isep.ipp.pt:10655"
 
-          # Retrieve the SSH host key from the server
-          SSH_HOST_KEY=$(ssh-keyscan -p $SSH_PORT $SSH_SERVER)
+          # Save SSH private key to a file and set permissions
+          echo "$SSH_PRIVATE_KEY" > ssh_key
+          chmod 600 ssh_key
 
-          # Add the host key to the known hosts file
-          echo "$SSH_HOST_KEY" >> .github/workflows/known_hosts
-
-      - name: Deploy to SFTP
-        run: |
-          # Replace these variables with your FTP server details
-          SFTP_SERVER="vsgate-ssh.dei.isep.ipp.pt"
-          SFTP_PORT="10655"
-          SFTP_USERNAME="root"
-          SFTP_PRIVATE_KEY="${{ secrets.SFTP_PRIVATE_KEY }}" # Correct syntax for referencing a secret
-
-          # Save SFTP private key to a file and set permissions
-          echo "$SFTP_PRIVATE_KEY" > sftp_key
-          chmod 600 sftp_key
-
-          # Use sftp to transfer files to the SFTP server
-          sftp -i sftp_key -oPort=$SFTP_PORT -oUserKnownHostsFile=.github/workflows/known_hosts "$SFTP_USERNAME@$SFTP_SERVER" <<EOF
-          put -r * /home/ubuntu/API
-          bye
-          EOF
+          # SSH into the server and execute commands
+          ssh -i ssh_key "$SSH_USERNAME@$SERVER_IP" "sudo npm i && sudo npm start"
 
           # Cleanup (remove the private key)
-          rm sftp_key
-
-
+          rm ssh_key
