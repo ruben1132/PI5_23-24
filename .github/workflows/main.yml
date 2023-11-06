@@ -18,9 +18,9 @@ jobs:
       - name: Execute SSH Commands
         run: |
           # Replace these variables with your SSH and server details
-          SSH_PRIVATE_KEY: "${{ secrets.SSH_PRIVATE_KEY }}"
-          SSH_USERNAME: "root"
-          SERVER_IP: "vsgate-ssh.dei.isep.ipp.pt:10655"
+          SSH_PRIVATE_KEY= "${{ secrets.SSH_PRIVATE_KEY }}"
+          SSH_USERNAME= "root"
+          SERVER_IP= "vsgate-ssh.dei.isep.ipp.pt:10655"
 
           # Save SSH private key to a file and set permissions
           echo "$SSH_PRIVATE_KEY" > ssh_key
