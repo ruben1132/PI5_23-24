@@ -13,34 +13,34 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Deploy to FTP
+      - name: Accept SSH Host Key
         run: |
-          # Replace these variables with your FTP server details
-          FTP_SERVER="sftp://vsgate-ssh.dei.isep.ipp.pt"
-          FTP_PORT=10655
-          FTP_USERNAME="root"
-          FTP_PASSWORD="root"
-
-          # Install lftp
-          apt-get update
-          apt-get -y install lftp
-
-          # Use lftp to mirror the local directory to the FTP server
-          lftp -e "set ftp:port $FTP_PORT; mirror --reverse --delete --verbose . /home/ubuntu/API; exit" -u "$FTP_USERNAME","$FTP_PASSWORD" "$FTP_SERVER"
-
+          # Replace these variables with your SSH server details
+          SERVER_IP="vsgate-ssh.dei.isep.ipp.pt"
+          SSH_PORT="10655"
+  
+          # Retrieve the SSH host key from the server
+          SSH_HOST_KEY=$(ssh-keyscan -p $SSH_PORT $SERVER_IP)
+  
+          # Add the host key to the known hosts file
+          echo "$SSH_HOST_KEY" >> .github/workflows/known_hosts
+  
       - name: Execute SSH Commands
         run: |
           # Replace these variables with your SSH and server details
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_USERNAME: root
-          SERVER_IP: vsgate-ssh.dei.isep.ipp.pt:10655
-
+          SERVER_IP="vsgate-ssh.dei.isep.ipp.pt"
+          SSH_PORT="10655"  # Replace with your desired SSH port
+          SSH_USERNAME="root"
+          SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY }}"
+  
           # Save SSH private key to a file and set permissions
           echo "$SSH_PRIVATE_KEY" > ssh_key
           chmod 600 ssh_key
-
+  
           # SSH into the server and execute commands
-          ssh -i ssh_key "$SSH_USERNAME@$SERVER_IP" "npm i && npm start"
+          ssh -i ssh_key -o UserKnownHostsFile=.github/workflows/known_hosts -p $SSH_PORT "$SSH_USERNAME@$SERVER_IP" "cd /home/ubuntu/API/mgi && sudo npm i"
+          ssh -i ssh_key -o UserKnownHostsFile=.github/workflows/known_hosts -p $SSH_PORT "$SSH_USERNAME@$SERVER_IP" "cd /home/ubuntu/API/mgi && sudo npm start"
 
           # Cleanup (remove the private key)
           rm ssh_key
+  
