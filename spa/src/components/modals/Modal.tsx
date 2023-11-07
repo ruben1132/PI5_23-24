@@ -25,7 +25,7 @@ interface Props {
 }
 
 export default function BuildingModal(props: Props) {
-  const buildingForm = useSubmitData(
+  const dataForm = useSubmitData(
     props.item,
     props.route.api,
     props.action === "edit" ? "PUT" : "POST"
@@ -34,7 +34,7 @@ export default function BuildingModal(props: Props) {
 
   // updates the building and refreshes the table
   const submitData = async () => {
-    let res = await buildingForm.submit();
+    let res = await dataForm.submit();
 
     if (!res) {
       // TODO: show alert
@@ -65,7 +65,7 @@ export default function BuildingModal(props: Props) {
             value: props.item.value ? props.item.value : null,
             type: props.item.type,
           }}
-          onUpdate={buildingForm.handleChange}
+          onUpdate={dataForm.handleChange}
         />
       </Modal.Body>
       <Modal.Footer>

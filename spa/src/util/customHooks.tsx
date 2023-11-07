@@ -106,7 +106,7 @@ export function useSubmitData(initialValue: any, r: string, t: string) {
     setValue(e);
   }
 
-  async function submit(): Promise<boolean> {
+  async function submit(): Promise<any | null> {
     // API - update
     try {
       const response = await axios(route, {
@@ -118,15 +118,12 @@ export function useSubmitData(initialValue: any, r: string, t: string) {
       });
 
       if (response.status === 201 || response.status === 200) {
-        return true;
-      } else {
-        return false;
+        return response.data;
       }
 
-      return true;
+      return null;
     } catch (error) {
-      console.log(error);
-      return false;
+      return null;
     }
   }
 

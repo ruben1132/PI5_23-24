@@ -77,6 +77,7 @@ export default {
       tasktypes: "tasktypes/",
       users: "users/",
       floormaps: "floormaps/",
+      floormapsWithFloor: "floormaps/floor/",
       roles: "roles/",
       elevators: "elevators/",
       rooms: "rooms/",
