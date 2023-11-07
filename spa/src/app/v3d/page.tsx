@@ -1,4 +1,4 @@
-import ThreeJSPage from "@/components/v3d/Scene2";
+import ThreeJSPage from "@/components/v3d/Scene";
 
 
 export default async function Users() {
@@ -7,7 +7,7 @@ export default async function Users() {
     <div>
       <p>V3D</p>
 
-    {/* <ThreeJSPage /> */}
+    <ThreeJSPage />
     </div>
   );
 }
