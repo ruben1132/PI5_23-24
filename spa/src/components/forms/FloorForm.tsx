@@ -1,16 +1,21 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import BuildingSelectBox from "@/components/forms/selectboxes/BuildingSelectBox";
 // custom hooks
-import { useFormNumberInput, useFormStringInput } from "@/util/customHooks";
+import {
+  useFetchData,
+  useFormNumberInput,
+  useFormStringInput,
+} from "@/util/customHooks";
 // models
 import { Floor, FloorWithBuilding } from "@/models/Floor";
 // config
 import config from "../../../config";
+import { Building } from "@/models/Building";
 
 interface Props {
   item: {
@@ -22,32 +27,47 @@ interface Props {
 export default function FloorForm(props: Props) {
   const floorInformation = useFormStringInput(props.item.value?.information);
   const floorNumber = useFormNumberInput(props.item.value?.number);
-  const floorBuilding = useFormStringInput(props.item.value?.building.id);
+  const floorBuilding = useFormStringInput(props.item.value?.building?.id);
+  const selectBoxDataFetch = useFetchData(
+    config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings
+  );
 
   const sendDataToParent = () => {
     let item: Floor = {
       id: props.item.value?.id,
-      number: props.item.value.number,
-      information: props.item.value.information,
-      building: props.item.value.building.id,
+      number: props.item.value?.number,
+      information: props.item.value?.information,
+      building: props.item.value?.building?.id,
     };
 
     item.id = props.item.value?.id;
     item.number = floorNumber.value;
     item.information = floorInformation.value;
-    item.building = floorBuilding.value;
+    item.building = floorBuilding.value || filteredSelectBoxData[0].id;
 
     props.onUpdate(item);
   };
 
-  const selectBoxSelected = (e: string) => {
-    floorBuilding.handleLoad(e);
+  const selectBoxSelected = (e: ChangeEvent<HTMLSelectElement>) => {
+    floorBuilding.handleLoad(e.target.value);
   };
 
   // send data to parent when the there's changes on the form
   useEffect(() => {
     sendDataToParent();
   }, [floorInformation.value, floorNumber.value, floorBuilding.value]);
+
+  if (selectBoxDataFetch.isLoading) {
+    return <Form.Select>Loading...</Form.Select>;
+  }
+  if (selectBoxDataFetch.isError) {
+    return <Form.Select>Error</Form.Select>;
+  }
+
+  // filter data so it removes the element already selected
+  const filteredSelectBoxData = selectBoxDataFetch.data.filter(
+    (item: any) => item.id !== props.item.value?.building?.id
+  );
 
   return (
     <Form>
@@ -79,16 +99,25 @@ export default function FloorForm(props: Props) {
         <Col sm={6}>
           <Form.Group className="mb-6">
             <Form.Label htmlFor="select">Building</Form.Label>
-            <BuildingSelectBox
-              defaultValue={{
-                id: props.item.value?.building.id,
-                name:
-                  props.item.value?.building.code +
-                  " - " +
-                  props.item.value?.building.name,
-              }}
+            <Form.Select
+              defaultValue={
+                props.item.value?.building?.id ?? filteredSelectBoxData[0].id
+              }
               onChange={selectBoxSelected}
-            />
+            >
+              {props.item.value?.building?.id && (
+                <option defaultChecked={true}>
+                  {props.item.value?.building.name}
+                </option>
+              )}
+
+              {filteredSelectBoxData?.map((item: Building) => (
+                <option key={item.id} value={item.id}>
+                  {/* show 2nd prop from item, 1st prop is the id */}
+                  {item.code + " - " + item.name}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
         </Col>
       </Row>
