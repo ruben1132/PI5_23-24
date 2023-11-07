@@ -21,6 +21,7 @@ export default {
         'mongodb://mongoadmin:ca7408396943512431f6af8a@vsgate-s1.dei.isep.ipp.pt:10937/?authMechanism=SCRAM-SHA-1',
     ),
 
+
     // Your secret sauce
     jwtSecret: getEnvVariable('JWT_SECRET', 'secret'),
 
