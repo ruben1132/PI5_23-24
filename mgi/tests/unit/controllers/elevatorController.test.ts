@@ -42,7 +42,7 @@ describe('Elevator Controller', function () {
         let next: Partial<NextFunction> = () => { };
 
         sinon.stub(service, "createElevator").resolves(Result.ok<IElevatorDTO>({
-            "domainId": "123",
+            "id": "123",
             "designation": req.body.designation,
             "floorsAllowed": req.body.floorsAllowed
         }
@@ -57,7 +57,7 @@ describe('Elevator Controller', function () {
             // Assert
             sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
             sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
-                "domainId": "123",
+                "id": "123",
                 "designation": req.body.designation,
                 "floorsAllowed": req.body.floorsAllowed
             }));
