@@ -100,11 +100,6 @@ export class FloorMapMap extends Mapper<FloorMap> {
     }
 
     private static mapObjs(fm: FloorMap): any {
-        console.log(fm.fmRooms);
-        console.log(fm.fmDoors);
-        console.log(fm.fmElevator);
-        console.log(fm.fmPassages);
-
         return {
             fmRooms: fm.fmRooms.map(fR => {
                 return {
