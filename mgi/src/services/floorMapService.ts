@@ -180,12 +180,12 @@ export default class FloorMapService implements IFloorMapService {
 
     public async getFloorMapByFloorId(floorId: string): Promise<Result<IFloorMapDTO>> {
         try {
-            const floorMaps = await this.floorMapRepo.getFloorMapByFloorId(floorId);
+            const floorMap = await this.floorMapRepo.getFloorMapByFloorId(floorId);
 
-            if (floorMaps === null) {
-                return Result.fail<IFloorMapDTO>("FloorMaps not found");
+            if (floorMap === null) {
+                return Result.fail<IFloorMapDTO>("FloorMap not found for the given floor");
             } else {
-                const floorMapsDTOResult = FloorMapMap.toDTO(floorMaps) as IFloorMapDTO;
+                const floorMapsDTOResult = FloorMapMap.toDTO(floorMap) as IFloorMapDTO;
                 return Result.ok<IFloorMapDTO>(floorMapsDTOResult);
             }
         } catch (e) {
