@@ -98,7 +98,7 @@ export function useFormNumberInput(initialValue: number) {
 
 // hook to update data
 export function useSubmitData(initialValue: any, r: string, t: string) {
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState<any>(initialValue);
   const [route] = useState<string>(r);
   const [type] = useState<string>(t);
 
@@ -106,15 +106,13 @@ export function useSubmitData(initialValue: any, r: string, t: string) {
     setValue(e);
   }
 
-  async function submit(): Promise<any | null> {
+  async function submit(data? : any): Promise<any | null> {
+
     // API - update
     try {
       const response = await axios(route, {
         method: type,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: value,
+        data: value || data,
       });
 
       if (response.status === 201 || response.status === 200) {

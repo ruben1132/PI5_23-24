@@ -63,16 +63,29 @@ export default function FloorForm(props: Props) {
   };
 
   // handle upload to floormap to server
-  const handleUpload = (file: File | undefined) => {
+  const handleUpload = async (file: File | undefined) => {
     if (!file) {
+      console.log("no file");
+
       // TODO: show alert that there's no file
       return;
     }
 
+    console.log("fffff");
+
     let formData = new FormData();
     formData.append("jsonFile", file);
+    // uploadFloorMap.handleChange("teste");
+    let res = await uploadFloorMap.submit(formData);
+    console.log(res);
 
-    uploadFloorMap.handleChange(formData);
+    if (!res) {
+      // TODO: show alert
+      return;
+    }
+
+    // fetch floor map again
+    fetchFloorMap.revalidate();
   };
 
   // send data to parent when the there's changes on the form
@@ -142,7 +155,9 @@ export default function FloorForm(props: Props) {
             >
               {props.item.value?.building?.id && (
                 <option defaultChecked={true}>
-                  {props.item.value?.building.code + " - " + props.item.value?.building.name}
+                  {props.item.value?.building.code +
+                    " - " +
+                    props.item.value?.building.name}
                 </option>
               )}
 
@@ -155,20 +170,35 @@ export default function FloorForm(props: Props) {
             </Form.Select>
           </Form.Group>
         </Col>
-        <Col sm={6}>
-          <Form.Group controlId="formFile" className="mb-3">
+        {props.item.value.id && (
+          <Col sm={6}>
+            <Form.Group controlId="formFile" className="mb-3">
+              <Form.Label>Floor map</Form.Label>
+              <Form.Control
+                key={props.item.value.id}
+                type="file"
+                onChange={(e) => {
+                  handleUpload((e.target as HTMLInputElement).files?.[0]);
+                  e.target.value = "";
+                }}
+              />
+            </Form.Group>
+          </Col>
+        )}
+      </Row>
+      {fetchFloorMap.data && (
+        <Col sm={12}>
+          <Form.Group controlId="preview" className="mb-3">
             <Form.Label>Floor map</Form.Label>
             <Form.Control
-              type="file"
-              onChange={(e) => {
-                handleUpload((e.target as HTMLInputElement).files?.[0]);
-              }}
+              as={"textarea"}
+              value={JSON.stringify(fetchFloorMap.data, null, 2)}
+              disabled={true}
+              style={{ height: "500px" }}
             />
           </Form.Group>
         </Col>
-      </Row>
-      {/* if it has a floor map already, shows it below */}
-      <Row></Row>
+      )}
     </Form>
   );
 }
