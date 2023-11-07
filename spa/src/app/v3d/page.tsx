@@ -1,7 +1,7 @@
 import ThreeJSPage from "@/components/v3d/Scene";
+import "./main.module.css";
 
-
-export default async function Users() {
+export default async function Page() {
 
   return (
     <div>

@@ -1,4 +1,4 @@
-body {
+.v3dbody {
   margin: 0;
 }
 
@@ -57,7 +57,7 @@ body {
   color: white;
 }
 
-table {
+.v3dtable {
   margin: auto;
   border: 1px solid black;
 }
@@ -88,15 +88,15 @@ table.subwindows {
   background-color: #44444470;
 }
 
-th,
-td {
+table.th,
+table.td {
   overflow: hidden;
   border: 1px solid black;
 }
 
-a {
+/* a {
   color: white;
-}
+} */
 
 #view,
 #projection {
@@ -118,7 +118,7 @@ a {
   font-size: 1.5vmin;
 }
 
-input:invalid {
+.v3dinput:invalid {
   background-color: pink;
 }
 
@@ -126,6 +126,6 @@ input:invalid {
   accent-color: red;
 }
 
-canvas {
+.v3dcanvas {
   display: block;
 }

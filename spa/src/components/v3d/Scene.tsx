@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useEffect } from "react";
-import * as THREE from "three"; // Import Three.js
-import Orientation from "./orientation.js"; // Import your Orientation class
-import ThumbRaiser from "./thumb_raiser.js"; // Import your ThumbRaiser class
-import "./main.module.css";
+import * as THREE from "three";
+import Orientation from "./orientation.js";
+import ThumbRaiser from "./thumb_raiser.js";
 
 const ThreeJSPage: React.FC = () => {
   useEffect(() => {
@@ -17,7 +16,7 @@ const ThreeJSPage: React.FC = () => {
           enabled: true,
           introductionClips: [
             {
-              url: "./clips/el-gringo-12613.mp3",
+              url: "./v3d/clips/el-gringo-12613.mp3",
               position: "initial", // Global (non-positional) audio object: ""; positional audio object: "scene x y z" (scene specific position in cartesian coordinates), "maze line column" (maze specific position in cell coordinates), "exit" (maze exit location), "initial" (player initial position), "player" (player current position), "spotlight" (spotlight current position)
               referenceDistance: 1.0,
               loop: false,
@@ -26,21 +25,21 @@ const ThreeJSPage: React.FC = () => {
           ],
           idleClips: [
             {
-              url: "./clips/Clearing-Throat-Moderate-Speed-www.fesliyanstudios.com.mp3",
+              url: "./v3d/clips/Clearing-Throat-Moderate-Speed-www.fesliyanstudios.com.mp3",
               position: "player",
               referenceDistance: 1.0,
               loop: false,
               volume: 0.75,
             },
             {
-              url: "./clips/Small-Double-Cough-1-www.fesliyanstudios.com.mp3",
+              url: "./v3d/clips/Small-Double-Cough-1-www.fesliyanstudios.com.mp3",
               position: "player",
               referenceDistance: 1.0,
               loop: false,
               volume: 0.75,
             },
             {
-              url: "./clips/Yawn-A2-www.fesliyanstudios.com.mp3",
+              url: "./v3d/clips/Yawn-A2-www.fesliyanstudios.com.mp3",
               position: "player",
               referenceDistance: 1.0,
               loop: false,
@@ -49,14 +48,14 @@ const ThreeJSPage: React.FC = () => {
           ],
           jumpClips: [
             {
-              url: "./clips/Cheering-A6-www.fesliyanstudios.com.mp3",
+              url: "./v3d/clips/Cheering-A6-www.fesliyanstudios.com.mp3",
               position: "player",
               referenceDistance: 1.0,
               loop: false,
               volume: 0.75,
             },
             {
-              url: "./clips/Cheering-A7-www.fesliyanstudios.com.mp3",
+              url: "./v3d/clips/Cheering-A7-www.fesliyanstudios.com.mp3",
               position: "player",
               referenceDistance: 1.0,
               loop: false,
@@ -65,14 +64,14 @@ const ThreeJSPage: React.FC = () => {
           ],
           deathClips: [
             {
-              url: "./clips/176653326.mp3",
+              url: "./v3d/clips/176653326.mp3",
               position: "player",
               referenceDistance: 1.0,
               loop: false,
               volume: 0.75,
             },
             {
-              url: "./clips/Horn+Squeeze+Clown.mp3",
+              url: "./v3d/clips/Horn+Squeeze+Clown.mp3",
               position: "player",
               referenceDistance: 1.0,
               loop: false,
@@ -81,7 +80,7 @@ const ThreeJSPage: React.FC = () => {
           ],
           danceClips: [
             {
-              url: "./clips/best-buddies-12609.mp3",
+              url: "./v3d/clips/best-buddies-12609.mp3",
               position: "exit",
               referenceDistance: 1.0,
               loop: true,
@@ -90,21 +89,21 @@ const ThreeJSPage: React.FC = () => {
           ],
           endClips: [
             {
-              url: "./clips/Ba-Bum-Tss-Joke-Drum-A1-www.fesliyanstudios.com.mp3",
+              url: "./v3d/clips/Ba-Bum-Tss-Joke-Drum-A1-www.fesliyanstudios.com.mp3",
               position: "exit",
               referenceDistance: 1.0,
               loop: false,
               volume: 2.0,
             },
             {
-              url: "./clips/yay-6326.mp3",
+              url: "./v3d/clips/yay-6326.mp3",
               position: "exit",
               referenceDistance: 1.0,
               loop: false,
               volume: 0.75,
             },
             {
-              url: "./clips/crowd-cheer-ii-6263.mp3",
+              url: "./v3d/clips/crowd-cheer-ii-6263.mp3",
               position: "exit",
               referenceDistance: 1.0,
               loop: false,
@@ -119,7 +118,7 @@ const ThreeJSPage: React.FC = () => {
             {
               // Stormy days
               name: "Stormy days",
-              texturePath: "./cube_textures/envmap_stormydays/",
+              texturePath: "./v3d/cube_textures/envmap_stormydays/",
               texturePositiveXUrl: "stormydays_ft.jpg",
               textureNegativeXUrl: "stormydays_bk.jpg",
               texturePositiveYUrl: "stormydays_up.jpg",
@@ -132,7 +131,7 @@ const ThreeJSPage: React.FC = () => {
             {
               // Miramar
               name: "Miramar",
-              texturePath: "./cube_textures/red-eclipse-skyboxes/skyboxes/",
+              texturePath: "./v3d/cube_textures/red-eclipse-skyboxes/skyboxes/",
               texturePositiveXUrl: "miramar_ft.jpg",
               textureNegativeXUrl: "miramar_bk.jpg",
               texturePositiveYUrl: "miramar_up.jpg",
@@ -145,7 +144,7 @@ const ThreeJSPage: React.FC = () => {
             {
               // Flat sunset
               name: "Flat sunset",
-              texturePath: "./cube_textures/red-eclipse-skyboxes/skyboxes/",
+              texturePath: "./v3d/cube_textures/red-eclipse-skyboxes/skyboxes/",
               texturePositiveXUrl: "sunsetflat_ft.jpg",
               textureNegativeXUrl: "sunsetflat_bk.jpg",
               texturePositiveYUrl: "sunsetflat_up.jpg",
@@ -200,7 +199,7 @@ const ThreeJSPage: React.FC = () => {
             {
               // Heaven
               name: "Heaven",
-              texturePath: "./cube_textures/xonotic-skyboxes/skyboxes/heaven/",
+              texturePath: "./v3d/cube_textures/xonotic-skyboxes/skyboxes/heaven/",
               texturePositiveXUrl: "heaven_ft.jpg",
               textureNegativeXUrl: "heaven_bk.jpg",
               texturePositiveYUrl: "heaven_up.jpg",
@@ -310,6 +309,7 @@ const ThreeJSPage: React.FC = () => {
       );
     }
 
+
     function animate() {
       requestAnimationFrame(animate);
       // Update the game
@@ -322,331 +322,358 @@ const ThreeJSPage: React.FC = () => {
 
   return (
     <>
-      <html>
-        <head>
-          <meta charSet="utf-8"> </meta>
-          <title>Thumb Raiser (10 x 10)</title>
-        </head>
-
-        <body>
-          <div id="container">
-            <div id="views-panel">
-              <table className="views">
-                <tr>
-                  <td>
-                    View:
-                    <select id="view">
-                      <option value="fixed">Fixed</option>
-                      <option value="first">First-person</option>
-                      <option value="third">Third-person</option>
-                      <option value="top">Top</option>
-                    </select>
-                  </td>
-                  <td>
-                    Orientation (h):
-                    <input type="number" id="horizontal" required />
-                  </td>
-                  <td>
-                    Orientation (v):
-                    <input type="number" id="vertical" required />
-                  </td>
-                  <td>
-                    <input type="button" id="reset" value="Reset view" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Projection:
-                    <select id="projection">
-                      <option value="perspective">Perspective</option>
-                      <option value="orthographic">Orthographic</option>
-                    </select>
-                  </td>
-                  <td>
-                    Distance:
-                    <input type="number" id="distance" required />
-                  </td>
-                  <td>
-                    Zoom:
-                    <input type="number" id="zoom" required />
-                  </td>
-                  <td>
-                    <input
-                      type="button"
-                      id="reset-all"
-                      value="Reset all views"
-                    />
-                  </td>
-                </tr>
-              </table>
-            </div>
-            <div id="mouse-help-panel">
-              <table className="mouse-help" id="mouse-help-table">
-                <tr>
-                  <th colSpan={5} style={{ fontSize: "2.0vmin" }}>
-                    Help - Mouse
-                  </th>
-                </tr>
-                <tr>
-                  <th>View</th>
-                  <th>Primary button</th>
-                  <th>Secondary button</th>
-                  <th>Shift-wheel</th>
-                  <th>Wheel</th>
-                </tr>
-                <tr>
-                  <td>Fixed</td>
-                  <td>Drag / resize</td>
-                  <td>Orbit</td>
-                  <td>Dolly</td>
-                  <td>Zoom</td>
-                </tr>
-                <tr>
-                  <td>First-person</td>
-                  <td>Drag / resize</td>
-                  <td>Orbit</td>
-                  <td>n/a</td>
-                  <td>Zoom</td>
-                </tr>
-                <tr>
-                  <td>Third-person</td>
-                  <td>Drag / resize</td>
-                  <td>Orbit</td>
-                  <td>Dolly</td>
-                  <td>Zoom</td>
-                </tr>
-                <tr>
-                  <td>Top</td>
-                  <td>Drag / resize</td>
-                  <td>Orbit</td>
-                  <td>Dolly</td>
-                  <td>Zoom</td>
-                </tr>
-                <tr>
-                  <td>Mini-map</td>
-                  <td>Drag / resize</td>
-                  <td>Pan</td>
-                  <td>n/a</td>
-                  <td>Zoom</td>
-                </tr>
-              </table>
-            </div>
-            <div id="keyboard-help-panel">
-              <table className="keyboard-help" id="keyboard-help-table">
-                <tr>
-                  <th colSpan={2} style={{ fontSize: "2.0vmin" }}>
-                    Help - Keyboard
-                  </th>
-                </tr>
-                <tr>
-                  <th colSpan={2} style={{ textAlign: "left" }}>
-                    Set view mode
-                  </th>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Stabilized view mode / realistic view mode</td>
-                </tr>
-                <tr>
-                  <th colSpan={2} style={{ textAlign: "left" }}>
-                    Display / select / hide views
-                  </th>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Fixed view</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>First-person view</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Third-person view</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Top view</td>
-                </tr>
-                <tr>
-                  <th colSpan={2} style={{ textAlign: "left" }}>
-                    Display / hide subwindows and bounding volumes
-                  </th>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Mini-map</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Statistics</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>User interface</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Help and credits</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Bounding volumes</td>
-                </tr>
-                <tr>
-                  <th colSpan={2} style={{ textAlign: "left" }}>
-                    Turn on / off lights, shadows and fog
-                  </th>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Ambient light</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Directional light</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Spotlight</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Flashlight</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Shadows</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Fog</td>
-                </tr>
-                <tr>
-                  <th colSpan={2} style={{ textAlign: "left" }}>
-                    Move character
-                  </th>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Turn left slowly / quickly (with shift key)</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Turn right slowly / quickly (with shift key)</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Walk / run (with shift key) backward</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Walk / run (with shift key) forward</td>
-                </tr>
-                <tr>
-                  <th colSpan={2} style={{ textAlign: "left" }}>
-                    Emote character
-                  </th>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Jump</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Yes</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>No</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Wave</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Punch</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>Thumbs up</td>
-                </tr>
-              </table>
-            </div>
-            <div id="credits-panel">
-              <table className="credits" id="credits-table">
-                <tr>
-                  <th style={{ fontSize: "2.0vmin" }}>Credits</th>
-                </tr>
-                <tr>
-                  <td></td>
-                </tr>
-              </table>
-            </div>
-            <div id="subwindows-panel">
-              <table className="subwindows">
-                <tr>
-                  <td>
-                    Realistic view mode:
-                    <input type="checkbox" id="realistic" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Fixed view:
-                    <input type="checkbox" id="fixed" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    First-person view:
-                    <input type="checkbox" id="first-person" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Third-person view:
-                    <input type="checkbox" id="third-person" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Top view:
-                    <input type="checkbox" id="top" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Mini-map:
-                    <input type="checkbox" id="mini-map" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Statistics:
-                    <input type="checkbox" id="statistics" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    User interface:
-                    <input type="checkbox" id="user-interface" />
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    Help and credits:
-                    <input type="checkbox" id="help" />
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
-
-          <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-        </body>
-      </html>
+    <canvas id="canvas">
+      <div id="container">
+        <div id="views-panel">
+          <table className="v3dtable views">
+            <tbody>
+              <tr>
+                <td>
+                  View:
+                  <select id="view">
+                    <option value="fixed">Fixed</option>
+                    <option value="first">First-person</option>
+                    <option value="third">Third-person</option>
+                    <option value="top">Top</option>
+                  </select>
+                </td>
+                <td>
+                  Orientation (h):
+                  <input
+                    className="v3dinput"
+                    type="number"
+                    id="horizontal"
+                    required
+                  />
+                </td>
+                <td>
+                  Orientation (v):
+                  <input
+                    className="v3dinput"
+                    type="number"
+                    id="vertical"
+                    required
+                  />
+                </td>
+                <td>
+                  <input
+                    className="v3dinput"
+                    type="button"
+                    id="reset"
+                    value="Reset view"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Projection:
+                  <select id="projection">
+                    <option value="perspective">Perspective</option>
+                    <option value="orthographic">Orthographic</option>
+                  </select>
+                </td>
+                <td>
+                  Distance:
+                  <input
+                    className="v3dinput"
+                    type="number"
+                    id="distance"
+                    required
+                  />
+                </td>
+                <td>
+                  Zoom:
+                  <input
+                    className="v3dinput"
+                    type="number"
+                    id="zoom"
+                    required
+                  />
+                </td>
+                <td>
+                  <input type="button" id="reset-all" value="Reset all views" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="mouse-help-panel">
+          <table className="v3dtable mouse-help" id="mouse-help-table">
+            <tbody>
+            <tr>
+              <th colSpan={5} style={{ fontSize: "2.0vmin" }}>
+                Help - Mouse
+              </th>
+            </tr>
+            <tr>
+              <th>View</th>
+              <th>Primary button</th>
+              <th>Secondary button</th>
+              <th>Shift-wheel</th>
+              <th>Wheel</th>
+            </tr>
+            <tr>
+              <td>Fixed</td>
+              <td>Drag / resize</td>
+              <td>Orbit</td>
+              <td>Dolly</td>
+              <td>Zoom</td>
+            </tr>
+            <tr>
+              <td>First-person</td>
+              <td>Drag / resize</td>
+              <td>Orbit</td>
+              <td>n/a</td>
+              <td>Zoom</td>
+            </tr>
+            <tr>
+              <td>Third-person</td>
+              <td>Drag / resize</td>
+              <td>Orbit</td>
+              <td>Dolly</td>
+              <td>Zoom</td>
+            </tr>
+            <tr>
+              <td>Top</td>
+              <td>Drag / resize</td>
+              <td>Orbit</td>
+              <td>Dolly</td>
+              <td>Zoom</td>
+            </tr>
+            <tr>
+              <td>Mini-map</td>
+              <td>Drag / resize</td>
+              <td>Pan</td>
+              <td>n/a</td>
+              <td>Zoom</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="keyboard-help-panel">
+          <table className="v3dtable keyboard-help" id="keyboard-help-table">
+            <tbody>
+            <tr>
+              <th colSpan={2} style={{ fontSize: "2.0vmin" }}>
+                Help - Keyboard
+              </th>
+            </tr>
+            <tr>
+              <th colSpan={2} style={{ textAlign: "left" }}>
+                Set view mode
+              </th>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Stabilized view mode / realistic view mode</td>
+            </tr>
+            <tr>
+              <th colSpan={2} style={{ textAlign: "left" }}>
+                Display / select / hide views
+              </th>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Fixed view</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>First-person view</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Third-person view</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Top view</td>
+            </tr>
+            <tr>
+              <th colSpan={2} style={{ textAlign: "left" }}>
+                Display / hide subwindows and bounding volumes
+              </th>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Mini-map</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Statistics</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>User interface</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Help and credits</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Bounding volumes</td>
+            </tr>
+            <tr>
+              <th colSpan={2} style={{ textAlign: "left" }}>
+                Turn on / off lights, shadows and fog
+              </th>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Ambient light</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Directional light</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Spotlight</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Flashlight</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Shadows</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Fog</td>
+            </tr>
+            <tr>
+              <th colSpan={2} style={{ textAlign: "left" }}>
+                Move character
+              </th>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Turn left slowly / quickly (with shift key)</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Turn right slowly / quickly (with shift key)</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Walk / run (with shift key) backward</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Walk / run (with shift key) forward</td>
+            </tr>
+            <tr>
+              <th colSpan={2} style={{ textAlign: "left" }}>
+                Emote character
+              </th>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Jump</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Wave</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Punch</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td>Thumbs up</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="credits-panel">
+          <table className="v3dtable credits" id="credits-table">
+            <tbody>
+            <tr>
+              <th style={{ fontSize: "2.0vmin" }}>Credits</th>
+            </tr>
+            <tr>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="subwindows-panel">
+          <table className="subwindows">
+            <tbody>
+            <tr>
+              <td>
+                Realistic view mode:
+                <input className="v3dinput" type="checkbox" id="realistic" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Fixed view:
+                <input className="v3dinput" type="checkbox" id="fixed" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                First-person view:
+                <input className="v3dinput" type="checkbox" id="first-person" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Third-person view:
+                <input className="v3dinput" type="checkbox" id="third-person" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Top view:
+                <input className="v3dinput" type="checkbox" id="top" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Mini-map:
+                <input className="v3dinput" type="checkbox" id="mini-map" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Statistics:
+                <input className="v3dinput" type="checkbox" id="statistics" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                User interface:
+                <input
+                  className="v3dinput"
+                  type="checkbox"
+                  id="user-interface"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Help and credits:
+                <input className="v3dinput" type="checkbox" id="help" />
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      </canvas>
+      <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     </>
   );
 };
