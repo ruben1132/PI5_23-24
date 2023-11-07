@@ -13,7 +13,7 @@
         "lint:eslint": "eslint --ignore-path .gitignore --ext .ts",
         "lint:js": "npm run lint:eslint src/",
         "lint:fix": "npm run lint:js -- --fix",
-        "clean": "rm -rf node_modules && rm -rf package-lock.json"
+        "clean": "rm -rf node_modules && rm -rf package-lock.json && rm -rf build"
     },
     "repository": {
         "type": "git",
