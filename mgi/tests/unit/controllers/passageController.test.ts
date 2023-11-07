@@ -40,7 +40,7 @@ describe('Passage Controller', function () {
         let next: Partial<NextFunction> = () => { };
 
         sinon.stub(service, "createPassage").resolves(Result.ok<IPassageDTO>({
-            "domainId": "123",
+            "id": "123",
             "designation": req.body.designation,
             "fromFloor": req.body.fromFloor,
             "toFloor": req.body.toFloor
@@ -56,7 +56,7 @@ describe('Passage Controller', function () {
             // Assert
             sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
             sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
-                "domainId": "123",
+                "id": "123",
                 "designation": req.body.designation,
                 "fromFloor": req.body.fromFloor,
                 "toFloor": req.body.toFloor

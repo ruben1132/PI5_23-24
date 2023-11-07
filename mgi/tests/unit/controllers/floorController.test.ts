@@ -41,7 +41,7 @@ describe('Floor Controller', function () {
         let next: Partial<NextFunction> = () => { };
 
         sinon.stub(service, "createFloor").resolves(Result.ok<IFloorDTO>({
-            "domainId": "123",
+            "id": "123",
             "number": req.body.number,
             "information": req.body.information,
             "building": req.body.building
@@ -57,7 +57,7 @@ describe('Floor Controller', function () {
             // Assert
             sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
             sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
-                "domainId": "123",
+                "id": "123",
                 "number": req.body.number,
                 "information": req.body.information,
                 "building": req.body.building
@@ -70,7 +70,7 @@ describe('Floor Controller', function () {
         }
 
         sinon.restore();
-    
+
 
     });
 });

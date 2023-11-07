@@ -43,7 +43,7 @@ describe('Robot Controller', function () {
         let next: Partial<NextFunction> = () => { };
 
         sinon.stub(service, "createRobot").resolves(Result.ok<IRobotDTO>({
-            "domainId": "123",
+            "id": "123",
             "identification": req.body.identification,
             "nickname": req.body.nickname,
             "robotType": req.body.robotType,
@@ -62,7 +62,7 @@ describe('Robot Controller', function () {
             // Assert
             sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
             sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
-                "domainId": "123",
+                "id": "123",
                 "identification": req.body.identification,
                 "nickname": req.body.nickname,
                 "robotType": req.body.robotType,

@@ -44,7 +44,7 @@ describe('RobotType Controller', function () {
         let next: Partial<NextFunction> = () => { };
 
         sinon.stub(service, "createRobotType").resolves(Result.ok<IRobotTypeDTO>({
-            "domainId": "123",
+            "id": "123",
             "type": req.body.type,
             "brand": req.body.brand,
             "model": req.body.model,
@@ -61,7 +61,7 @@ describe('RobotType Controller', function () {
             // Assert
             sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
             sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
-                "domainId": "123",
+                "id": "123",
                 "type": req.body.type,
                 "brand": req.body.brand,
                 "model": req.body.model,

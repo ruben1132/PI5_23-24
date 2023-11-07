@@ -37,7 +37,7 @@ describe('TaskType Controller', function () {
         let next: Partial<NextFunction> = () => { };
 
         sinon.stub(service, "createTaskType").resolves(Result.ok<ITaskTypeDTO>({
-            "domainId": "123",
+            "id": "123",
             "name": req.body.name,
             "description": req.body.description
         }
@@ -52,20 +52,20 @@ describe('TaskType Controller', function () {
             // Assert
             sinon.assert.calledOnce(res.json as SinonSpy<[any?]>);
             sinon.assert.calledWith(res.json as SinonSpy<[any?]>, sinon.match({
-                "domainId": "123",
+                "id": "123",
                 "name": req.body.name,
                 "description": req.body.description
             }));
 
         } catch (error) {
             console.log(error);
-            
+
             throw error;
         }
 
         sinon.restore();
 
-        
+
 
     });
 });
