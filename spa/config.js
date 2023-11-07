@@ -40,9 +40,9 @@ export default {
     //   displayName: "Users",
     //   permissions: ["admin"],
     // },
-    // { 
-    //   routeName: "floormaps", 
-    //   displayName: "Floor Maps" , 
+    // {
+    //   routeName: "floormaps",
+    //   displayName: "Floor Maps" ,
     //   permissions: ["gestor campus"]
     // },
     {
@@ -58,7 +58,10 @@ export default {
   ],
 
   mgiAPI: {
-    baseUrl: "http://localhost:4000/api/",
+    baseUrl:
+      process.env.NODE_ENV === "production"
+        ? process.env.API_URL
+        : "http://localhost:4000/api/",
     routes: {
       buildings: "buildings/",
       floors: "floors/",

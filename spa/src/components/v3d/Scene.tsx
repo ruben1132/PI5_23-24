@@ -210,7 +210,6 @@ const ThreeJSPage = () => {
                     <th>Shift-wheel</th>
                     <th>Wheel</th>
                 </tr>
-            </table>
                 <tr>
                     <td>Fixed</td>
                     <td>Drag / resize</td>

@@ -1,5 +1,3 @@
-import ContentTable from "@/components/table/Table";
-import config from "../../../config";
 import ThreeJSPage from "@/components/v3d/Scene";
 
 
@@ -9,7 +7,7 @@ export default async function Users() {
     <div>
       <p>V3D</p>
 
-    <ThreeJSPage />
+    {/* <ThreeJSPage /> */}
     </div>
   );
 }
