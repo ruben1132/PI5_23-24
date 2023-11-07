@@ -39,6 +39,7 @@ const sideBarIcons = {
   floormaps: faMap,
   roles: faUsers,
   elevators: faElevator,
+  v3d: faMap
 };
 
 function Sidebar(props: SidebarProps) {

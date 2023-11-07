@@ -55,6 +55,11 @@ export default {
       displayName: "Elevators",
       permissions: ["gestor campus"],
     },
+    {
+      routeName: "v3d",
+      displayName: "3D Viewer",
+      permissions: ["gestor campus", "gestor frota"],
+    },
   ],
 
   mgiAPI: {
