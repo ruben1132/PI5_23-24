@@ -1,11 +1,15 @@
 "use client";
 
 import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import * as THREE from "three";
 import Orientation from "./orientation.js";
 import ThumbRaiser from "./thumb_raiser.js";
 
 const ThreeJSPage: React.FC = () => {
+  const router = useRouter();
+  let animationFrameId: number;
+
   useEffect(() => {
     let thumbRaiser: ThumbRaiser;
 
@@ -199,7 +203,8 @@ const ThreeJSPage: React.FC = () => {
             {
               // Heaven
               name: "Heaven",
-              texturePath: "./v3d/cube_textures/xonotic-skyboxes/skyboxes/heaven/",
+              texturePath:
+                "./v3d/cube_textures/xonotic-skyboxes/skyboxes/heaven/",
               texturePositiveXUrl: "heaven_ft.jpg",
               textureNegativeXUrl: "heaven_bk.jpg",
               texturePositiveYUrl: "heaven_up.jpg",
@@ -309,369 +314,401 @@ const ThreeJSPage: React.FC = () => {
       );
     }
 
-
     function animate() {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate); // Store the animation frame ID
       // Update the game
       thumbRaiser.update();
     }
 
     initialize();
     animate();
+
+    function cleanup() {
+      // Stop any ongoing animations or event listeners here
+      // For example, you can stop the animation loop and remove event listeners
+      cancelAnimationFrame(animationFrameId); // Make sure to store the animationFrameId when starting the animation
+      thumbRaiser.dispose(); // Dispose of any Three.js resources
+    }
+
+    // Return the cleanup function to be called when the component unmounts
+    return () => {
+      // Call the cleanup function when the component unmounts
+      cleanup();
+    };
   }, []);
 
   return (
     <>
-    <canvas id="canvas">
-      <div id="container">
-        <div id="views-panel">
-          <table className="v3dtable views">
-            <tbody>
-              <tr>
-                <td>
-                  View:
-                  <select id="view">
-                    <option value="fixed">Fixed</option>
-                    <option value="first">First-person</option>
-                    <option value="third">Third-person</option>
-                    <option value="top">Top</option>
-                  </select>
-                </td>
-                <td>
-                  Orientation (h):
-                  <input
-                    className="v3dinput"
-                    type="number"
-                    id="horizontal"
-                    required
-                  />
-                </td>
-                <td>
-                  Orientation (v):
-                  <input
-                    className="v3dinput"
-                    type="number"
-                    id="vertical"
-                    required
-                  />
-                </td>
-                <td>
-                  <input
-                    className="v3dinput"
-                    type="button"
-                    id="reset"
-                    value="Reset view"
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  Projection:
-                  <select id="projection">
-                    <option value="perspective">Perspective</option>
-                    <option value="orthographic">Orthographic</option>
-                  </select>
-                </td>
-                <td>
-                  Distance:
-                  <input
-                    className="v3dinput"
-                    type="number"
-                    id="distance"
-                    required
-                  />
-                </td>
-                <td>
-                  Zoom:
-                  <input
-                    className="v3dinput"
-                    type="number"
-                    id="zoom"
-                    required
-                  />
-                </td>
-                <td>
-                  <input type="button" id="reset-all" value="Reset all views" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <canvas id="canvas">
+        <div id="container">
+          <div id="views-panel">
+            <table className="v3dtable views">
+              <tbody>
+                <tr>
+                  <td>
+                    View:
+                    <select id="view">
+                      <option value="fixed">Fixed</option>
+                      <option value="first">First-person</option>
+                      <option value="third">Third-person</option>
+                      <option value="top">Top</option>
+                    </select>
+                  </td>
+                  <td>
+                    Orientation (h):
+                    <input
+                      className="v3dinput"
+                      type="number"
+                      id="horizontal"
+                      required
+                    />
+                  </td>
+                  <td>
+                    Orientation (v):
+                    <input
+                      className="v3dinput"
+                      type="number"
+                      id="vertical"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <input
+                      className="v3dinput"
+                      type="button"
+                      id="reset"
+                      value="Reset view"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Projection:
+                    <select id="projection">
+                      <option value="perspective">Perspective</option>
+                      <option value="orthographic">Orthographic</option>
+                    </select>
+                  </td>
+                  <td>
+                    Distance:
+                    <input
+                      className="v3dinput"
+                      type="number"
+                      id="distance"
+                      required
+                    />
+                  </td>
+                  <td>
+                    Zoom:
+                    <input
+                      className="v3dinput"
+                      type="number"
+                      id="zoom"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="button"
+                      id="reset-all"
+                      value="Reset all views"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="mouse-help-panel">
+            <table className="v3dtable mouse-help" id="mouse-help-table">
+              <tbody>
+                <tr>
+                  <th colSpan={5} style={{ fontSize: "2.0vmin" }}>
+                    Help - Mouse
+                  </th>
+                </tr>
+                <tr>
+                  <th>View</th>
+                  <th>Primary button</th>
+                  <th>Secondary button</th>
+                  <th>Shift-wheel</th>
+                  <th>Wheel</th>
+                </tr>
+                <tr>
+                  <td>Fixed</td>
+                  <td>Drag / resize</td>
+                  <td>Orbit</td>
+                  <td>Dolly</td>
+                  <td>Zoom</td>
+                </tr>
+                <tr>
+                  <td>First-person</td>
+                  <td>Drag / resize</td>
+                  <td>Orbit</td>
+                  <td>n/a</td>
+                  <td>Zoom</td>
+                </tr>
+                <tr>
+                  <td>Third-person</td>
+                  <td>Drag / resize</td>
+                  <td>Orbit</td>
+                  <td>Dolly</td>
+                  <td>Zoom</td>
+                </tr>
+                <tr>
+                  <td>Top</td>
+                  <td>Drag / resize</td>
+                  <td>Orbit</td>
+                  <td>Dolly</td>
+                  <td>Zoom</td>
+                </tr>
+                <tr>
+                  <td>Mini-map</td>
+                  <td>Drag / resize</td>
+                  <td>Pan</td>
+                  <td>n/a</td>
+                  <td>Zoom</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="keyboard-help-panel">
+            <table className="v3dtable keyboard-help" id="keyboard-help-table">
+              <tbody>
+                <tr>
+                  <th colSpan={2} style={{ fontSize: "2.0vmin" }}>
+                    Help - Keyboard
+                  </th>
+                </tr>
+                <tr>
+                  <th colSpan={2} style={{ textAlign: "left" }}>
+                    Set view mode
+                  </th>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Stabilized view mode / realistic view mode</td>
+                </tr>
+                <tr>
+                  <th colSpan={2} style={{ textAlign: "left" }}>
+                    Display / select / hide views
+                  </th>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Fixed view</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>First-person view</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Third-person view</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Top view</td>
+                </tr>
+                <tr>
+                  <th colSpan={2} style={{ textAlign: "left" }}>
+                    Display / hide subwindows and bounding volumes
+                  </th>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Mini-map</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Statistics</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>User interface</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Help and credits</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Bounding volumes</td>
+                </tr>
+                <tr>
+                  <th colSpan={2} style={{ textAlign: "left" }}>
+                    Turn on / off lights, shadows and fog
+                  </th>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Ambient light</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Directional light</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Spotlight</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Flashlight</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Shadows</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Fog</td>
+                </tr>
+                <tr>
+                  <th colSpan={2} style={{ textAlign: "left" }}>
+                    Move character
+                  </th>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Turn left slowly / quickly (with shift key)</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Turn right slowly / quickly (with shift key)</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Walk / run (with shift key) backward</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Walk / run (with shift key) forward</td>
+                </tr>
+                <tr>
+                  <th colSpan={2} style={{ textAlign: "left" }}>
+                    Emote character
+                  </th>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Jump</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Yes</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>No</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Wave</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Punch</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>Thumbs up</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="credits-panel">
+            <table className="v3dtable credits" id="credits-table">
+              <tbody>
+                <tr>
+                  <th style={{ fontSize: "2.0vmin" }}>Credits</th>
+                </tr>
+                <tr>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="subwindows-panel">
+            <table className="subwindows">
+              <tbody>
+                <tr>
+                  <td>
+                    Realistic view mode:
+                    <input
+                      className="v3dinput"
+                      type="checkbox"
+                      id="realistic"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Fixed view:
+                    <input className="v3dinput" type="checkbox" id="fixed" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    First-person view:
+                    <input
+                      className="v3dinput"
+                      type="checkbox"
+                      id="first-person"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Third-person view:
+                    <input
+                      className="v3dinput"
+                      type="checkbox"
+                      id="third-person"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Top view:
+                    <input className="v3dinput" type="checkbox" id="top" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Mini-map:
+                    <input className="v3dinput" type="checkbox" id="mini-map" />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Statistics:
+                    <input
+                      className="v3dinput"
+                      type="checkbox"
+                      id="statistics"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    User interface:
+                    <input
+                      className="v3dinput"
+                      type="checkbox"
+                      id="user-interface"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    Help and credits:
+                    <input className="v3dinput" type="checkbox" id="help" />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div id="mouse-help-panel">
-          <table className="v3dtable mouse-help" id="mouse-help-table">
-            <tbody>
-            <tr>
-              <th colSpan={5} style={{ fontSize: "2.0vmin" }}>
-                Help - Mouse
-              </th>
-            </tr>
-            <tr>
-              <th>View</th>
-              <th>Primary button</th>
-              <th>Secondary button</th>
-              <th>Shift-wheel</th>
-              <th>Wheel</th>
-            </tr>
-            <tr>
-              <td>Fixed</td>
-              <td>Drag / resize</td>
-              <td>Orbit</td>
-              <td>Dolly</td>
-              <td>Zoom</td>
-            </tr>
-            <tr>
-              <td>First-person</td>
-              <td>Drag / resize</td>
-              <td>Orbit</td>
-              <td>n/a</td>
-              <td>Zoom</td>
-            </tr>
-            <tr>
-              <td>Third-person</td>
-              <td>Drag / resize</td>
-              <td>Orbit</td>
-              <td>Dolly</td>
-              <td>Zoom</td>
-            </tr>
-            <tr>
-              <td>Top</td>
-              <td>Drag / resize</td>
-              <td>Orbit</td>
-              <td>Dolly</td>
-              <td>Zoom</td>
-            </tr>
-            <tr>
-              <td>Mini-map</td>
-              <td>Drag / resize</td>
-              <td>Pan</td>
-              <td>n/a</td>
-              <td>Zoom</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div id="keyboard-help-panel">
-          <table className="v3dtable keyboard-help" id="keyboard-help-table">
-            <tbody>
-            <tr>
-              <th colSpan={2} style={{ fontSize: "2.0vmin" }}>
-                Help - Keyboard
-              </th>
-            </tr>
-            <tr>
-              <th colSpan={2} style={{ textAlign: "left" }}>
-                Set view mode
-              </th>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Stabilized view mode / realistic view mode</td>
-            </tr>
-            <tr>
-              <th colSpan={2} style={{ textAlign: "left" }}>
-                Display / select / hide views
-              </th>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Fixed view</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>First-person view</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Third-person view</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Top view</td>
-            </tr>
-            <tr>
-              <th colSpan={2} style={{ textAlign: "left" }}>
-                Display / hide subwindows and bounding volumes
-              </th>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Mini-map</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Statistics</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>User interface</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Help and credits</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Bounding volumes</td>
-            </tr>
-            <tr>
-              <th colSpan={2} style={{ textAlign: "left" }}>
-                Turn on / off lights, shadows and fog
-              </th>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Ambient light</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Directional light</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Spotlight</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Flashlight</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Shadows</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Fog</td>
-            </tr>
-            <tr>
-              <th colSpan={2} style={{ textAlign: "left" }}>
-                Move character
-              </th>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Turn left slowly / quickly (with shift key)</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Turn right slowly / quickly (with shift key)</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Walk / run (with shift key) backward</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Walk / run (with shift key) forward</td>
-            </tr>
-            <tr>
-              <th colSpan={2} style={{ textAlign: "left" }}>
-                Emote character
-              </th>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Jump</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Yes</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>No</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Wave</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Punch</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Thumbs up</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div id="credits-panel">
-          <table className="v3dtable credits" id="credits-table">
-            <tbody>
-            <tr>
-              <th style={{ fontSize: "2.0vmin" }}>Credits</th>
-            </tr>
-            <tr>
-              <td></td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-        <div id="subwindows-panel">
-          <table className="subwindows">
-            <tbody>
-            <tr>
-              <td>
-                Realistic view mode:
-                <input className="v3dinput" type="checkbox" id="realistic" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Fixed view:
-                <input className="v3dinput" type="checkbox" id="fixed" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                First-person view:
-                <input className="v3dinput" type="checkbox" id="first-person" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Third-person view:
-                <input className="v3dinput" type="checkbox" id="third-person" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Top view:
-                <input className="v3dinput" type="checkbox" id="top" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Mini-map:
-                <input className="v3dinput" type="checkbox" id="mini-map" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Statistics:
-                <input className="v3dinput" type="checkbox" id="statistics" />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                User interface:
-                <input
-                  className="v3dinput"
-                  type="checkbox"
-                  id="user-interface"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                Help and credits:
-                <input className="v3dinput" type="checkbox" id="help" />
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
       </canvas>
     </>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import ThreeJSPage from "@/components/v3d/Scene";
 import "./main.module.css";
 

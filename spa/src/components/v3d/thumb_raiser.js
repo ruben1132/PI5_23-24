@@ -1427,4 +1427,75 @@ export default class ThumbRaiser {
             }
         }
     }
+
+    dispose() {
+        // Clean up resources or event listeners here
+        this.audio.stop(this.audio.introductionClips);
+        this.audio.stop(this.audio.idleClips);
+        this.audio.stop(this.audio.danceClips);
+        this.audio.stop(this.audio.endClips);
+        this.audio.stop(this.audio.jumpClips);
+        this.audio.stop(this.audio.deathClips);
+
+        // Remove the maze, the player and the lights from the scene
+        this.scene.remove(this.maze);
+        this.scene.remove(this.player);
+        this.scene.remove(this.ambientLight);
+        this.scene.remove(this.directionalLight);
+        this.scene.remove(this.spotLight);
+        this.scene.remove(this.flashLight);
+        this.scene.remove(this.flashLight.target);
+
+        // Remove positional audio sources from objects
+        const types = [this.audio.introductionClips, this.audio.idleClips, this.audio.jumpClips, this.audio.deathClips, this.audio.danceClips, this.audio.endClips];
+        types.forEach(type => {
+            type.forEach(clip => {
+                this.scene.remove(clip.source);
+            });
+        });
+
+        // Remove the event handler to be called on window resize
+        window.removeEventListener("resize", event => this.windowResize(event));
+        // Remove the event handler to be called on key down
+        document.removeEventListener("keydown", event => this.keyChange(event, true));
+        // Remove the event handler to be called on key release
+        document.removeEventListener("keyup", event => this.keyChange(event, false));
+        // Remove the event handler to be called on mouse down
+        document.removeEventListener("mousedown", event => this.mouseDown(event));
+        // Remove the event handler to be called on mouse move
+        document.removeEventListener("mousemove", event => this.mouseMove(event));
+        // Remove the event handler to be called on mouse up
+        document.removeEventListener("mouseup", event => this.mouseUp(event));
+        // Remove the event handler to be called on mouse wheel
+        this.renderer.domElement.removeEventListener("wheel", event => this.mouseWheel(event));
+        // Remove the event handler to be called on context menu
+        document.removeEventListener("contextmenu", event => this.contextMenu(event));
+        // Remove the event handler to be called on select, input number, or input checkbox change
+        this.view.removeEventListener("change", event => this.elementChange(event));
+        // Remove the event handler to be called on input button click
+        this.reset.removeEventListener("click", event => this.buttonClick(event));
+        // Remove the event handler to be called on input button click
+        this.resetAll.removeEventListener("click", event => this.buttonClick(event));
+        // Remove the event handler to be called on select, input number, or input checkbox change
+        this.projection.removeEventListener("change", event => this.elementChange(event));  
+        this.horizontal.removeEventListener("change", event => this.elementChange(event));
+        this.vertical.removeEventListener("change", event => this.elementChange(event));
+        this.distance.removeEventListener("change", event => this.elementChange(event));
+        this.zoom.removeEventListener("change", event => this.elementChange(event));
+        this.fixedViewCamera.checkBox.removeEventListener("change", event => this.elementChange(event));
+        this.firstPersonViewCamera.checkBox.removeEventListener("change", event => this.elementChange(event));
+        this.thirdPersonViewCamera.checkBox.removeEventListener("change", event => this.elementChange(event));
+        this.topViewCamera.checkBox.removeEventListener("change", event => this.elementChange(event));
+        this.statistics.checkBox.removeEventListener("change", event => this.elementChange(event));
+        this.help.checkBox.removeEventListener("change", event => this.elementChange(event));
+
+
+        // Remove the user interface
+        this.userInterface?.destroy();
+
+        // Remove the canvas
+        this.renderer.domElement.remove();
+
+      }
+    
 }
