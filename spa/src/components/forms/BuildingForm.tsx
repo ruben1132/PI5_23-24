@@ -155,7 +155,6 @@ export default function BuildingForm(props: Props) {
       <Row>
         <Col sm={6}>
           {props.action === "edit" ? (
-            <>
               <Button
                 variant="primary"
                 onClick={submitData}
@@ -168,18 +167,6 @@ export default function BuildingForm(props: Props) {
               >
                 Update
               </Button>
-              {props.showFullPage && (
-                <Button
-                  variant="warning"
-                  onClick={() =>
-                    router.push("/buildings/" + props.item.value.id)
-                  }
-                  disabled={!enabled}
-                >
-                  Full page
-                </Button>
-              )}
-            </>
           ) : (
             <Button
               variant="success"
