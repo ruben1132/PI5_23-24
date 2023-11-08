@@ -5,6 +5,8 @@ import config from "../../../../config";
 import { useFetchData, useSubmitData } from "@/util/customHooks";
 import Button from "react-bootstrap/Button";
 import MeekoLoader from "@/components/loaders/MeekoLoader";
+import { useEffect, useState } from "react";
+import { Building } from "@/models/Building";
 
 interface Props {
   params: { slug: string };
@@ -14,24 +16,16 @@ export default function Page({ params }: Props) {
   const useFetchdata = useFetchData(
     config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings + params.slug
   );
-  const buildingForm = useSubmitData(
-    useFetchdata.data,
-    config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings,
-    "PUT"
-  );
+  const [building, setBuilding] = useState<Building>(useFetchdata.data);
 
-  // updates the building and refreshes the table
-  const updateBuilding = async () => {
-    let res = await buildingForm.submit();
+  useEffect(() => {
+    console.log("hello");
 
-    if (!res) {
-      // TODO: show alert
+    if (useFetchdata.isLoading || useFetchdata.isError) return;
 
-      return;
-    }
-
-    // TODO: show alert
-  };
+    // when data is fetched, set the building state
+    setBuilding(useFetchdata.data);
+  }, [useFetchdata.data]);
 
   if (useFetchdata.isError) return <div>failed to load</div>;
   if (useFetchdata.isLoading) return <MeekoLoader />;
@@ -42,14 +36,16 @@ export default function Page({ params }: Props) {
         <p>Building: {params.slug}</p>
       </div>
 
-      <BuildingForm
-        item={{ value: useFetchdata.data }}
-        onUpdate={buildingForm.handleChange}
-      />
-      <br />
-      <Button variant="success" onClick={updateBuilding}>
-        Update
-      </Button>
+      {building ? (
+        <BuildingForm
+          item={{ value: building }}
+          reFetchData={useFetchdata.revalidate}
+          action="edit"
+          showFullPage={false}
+        />
+      ) : (
+        <span>Building not found</span>
+      )}
     </>
   );
 }

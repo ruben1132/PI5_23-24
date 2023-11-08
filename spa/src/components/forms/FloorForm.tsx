@@ -21,7 +21,9 @@ interface Props {
   item: {
     value: FloorWithBuilding;
   };
-  onUpdate: (item: Floor) => void;
+  action: string;
+  showFullPage: boolean;
+  reFetchData: () => void;
 }
 
 export default function FloorForm(props: Props) {
@@ -55,7 +57,6 @@ export default function FloorForm(props: Props) {
     item.information = floorInformation.value;
     item.building = floorBuilding.value;
 
-    props.onUpdate(item);
   };
 
   const selectBoxSelected = (e: ChangeEvent<HTMLSelectElement>) => {

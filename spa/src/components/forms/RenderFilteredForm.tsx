@@ -5,8 +5,10 @@ interface Props {
   item: {
     value: any;
     type: string;
-  };
-  onUpdate: (item: any) => void;
+  },
+  action: string;
+  showFullPage: boolean;
+  reFetchData: () => void;
 }
 
 export function RenderFilteredForm(props: Props) {
@@ -17,14 +19,19 @@ export function RenderFilteredForm(props: Props) {
           return (
             <BuildingForm
               item={{ value: props.item.value }}
-              onUpdate={props.onUpdate}
+              action={props.action}
+              reFetchData={props.reFetchData}
+              showFullPage={props.showFullPage}
             />
           );
         case "floor":
           return (
             <FloorForm
               item={{ value: props.item.value }}
-              onUpdate={props.onUpdate}
+              action={props.action}
+              reFetchData={props.reFetchData}
+              showFullPage={props.showFullPage}
+
             />
           );
         default:

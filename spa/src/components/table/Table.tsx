@@ -40,17 +40,18 @@ function ContentTable(props: Props) {
     contentModal.handleOpen();
   };
 
+  // ON CLOSE THE MODAL, FETCH DATA TO UPDATE TABLE!!
+
   return (
     <>
       {contentModal.show && (
         <Modal
           action={modalType}
           item={{ value: itemClicked, type: props.type }}
-          route={{ api: props.routeToFetch, push: props.routeToPush }}
           fade={false}
           show={contentModal.show}
           close={contentModal.handleClose}
-          onUpdate={useFetchdata.revalidate}
+          reFetchData={useFetchdata.revalidate}
         />
       )}
 

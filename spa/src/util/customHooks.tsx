@@ -46,6 +46,40 @@ export function useFormStringInput(initialValue: string) {
   };
 }
 
+// hook for string input with regex
+export function useFormStringInputWithRegex(
+  initialValue: string | undefined,
+  regex: RegExp
+) {
+  const [value, setValue] = useState(initialValue || "");
+  const [isValid, setIsValid] = useState<boolean>(regex.test(initialValue || ""));
+
+  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+    const inputValue = e.target.value;
+    const inputIsValid = regex.test(inputValue);
+    setIsValid(inputIsValid);
+    setValue(inputValue);
+  }
+
+  function handleLoad(e: string | undefined) {
+    setValue(e || "");
+    setIsValid(regex.test(e || ""));
+  }
+
+  function handleReset() {
+    setValue("");
+    setIsValid(false);
+  }
+
+  return {
+    value,
+    isValid,
+    handleLoad,
+    handleChange,
+    handleReset,
+  };
+}
+
 export function useFormSelectBox(initialValue: string) {
   const [value, setValue] = useState(initialValue);
 
@@ -98,25 +132,20 @@ export function useFormNumberInput(initialValue: number) {
 
 // hook to update data
 export function useSubmitData(initialValue: any, r: string, t: string) {
-  const [value, setValue] = useState<any>(initialValue);
   const [route] = useState<string>(r);
   const [type] = useState<string>(t);
 
-  function handleChange(e: any) {
-    setValue(e);
-  }
-
-  async function submit(data? : any): Promise<any | null> {
-
+  async function submit(data: any): Promise<any | null> {
     // API - update
     try {
       const response = await axios(route, {
         method: type,
-        data: value || data,
+        data:  data,
       });
 
       if (response.status === 201 || response.status === 200) {
-        return response.data;
+        const data = await response.data;
+        return data;
       }
 
       return null;
@@ -126,20 +155,19 @@ export function useSubmitData(initialValue: any, r: string, t: string) {
   }
 
   return {
-    value,
-    handleChange,
     submit,
   };
 }
 
 // hook to fetch and handle data
 export function useFetchData(r: string) {
-  const [route] = useState<string>(r);
 
-  const { data, error, isLoading } = useSWR(route, fetcher);
+  const { data, error, isLoading } = useSWR(r, fetcher, {
+    revalidateOnMount: true,
+  });
 
   const revalidate = () => {
-    mutate(route);
+    mutate(r);
   };
 
   return {
