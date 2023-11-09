@@ -25,7 +25,6 @@ interface Props {
 }
 
 export default function BuildingForm(props: Props) {
-  
   // inputs
   const buildingName = useFormStringInput(props.item.value?.name);
   const buildingCode = useFormStringInputWithRegex(
@@ -63,7 +62,7 @@ export default function BuildingForm(props: Props) {
 
     if (!res) {
       // TODO: show alert
-
+      setEnabled(true);
       return;
     }
 

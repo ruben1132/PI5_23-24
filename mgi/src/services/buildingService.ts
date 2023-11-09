@@ -1,12 +1,12 @@
 import { Service, Inject } from 'typedi';
-import config from "../../config";
+import config from '../../config';
 import IBuildingDTO from '../dto/IBuildingDTO';
-import { Building } from "../domain/building";
+import { Building } from '../domain/building';
 import IBuildingRepo from '../services/IRepos/IBuildingRepo';
 import IFloorRepo from '../services/IRepos/IFloorRepo';
 import IBuildingService from './IServices/IBuildingService';
-import { Result } from "../core/logic/Result";
-import { BuildingMap } from "../mappers/BuildingMap";
+import { Result } from '../core/logic/Result';
+import { BuildingMap } from '../mappers/BuildingMap';
 import { BuildingCode } from '../domain/valueObj/buildingCode';
 import { BuildingName } from '../domain/valueObj/buildingName';
 import { BuildingDimensions } from '../domain/valueObj/buildingDimensions';
@@ -15,20 +15,18 @@ import { BuildingDimensions } from '../domain/valueObj/buildingDimensions';
 export default class BuildingService implements IBuildingService {
     constructor(
         @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
-        @Inject(config.repos.floor.name) private floorRepo: IFloorRepo
-    ) { }
+        @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
+    ) {}
 
     public async getBuildings(): Promise<Result<Array<IBuildingDTO>>> {
         try {
             const buildings = await this.buildingRepo.getBuildings();
 
             if (buildings === null) {
-                return Result.fail<Array<IBuildingDTO>>("Buildings not found");
-            }
-            else {
-                
+                return Result.fail<Array<IBuildingDTO>>('Buildings not found');
+            } else {
                 const buildingsDTOResult = buildings.map(building => BuildingMap.toDTO(building) as IBuildingDTO);
-                return Result.ok<Array<IBuildingDTO>>(buildingsDTOResult)
+                return Result.ok<Array<IBuildingDTO>>(buildingsDTOResult);
             }
         } catch (e) {
             throw e;
@@ -40,11 +38,10 @@ export default class BuildingService implements IBuildingService {
             const building = await this.buildingRepo.findByDomainId(buildingId);
 
             if (building === null) {
-                return Result.fail<IBuildingDTO>("Building not found");
-            }
-            else {
+                return Result.fail<IBuildingDTO>('Building not found');
+            } else {
                 const buildingDTOResult = BuildingMap.toDTO(building) as IBuildingDTO;
-                return Result.ok<IBuildingDTO>(buildingDTOResult)
+                return Result.ok<IBuildingDTO>(buildingDTOResult);
             }
         } catch (e) {
             throw e;
@@ -53,16 +50,19 @@ export default class BuildingService implements IBuildingService {
 
     public async createBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
         try {
+            // check if building with same code already exists
+            const buildingWithSameCode = await this.buildingRepo.findByBuildingCode(buildingDTO.code);
+            if (buildingWithSameCode) {
+                return Result.fail<IBuildingDTO>('Building with same code already exists');
+            }
 
             const buildingDM = BuildingMap.toDomain(buildingDTO);
 
-            const buildingOrError = await Building.create(
-                {
-                    code: buildingDM.code,
-                    name: buildingDM.name,
-                    dimensions: buildingDM.dimensions,
-                }
-            );
+            const buildingOrError = await Building.create({
+                code: buildingDM.code,
+                name: buildingDM.name,
+                dimensions: buildingDM.dimensions,
+            });
 
             if (buildingOrError.isFailure) {
                 return Result.fail<IBuildingDTO>(buildingOrError.errorValue());
@@ -73,7 +73,7 @@ export default class BuildingService implements IBuildingService {
             const test = await this.buildingRepo.save(buildingResult);
 
             const buildingDTOResult = BuildingMap.toDTO(buildingResult) as IBuildingDTO;
-            return Result.ok<IBuildingDTO>(buildingDTOResult)
+            return Result.ok<IBuildingDTO>(buildingDTOResult);
         } catch (e) {
             throw e;
         }
@@ -84,7 +84,7 @@ export default class BuildingService implements IBuildingService {
             const building = await this.buildingRepo.findByDomainId(buildingDTO.id);
 
             if (building === null) {
-                return Result.fail<IBuildingDTO>("Building not found");
+                return Result.fail<IBuildingDTO>('Building not found');
             }
 
             const code = await BuildingCode.create(buildingDTO.code);
@@ -109,8 +109,7 @@ export default class BuildingService implements IBuildingService {
             await this.buildingRepo.save(building);
             const buildingDTOResult = BuildingMap.toDTO(building) as IBuildingDTO;
 
-            return Result.ok<IBuildingDTO>(buildingDTOResult)
-
+            return Result.ok<IBuildingDTO>(buildingDTOResult);
         } catch (e) {
             throw e;
         }
@@ -132,16 +131,14 @@ export default class BuildingService implements IBuildingService {
             const building = await this.buildingRepo.findByDomainId(buildingId);
 
             if (building === null) {
-                return Result.fail<void>("Building not found");
+                return Result.fail<void>('Building not found');
             }
 
             await this.buildingRepo.deleteBuilding(buildingId);
 
             return Result.ok<void>();
-
         } catch (e) {
             throw e;
         }
-    };
-
+    }
 }

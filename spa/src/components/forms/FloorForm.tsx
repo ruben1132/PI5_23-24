@@ -106,7 +106,7 @@ export default function FloorForm(props: Props) {
 
     if (!res) {
       // TODO: show alert
-
+      setEnabled(true);
       return;
     }
 
