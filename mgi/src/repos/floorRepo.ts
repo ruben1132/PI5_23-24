@@ -97,7 +97,6 @@ export default class FloorRepo implements IFloorRepo {
             if (floors != null && floors.length > 0) {
                 return floors.map((floor) => FloorMap.toDomain(floor));
             } else {
-                console.log("No matching data found.");
                 return [];
             }
         } catch (error) {

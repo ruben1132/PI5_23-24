@@ -92,7 +92,6 @@ export default class RobotRepo implements IRobotRepo {
     public async deleteRobot(robotId: string): Promise<boolean> {
         try {
 
-            // console.log('robotId', robotId);
             const query = { domainId: robotId };
             const robotRecord = await this.robotSchema.findOne(query as FilterQuery<IRobotPersistence & Document>);
 

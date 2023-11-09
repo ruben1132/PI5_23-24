@@ -81,7 +81,6 @@ export default class RobotService implements IRobotService {
 
             const robotDTOResult = RobotMap.toDTO(robotResult);
 
-            console.log('robotDTOResult', robotDTOResult);
 
             return Result.ok<IRobotDTO>(robotDTOResult);
         } catch (e) {
