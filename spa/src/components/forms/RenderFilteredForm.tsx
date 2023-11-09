@@ -5,9 +5,8 @@ interface Props {
   item: {
     value: any;
     type: string;
-  },
+  };
   action: string;
-  showFullPage: boolean;
   reFetchData: () => void;
 }
 
@@ -21,7 +20,6 @@ export function RenderFilteredForm(props: Props) {
               item={{ value: props.item.value }}
               action={props.action}
               reFetchData={props.reFetchData}
-              showFullPage={props.showFullPage}
             />
           );
         case "floor":
@@ -30,8 +28,6 @@ export function RenderFilteredForm(props: Props) {
               item={{ value: props.item.value }}
               action={props.action}
               reFetchData={props.reFetchData}
-              showFullPage={props.showFullPage}
-
             />
           );
         default:

@@ -75,11 +75,10 @@ export default class FloorMapService implements IFloorMapService {
                 return Result.fail<IFloorMapDTO>(passagesOrError.errorValue());
             }
 
-            // check if it found all the rooms
+            // check if it found all the passages
             if (passagesOrError.getValue().length !== floorMapDTO.fmPassages.length) {
                 return Result.fail<IFloorMapDTO>("Couldn't find all the passages by the given ids");
             }
-
             passages = passagesOrError.getValue();
 
             // create fmRooms
@@ -143,8 +142,7 @@ export default class FloorMapService implements IFloorMapService {
                 groundTexture: floorMapDTO.groundTexture,
                 doorTexture: floorMapDTO.doorTexture,
                 elevatorTexture: floorMapDTO.elevatorTexture
-            });
-
+            });            
 
             if (floorMapOrError.isFailure) {
                 return Result.fail<IFloorMapDTO>(floorMapOrError.errorValue());

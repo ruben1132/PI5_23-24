@@ -24,7 +24,7 @@ export function useModal(initialValue: boolean) {
 
 // hook for string input
 export function useFormStringInput(initialValue: string) {
-  const [value, setValue] = useState(initialValue);
+  const [value, setValue] = useState<string>(initialValue);
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     setValue(e.target.value);
@@ -164,6 +164,7 @@ export function useFetchData(r: string) {
 
   const { data, error, isLoading } = useSWR(r, fetcher, {
     revalidateOnMount: true,
+    shouldRetryOnError: false,
   });
 
   const revalidate = () => {

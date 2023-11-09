@@ -1,40 +1,59 @@
 import { IFloorMapPersistence } from '../../dataschema/IFloorMapPersistence';
 import mongoose from 'mongoose';
 
-const fmRoomSchema = new mongoose.Schema({
-    roomId: String,
-    startX: Number,
-    startY: Number,
-    endX: Number,
-    endY: Number,
-});
+const fmRoomSchema = new mongoose.Schema(
+    {
+        roomId: String,
+        startX: Number,
+        startY: Number,
+        endX: Number,
+        endY: Number,
+    },
+    {
+        _id: false, // Disable _id for this subdocument
+    },
+);
 
-const fmDoorSchema = new mongoose.Schema({
-    positionX: Number,
-    positionY: Number,
-    direction: String,
-});
+const fmDoorSchema = new mongoose.Schema(
+    {
+        positionX: Number,
+        positionY: Number,
+        direction: String,
+    },
+    {
+        _id: false, // Disable _id for this subdocument
+    },
+);
 
-const fmElevatorSchema = new mongoose.Schema({
-    elevatorId: String,
-    positionX: Number,
-    positionY: Number,
-    direction: String,
-});
+const fmElevatorSchema = new mongoose.Schema(
+    {
+        elevatorId: String,
+        positionX: Number,
+        positionY: Number,
+        direction: String,
+    },
+    {
+        _id: false, // Disable _id for this subdocument
+    },
+);
 
-const fmPassageSchema = new mongoose.Schema({
-    passageId: String,
-    positionX: Number,
-    positionY: Number,
-    direction: String,
-});
-
+const fmPassageSchema = new mongoose.Schema(
+    {
+        passageId: String,
+        positionX: Number,
+        positionY: Number,
+        direction: String,
+    },
+    {
+        _id: false, // Disable _id for this subdocument
+    },
+);
 
 const FloorMap = new mongoose.Schema(
     {
         domainId: {
             type: String,
-            unique: true
+            // unique: true,
         },
 
         floor: {
@@ -86,13 +105,8 @@ const FloorMap = new mongoose.Schema(
             type: String,
             required: [true, 'Please enter the elevator texture'],
         },
-
-
-
     },
     { timestamps: true },
 );
 
 export default mongoose.model<IFloorMapPersistence & mongoose.Document>('FloorMap', FloorMap);
-
-

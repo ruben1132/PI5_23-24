@@ -34,7 +34,6 @@ export default function BuildingModal(props: Props) {
           }}
           action={props.action}
           reFetchData={props.reFetchData}
-          showFullPage={true}
         />
       </Modal.Body>
       <Modal.Footer>
