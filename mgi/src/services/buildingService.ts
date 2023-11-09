@@ -51,8 +51,8 @@ export default class BuildingService implements IBuildingService {
     public async createBuilding(buildingDTO: IBuildingDTO): Promise<Result<IBuildingDTO>> {
         try {
             // check if building with same code already exists
-            const buildingWithSameCode = await this.buildingRepo.findByBuildingCode(buildingDTO.code);
-            if (buildingWithSameCode) {
+            const result = await this.buildingRepo.findByBuildingCode(buildingDTO.code);
+            if (result) {
                 return Result.fail<IBuildingDTO>('Building with same code already exists');
             }
 
@@ -85,6 +85,12 @@ export default class BuildingService implements IBuildingService {
 
             if (building === null) {
                 return Result.fail<IBuildingDTO>('Building not found');
+            }
+
+            // check if building with same code already exists
+            const result = await this.buildingRepo.findByBuildingCode(buildingDTO.code, buildingDTO.id);
+            if (result) {
+                return Result.fail<IBuildingDTO>('Building with same code already exists');
             }
 
             const code = await BuildingCode.create(buildingDTO.code);

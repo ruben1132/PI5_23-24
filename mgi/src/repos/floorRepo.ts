@@ -1,34 +1,31 @@
 import { Service, Inject } from 'typedi';
 
-import IFloorRepo from "../services/IRepos/IFloorRepo";
-import { Floor } from "../domain/floor";
-import { Building } from "../domain/building";
-import { FloorId } from "../domain/valueObj/floorId";
-import { FloorMap } from "../mappers/FloorMap";
-import { BuildingMap } from "../mappers/BuildingMap";
+import IFloorRepo from '../services/IRepos/IFloorRepo';
+import { Floor } from '../domain/floor';
+import { Building } from '../domain/building';
+import { FloorId } from '../domain/valueObj/floorId';
+import { FloorMap } from '../mappers/FloorMap';
+import { BuildingMap } from '../mappers/BuildingMap';
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IFloorPersistence } from '../dataschema/IFloorPersistence';
 
-import { FloorInformation } from "../domain/valueObj/floorInformation";
-import { FloorNumber } from "../domain/valueObj/floorNumber";
+import { FloorInformation } from '../domain/valueObj/floorInformation';
+import { FloorNumber } from '../domain/valueObj/floorNumber';
 
 @Service()
 export default class FloorRepo implements IFloorRepo {
     private models: any;
 
-    constructor(
-        @Inject('floorSchema') private floorSchema: Model<IFloorPersistence & Document>,
-    ) { }
+    constructor(@Inject('floorSchema') private floorSchema: Model<IFloorPersistence & Document>) {}
 
     private createBaseQuery(): any {
         return {
             where: {},
-        }
+        };
     }
 
     public async exists(floor: Floor): Promise<boolean> {
-
         const idX = floor.id instanceof FloorId ? (<FloorId>floor.id).toValue() : floor.id;
 
         const query = { domainId: idX };
@@ -68,7 +65,7 @@ export default class FloorRepo implements IFloorRepo {
             const floors = await this.floorSchema.find({});
 
             if (floors) {
-                return floors.map((floor) => FloorMap.toDomain(floor));
+                return floors.map(floor => FloorMap.toDomain(floor));
             } else {
                 return [];
             }
@@ -77,10 +74,7 @@ export default class FloorRepo implements IFloorRepo {
         }
     }
 
-
-
     public async findByDomainId(floorId: FloorId | string): Promise<Floor> {
-
         const floor = await this.floorSchema.findOne({ domainId: floorId });
 
         if (floor != null) {
@@ -95,12 +89,12 @@ export default class FloorRepo implements IFloorRepo {
             const floors = await this.floorSchema.find({ building: buildingId });
 
             if (floors != null && floors.length > 0) {
-                return floors.map((floor) => FloorMap.toDomain(floor));
+                return floors.map(floor => FloorMap.toDomain(floor));
             } else {
                 return [];
             }
         } catch (error) {
-            console.error("Error during aggregation:", error);
+            console.error('Error during aggregation:', error);
             return [];
         }
     }
@@ -111,35 +105,35 @@ export default class FloorRepo implements IFloorRepo {
                 {
                     $lookup: {
                         from: 'passages',
-                        localField: 'domainId',  // Assuming 'domainId' is the unique identifier for floors
+                        localField: 'domainId', // Assuming 'domainId' is the unique identifier for floors
                         foreignField: 'fromFloor',
-                        as: 'fromFloorPassages'
-                    }
+                        as: 'fromFloorPassages',
+                    },
                 },
                 {
                     $lookup: {
                         from: 'passages',
                         localField: 'domainId',
                         foreignField: 'toFloor',
-                        as: 'toFloorPassages'
-                    }
+                        as: 'toFloorPassages',
+                    },
                 },
                 {
                     $addFields: {
                         passages: {
-                            $concatArrays: ["$fromFloorPassages", "$toFloorPassages"]
-                        }
-                    }
+                            $concatArrays: ['$fromFloorPassages', '$toFloorPassages'],
+                        },
+                    },
                 },
                 {
                     $match: {
-                        passages: { $exists: true, $ne: [] }
-                    }
-                }
+                        passages: { $exists: true, $ne: [] },
+                    },
+                },
             ]);
 
             if (floors) {
-                return floors.map((floor) => FloorMap.toDomain(floor));
+                return floors.map(floor => FloorMap.toDomain(floor));
             } else {
                 return [];
             }
@@ -148,9 +142,7 @@ export default class FloorRepo implements IFloorRepo {
         }
     }
 
-
     public async getBuildingsByFloorRange(min: number, max: number): Promise<Building[]> {
-
         try {
             const buildingRecords = await this.floorSchema.aggregate([
                 {
@@ -186,14 +178,32 @@ export default class FloorRepo implements IFloorRepo {
             ]);
 
             if (buildingRecords) {
-                return buildingRecords.map((building) => BuildingMap.toDomain(building));
+                return buildingRecords.map(building => BuildingMap.toDomain(building));
             } else {
-                console.error("Error occurred during query execution");
+                console.error('Error occurred during query execution');
                 return [];
             }
         } catch (err) {
             console.error(err);
             throw err;
+        }
+    }
+
+    public async getFloorByBuildingAndNumber(buildingId: string, number: number, floorId?: string): Promise<Floor> {
+        try {
+            const floors = await this.floorSchema.findOne({
+                building: buildingId,
+                number: number,
+                domainId: { $ne: floorId },
+            });
+
+            if (floors != null) {
+                return FloorMap.toDomain(floors);
+            }
+            return null;
+        } catch (error) {
+            console.error('Error during aggregation:', error);
+            return null;
         }
     }
 

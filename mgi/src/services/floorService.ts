@@ -21,12 +21,19 @@ export default class FloorService implements IFloorService {
     public async createFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
         try {
             // check if building exists
-            let building: Building;
             const buildingOrError = await this.getBuilding(floorDTO.building);
             if (buildingOrError.isFailure) {
                 return Result.fail<IFloorDTO>(buildingOrError.errorValue());
-            } else {
-                building = buildingOrError.getValue();
+            }
+            let building: Building = buildingOrError.getValue();
+
+            // check if there's already a floor with the same number in the building
+            const floorWithSameNumber = await this.floorRepo.getFloorByBuildingAndNumber(
+                floorDTO.building,
+                floorDTO.number,
+            );
+            if (floorWithSameNumber) {
+                return Result.fail<IFloorDTO>('Floor with same number already exists in this building');
             }
 
             const information = await FloorInformation.create(floorDTO.information);
@@ -49,6 +56,50 @@ export default class FloorService implements IFloorService {
             await this.floorRepo.save(floorResult);
 
             const floorDTOResult = FloorMap.toDTO(floorResult);
+
+            return Result.ok<IFloorDTO>(floorDTOResult);
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    public async updateFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
+        try {
+            const floor = await this.floorRepo.findByDomainId(floorDTO.id);
+
+            if (floor === null) {
+                return Result.fail<IFloorDTO>('Floor not found');
+            }
+
+            // check if there's already a floor with the same number in the building
+            const floorWithSameNumber = await this.floorRepo.getFloorByBuildingAndNumber(
+                floorDTO.building,
+                floorDTO.number,
+                floorDTO.id,
+            );
+            if (floorWithSameNumber) {
+                return Result.fail<IFloorDTO>('Floor with same number already exists in this building');
+            }
+
+            const information = await FloorInformation.create(floorDTO.information);
+            if (information.isFailure) {
+                return Result.fail<IFloorDTO>(information.errorValue());
+            }
+
+            // check if building exists
+            const buildingOrError = await this.getBuilding(floorDTO.building);
+            if (buildingOrError.isFailure) {
+                return Result.fail<IFloorDTO>(buildingOrError.errorValue());
+            }
+            let building: Building = buildingOrError.getValue();
+
+            floor.number = floorDTO.number;
+            floor.information = information.getValue();
+            floor.building = building.buildingId;
+
+            await this.floorRepo.save(floor);
+
+            const floorDTOResult = FloorMap.toDTO(floor) as IFloorDTO;
 
             return Result.ok<IFloorDTO>(floorDTOResult);
         } catch (e) {
@@ -139,38 +190,6 @@ export default class FloorService implements IFloorService {
                 const floorsDTOResult = floors.map(floor => FloorMap.toDTO(floor) as IFloorDTO);
                 return Result.ok<Array<IFloorDTO>>(floorsDTOResult);
             }
-        } catch (e) {
-            throw e;
-        }
-    }
-
-    public async updateFloor(floorDTO: IFloorDTO): Promise<Result<IFloorDTO>> {
-        try {
-            const floor = await this.floorRepo.findByDomainId(floorDTO.id);
-
-            if (floor === null) {
-                return Result.fail<IFloorDTO>('Floor not found');
-            }
-
-            const information = await FloorInformation.create(floorDTO.information);
-            if (information.isFailure) {
-                return Result.fail<IFloorDTO>(information.errorValue());
-            }
-
-            const building = await this.buildingRepo.findByDomainId(floorDTO.building);
-            if (building === null) {
-                return Result.fail<IFloorDTO>('Building not found');
-            }
-
-            floor.number = floorDTO.number;
-            floor.information = information.getValue();
-            floor.building = building.buildingId;
-
-            await this.floorRepo.save(floor);
-
-            const floorDTOResult = FloorMap.toDTO(floor) as IFloorDTO;
-
-            return Result.ok<IFloorDTO>(floorDTOResult);
         } catch (e) {
             throw e;
         }
