@@ -2,7 +2,7 @@ import * as THREE from "three";
 import Orientation from "./orientation.js";
 import CubeTexture from "./cubetexture.js";
 import { GUI } from "three/addons/libs/lil-gui.module.min.js";
-
+import axios from "axios";
 export default class UserInterface extends GUI {
     constructor(thumbRaiser) {
         super();
@@ -45,6 +45,19 @@ export default class UserInterface extends GUI {
         this.domElement.style.right = "0.5vw";
         this.domElement.style.top = "1.0vh";
         this.domElement.style.fontSize = fontSize;
+
+        // Create the floors folder
+        console.log(thumbRaiser.floors)
+
+        const floorsFolder = this.addFolder("Floors");
+        floorsFolder.domElement.style.fontSize = fontSize;         
+        const floorsParameters = { name: "Select a floor"};
+        const floorsOptions = [];
+        for (let i = 0; i < thumbRaiser.floors.length; i++) {
+            floorsOptions[i] = thumbRaiser.floors[i].information;
+        }
+        floorsFolder.add(floorsParameters, "name").options(floorsOptions).onChange(name => textureCallback(floorsOptions, name));
+        floorsFolder.close();
 
         // Create the audio folder
         const audioFolder = this.addFolder("Audio");

@@ -11,7 +11,14 @@ import ThumbRaiser from "./thumb_raiser.js";
 // css
 import "../../styles/v3d.css";
 
-const ThreeJSPage: React.FC = () => {
+// models
+import { FloorWithBuilding } from "@/models/Floor.jsx";
+
+interface Props {
+  floors: FloorWithBuilding[];
+}
+
+export default function Scene(props: Props) {
   let animationFrameId: number;
 
   useEffect(() => {
@@ -314,7 +321,8 @@ const ThreeJSPage: React.FC = () => {
           initialZoom: 0.64,
           zoomMin: 0.64,
           zoomMax: 5.12,
-        } // Mini-map view camera parameters
+        }, // Mini-map view camera parameters
+        props.floors // all floors
       );
     }
 
@@ -716,6 +724,4 @@ const ThreeJSPage: React.FC = () => {
       </div>
     </div>
   );
-};
-
-export default ThreeJSPage;
+}
