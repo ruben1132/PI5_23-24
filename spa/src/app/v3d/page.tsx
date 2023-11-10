@@ -1,7 +1,7 @@
 "use client";
 
 import ThreeJSPage from "@/components/v3d/Scene";
-import "./main.module.css";
+// import "./main.module.css";
 
 export default async function Page() {
 

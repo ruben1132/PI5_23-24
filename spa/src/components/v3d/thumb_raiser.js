@@ -438,8 +438,9 @@ export default class ThumbRaiser {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = this.shadowsParameters.type;
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.domElement.id = "canvas";
-        document.body.appendChild(this.renderer.domElement);
+        // this.renderer.domElement.id = "scene";
+        // document.body.appendChild(this.renderer.domElement);
+        document.getElementById("scene").appendChild(this.renderer.domElement);
 
         // Get and configure the panels' <div> elements (with the exception of the user interface checkbox, which will be addressed later)
         this.viewsPanel = document.getElementById("views-panel");

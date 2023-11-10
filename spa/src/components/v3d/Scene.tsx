@@ -1,13 +1,17 @@
 "use client";
 
+// react
 import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+
+// threejs and project itself
 import * as THREE from "three";
 import Orientation from "./orientation.js";
 import ThumbRaiser from "./thumb_raiser.js";
 
+// css
+import "../../styles/v3d.css";
+
 const ThreeJSPage: React.FC = () => {
-  const router = useRouter();
   let animationFrameId: number;
 
   useEffect(() => {
@@ -338,8 +342,8 @@ const ThreeJSPage: React.FC = () => {
   }, []);
 
   return (
-    <>
-      <canvas id="canvas">
+    <div id="scene">
+      <div id="canvas" className="v3dcanvas">
         <div id="container">
           <div id="views-panel">
             <table className="v3dtable views">
@@ -709,8 +713,8 @@ const ThreeJSPage: React.FC = () => {
             </table>
           </div>
         </div>
-      </canvas>
-    </>
+      </div>
+    </div>
   );
 };
 
