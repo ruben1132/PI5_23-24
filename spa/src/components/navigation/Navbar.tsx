@@ -29,7 +29,8 @@ function NavBar(props : NavBarProps) {
             navbarScroll
           >
             <Nav.Link href="#action1">Home</Nav.Link>
-            <Nav.Link href="#action2">Link</Nav.Link>
+            <Nav.Link href="#action2">About Us</Nav.Link>
+            <Nav.Link href="#action2">Terms of service</Nav.Link>
           </Nav>
           <Form className="d-flex">
             <Form.Control
