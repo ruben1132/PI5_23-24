@@ -47,5 +47,35 @@ jobs:
           # Cleanup (remove the private key)
           rm sftp_key
           
+      - name: Accept SSH Host Key
+        run: |
+          # Replace these variables with your SSH server details
+          SSH_SERVER="vsgate-ssh.dei.isep.ipp.pt"
+          SSH_PORT="10655"
+          SSH_USERNAME="root"
 
+          # Retrieve the SSH host key from the server
+          SSH_HOST_KEY=$(ssh-keyscan -p $SSH_PORT $SSH_SERVER)
+
+          # Add the host key to the known hosts file
+          echo "$SSH_HOST_KEY" >> .github/workflows/known_hosts
+
+          
+      - name: Execute SSH Commands
+        run: |
+          # Replace these variables with your SSH and server details
+          SERVER_IP="vsgate-ssh.dei.isep.ipp.pt"
+          SSH_PORT="10655"  # Replace with your desired SSH port
+          SSH_USERNAME="root"
+          SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY }}"
   
+          # Save SSH private key to a file and set permissions
+          echo "$SSH_PRIVATE_KEY" > ssh_key
+          chmod 600 ssh_key
+  
+          # SSH into the server and execute commands
+          ssh -i ssh_key -o UserKnownHostsFile=.github/workflows/known_hosts -p $SSH_PORT "$SSH_USERNAME@$SERVER_IP" "cd /home/ubuntu/API/mgi && sudo npm i"
+          # ssh -i ssh_key -o UserKnownHostsFile=.github/workflows/known_hosts -p $SSH_PORT "$SSH_USERNAME@$SERVER_IP" "cd /home/ubuntu/API/mgi && sudo npm start"
+
+          # Cleanup (remove the private key)
+          rm ssh_key
