@@ -1,6 +1,6 @@
 import { useState, ChangeEvent } from "react";
 import useSWR, { mutate } from "swr";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { fetcher } from "./swrFetcher";
 
 // hook for opening and closing modals
@@ -52,7 +52,9 @@ export function useFormStringInputWithRegex(
   regex: RegExp
 ) {
   const [value, setValue] = useState(initialValue || "");
-  const [isValid, setIsValid] = useState<boolean>(regex.test(initialValue || ""));
+  const [isValid, setIsValid] = useState<boolean>(
+    regex.test(initialValue || "")
+  );
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const inputValue = e.target.value;
@@ -140,17 +142,16 @@ export function useSubmitData(initialValue: any, r: string, t: string) {
     try {
       const response = await axios(route, {
         method: type,
-        data:  data,
+        data: data,
       });
 
       if (response.status === 201 || response.status === 200) {
-        const data = await response.data;
-        return data;
+        const responseData = await response.data;
+        return { data: responseData, error: null };
       }
-
-      return null;
-    } catch (error) {
-      return null;
+    } catch (res: any) {
+      const errorMessage = res.response.data.error || "An error occurred";
+      return { data: null, error: errorMessage };
     }
   }
 
@@ -161,7 +162,6 @@ export function useSubmitData(initialValue: any, r: string, t: string) {
 
 // hook to fetch and handle data
 export function useFetchData(r: string) {
-
   const { data, error, isLoading } = useSWR(r, fetcher, {
     revalidateOnMount: true,
     shouldRetryOnError: false,

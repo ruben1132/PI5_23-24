@@ -1,9 +1,17 @@
 "use client";
 
+// react
 import React, { ChangeEvent, useEffect, useState } from "react";
+
+// react bootstrap components
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import { Button } from "react-bootstrap";
+
+// notification component
+import { notify } from "@/components/notification/Notification";
+
 // custom hooks
 import {
   useFetchData,
@@ -11,12 +19,13 @@ import {
   useFormNumberInput,
   useFormStringInput,
 } from "@/util/customHooks";
+
 // models
 import { Floor, FloorWithBuilding } from "@/models/Floor";
 import { Building } from "@/models/Building";
+
 // config
 import config from "../../../config";
-import { Button } from "react-bootstrap";
 
 interface Props {
   item: {
@@ -78,10 +87,19 @@ export default function FloorForm(props: Props) {
     formData.append("jsonFile", file);
     let res = await uploadFloorMap.submit(formData);
 
-    if (!res) {
-      // TODO: show alert
+    if (res.error) {
+      setEnabled(true);
+      notify.error(res.error);
       return;
     }
+
+    props.reFetchData(); // refresh data
+    setEnabled(true); // enable buttons
+
+    // show alert
+    notify.success(
+      `Floor map uploaded successfully`
+    );
 
     // fetch floor map again
     fetchFloorMap.revalidate();
@@ -94,7 +112,7 @@ export default function FloorForm(props: Props) {
     // set floor data
     let item: Floor = {
       ...props.item.value,
-      building: props.item.value?.building.id,
+      building: props.item.value?.building?.id,
     };
     item.id = props.item.value?.id;
     item.information = floorInformation.value;
@@ -104,17 +122,19 @@ export default function FloorForm(props: Props) {
     // submit data
     let res = await floorForm.submit(item);
 
-    if (!res) {
-      // TODO: show alert
+    if (res.error) {
       setEnabled(true);
+      notify.error(res.error);
       return;
     }
 
-    // refresh data
-    props.reFetchData();
-    setEnabled(true);
+    props.reFetchData(); // refresh data
+    setEnabled(true); // enable buttons
 
-    // TODO: show alert
+    // show alert
+    notify.success(
+      `Floor ${props.action == "edit" ? "edited" : "added"} successfully`
+    );
   };
 
   // when floors load, load them to the select box

@@ -69,7 +69,7 @@ export default class FloorMapController implements IFloorMapController /* TODO: 
     //       const floorMapOrError = await this.floorMapServiceInstance.updateFloorMap(req.body as IFloorMapDTO) as Result<IFloorMapDTO>;
 
     //       if (floorMapOrError.isFailure) {
-    //         return res.status(404).send({ error: floorMapOrError.errorValue()});
+    //         return res.status(400).send({ error: floorMapOrError.errorValue()});
     //       }
 
     //       const floorMapDTO = floorMapOrError.getValue();

@@ -50,7 +50,7 @@ export default class ElevatorController implements IElevatorController /* TODO: 
         const elevatorOrError = await this.elevatorServiceInstance.updateElevator(req.body as IElevatorDTO) as Result<IElevatorDTO>;
   
         if (elevatorOrError.isFailure) {
-          return res.status(404).send({ error: elevatorOrError.errorValue()});
+          return res.status(400).send({ error: elevatorOrError.errorValue()});
         }
   
         const elevatorDTO = elevatorOrError.getValue();
@@ -66,7 +66,7 @@ export default class ElevatorController implements IElevatorController /* TODO: 
             const elevatorOrError = await this.elevatorServiceInstance.deleteElevator(req.params.id) as Result<void>;
 
             if (elevatorOrError.isFailure) {
-                return res.status(404).send({ error: elevatorOrError.errorValue() });
+                return res.status(500).send({ error: elevatorOrError.errorValue() });
             }
 
             //204 - No content  - The server successfully processed the request, but is not returning any content

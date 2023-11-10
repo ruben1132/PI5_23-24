@@ -68,7 +68,7 @@ export default class BuildingController implements IBuildingController /* TODO: 
             const buildingOrError = await this.buildingServiceInstance.getBuildingById(req.params.id) as Result<IBuildingDTO>;
 
             if (buildingOrError.isFailure) {
-                return res.status(404).send({ error: buildingOrError.errorValue() });
+                return res.status(400).send({ error: buildingOrError.errorValue() });
             }
 
             const buildingDTO = buildingOrError.getValue();
@@ -84,7 +84,7 @@ export default class BuildingController implements IBuildingController /* TODO: 
             const buildingOrError = await this.buildingServiceInstance.updateBuilding(req.body as IBuildingDTO) as Result<IBuildingDTO>;
 
             if (buildingOrError.isFailure) {
-                return res.status(404).send({ error: buildingOrError.errorValue() });
+                return res.status(400).send({ error: buildingOrError.errorValue() });
             }
 
             const buildingDTO = buildingOrError.getValue();
@@ -100,7 +100,7 @@ export default class BuildingController implements IBuildingController /* TODO: 
             const buildingOrError = await this.buildingServiceInstance.deleteBuilding(req.params.id) as Result<void>;
 
             if (buildingOrError.isFailure) {
-                return res.status(404).send({ error: buildingOrError.errorValue() });
+                return res.status(400).send({ error: buildingOrError.errorValue() });
             }
 
             //204 - No content  - The server successfully processed the request, but is not returning any content

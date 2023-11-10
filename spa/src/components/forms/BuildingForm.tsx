@@ -1,9 +1,18 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+// react
+import React, { useState } from "react";
+
+// react bootstrap components
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
+import { Button } from "react-bootstrap";
+
+// notification component
+import { notify } from "@/components/notification/Notification";
+
+// config
 import config from "../../../config";
 
 // custom hooks
@@ -12,9 +21,9 @@ import {
   useFormStringInputWithRegex,
   useSubmitData,
 } from "@/util/customHooks";
+
 // model
 import { Building } from "@/models/Building";
-import { Button } from "react-bootstrap";
 
 interface Props {
   item: {
@@ -60,17 +69,19 @@ export default function BuildingForm(props: Props) {
     // submit data
     let res = await buildingForm.submit(item);
 
-    if (!res) {
-      // TODO: show alert
+    if (res.error) {
       setEnabled(true);
+      notify.error(res.error);
       return;
     }
 
-    // refresh data
-    props.reFetchData();
-    setEnabled(true);
+    props.reFetchData(); // refresh data
+    setEnabled(true); // enable buttons
 
-    // TODO: show alert
+    // show alert
+    notify.success(
+      `Building ${props.action == "edit" ? "edited" : "added"} successfully`
+    );
   };
 
   return (

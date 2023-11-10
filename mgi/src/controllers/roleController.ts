@@ -35,7 +35,7 @@ export default class RoleController implements IRoleController /* TODO: extends 
             const roleOrError = await this.roleServiceInstance.updateRole(req.body as IRoleDTO) as Result<IRoleDTO>;
 
             if (roleOrError.isFailure) {
-                return res.status(404).send({ error: roleOrError.errorValue() });
+                return res.status(400).send({ error: roleOrError.errorValue() });
             }
 
             const roleDTO = roleOrError.getValue();
