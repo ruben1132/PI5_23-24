@@ -48,4 +48,21 @@ jobs:
           rm sftp_key
           
 
+      - name: Execute SSH Commands
+        run: |
+          # Replace these variables with your SSH and server details
+          SERVER_IP="vsgate-ssh.dei.isep.ipp.pt"
+          SSH_PORT="10655"  # Replace with your desired SSH port
+          SSH_USERNAME="root"
+          SSH_PRIVATE_KEY="${{ secrets.SSH_PRIVATE_KEY }}"
   
+          # Save SSH private key to a file and set permissions
+          echo "$SSH_PRIVATE_KEY" > ssh_key
+          chmod 600 ssh_key
+  
+          # SSH into the server and execute commands
+          ssh -i ssh_key -o UserKnownHostsFile=.github/workflows/known_hosts -p $SSH_PORT "$SSH_USERNAME@$SERVER_IP" "cd /home/ubuntu/API/mgi && sudo npm i"
+          # ssh -i ssh_key -o UserKnownHostsFile=.github/workflows/known_hosts -p $SSH_PORT "$SSH_USERNAME@$SERVER_IP" "cd /home/ubuntu/API/mgi && sudo npm start"
+
+          # Cleanup (remove the private key)
+          rm ssh_key
