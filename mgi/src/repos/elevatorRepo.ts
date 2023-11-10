@@ -3,7 +3,7 @@ import { Service, Inject } from 'typedi';
 import IElevatorRepo from '../services/IRepos/IElevatorRepo';
 import { Elevator } from '../domain/elevator';
 import { ElevatorId } from '../domain/valueObj/elevatorId';
-import { ElevatorMap } from "../mappers/ElevatorMap";
+import { ElevatorMap } from '../mappers/ElevatorMap';
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IElevatorPersistence } from '../dataschema/IElevatorPersistence';
@@ -12,7 +12,7 @@ import { IElevatorPersistence } from '../dataschema/IElevatorPersistence';
 export default class ElevatorRepo implements IElevatorRepo {
     private models: any;
 
-    constructor(@Inject('elevatorSchema') private elevatorSchema: Model<IElevatorPersistence & Document>) { }
+    constructor(@Inject('elevatorSchema') private elevatorSchema: Model<IElevatorPersistence & Document>) {}
 
     private createBaseQuery(): any {
         return {
@@ -43,9 +43,7 @@ export default class ElevatorRepo implements IElevatorRepo {
 
                 return ElevatorMap.toDomain(elevatorCreated);
             } else {
-
-
-                let fAllowed: string[] = [];
+                const fAllowed: string[] = [];
 
                 for (const floor of elevator.floorsAllowed) {
                     fAllowed.push(floor.toString());
@@ -59,6 +57,21 @@ export default class ElevatorRepo implements IElevatorRepo {
             }
         } catch (err) {
             throw err;
+        }
+    }
+
+    public async getElevatorById(elevatorId: ElevatorId): Promise<Elevator> {
+        try {
+            const query = { domainId: elevatorId };
+            const elevatorRecord = await this.elevatorSchema.findOne(
+                query as FilterQuery<IElevatorPersistence & Document>,
+            );
+
+            if (elevatorRecord != null) {
+                return ElevatorMap.toDomain(elevatorRecord);
+            } else return null;
+        } catch (error) {
+            return null;
         }
     }
 
@@ -81,7 +94,7 @@ export default class ElevatorRepo implements IElevatorRepo {
             const elevators = await this.elevatorSchema.find({ domainId: { $in: elevatorIds } });
 
             if (elevators.length > 0) {
-                return elevators.map((elevator) => ElevatorMap.toDomain(elevator));
+                return elevators.map(elevator => ElevatorMap.toDomain(elevator));
             }
 
             return [];
@@ -94,7 +107,7 @@ export default class ElevatorRepo implements IElevatorRepo {
             const elevators = await this.elevatorSchema.find();
 
             if (elevators.length > 0) {
-                return elevators.map((elevator) => ElevatorMap.toDomain(elevator));
+                return elevators.map(elevator => ElevatorMap.toDomain(elevator));
             }
 
             return [];

@@ -6,4 +6,6 @@ export default interface IRobotController {
     inhibitRobot(req: Request, res: Response, next: NextFunction);
     updateRobot(req: Request, res: Response, next: NextFunction);
     deleteRobot(req: Request, res: Response, next: NextFunction);
+
+    getRobotById(req: Request, res: Response, next: NextFunction);
 }

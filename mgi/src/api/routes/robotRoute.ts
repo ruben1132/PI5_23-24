@@ -40,6 +40,8 @@ export default (app: Router) => {
 
     route.get('', (req, res, next) => ctrl.getRobots(req, res, next));
 
+    route.get('/:id', (req, res, next) => ctrl.getRobotById(req, res, next));
+
 
     route.delete('/:id', (req, res, next) => ctrl.deleteRobot(req, res, next));
 };

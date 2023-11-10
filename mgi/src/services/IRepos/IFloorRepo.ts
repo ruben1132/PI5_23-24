@@ -12,7 +12,6 @@ export default interface IFloorRepo extends Repo<Floor> {
     getBuildingsByFloorRange(min: number, max: number): Promise<Building[]>;
     getFloorByBuildingAndNumber(buildingId: string, number: number, floorId?: string): Promise<Floor>;
     deleteFloor(floorId: string): Promise<Boolean>;
-
     //findByIds (floorsIds: FloorId[]): Promise<Floor[]>;
     //saveCollection (floors: Floor[]): Promise<Floor[]>;
     //removeByFloorIds (floors: FloorId[]): Promise<any>

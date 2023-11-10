@@ -1,6 +1,6 @@
 import { Service, Inject } from 'typedi';
 import config from '../../config';
-import IRobotDTO from '../dto/IRobotDTO';
+import {IRobotDTO, IRobotWithRobotTypeDTO} from '../dto/IRobotDTO';
 import { Robot } from '../domain/robot';
 import IRobotRepo from './IRepos/IRobotRepo';
 import IBuildingRepo from './IRepos/IBuildingRepo';
@@ -105,15 +105,46 @@ export default class RobotService implements IRobotService {
         return Result.ok<IRobotDTO>(robotDTOResult);
     }
 
-    public async getRobots(): Promise<Result<Array<IRobotDTO>>> {
+    public async getRobots(): Promise<Result<Array<IRobotWithRobotTypeDTO>>> {
         try {
             const robots = await this.robotRepo.getRobots();
 
+            const robotDTO: IRobotWithRobotTypeDTO[] = [];
+
+            for (const robot of robots) {
+                const robotType = await this.robotTypeRepo.findByDomainId(robot.robotType);
+                if (robotType === null) {
+                    return Result.fail<Array<IRobotWithRobotTypeDTO>>('RobotType not found');
+                } else {
+                    const robotDTOResult = RobotMap.toDTOWithRobotType(robot, robotType) as IRobotWithRobotTypeDTO;
+                    robotDTO.push(robotDTOResult);
+                }
+            }
+
             if (robots === null) {
-                return Result.fail<Array<IRobotDTO>>('Robots not found');
+                return Result.fail<Array<IRobotWithRobotTypeDTO>>('Robots not found');
             } else {
-                const robotsDTOResult = robots.map(robot => RobotMap.toDTO(robot) as IRobotDTO);
-                return Result.ok<Array<IRobotDTO>>(robotsDTOResult);
+                return Result.ok<Array<IRobotWithRobotTypeDTO>>(robotDTO);
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    public async getRobotById(robotId: string): Promise<Result<IRobotWithRobotTypeDTO>> {
+        try {
+            const robot = await this.robotRepo.findByDomainId(robotId);
+
+            if (robot === null) {
+                return Result.fail<IRobotWithRobotTypeDTO>('Robot not found');
+            } else {
+                const robotType = await this.robotTypeRepo.findByDomainId(robot.robotType);
+                if (robotType === null) {
+                    return Result.fail<IRobotWithRobotTypeDTO>('RobotType not found');
+                } else {
+                    const robotDTOResult = RobotMap.toDTOWithRobotType(robot, robotType) as IRobotWithRobotTypeDTO;
+                    return Result.ok<IRobotWithRobotTypeDTO>(robotDTOResult);
+                }
             }
         } catch (e) {
             throw e;

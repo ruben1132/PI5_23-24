@@ -4,7 +4,7 @@ import config from "../../config";
 
 import IRobotTypeController from "./IControllers/IRobotTypeController";
 import IRobotTypeService from '../services/IServices/IRobotTypeService';
-import IRobotTypeDTO from '../dto/IRobotTypeDTO';
+import { IRobotTypeDTO, IRobotTypeWithTasksDTO } from '../dto/IRobotTypeDTO';
 
 import { Result } from "../core/logic/Result";
 
@@ -16,7 +16,7 @@ export default class RobotTypeController implements IRobotTypeController /* TODO
 
     public async createRobotType(req: Request, res: Response, next: NextFunction) {
         try {
-            
+
             const robotTypeOrError = await this.robotTypeServiceInstance.createRobotType(req.body as IRobotTypeDTO) as Result<IRobotTypeDTO>;
 
             if (robotTypeOrError.isFailure) {
@@ -34,7 +34,7 @@ export default class RobotTypeController implements IRobotTypeController /* TODO
 
     public async getRobotTypes(req: Request, res: Response, next: NextFunction) {
         try {
-            const robotTypesOrError = await this.robotTypeServiceInstance.getRobotTypes() as Result<Array<IRobotTypeDTO>>;
+            const robotTypesOrError = await this.robotTypeServiceInstance.getRobotTypes() as Result<Array<IRobotTypeWithTasksDTO>>;
 
 
             if (robotTypesOrError.isFailure) {
@@ -42,6 +42,22 @@ export default class RobotTypeController implements IRobotTypeController /* TODO
             }
 
             return res.json(robotTypesOrError.getValue()).status(201);
+        }
+        catch (e) {
+            return next(e);
+        }
+    }
+
+    public async getRobotTypeById(req: Request, res: Response, next: NextFunction) {
+        try {
+            const robotTypeOrError = await this.robotTypeServiceInstance.getRobotTypeById(req.params.id) as Result<IRobotTypeWithTasksDTO>;
+
+            if (robotTypeOrError.isFailure) {
+                return res.status(400).send({ error: robotTypeOrError.errorValue() });
+            }
+
+            const robotTypeDTO = robotTypeOrError.getValue();
+            return res.json(robotTypeDTO).status(201);
         }
         catch (e) {
             return next(e);

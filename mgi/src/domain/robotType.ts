@@ -10,12 +10,13 @@ import { RobotTypeId } from './valueObj/robotTypeId';
 import { TaskType } from './taskType';
 import { Guard } from '../core/logic/Guard';
 import { TaskTypeId } from './valueObj/taskTypeId';
+import ITaskTypeDTO from '../dto/ITaskTypeDTO';
 
 interface RobotTypeProps {
     type: RobotTypeType;
     brand: RobotTypeBrand;
     model: RobotTypeModel;
-    tasksAllowed: TaskTypeId[];   
+    tasksAllowed: ITaskTypeDTO[];
 }
 
 export class RobotType extends AggregateRoot<RobotTypeProps> {
@@ -51,11 +52,11 @@ export class RobotType extends AggregateRoot<RobotTypeProps> {
         this.props.model = value;
     }
 
-    get tasksAllowed(): TaskTypeId[] {
+    get tasksAllowed(): ITaskTypeDTO[] {
         return this.props.tasksAllowed;
     }
 
-    set tasksAllowed(value: TaskTypeId[]) {
+    set tasksAllowed(value: ITaskTypeDTO[]) {
         this.props.tasksAllowed = value;
     }
 

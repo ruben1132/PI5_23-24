@@ -8,8 +8,9 @@ export default interface IRoomRepo extends Repo<Room> {
 
   getRooms (): Promise<Room[]>;
   deleteRoom(roomId: RoomId | string): Promise<boolean>;
-    
+
   findByIds (roomsIds: RoomId[] | string[]): Promise<Room[]>;
+  getRoomById (roomId: string): Promise<Room>;
   //saveCollection (rooms: Room[]): Promise<Room[]>;
   //removeByRoomIds (rooms: RoomId[]): Promise<any>
 }

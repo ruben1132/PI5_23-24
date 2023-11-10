@@ -1,11 +1,13 @@
 import { Result } from "../../core/logic/Result";
-import IRobotDTO from "../../dto/IRobotDTO";
+import {IRobotDTO, IRobotWithRobotTypeDTO} from "../../dto/IRobotDTO";
 
 export default interface IRobotService {
 
   createRobot(robotDTO: IRobotDTO): Promise<Result<IRobotDTO>>;
-  getRobots (): Promise<Result<Array<IRobotDTO>>>;
+  getRobots (): Promise<Result<Array<IRobotWithRobotTypeDTO>>>;
   inhibitRobot(robotId: string): Promise<Result<IRobotDTO>>;
   updateRobot(robotDTO: IRobotDTO): Promise<Result<IRobotDTO>>;
   deleteRobot(robotId: string): Promise<Result<void>>;
+
+  getRobotById(robotId: string): Promise<Result<IRobotWithRobotTypeDTO>>;
 }

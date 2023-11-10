@@ -1,6 +1,6 @@
 import { Service, Inject } from 'typedi';
 import config from '../../config';
-import IRobotTypeDTO from '../dto/IRobotTypeDTO';
+import { IRobotTypeDTO, IRobotTypeWithTasksDTO } from '../dto/IRobotTypeDTO';
 import { RobotType } from '../domain/robotType';
 import IRobotTypeRepo from './IRepos/IRobotTypeRepo';
 import IBuildingRepo from './IRepos/IBuildingRepo';
@@ -23,7 +23,7 @@ export default class RobotTypeService implements IRobotTypeService {
     constructor(
         @Inject(config.repos.robotType.name) private robotTypeRepo: IRobotTypeRepo,
         @Inject(config.repos.taskType.name) private taskTypeRepo: ITaskTypeRepo,
-    ) { }
+    ) {}
 
     public async createRobotType(robotTypeDTO: IRobotTypeDTO): Promise<Result<IRobotTypeDTO>> {
         try {
@@ -69,15 +69,39 @@ export default class RobotTypeService implements IRobotTypeService {
         }
     }
 
-    public async getRobotTypes(): Promise<Result<Array<IRobotTypeDTO>>> {
+    public async getRobotTypes(): Promise<Result<Array<IRobotTypeWithTasksDTO>>> {
         try {
             const robotTypes = await this.robotTypeRepo.getRobotTypes();
 
+            const robotTypeDTO: IRobotTypeWithTasksDTO[] = [];
+
+            for (const robotType of robotTypes) {
+                const tasks = await this.taskTypeRepo.findByIds(robotType.tasksAllowed);
+
+                robotTypeDTO.push(RobotTypeMap.toDTOWithTask(robotType, tasks) as IRobotTypeWithTasksDTO);
+            }
+
             if (robotTypes === null) {
-                return Result.fail<Array<IRobotTypeDTO>>('RobotTypes not found');
+                return Result.fail<Array<IRobotTypeWithTasksDTO>>('RobotTypes not found');
             } else {
-                const robotTypesDTOResult = robotTypes.map(robotType => RobotTypeMap.toDTO(robotType) as IRobotTypeDTO);
-                return Result.ok<Array<IRobotTypeDTO>>(robotTypesDTOResult);
+                return Result.ok<Array<IRobotTypeWithTasksDTO>>(robotTypeDTO);
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    public async getRobotTypeById(robotTypeId: string): Promise<Result<IRobotTypeWithTasksDTO>> {
+        try {
+            const robotType = await this.robotTypeRepo.findByDomainId(robotTypeId);
+
+            const tasks = await this.taskTypeRepo.findByIds(robotType.tasksAllowed);
+
+            if (robotType === null) {
+                return Result.fail<IRobotTypeWithTasksDTO>('RobotType not found');
+            } else {
+                const robotTypeDTOResult = RobotTypeMap.toDTOWithTask(robotType, tasks) as IRobotTypeWithTasksDTO;
+                return Result.ok<IRobotTypeWithTasksDTO>(robotTypeDTOResult);
             }
         } catch (e) {
             throw e;
@@ -142,10 +166,8 @@ export default class RobotTypeService implements IRobotTypeService {
         }
     }
 
-
     // check if task types exist
     private async getTaskTypes(taskTypeIds: string[]): Promise<Result<TaskType[]>> {
-
         const taskTypes = await this.taskTypeRepo.findByIds(taskTypeIds);
         const found = !!taskTypes;
 
@@ -155,5 +177,4 @@ export default class RobotTypeService implements IRobotTypeService {
             return Result.fail<TaskType[]>("Couldn't find rooms by one of the given ids=" + taskTypeIds);
         }
     }
-
 }
