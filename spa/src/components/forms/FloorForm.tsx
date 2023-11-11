@@ -74,11 +74,6 @@ export default function FloorForm(props: Props) {
   // button enables - used to prevent double clicks
   const [enabled, setEnabled] = useState<boolean>(true);
 
-  // filter data so it removes the element already selected
-  const selectBoxSelected = (e: ChangeEvent<HTMLSelectElement>) => {
-    floorBuilding.handleLoad(e.target.value);
-  };
-
   // handle upload to floormap to server
   const handleUpload = async (file: File | undefined) => {
     if (!file) {
@@ -184,6 +179,11 @@ export default function FloorForm(props: Props) {
     (item: any) => item.id !== props.item.value?.building?.id
   );
 
+  // handle for selecting a building
+  const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+    floorBuilding.handleLoad(e.target.value);
+  };
+
   return (
     <Form>
       {props.action === "edit" && (
@@ -237,7 +237,7 @@ export default function FloorForm(props: Props) {
               defaultValue={
                 props.item.value?.building?.id ?? filteredSelectBoxData[0].id
               }
-              onChange={selectBoxSelected}
+              onChange={handleSelect}
             >
               {props.item.value?.building?.id && (
                 <option defaultChecked={true}>

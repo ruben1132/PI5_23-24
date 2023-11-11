@@ -8,6 +8,8 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Button } from "react-bootstrap";
+import ListGroup from "react-bootstrap/ListGroup";
+import CloseButton from "react-bootstrap/CloseButton";
 
 // notification component
 import { notify } from "@/components/notification/Notification";
@@ -18,12 +20,10 @@ import {
   useSubmitData,
   useDeleteData,
   useFormStringInputWithRegex,
-  useFormStringInput,
 } from "@/util/customHooks";
 
 // models
 import { RobotType, RobotTypeWithTaskTypes } from "@/models/RobotType";
-import { Building } from "@/models/Building";
 
 // config
 import config from "../../../config";
@@ -52,7 +52,9 @@ export default function RobotTypeForm(props: Props) {
 
   // deleter
   const robotTypeDeleter = useDeleteData(
-    config.mgiAPI.baseUrl + config.mgiAPI.routes.robottypes + props.item?.value.id
+    config.mgiAPI.baseUrl +
+      config.mgiAPI.routes.robottypes +
+      props.item?.value.id
   );
 
   // inputs
@@ -68,15 +70,10 @@ export default function RobotTypeForm(props: Props) {
     props.item.value?.model,
     /^.{1,100}$/
   );
-  const robotTypeTasksAllowed = useFormStringInput(""); // TODO:
+  const [tasksAllowed, setTasksAllowed] = useState<TaskType[]>([]); // TODO:
 
   // button enables - used to prevent double clicks
   const [enabled, setEnabled] = useState<boolean>(true);
-
-  // filter data so it removes the element already selected
-  const selectBoxSelected = (e: ChangeEvent<HTMLSelectElement>) => {
-    robotTypeTasksAllowed.handleLoad(e.target.value);
-  };
 
   // updates the floor and refreshes the table
   const handleSubmitData = async () => {
@@ -85,13 +82,13 @@ export default function RobotTypeForm(props: Props) {
     // set floor data
     let item: RobotType = {
       ...props.item.value,
-      tasksAllowed: props.item.value?.tasksAllowed.map((item) => item.id),
+      tasksAllowed: tasksAllowed.map((item) => item.id),
     };
     item.id = props.item.value?.id;
     item.type = robotTypeName.value;
     item.brand = robotTypeBrand.value;
     item.model = robotTypeModel.value;
-    item.tasksAllowed = [robotTypeTasksAllowed.value]; // TODO:
+    item.tasksAllowed = tasksAllowed.map((item) => item.id);
 
     // submit data
     let res = await robotTypeForm.submit(item);
@@ -133,15 +130,12 @@ export default function RobotTypeForm(props: Props) {
     props.close();
   };
 
-  // when floors load, load them to the select box
+  // when the action changes, update the tasks allowed
   useEffect(() => {
-    // if there's no data, return
-    if (!selectBoxTaskTypesDataFetch.data) {
-      return;
+    if (props.action === "edit") {
+      setTasksAllowed(props.item.value.tasksAllowed);
     }
-
-    robotTypeTasksAllowed.handleLoad(selectBoxTaskTypesDataFetch.data[0].id); // TODO:
-  }, [selectBoxTaskTypesDataFetch.data]);
+  }, [props.action]);
 
   if (selectBoxTaskTypesDataFetch.isLoading) {
     return <Form>Loading...</Form>;
@@ -150,10 +144,28 @@ export default function RobotTypeForm(props: Props) {
     return <Form>Error</Form>;
   }
 
-  // filter data so it removes the element already selected
+  // filter data so it removes the element(s) already selected
   const filteredSelectBoxData = selectBoxTaskTypesDataFetch.data.filter(
-    (item: any) => item.id !== "" // TODO:
+    (item: TaskType) => {
+      return !tasksAllowed.some((task) => task.id === item.id);
+    }
   );
+
+  // add the selected value
+  const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+    const selectedType = selectBoxTaskTypesDataFetch.data.find(
+      (type: TaskType) => type.id === selectedValue
+    );
+
+    const newArray: TaskType[] = [...tasksAllowed, selectedType];
+    setTasksAllowed(newArray);
+  };
+
+  const handleRemoveTaskType = (id: TaskType) => {
+    const newArray = tasksAllowed.filter((item) => item.id !== id.id);
+    setTasksAllowed(newArray);
+  };
 
   return (
     <Form>
@@ -215,28 +227,28 @@ export default function RobotTypeForm(props: Props) {
           <Form.Group className="mb-6">
             <Form.Label htmlFor="select">Task Types</Form.Label>
 
-            <Form.Select
-              // defaultValue={
-              //   props.item.value?.tasksAllowed?.id ?? filteredSelectBoxData[0].id
-              // }
-              onChange={selectBoxSelected}
-            >
-              {/* {props.item.value?.building?.id && (
-                <option defaultChecked={true}>
-                  {props.item.value?.building.code +
-                    " - " +
-                    props.item.value?.building.name}
-                </option>
-              )} */}
-
+            <Form.Select onChange={handleSelect}>
+              <option>select task types</option>
               {filteredSelectBoxData?.map((item: TaskType) => (
                 <option key={item.id} value={item.id}>
-                  {/* show 2nd prop from item, 1st prop is the id */}
                   {item.name}
                 </option>
               ))}
             </Form.Select>
           </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        <Col sm={6}></Col>
+        <Col sm={6}>
+          <ListGroup>
+            {tasksAllowed?.map((item) => (
+              <ListGroup.Item key={item.id}>
+                <CloseButton onClick={() => handleRemoveTaskType(item)} />
+                {item.name}
+              </ListGroup.Item>
+            ))}
+          </ListGroup>
         </Col>
       </Row>
       <br />
@@ -252,7 +264,7 @@ export default function RobotTypeForm(props: Props) {
                     !robotTypeName.isValid ||
                     !robotTypeBrand.isValid ||
                     !robotTypeModel.isValid ||
-                    robotTypeTasksAllowed.value === "" || // TODO:
+                    tasksAllowed.length === 0 ||
                     !enabled
                   }
                 >
@@ -271,7 +283,7 @@ export default function RobotTypeForm(props: Props) {
                   !robotTypeName.isValid ||
                   !robotTypeBrand.isValid ||
                   !robotTypeModel.isValid ||
-                  robotTypeTasksAllowed.value === "" || // TODO:
+                  tasksAllowed.length === 0 ||
                   !enabled
                 }
               >
