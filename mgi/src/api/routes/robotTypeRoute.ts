@@ -30,19 +30,19 @@ export default (app: Router) => {
 
     route.get('/:id', (req, res, next) => ctrl.getRobotTypeById(req, res, next));
 
-    // route.put(
-    //     '',
-    //     celebrate({
-    //         body: Joi.object({
-    //             id: Joi.string().required(),
-    //             type: Joi.string().required(),
-    //             brand: Joi.string().required(),
-    //             model: Joi.string().required(),
-    //             tasksAvailable: Joi.array().items(Joi.string()).required(),
-    //         }),
-    //     }),
-    //     (req, res, next) => ctrl.updateRobotType(req, res, next),
-    // );
+    route.put(
+        '',
+        celebrate({
+            body: Joi.object({
+                id: Joi.string().required(),
+                type: Joi.string().required(),
+                brand: Joi.string().required(),
+                model: Joi.string().required(),
+                tasksAllowed: Joi.array().items(Joi.string()).required(),
+            }),
+        }),
+        (req, res, next) => ctrl.updateRobotType(req, res, next),
+    );
 
     route.delete('/:id', (req, res, next) => ctrl.deleteRobotType(req, res, next));
 };
