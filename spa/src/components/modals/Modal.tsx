@@ -16,9 +16,8 @@ interface Props {
 }
 
 export default function BuildingModal(props: Props) {
-
   return (
-    <Modal size="lg" onHide={ props.close} show={props.show}>
+    <Modal size="lg" onHide={props.close} show={props.show}>
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-lg">
           {props.action === "edit"
@@ -34,11 +33,10 @@ export default function BuildingModal(props: Props) {
           }}
           action={props.action}
           reFetchData={props.reFetchData}
+          close={props.close}
         />
       </Modal.Body>
-      <Modal.Footer>
-
-      </Modal.Footer>
+      <Modal.Footer></Modal.Footer>
     </Modal>
   );
 }

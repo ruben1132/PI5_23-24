@@ -8,6 +8,7 @@ interface Props {
   };
   action: string;
   reFetchData: () => void;
+  close: () => void;
 }
 
 export function RenderFilteredForm(props: Props) {
@@ -20,6 +21,7 @@ export function RenderFilteredForm(props: Props) {
               item={{ value: props.item.value }}
               action={props.action}
               reFetchData={props.reFetchData}
+              close={props.close}
             />
           );
         case "floor":
@@ -28,6 +30,7 @@ export function RenderFilteredForm(props: Props) {
               item={{ value: props.item.value }}
               action={props.action}
               reFetchData={props.reFetchData}
+              close={props.close}
             />
           );
         default:

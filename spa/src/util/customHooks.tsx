@@ -133,12 +133,8 @@ export function useFormNumberInput(initialValue: number) {
 }
 
 // hook to update data
-export function useSubmitData(initialValue: any, r: string, t: string) {
-  const [route] = useState<string>(r);
-  const [type] = useState<string>(t);
-
+export function useSubmitData(route: string, type: string) {
   async function submit(data: any): Promise<any | null> {
-    // API - update
     try {
       const response = await axios(route, {
         method: type,
@@ -157,6 +153,29 @@ export function useSubmitData(initialValue: any, r: string, t: string) {
 
   return {
     submit,
+  };
+}
+
+// hook to delete data
+export function useDeleteData(route: string) {
+  async function del(): Promise<any | null> {
+    try {
+      const response = await axios(route, {
+        method: "DELETE",
+      });
+
+      if (response.status === 201 || response.status === 200) {
+        const responseData = await response.data;
+        return { data: responseData, error: null };
+      }
+    } catch (res: any) {
+      const errorMessage = res.response.data.error || "An error occurred";
+      return { data: null, error: errorMessage };
+    }
+  }
+
+  return {
+    del,
   };
 }
 

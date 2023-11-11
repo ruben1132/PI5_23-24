@@ -20,6 +20,7 @@ import {
   useFormStringInput,
   useFormStringInputWithRegex,
   useSubmitData,
+  useDeleteData,
 } from "@/util/customHooks";
 
 // model
@@ -31,6 +32,7 @@ interface Props {
   };
   action: string;
   reFetchData: () => void;
+  close: () => void;
 }
 
 export default function BuildingForm(props: Props) {
@@ -47,16 +49,22 @@ export default function BuildingForm(props: Props) {
 
   // form submitter
   const buildingForm = useSubmitData(
-    props.item.value,
     config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings,
     props.action === "edit" ? "PUT" : "POST"
+  );
+
+  // deleter
+  const buildingDeleter = useDeleteData(
+    config.mgiAPI.baseUrl +
+      config.mgiAPI.routes.buildings +
+      props.item?.value.id
   );
 
   // button enables - used to prevent double clicks
   const [enabled, setEnabled] = useState<boolean>(true);
 
   // updates the building and refreshes the table
-  const submitData = async () => {
+  const handleSubmitData = async () => {
     setEnabled(false);
 
     // set building data
@@ -82,6 +90,28 @@ export default function BuildingForm(props: Props) {
     notify.success(
       `Building ${props.action == "edit" ? "edited" : "added"} successfully`
     );
+  };
+
+  const handleDeleteData = async () => {
+    setEnabled(false);
+
+    // delete data
+    let res = await buildingDeleter.del();
+
+    if (res.error) {
+      setEnabled(true);
+      notify.error(res.error);
+      return;
+    }
+
+    props.reFetchData(); // refresh data
+    setEnabled(true); // enable buttons
+
+    // show alert
+    notify.success(`Building deleted successfully`);
+
+    // close modal
+    props.close();
   };
 
   return (
@@ -155,7 +185,7 @@ export default function BuildingForm(props: Props) {
               <>
                 <Button
                   variant="primary"
-                  onClick={submitData}
+                  onClick={handleSubmitData}
                   disabled={
                     buildingName.value === "" ||
                     !buildingCode.isValid ||
@@ -166,17 +196,14 @@ export default function BuildingForm(props: Props) {
                   Update
                 </Button>
 
-                <Button
-                  variant="danger"
-                  // onClick={}
-                >
+                <Button variant="danger" onClick={handleDeleteData}>
                   Delete
                 </Button>
               </>
             ) : (
               <Button
                 variant="success"
-                onClick={submitData}
+                onClick={handleSubmitData}
                 disabled={
                   buildingName.value === "" ||
                   !buildingCode.isValid ||

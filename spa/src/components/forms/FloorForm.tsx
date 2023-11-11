@@ -18,6 +18,7 @@ import {
   useSubmitData,
   useFormNumberInput,
   useFormStringInput,
+  useDeleteData,
 } from "@/util/customHooks";
 
 // models
@@ -33,6 +34,7 @@ interface Props {
   };
   action: string;
   reFetchData: () => void;
+  close: () => void;
 }
 
 export default function FloorForm(props: Props) {
@@ -49,16 +51,21 @@ export default function FloorForm(props: Props) {
 
   // form submitter
   const floorForm = useSubmitData(
-    props.item.value,
     config.mgiAPI.baseUrl + config.mgiAPI.routes.floors,
     props.action === "edit" ? "PUT" : "POST"
   );
 
   // floor map uploader
   const uploadFloorMap = useSubmitData(
-    null,
     config.mgiAPI.baseUrl + config.mgiAPI.routes.floormaps,
     "PATCH"
+  );
+
+  // deleter
+  const floorDeleter = useDeleteData(
+    config.mgiAPI.baseUrl +
+      config.mgiAPI.routes.floors +
+      props.item?.value.id
   );
 
   // inputs
@@ -97,16 +104,14 @@ export default function FloorForm(props: Props) {
     setEnabled(true); // enable buttons
 
     // show alert
-    notify.success(
-      `Floor map uploaded successfully`
-    );
+    notify.success(`Floor map uploaded successfully`);
 
     // fetch floor map again
     fetchFloorMap.revalidate();
   };
 
   // updates the floor and refreshes the table
-  const submitData = async () => {
+  const handleSubmitData = async () => {
     setEnabled(false);
 
     // set floor data
@@ -135,6 +140,28 @@ export default function FloorForm(props: Props) {
     notify.success(
       `Floor ${props.action == "edit" ? "edited" : "added"} successfully`
     );
+  };
+
+  const handleDeleteData = async () => {
+    setEnabled(false);
+
+    // delete data
+    let res = await floorDeleter.del();
+
+    if (res.error) {
+      setEnabled(true);
+      notify.error(res.error);
+      return;
+    }
+
+    props.reFetchData(); // refresh data
+    setEnabled(true); // enable buttons
+
+    // show alert
+    notify.success(`Floor deleted successfully`);
+
+    // close modal
+    props.close();
   };
 
   // when floors load, load them to the select box
@@ -269,7 +296,7 @@ export default function FloorForm(props: Props) {
               <>
                 <Button
                   variant="primary"
-                  onClick={submitData}
+                  onClick={handleSubmitData}
                   disabled={
                     floorInformation.value === "" ||
                     !floorNumber.value ||
@@ -281,7 +308,7 @@ export default function FloorForm(props: Props) {
 
                 <Button
                   variant="danger"
-                  // onClick={}
+                  onClick={handleDeleteData}
                 >
                   Delete
                 </Button>
@@ -289,7 +316,7 @@ export default function FloorForm(props: Props) {
             ) : (
               <Button
                 variant="success"
-                onClick={submitData}
+                onClick={handleSubmitData}
                 disabled={
                   floorInformation.value === "" ||
                   !floorNumber.value ||
