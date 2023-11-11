@@ -1,6 +1,7 @@
 import BuildingForm from "./BuildingForm";
 import FloorForm from "./FloorForm";
 import RobotTypeForm from "./RobotTypeForm";
+import TaskTypeForm from "./TaskTypeForm";
 
 interface Props {
   item: {
@@ -37,6 +38,15 @@ export function RenderFilteredForm(props: Props) {
         case "robottype":
           return (
             <RobotTypeForm
+              item={{ value: props.item.value }}
+              action={props.action}
+              reFetchData={props.reFetchData}
+              close={props.close}
+            />
+          );
+        case "tasktype":
+          return (
+            <TaskTypeForm
               item={{ value: props.item.value }}
               action={props.action}
               reFetchData={props.reFetchData}
