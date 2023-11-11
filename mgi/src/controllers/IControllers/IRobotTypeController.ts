@@ -6,4 +6,6 @@ export default interface IRobotTypeController {
 
     updateRobotType(req: Request, res: Response, next: NextFunction);
     deleteRobotType(req: Request, res: Response, next: NextFunction);
+
+    getRobotTypeById(req: Request, res: Response, next: NextFunction);
 }

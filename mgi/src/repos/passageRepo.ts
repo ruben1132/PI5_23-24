@@ -1,10 +1,10 @@
 import { Service, Inject } from 'typedi';
 
-import IPassageRepo from "../services/IRepos/IPassageRepo";
-import { Passage } from "../domain/passage";
-import { PassageId } from "../domain/valueObj/passageId";
-import { PassageMap } from "../mappers/PassageMap";
-import { FloorMap } from "../mappers/FloorMap";
+import IPassageRepo from '../services/IRepos/IPassageRepo';
+import { Passage } from '../domain/passage';
+import { PassageId } from '../domain/valueObj/passageId';
+import { PassageMap } from '../mappers/PassageMap';
+import { FloorMap } from '../mappers/FloorMap';
 
 import { Document, FilterQuery, Model } from 'mongoose';
 import { IPassagePersistence } from '../dataschema/IPassagePersistence';
@@ -13,18 +13,15 @@ import { IPassagePersistence } from '../dataschema/IPassagePersistence';
 export default class PassageRepo implements IPassageRepo {
     private models: any;
 
-    constructor(
-        @Inject('passageSchema') private passageSchema: Model<IPassagePersistence & Document>,
-    ) { }
+    constructor(@Inject('passageSchema') private passageSchema: Model<IPassagePersistence & Document>) {}
 
     private createBaseQuery(): any {
         return {
             where: {},
-        }
+        };
     }
 
     public async exists(passage: Passage): Promise<boolean> {
-
         const idX = passage.id instanceof PassageId ? (<PassageId>passage.id).toValue() : passage.id;
 
         const query = { domainId: idX };
@@ -60,16 +57,29 @@ export default class PassageRepo implements IPassageRepo {
 
     public async getPassages(): Promise<Passage[]> {
         try {
-
             const passages = await this.passageSchema.find({});
 
             if (passages) {
-                return passages.map((passage) => PassageMap.toDomain(passage));
+                return passages.map(passage => PassageMap.toDomain(passage));
             } else {
                 return [];
             }
         } catch (error) {
             return [];
+        }
+    }
+
+    public async getPassageById(id: string): Promise<Passage> {
+        try {
+            const passage = await this.passageSchema.findOne({ domainId: id });
+
+            if (passage) {
+                return PassageMap.toDomain(passage);
+            } else {
+                return null;
+            }
+        } catch (error) {
+            return null;
         }
     }
 
@@ -81,43 +91,43 @@ export default class PassageRepo implements IPassageRepo {
                         from: 'floors',
                         localField: 'fromFloor',
                         foreignField: 'domainId',
-                        as: 'fromFloorData'
-                    }
+                        as: 'fromFloorData',
+                    },
                 },
                 {
-                    $unwind: '$fromFloorData'
+                    $unwind: '$fromFloorData',
                 },
                 {
                     $lookup: {
                         from: 'floors',
                         localField: 'toFloor',
                         foreignField: 'domainId',
-                        as: 'toFloorData'
-                    }
+                        as: 'toFloorData',
+                    },
                 },
                 {
-                    $unwind: '$toFloorData'
+                    $unwind: '$toFloorData',
                 },
                 {
                     $match: {
                         $or: [
                             {
                                 'fromFloorData.building': from,
-                                'toFloorData.building': to
+                                'toFloorData.building': to,
                             },
                             {
                                 'fromFloorData.building': to,
-                                'toFloorData.building': from
-                            }
-                        ]
-                    }
-                }
+                                'toFloorData.building': from,
+                            },
+                        ],
+                    },
+                },
             ];
 
             const passagesWithFloorData = await this.passageSchema.aggregate(pipeline);
 
             if (passagesWithFloorData) {
-                return passagesWithFloorData.map((passage) => PassageMap.toDomain(passage));
+                return passagesWithFloorData.map(passage => PassageMap.toDomain(passage));
             } else {
                 return [];
             }
@@ -126,12 +136,10 @@ export default class PassageRepo implements IPassageRepo {
         }
     }
 
-
     public async findByDomainId(passageId: PassageId | string): Promise<Passage> {
         const passage = await this.passageSchema.findOne({ domainId: passageId });
 
         if (passage != null) {
-
             return PassageMap.toDomain(passage);
         }
 
@@ -142,18 +150,18 @@ export default class PassageRepo implements IPassageRepo {
         const passages = await this.passageSchema.find({ domainId: { $in: passageIds } });
 
         if (passages != null && passages.length > 0) {
-
-            return passages.map((passage) => PassageMap.toDomain(passage));
+            return passages.map(passage => PassageMap.toDomain(passage));
         }
 
         return [];
     }
 
-    public async deletePassage(passageId: PassageId | string): Promise<Boolean> {
-
+    public async deletePassage(passageId: PassageId | string): Promise<boolean> {
         try {
             const query = { domainId: passageId };
-            const passageRecord = await this.passageSchema.findOne(query as FilterQuery<IPassagePersistence & Document>);
+            const passageRecord = await this.passageSchema.findOne(
+                query as FilterQuery<IPassagePersistence & Document>,
+            );
 
             if (passageRecord != null) {
                 await passageRecord.remove();

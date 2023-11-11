@@ -27,6 +27,8 @@ export default (app: Router) => {
 
     route.get('', (req, res, next) => ctrl.getPassages(req, res, next));
 
+    route.get('/:id', (req, res, next) => ctrl.getPassageById(req, res, next));
+
     route.get(
         '/:first/:second',
         celebrate({
@@ -52,5 +54,4 @@ export default (app: Router) => {
         }),
         (req, res, next) => ctrl.updatePassage(req, res, next),
     );
-
 };

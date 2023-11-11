@@ -11,4 +11,6 @@ export default interface IPassageRepo extends Repo<Passage> {
     getPassagesBetweenBuildings (from: PassageId | string, to: PassageId  | string): Promise<Passage[]>;
     deletePassage(passageId: PassageId | string): Promise<Boolean>;
 
+    getPassageById(id: string): Promise<Passage>;
+
 }

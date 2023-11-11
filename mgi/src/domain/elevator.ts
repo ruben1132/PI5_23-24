@@ -45,7 +45,7 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
         if (props.floorsAllowed.length === 0) {
             return Result.fail<Elevator>('Must provide floors');
         }
-        
+
         if (!guardResult.succeeded) {
             return Result.fail<Elevator>(guardResult.message)
         }

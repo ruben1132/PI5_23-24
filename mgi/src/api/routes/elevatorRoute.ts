@@ -17,13 +17,21 @@ export default (app: Router) => {
     celebrate({
       body: Joi.object({
         designation: Joi.string().required(),
-        floorsAllowed: Joi.array().required()     
+        floorsAllowed: Joi.array().required()
       })
     }),
     (req, res, next) => ctrl.createElevator(req, res, next));
 
   route.get('',
     (req, res, next) => ctrl.getElevators(req, res, next));
+
+    route.get('/:id',
+        celebrate({
+            params: Joi.object({
+                id: Joi.string().required()
+            }),
+        }),
+        (req, res, next) => ctrl.getElevatorById(req, res, next));
 
   /*route.put('',
     celebrate({

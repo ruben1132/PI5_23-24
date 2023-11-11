@@ -26,6 +26,8 @@ export default (app: Router) => {
 
     route.get('', (req, res, next) => ctrl.getRooms(req, res, next));
 
+    route.get('/:id', (req, res, next) => ctrl.getRoomById(req, res, next));
+
     /*route.put(
         '',
         celebrate({

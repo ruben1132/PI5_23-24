@@ -4,7 +4,7 @@ import config from "../../config";
 
 import IPassageController from "./IControllers/IPassageController";
 import IPassageService from '../services/IServices/IPassageService';
-import IPassageDTO from '../dto/IPassageDTO';
+import {IPassageDTO, IPassageWithFloorDTO} from '../dto/IPassageDTO';
 
 import { Result } from "../core/logic/Result";
 
@@ -33,13 +33,28 @@ export default class PassageController implements IPassageController /* TODO: ex
 
     public async getPassages(req: Request, res: Response, next: NextFunction) {
         try {
-            const passagesOrError = await this.passageServiceInstance.getPassages() as Result<Array<IPassageDTO>>;
+            const passagesOrError = await this.passageServiceInstance.getPassages() as Result<Array<IPassageWithFloorDTO>>;
 
             if (passagesOrError.isFailure) {
                 return res.status(400).send({ error: passagesOrError.errorValue() });
             }
 
             return res.json(passagesOrError.getValue()).status(201);
+        }
+        catch (e) {
+            return next(e);
+        }
+    }
+
+    public async getPassageById(req: Request, res: Response, next: NextFunction) {
+        try {
+            const passageOrError = await this.passageServiceInstance.getPassageById(req.params.id) as Result<IPassageWithFloorDTO>;
+
+            if (passageOrError.isFailure) {
+                return res.status(400).send({ error: passageOrError.errorValue() });
+            }
+
+            return res.json(passageOrError.getValue()).status(201);
         }
         catch (e) {
             return next(e);

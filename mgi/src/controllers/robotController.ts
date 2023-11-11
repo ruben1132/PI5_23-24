@@ -4,7 +4,7 @@ import config from "../../config";
 
 import IRobotController from "./IControllers/IRobotController";
 import IRobotService from '../services/IServices/IRobotService';
-import IRobotDTO from '../dto/IRobotDTO';
+import {IRobotDTO, IRobotWithRobotTypeDTO} from '../dto/IRobotDTO';
 
 import { Result } from "../core/logic/Result";
 import { ParamsDictionary } from 'express-serve-static-core';
@@ -52,7 +52,7 @@ export default class RobotController implements IRobotController /* TODO: extend
 
     public async getRobots(req: Request, res: Response, next: NextFunction) {
         try {
-            const robotsOrError = await this.robotServiceInstance.getRobots() as Result<Array<IRobotDTO>>;
+            const robotsOrError = await this.robotServiceInstance.getRobots() as Result<Array<IRobotWithRobotTypeDTO>>;
 
 
             if (robotsOrError.isFailure) {
@@ -60,6 +60,23 @@ export default class RobotController implements IRobotController /* TODO: extend
             }
 
             return res.json(robotsOrError.getValue()).status(201);
+        }
+        catch (e) {
+            return next(e);
+        }
+    }
+
+    public async getRobotById(req: Request, res: Response, next: NextFunction) {
+        try {
+            const robotId = req.params.id;
+            const robotOrError = await this.robotServiceInstance.getRobotById(robotId) as Result<IRobotWithRobotTypeDTO>;
+
+            if (robotOrError.isFailure) {
+                return res.status(400).send({ error: robotOrError.errorValue() });
+            }
+
+            const robotDTO = robotOrError.getValue();
+            return res.json(robotDTO).status(201);
         }
         catch (e) {
             return next(e);

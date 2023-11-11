@@ -6,4 +6,6 @@ export default interface IPassageController {
     getPassagesBetweenBuildings(req: Request, res: Response, next: NextFunction);
     deletePassage(req: Request, res: Response, next: NextFunction);
     updatePassage(req: Request, res: Response, next: NextFunction);
+
+    getPassageById(req: Request, res: Response, next: NextFunction);
 }

@@ -3,7 +3,7 @@ import { Mapper } from '../core/infra/Mapper';
 import { Document, Model } from 'mongoose';
 import { IRobotTypePersistence } from '../dataschema/IRobotTypePersistence';
 
-import IRobotTypeDTO from '../dto/IRobotTypeDTO';
+import { IRobotTypeDTO, IRobotTypeWithTasksDTO } from '../dto/IRobotTypeDTO';
 import { RobotType } from '../domain/robotType';
 
 import { UniqueEntityID } from '../core/domain/UniqueEntityID';
@@ -11,21 +11,39 @@ import { UniqueEntityID } from '../core/domain/UniqueEntityID';
 import { RobotTypeType } from '../domain/valueObj/robotTypeType';
 import { RobotTypeBrand } from '../domain/valueObj/robotTypeBrand';
 import { RobotTypeModel } from '../domain/valueObj/robotTypeModel';
+import { TaskType } from '../domain/taskType';
+import ITaskTypeDTO from '../dto/ITaskTypeDTO';
 
 export class RobotTypeMap extends Mapper<RobotType> {
-    public static toDTO(robotType: RobotType): IRobotTypeDTO {        
+    public static toDTO(robotType: RobotType): IRobotTypeDTO {
         return {
             id: robotType.id.toString(),
             type: robotType.type.value,
             brand: robotType.brand.value,
             model: robotType.model.value,
-            tasksAllowed: robotType.tasksAllowed.map((taskType) => { return taskType.toString() })
-            ,
+            tasksAllowed: robotType.tasksAllowed.map(taskType => {
+                return taskType.toString();
+            }),
         } as IRobotTypeDTO;
     }
 
-    public static toDomain(robotType: any | Model<IRobotTypePersistence & Document>): RobotType {
+    public static toDTOWithTask(robotType: RobotType, tasks: TaskType[]): IRobotTypeWithTasksDTO {
+        return {
+            id: robotType.id.toString(),
+            type: robotType.type.value,
+            brand: robotType.brand.value,
+            model: robotType.model.value,
+            tasksAllowed: tasks.map(task => {
+                return {
+                    id: task.id.toString(),
+                    name: task.name,
+                    description: task.description,
+                } as ITaskTypeDTO;
+            }),
+        } as IRobotTypeWithTasksDTO;
+    }
 
+    public static toDomain(robotType: any | Model<IRobotTypePersistence & Document>): RobotType {
         const type = RobotTypeType.create(robotType.type);
         const brand = RobotTypeBrand.create(robotType.brand);
         const model = RobotTypeModel.create(robotType.model);
@@ -35,7 +53,7 @@ export class RobotTypeMap extends Mapper<RobotType> {
                 type: type.getValue(),
                 brand: brand.getValue(),
                 model: model.getValue(),
-                tasksAllowed: robotType.tasksAllowed
+                tasksAllowed: robotType.tasksAllowed,
             },
             new UniqueEntityID(robotType.domainId),
         );
@@ -51,7 +69,9 @@ export class RobotTypeMap extends Mapper<RobotType> {
             type: robotType.type.value,
             brand: robotType.brand.value,
             model: robotType.model.value,
-            tasksAllowed: robotType.tasksAllowed.map((taskType) => { return taskType.toString() })
+            tasksAllowed: robotType.tasksAllowed.map(taskType => {
+                return taskType.toString();
+            }),
         };
     }
 }
