@@ -63,9 +63,7 @@ export default function FloorForm(props: Props) {
 
   // deleter
   const floorDeleter = useDeleteData(
-    config.mgiAPI.baseUrl +
-      config.mgiAPI.routes.floors +
-      props.item?.value.id
+    config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + props.item?.value.id
   );
 
   // inputs
@@ -299,6 +297,7 @@ export default function FloorForm(props: Props) {
                   onClick={handleSubmitData}
                   disabled={
                     floorInformation.value === "" ||
+                    floorInformation.value === undefined ||
                     !floorNumber.value ||
                     !enabled
                   }
@@ -306,10 +305,7 @@ export default function FloorForm(props: Props) {
                   Update
                 </Button>
 
-                <Button
-                  variant="danger"
-                  onClick={handleDeleteData}
-                >
+                <Button variant="danger" onClick={handleDeleteData}>
                   Delete
                 </Button>
               </>
@@ -319,6 +315,7 @@ export default function FloorForm(props: Props) {
                 onClick={handleSubmitData}
                 disabled={
                   floorInformation.value === "" ||
+                  floorInformation.value === undefined ||
                   !floorNumber.value ||
                   !enabled
                 }

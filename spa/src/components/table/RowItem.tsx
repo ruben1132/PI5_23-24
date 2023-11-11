@@ -21,8 +21,11 @@ export default function RowItem(props: Props) {
           return (
             <td key={props.index}>
               [
-              {props.item.map((type: any, index: string) => (
-                <span key={index}>{type}, </span>
+              {props.item.map((type: any, index: number) => (
+                <span key={index}>
+                  {type.name}
+                  {index !== props.item.length - 1 ? ", " : ""} 
+                </span>
               ))}
               ]
             </td>
