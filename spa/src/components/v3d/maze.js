@@ -6,7 +6,7 @@ import Ground from "./ground.js";
 import Wall from "./wall.js";
 
 // doors
-import { FBXLoader } from "three/examples/jsm/Addons.js";
+import { FBXLoader, GLTFLoader } from "three/examples/jsm/Addons.js";
 import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
 
@@ -157,7 +157,6 @@ export default class Maze extends THREE.Group {
                     object.scale.set(0.1, 0.1, 0.1);
                     if(door.direction === "north"){
                         object.position.set(door.positionX - this.halfSize.width + 0.5, 0, door.positionY - this.halfSize.depth);
-                        // object.rotateY(Math.PI / 2);
                     }else{
                         object.position.set(door.positionX - this.halfSize.width, 0, door.positionY - this.halfSize.depth + 0.5);
                         object.rotateY(Math.PI/2);
@@ -180,6 +179,32 @@ export default class Maze extends THREE.Group {
                     this.add(object);
 
                 });
+            });
+
+            // add elevator
+            let elevator = description.fmElevator;
+            const loader = new GLTFLoader();
+            loader.load("./v3d/models/elevator/elevator.glb", (object) => {
+                if(elevator.direction === "north"){
+                    object.scene.position.set(elevator.positionX - this.halfSize.width + 0.5, 0.5, elevator.positionY - this.halfSize.depth);
+                }else{
+                    object.scene.position.set(elevator.positionX - this.halfSize.width, 0.5, elevator.positionY - this.halfSize.depth + 0.5);
+                    object.scene.rotateY(3*(Math.PI/2));
+                }
+                
+                // Set the scale after loading textures
+                object.scene.scale.set(0.008, 0.003, 0.006);
+                this.add(object.scene);
+
+                // double the elevator
+                let object2 = object.scene.clone();
+                if(elevator.direction === "north"){
+                    object2.position.set((elevator.positionX+1) - this.halfSize.width + 0.5, 0.5, elevator.positionY - this.halfSize.depth);
+                }else{
+                    object2.position.set(elevator.positionX - this.halfSize.width, 0.5, (elevator.positionY+1) - this.halfSize.depth + 0.5);
+                }
+
+                this.add(object2);
             });
 
             let mergedGeometry, mesh;

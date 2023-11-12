@@ -109,5 +109,11 @@
             "positionY": 4,
             "direction": "west"
         }
-    ]
+    ],
+    "fmElevator": {
+        "elevatorId": "089c4eff-652f-4b71-965a-a95ddb182e57",
+        "positionX": 8,
+        "positionY": 2,
+        "direction": "west"
+    }
 }
