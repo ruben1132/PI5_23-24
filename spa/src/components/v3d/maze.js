@@ -5,6 +5,11 @@ import { merge } from "./merge.js";
 import Ground from "./ground.js";
 import Wall from "./wall.js";
 
+// doors
+import { FBXLoader } from "three/examples/jsm/Addons.js";
+import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+
 /*
  * parameters = {
  *  url: String,
@@ -138,6 +143,44 @@ export default class Maze extends THREE.Group {
                     }
                 }
             }
+
+            // add doors
+            const mtlLoader = new MTLLoader();
+            const mtlLoader2 = new MTLLoader();
+            const objLoader = new OBJLoader();
+            const objLoader2 = new OBJLoader();
+            var textureLoader = new THREE.TextureLoader();
+
+            description.fmDoors.forEach(door => {
+                const loaderr = new FBXLoader();
+                loaderr.load("./v3d/models/door/3d-model.fbx", (object) => {
+                    object.scale.set(0.1, 0.1, 0.1);
+                    if(door.direction === "north"){
+                        object.position.set(door.positionX - this.halfSize.width + 0.5, 0, door.positionY - this.halfSize.depth);
+                        // object.rotateY(Math.PI / 2);
+                    }else{
+                        object.position.set(door.positionX - this.halfSize.width, 0, door.positionY - this.halfSize.depth + 0.5);
+                        object.rotateY(Math.PI/2);
+                    }
+                   
+                    // Create a material with light brown color
+                    const material = new THREE.MeshPhongMaterial({ color: 0xD2B48C }); // Use the color code for light brown
+
+                    // Assign the material to the object's children (assuming the model has child meshes)
+                    object.traverse(child => {
+                        if (child.isMesh) {
+                            child.material = material;
+                        }
+                    });
+
+                    // Set the scale after loading textures
+                    object.scale.set(0.018, 0.0055, 0.025);
+
+                    // Add the door object to the scene
+                    this.add(object);
+
+                });
+            });
 
             let mergedGeometry, mesh;
             for (let i = 0; i < 2; i++) {

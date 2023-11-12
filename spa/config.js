@@ -56,6 +56,11 @@ export default {
       permissions: ["gestor campus"],
     },
     {
+      routeName: "rooms",
+      displayName: "Rooms",
+      permissions: ["gestor campus"],
+    },
+    {
       routeName: "v3d",
       displayName: "3D Viewer",
       permissions: ["gestor campus", "gestor frota"],
