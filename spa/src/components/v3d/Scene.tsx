@@ -13,9 +13,11 @@ import "../../styles/v3d.css";
 
 // models
 import { FloorWithBuilding } from "@/models/Floor.jsx";
+import { Building } from "@/models/Building.js";
 
 interface Props {
   floors: FloorWithBuilding[];
+  buildings: Building[];
 }
 
 export default function Scene(props: Props) {
@@ -425,6 +427,30 @@ export default function Scene(props: Props) {
                       id="reset-all"
                       value="Reset all views"
                     />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="selects-panel">
+            <table className="v3dtable views">
+              <tbody>
+                <tr>
+                  <td>
+                    Buildings:
+                    <select id="view">
+                      {props.buildings.map((building) => (
+                        <option value={building.id}>{building.name}</option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    Floors:
+                    <select id="view">
+                      {props.floors.map((floor) => (
+                        <option value={floor.id}>{floor.information}</option>
+                      ))}
+                    </select>
                   </td>
                 </tr>
               </tbody>
