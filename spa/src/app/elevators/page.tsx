@@ -9,7 +9,7 @@ export default async function Elevators() {
 
       <ContentTable
         type="elevator"
-        routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings}
+        routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators}
         routeToPush={"/elevators/"}
       />
     </div>
