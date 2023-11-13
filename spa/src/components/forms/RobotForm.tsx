@@ -136,14 +136,10 @@ export default function RobotForm(props: Props) {
         setEnabled(false);
 
         const state = {
-            "id": props.item.value.id,
+            id: props.item.value.id,
         };
 
-        const jsonString = JSON.stringify(state)
-
-        // console.log(jsonString);
-
-        let res = await enableDisableRobot.submit(jsonString);
+        let res = await enableDisableRobot.submit(state);
 
         if (res.error) {
             setEnabled(true);
