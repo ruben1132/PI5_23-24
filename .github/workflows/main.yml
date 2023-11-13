@@ -35,6 +35,5 @@ jobs:
           git sparse-checkout init --cone
           git sparse-checkout set mgi
           git pull
-          cd mgi
-          npm install
-          nohup npm run start &
+          cd ../
+          ./killAPI.sh
