@@ -16,6 +16,7 @@ import {
   faMap,
   faUsers,
   faElevator,
+  faBorderAll,
   faGear
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -39,6 +40,7 @@ const sideBarIcons = {
   floormaps: faMap,
   roles: faUsers,
   elevators: faElevator,
+  rooms: faBorderAll,
   v3d: faMap
 };
 

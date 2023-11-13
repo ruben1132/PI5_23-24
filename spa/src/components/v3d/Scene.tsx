@@ -230,7 +230,12 @@ export default function Scene(props: Props) {
           ],
           selected: 2,
         }, // Cube texture parameters
-        { helpersColor: new THREE.Color(0xff0077) }, // Maze parameters
+        {
+          url: "./v3d/mazes/floor_example.json",
+          designCredits: "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
+          texturesCredits: "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
+          helpersColor: new THREE.Color(0xff0077)
+      }, // Maze parameters
         { helpersColor: new THREE.Color(0x0055ff) }, // Player parameters
         {
           intensity: 0.1,
