@@ -145,12 +145,6 @@ export default class Maze extends THREE.Group {
             }
 
             // add doors
-            const mtlLoader = new MTLLoader();
-            const mtlLoader2 = new MTLLoader();
-            const objLoader = new OBJLoader();
-            const objLoader2 = new OBJLoader();
-            var textureLoader = new THREE.TextureLoader();
-
             description.fmDoors.forEach(door => {
                 const loaderr = new FBXLoader();
                 loaderr.load("./v3d/models/door/3d-model.fbx", (object) => {
@@ -189,7 +183,7 @@ export default class Maze extends THREE.Group {
                     object.scene.position.set(elevator.positionX - this.halfSize.width + 0.5, 0.5, elevator.positionY - this.halfSize.depth);
                 }else{
                     object.scene.position.set(elevator.positionX - this.halfSize.width, 0.5, elevator.positionY - this.halfSize.depth + 0.5);
-                    object.scene.rotateY(3*(Math.PI/2));
+                    object.scene.rotateY((Math.PI/2));
                 }
                 
                 // Set the scale after loading textures
@@ -197,14 +191,14 @@ export default class Maze extends THREE.Group {
                 this.add(object.scene);
 
                 // double the elevator
-                let object2 = object.scene.clone();
-                if(elevator.direction === "north"){
-                    object2.position.set((elevator.positionX+1) - this.halfSize.width + 0.5, 0.5, elevator.positionY - this.halfSize.depth);
-                }else{
-                    object2.position.set(elevator.positionX - this.halfSize.width, 0.5, (elevator.positionY+1) - this.halfSize.depth + 0.5);
-                }
+                // let object2 = object.scene.clone();
+                // if(elevator.direction === "north"){
+                //     object2.position.set((elevator.positionX+1) - this.halfSize.width + 0.5, 0.5, elevator.positionY - this.halfSize.depth);
+                // }else{
+                //     object2.position.set(elevator.positionX - this.halfSize.width, 0.5, (elevator.positionY+1) - this.halfSize.depth + 0.5);
+                // }
 
-                this.add(object2);
+                // this.add(object2);
             });
 
             let mergedGeometry, mesh;

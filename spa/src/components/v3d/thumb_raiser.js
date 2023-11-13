@@ -1193,7 +1193,6 @@ export default class ThumbRaiser {
                 });
 
                 // Add the maze, the player and the lights to the scene
-                
                 this.scene.add(this.maze);
                 this.scene.add(this.player);
                 this.scene.add(this.ambientLight);
@@ -1279,6 +1278,7 @@ export default class ThumbRaiser {
                 // Start the game
                 this.gameRunning = true;
 
+                // Set the flag indicating that the maze has changed
                 this.mazeChanged = false;
             }
         }
