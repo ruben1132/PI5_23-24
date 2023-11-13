@@ -27,8 +27,6 @@ jobs:
         port: 10655
         username: ${{secrets.VM_USERNAME}}
         script: |
-          sudo npm install -g pm2
-          sudo apt install git
           pm2 delete all
           cd /home/ubuntu/API
           rm -rf mgi
