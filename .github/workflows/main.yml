@@ -59,7 +59,7 @@ jobs:
 
           # Use sftp to transfer files to the SFTP server
           sftp -i sftp_key -oPort=$SFTP_PORT -oUserKnownHostsFile=.github/workflows/known_hosts "$SFTP_USERNAME@$SFTP_SERVER" <<EOF
-          put -r /MGI /home/ubuntu/API
+          put -r mgi /home/ubuntu/API
           bye
           EOF
 
