@@ -28,7 +28,6 @@ jobs:
         username: ${{secrets.VM_USERNAME}}
         script: |
           pm2 delete all
-          # ./killAPI.sh
           cd /home/ubuntu/API
           rm -rf repo
           git clone --depth 1 --filter=blob:none --no-checkout https://ruben1132:${{secrets.PAT_TOKEN}}@github.com/ruben1132/PI5_23-24.git repo
