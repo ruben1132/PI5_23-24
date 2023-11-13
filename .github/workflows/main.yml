@@ -34,3 +34,6 @@ jobs:
           cd mgi
           git sparse-checkout init --cone
           git sparse-checkout set mgi
+          git pull
+          npm install
+          npm run start
