@@ -30,7 +30,8 @@ jobs:
           pm2 delete all
           cd /home/ubuntu/API
           rm -rf mgi
-          git clone https://github.com/ruben1132/PI5_23-24.git
+          git clone https://github.com/ruben1132/PI5_23-24.git repo
+          cd repo
           git pull
           cd mgi
           npm install
