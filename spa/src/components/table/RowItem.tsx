@@ -54,6 +54,12 @@ export default function RowItem(props: Props) {
                             ]
                         </td>
                     );
+                case "room":
+                    return (
+                        <td key={props.index}>
+                            {props.item.number + " - " + props.item.information}
+                        </td>
+                    );
 
                 default:
                     return (
