@@ -24,8 +24,8 @@ jobs:
       with:
         key: ${{secrets.SSH_PRIVATE_KEY}}
         host: ${{secrets.VM_IP}}
+        port: 10655
         username: ${{secrets.VM_USERNAME}}
-        port: ${{secrets.VM_PORT}}
         script: |
           pm2 delete all
           cd /home/ubuntu/API
