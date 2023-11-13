@@ -1285,9 +1285,10 @@ export default class ThumbRaiser {
         else {
 
             if(this.mazeChanged && this.maze.loaded){
-                this.scene.add(this.maze);
                 this.mazeChanged = false;
-                
+                this.scene.add(this.maze);
+                this.player.position.set(this.maze.initialPosition.x, this.maze.initialPosition.y, this.maze.initialPosition.z);
+                this.player.direction = this.maze.initialDirection;
             }else if(this.mazeChanged && !this.maze.loaded){
                 return;
             }
