@@ -35,7 +35,7 @@ export default class RobotController implements IRobotController /* TODO: extend
 
     public async inhibitRobot(req: Request, res: Response, next: NextFunction) {
         try {
-            const robotId = req.body.robotId;
+            const robotId = req.body.id;
             const robotOrError = await this.robotServiceInstance.inhibitRobot(robotId as string) as Result<IRobotDTO>;
 
             if (robotOrError.isFailure) {

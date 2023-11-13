@@ -123,6 +123,50 @@ export default class ElevatorService implements IElevatorService {
         }
     }
 
+    public async updateElevator(elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>> {
+        try {
+
+            const elevator = await this.elevatorRepo.findByDomainId(elevatorDTO.id);
+
+            if (elevator === null) {
+                return Result.fail<IElevatorDTO>('Elevator not found');
+            }
+
+            const fAllowed: FloorId[] = [];
+
+            for (const floorId of elevatorDTO.floorsAllowed) {
+                // check if floor exists
+                const floorOrError = await this.getFloor(floorId);
+                if (floorOrError.isFailure) {
+                    return Result.fail<IElevatorDTO>(floorOrError.errorValue());
+                } else {
+                    fAllowed.push(floorOrError.getValue().domainId);
+                }
+            }
+
+            const designation = await ElevatorDesignation.create(elevatorDTO.designation);
+            if (designation.isFailure) {
+                return Result.fail<IElevatorDTO>(designation.errorValue());
+            }
+
+            const elevatorOrError = await Elevator.create({
+                designation: designation.getValue(),
+                floorsAllowed: fAllowed,
+            });
+
+            elevator.elevatorDesignation = designation.getValue();
+            elevator.floorsAllowed = fAllowed;
+
+            await this.elevatorRepo.save(elevator);
+
+            const elevatorDTOResult = ElevatorMap.toDTO(elevator);
+            return Result.ok<IElevatorDTO>(elevatorDTOResult);
+        } catch (e) {
+            throw e;
+        }
+    }
+
+
     // check if floor exists
     private async getFloor(floorId: string): Promise<Result<Floor>> {
         const floor = await this.floorRepo.findByDomainId(floorId);

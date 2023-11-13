@@ -8,4 +8,6 @@ export default interface IElevatorService {
     deleteElevator(elevatorId: string): Promise<Result<void>>;
 
     getElevatorById(elevatorId: string): Promise<Result<IElevatorWithFloorsDTO>>;
+
+    updateElevator(elevatorDTO: IElevatorDTO): Promise<Result<IElevatorDTO>>;
 }

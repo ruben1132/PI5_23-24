@@ -1,6 +1,6 @@
 import { Service, Inject } from 'typedi';
 import config from '../../config';
-import {IRobotDTO, IRobotWithRobotTypeDTO} from '../dto/IRobotDTO';
+import { IRobotDTO, IRobotWithRobotTypeDTO } from '../dto/IRobotDTO';
 import { Robot } from '../domain/robot';
 import IRobotRepo from './IRepos/IRobotRepo';
 import IBuildingRepo from './IRepos/IBuildingRepo';
@@ -29,6 +29,7 @@ export default class RobotService implements IRobotService {
 
     public async createRobot(robotDTO: IRobotDTO): Promise<Result<IRobotDTO>> {
         try {
+            console.log('robotDTO', robotDTO);
 
             // check if robotType exists
             let robotType: RobotType;
@@ -81,16 +82,18 @@ export default class RobotService implements IRobotService {
 
             const robotDTOResult = RobotMap.toDTO(robotResult);
 
-
             return Result.ok<IRobotDTO>(robotDTOResult);
         } catch (e) {
             throw e;
         }
     }
 
-    public async  inhibitRobot(robotId: string): Promise<Result<IRobotDTO>> {
+    public async inhibitRobot(robotId: string): Promise<Result<IRobotDTO>> {
         // check if robot exists
         const robot = await this.robotRepo.findByDomainId(robotId);
+
+        // console.log('robotId', robotId);
+        // console.log('robot', robot);
 
         if (robot === null) {
             return Result.fail<IRobotDTO>('Robot not found');

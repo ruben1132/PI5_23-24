@@ -8,4 +8,6 @@ export default interface IRobotController {
     deleteRobot(req: Request, res: Response, next: NextFunction);
 
     getRobotById(req: Request, res: Response, next: NextFunction);
+
+
 }

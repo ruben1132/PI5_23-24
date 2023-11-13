@@ -14,84 +14,73 @@ import CloseButton from "react-bootstrap/CloseButton";
 // notification component
 import { notify } from "@/components/notification/Notification";
 
+// config
+import config from "../../../config";
+
 // custom hooks
 import {
     useFetchData,
     useSubmitData,
+    useFormNumberInput,
+    useFormStringInput,
     useDeleteData,
-    useFormStringInputWithRegex,
 } from "@/util/customHooks";
 
-// models
-import { RobotType, RobotTypeWithTaskTypes } from "@/models/RobotType";
-
-// config
-import config from "../../../config";
-import { TaskType } from "@/models/TaskType";
+// model
+import { Elevator, ElevatorWithFloor } from "@/models/Elevator";
+import { Floor } from "@/models/Floor";
 
 interface Props {
     item: {
-        value: RobotTypeWithTaskTypes;
+        value: ElevatorWithFloor;
     };
     action: string;
     reFetchData: () => void;
     close: () => void;
 }
 
-export default function RobotTypeForm(props: Props) {
-    // fetchers
-    const selectBoxTaskTypesDataFetch = useFetchData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.tasktypes
-    ); // fetch task types
+export default function ElevatorForm(props: Props) {
+
+
+    const selectBoxFloorsAllowedDataFetch = useFetchData(
+        config.mgiAPI.baseUrl + config.mgiAPI.routes.floors
+    ); // fetch floors for fromFloor
 
     // form submitter
-    const robotTypeForm = useSubmitData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.robottypes,
+    const elevatorForm = useSubmitData(
+        config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators,
         props.action === "edit" ? "PUT" : "POST"
     );
 
     // deleter
-    const robotTypeDeleter = useDeleteData(
-        config.mgiAPI.baseUrl +
-        config.mgiAPI.routes.robottypes +
-        props.item?.value.id
+    const elevatorDeleter = useDeleteData(
+        config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators + props.item?.value.id
     );
 
     // inputs
-    const robotTypeName = useFormStringInputWithRegex(
-        props.item.value?.type,
-        /^[A-Za-z0-9]{1,25}$/
-    );
-    const robotTypeBrand = useFormStringInputWithRegex(
-        props.item.value?.brand,
-        /^.{1,50}$/
-    );
-    const robotTypeModel = useFormStringInputWithRegex(
-        props.item.value?.model,
-        /^.{1,100}$/
-    );
-    const [tasksAllowed, setTasksAllowed] = useState<TaskType[]>([]); // TODO:
+    const elevatorDesignation = useFormStringInput(props.item.value?.designation);
+
+    const [floorsAllowed, setFloorsAllowed] = useState<Floor[]>([]); // TODO:
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
 
-    // updates the floor and refreshes the table
+
+    // updates the Elevator and refreshes the table
     const handleSubmitData = async () => {
         setEnabled(false);
 
-        // set floor data
-        let item: RobotType = {
+        // set Elevator data
+        let item: Elevator = {
             ...props.item.value,
-            tasksAllowed: tasksAllowed.map((item) => item.id),
+            floorsAllowed: floorsAllowed.map((item) => item.id),
         };
         item.id = props.item.value?.id;
-        item.type = robotTypeName.value;
-        item.brand = robotTypeBrand.value;
-        item.model = robotTypeModel.value;
-        item.tasksAllowed = tasksAllowed.map((item) => item.id);
+        item.designation = elevatorDesignation.value;
+        item.floorsAllowed = floorsAllowed.map((item) => item.id);
 
         // submit data
-        let res = await robotTypeForm.submit(item);
+        let res = await elevatorForm.submit(item);
 
         if (res.error) {
             setEnabled(true);
@@ -104,7 +93,7 @@ export default function RobotTypeForm(props: Props) {
 
         // show alert
         notify.success(
-            `Robot Type ${props.action == "edit" ? "edited" : "added"} successfully`
+            `Elevator ${props.action == "edit" ? "edited" : "added"} successfully`
         );
     };
 
@@ -112,7 +101,7 @@ export default function RobotTypeForm(props: Props) {
         setEnabled(false);
 
         // delete data
-        let res = await robotTypeDeleter.del();
+        let res = await elevatorDeleter.del();
 
         if (res.error) {
             setEnabled(true);
@@ -124,47 +113,47 @@ export default function RobotTypeForm(props: Props) {
         setEnabled(true); // enable buttons
 
         // show alert
-        notify.success(`Robot Type deleted successfully`);
+        notify.success(`Elevator deleted successfully`);
 
         // close modal
         props.close();
     };
 
-    // when the action changes, update the tasks allowed
+    // when Elevators load, load them to the select box
     useEffect(() => {
         if (props.action === "edit") {
-            setTasksAllowed(props.item.value.tasksAllowed);
+            setFloorsAllowed(props.item.value.floorsAllowed);
         }
     }, [props.action]);
 
-    if (selectBoxTaskTypesDataFetch.isLoading) {
+    if (selectBoxFloorsAllowedDataFetch.isLoading) {
         return <Form>Loading...</Form>;
     }
-    if (selectBoxTaskTypesDataFetch.isError) {
+    if (selectBoxFloorsAllowedDataFetch.isError) {
         return <Form>Error</Form>;
     }
 
     // filter data so it removes the element(s) already selected
-    const filteredSelectBoxData = selectBoxTaskTypesDataFetch.data.filter(
-        (item: TaskType) => {
-            return !tasksAllowed.some((task) => task.id === item.id);
+    const filteredSelectBoxData = selectBoxFloorsAllowedDataFetch.data.filter(
+        (item: Floor) => {
+            return !floorsAllowed.some((floor) => floor.id === item.id);
         }
     );
 
     // add the selected value
     const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = e.target.value;
-        const selectedType = selectBoxTaskTypesDataFetch.data.find(
-            (type: TaskType) => type.id === selectedValue
+        const selectedFloor = selectBoxFloorsAllowedDataFetch.data.find(
+            (f: Floor) => f.id === selectedValue
         );
 
-        const newArray: TaskType[] = [...tasksAllowed, selectedType];
-        setTasksAllowed(newArray);
+        const newArray: Floor[] = [...floorsAllowed, selectedFloor];
+        setFloorsAllowed(newArray);
     };
 
-    const handleRemoveTaskType = (id: TaskType) => {
-        const newArray = tasksAllowed.filter((item) => item.id !== id.id);
-        setTasksAllowed(newArray);
+    const handleRemoveFloorAllowed = (id: Floor) => {
+        const newArray = floorsAllowed.filter((item) => item.id !== id.id);
+        setFloorsAllowed(newArray);
     };
 
     return (
@@ -174,7 +163,7 @@ export default function RobotTypeForm(props: Props) {
                     <Row>
                         <Col sm={12}>
                             <Form.Group className="mb-6">
-                                <Form.Label htmlFor="select">Robot Type ID</Form.Label>
+                                <Form.Label htmlFor="select">Elevator ID</Form.Label>
                                 <Form.Control
                                     type="text"
                                     defaultValue={props.item.value?.id}
@@ -186,66 +175,44 @@ export default function RobotTypeForm(props: Props) {
                     <br />
                 </>
             )}
+
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Name</Form.Label>
+                        <Form.Label htmlFor="select">Designation</Form.Label>
                         <Form.Control
+                            required
                             type="text"
-                            placeholder="robot type's name..."
-                            defaultValue={props.item.value?.type}
-                            onChange={robotTypeName.handleChange}
+                            placeholder="Elevator's designation..."
+                            defaultValue={props.item.value?.designation}
+                            onChange={elevatorDesignation.handleChange}
                         />
                     </Form.Group>
                 </Col>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="brand">Brand</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="robot type's brand..."
-                            defaultValue={props.item.value?.brand}
-                            onChange={robotTypeBrand.handleChange}
-                        />
-                    </Form.Group>
-                </Col>
-            </Row>
-            <br />
-            <Row>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="model">Model</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="robot type's model..."
-                            defaultValue={props.item.value?.model}
-                            onChange={robotTypeModel.handleChange}
-                        />
-                    </Form.Group>
-                </Col>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Task Types</Form.Label>
+                        <Form.Label htmlFor="select">Floors Allowed</Form.Label>
 
                         <Form.Select onChange={handleSelect}>
-                            <option>select task types</option>
-                            {filteredSelectBoxData?.map((item: TaskType) => (
+                            <option>select floors allowed</option>
+                            {filteredSelectBoxData?.map((item: Floor) => (
                                 <option key={item.id} value={item.id}>
-                                    {item.name}
+                                    {item.information}
                                 </option>
                             ))}
                         </Form.Select>
                     </Form.Group>
                 </Col>
             </Row>
+            <br />
             <Row>
                 <Col sm={6}></Col>
                 <Col sm={6}>
                     <ListGroup>
-                        {tasksAllowed?.map((item) => (
+                        {floorsAllowed?.map((item) => (
                             <ListGroup.Item key={item.id}>
-                                <CloseButton onClick={() => handleRemoveTaskType(item)} />
-                                {item.name}
+                                <CloseButton onClick={() => handleRemoveFloorAllowed(item)} />
+                                {item.information}
                             </ListGroup.Item>
                         ))}
                     </ListGroup>
@@ -261,10 +228,8 @@ export default function RobotTypeForm(props: Props) {
                                     variant="primary"
                                     onClick={handleSubmitData}
                                     disabled={
-                                        !robotTypeName.isValid ||
-                                        !robotTypeBrand.isValid ||
-                                        !robotTypeModel.isValid ||
-                                        tasksAllowed.length === 0 ||
+                                        elevatorDesignation.value === "" ||
+                                        floorsAllowed.length === 0 ||
                                         !enabled
                                     }
                                 >
@@ -280,10 +245,8 @@ export default function RobotTypeForm(props: Props) {
                                 variant="success"
                                 onClick={handleSubmitData}
                                 disabled={
-                                    !robotTypeName.isValid ||
-                                    !robotTypeBrand.isValid ||
-                                    !robotTypeModel.isValid ||
-                                    tasksAllowed.length === 0 ||
+                                    elevatorDesignation.value === "" ||
+                                    floorsAllowed.length === 0 ||
                                     !enabled
                                 }
                             >

@@ -30,6 +30,14 @@ export class Elevator extends AggregateRoot<ElevatorProps> {
         return this.props.floorsAllowed
     }
 
+    set elevatorDesignation(designation: ElevatorDesignation) {
+        this.props.designation = designation;
+    }
+
+    set floorsAllowed(floorsAllowed: FloorId[]) {
+        this.props.floorsAllowed = floorsAllowed;
+    }
+
     private constructor(props: ElevatorProps, domainId?: UniqueEntityID) {
         super(props, domainId);
     }

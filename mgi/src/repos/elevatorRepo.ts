@@ -126,4 +126,29 @@ export default class ElevatorRepo implements IElevatorRepo {
             return true;
         } else return null;
     }
+
+    public async updateElevator(elevator: Elevator): Promise<Elevator> {
+        try {
+            const query = { domainId: elevator.id.toString() };
+            const elevatorRecord = await this.elevatorSchema.findOne(
+                query as FilterQuery<IElevatorPersistence & Document>,
+            );
+
+            if (elevatorRecord != null) {
+                const fAllowed: string[] = [];
+
+                for (const floor of elevator.floorsAllowed) {
+                    fAllowed.push(floor.toString());
+                }
+
+                elevatorRecord.designation = elevator.elevatorDesignation.value;
+                elevatorRecord.floorsAllowed = fAllowed;
+                await elevatorRecord.save();
+
+                return elevator;
+            } else return null;
+        } catch (error) {
+            return null;
+        }
+    }
 }
