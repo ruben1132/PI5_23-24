@@ -37,4 +37,4 @@ jobs:
           git pull
           cd mgi
           npm install
-          npm run start
+          nohup npm run start &
