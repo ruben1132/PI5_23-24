@@ -1,6 +1,6 @@
-import { IRobotTypeDTO } from "./IRobotTypeDTO";
+import { RobotType } from "./RobotType";
 
-export interface IRobotDTO {
+export interface Robot {
     id: string;
     identification: string;
     nickname: string;
@@ -10,11 +10,11 @@ export interface IRobotDTO {
     state: boolean;
 }
 
-export interface IRobotWithRobotTypeDTO{
+export interface RobotWithRobotType{
     id: string;
     identification: string;
     nickname: string;
-    robotType: IRobotTypeDTO
+    robotType: RobotType;
     serialNumber: string;
     description: string;
     state: boolean;

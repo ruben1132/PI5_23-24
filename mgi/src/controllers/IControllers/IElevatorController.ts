@@ -7,4 +7,6 @@ export default interface IElevatorController {
     deleteElevator(req: Request, res: Response, next: NextFunction);
 
     getElevatorById(req: Request, res: Response, next: NextFunction);
+
+    updateElevator(req: Request, res: Response, next: NextFunction);
 }

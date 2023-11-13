@@ -14,4 +14,6 @@ export default interface IElevatorRepo extends Repo<Elevator> {
     getElevatorById(elevatorId: ElevatorId | string): Promise<Elevator>;
     //saveCollection (elevators: Elevator[]): Promise<Elevator[]>;
     //removeByElevatorIds (elevators: ElevatorId[]): Promise<any>
+
+    updateElevator(elevator: Elevator): Promise<Elevator>;
 }
