@@ -30,7 +30,7 @@ jobs:
           pm2 delete all
           cd /home/ubuntu/API
           rm -rf mgi
-          git clone --depth 1 --filter=blob:none --no-checkout https://github.com/ruben1132/PI5_23-24.git repo
+          git clone --depth 1 --filter=blob:none --no-checkout https://ruben1132:${{secrets.PAT_TOKEN}}@github.com/ruben1132/PI5_23-24.git repo
           cd repo
           git sparse-checkout init --cone
           git sparse-checkout set mgi
