@@ -52,46 +52,6 @@ export default class UserInterface extends GUI {
     this.domElement.style.top = "1.0vh";
     this.domElement.style.fontSize = fontSize;
 
-    // Create the floors folder
-    const floorsFolder = this.addFolder("Floors");
-    floorsFolder.domElement.style.fontSize = fontSize;
-    const floorsParameters = { name: "Select a floor" };
-    const floorsOptions = [];
-    for (let i = 0; i < thumbRaiser.floors.length; i++) {
-      floorsOptions[i] = thumbRaiser.floors[i].information;
-    }
-    floorsFolder
-      .add(floorsParameters, "name")
-      .options(floorsOptions)
-      .onChange((name) => {
-        const floor = thumbRaiser.floors.find(
-          (floor) => floor.information === name
-        );
-        console.log("changed");
-        thumbRaiser.maze.url = "./v3d/mazes/floor_example.json";
-        
-        thumbRaiser.scene.remove(thumbRaiser.maze);
-
-        thumbRaiser.maze = new Maze({
-          url: "./v3d/mazes/Loquitas_20x20.json",
-          designCredits: "Maze designed by Cecília Fernandes and Nikita.",
-          texturesCredits:
-            "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
-          scale: new THREE.Vector3(1.0, 1.0, 1.0),
-          helpersColor: new THREE.Color(0xffffff),
-        });
-        // thumbRaiser.update();
-      });
-      // thumbRaiser.scene.add(thumbRaiser.maze);
-
-    floorsFolder.close();
-
-    // floors on change
-    // thumbRaiser.maze.url  change maze URL
-    // dps n sei se muda logo ou nao ou se tenho de mandar dar render
-    // thumbRaiser.maze.render()  ??
-    // thumbRaiser.update() ??
-
     // Create the audio folder
     const audioFolder = this.addFolder("Audio");
     audioFolder.domElement.style.fontSize = fontSize;

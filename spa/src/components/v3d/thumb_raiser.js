@@ -346,8 +346,7 @@ import UserInterface from "./user_interface.js";
  */
 
 export default class ThumbRaiser {
-    constructor(generalParameters, audioParameters, cubeTexturesParameters, mazeParameters, playerParameters, ambientLightParameters, directionalLightParameters, spotLightParameters, flashLightParameters, shadowsParameters, fogParameters, collisionDetectionParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters,
-        floors) {
+    constructor(generalParameters, audioParameters, cubeTexturesParameters, mazeParameters, playerParameters, ambientLightParameters, directionalLightParameters, spotLightParameters, flashLightParameters, shadowsParameters, fogParameters, collisionDetectionParameters, fixedViewCameraParameters, firstPersonViewCameraParameters, thirdPersonViewCameraParameters, topViewCameraParameters, miniMapCameraParameters) {
         this.generalParameters = merge({}, generalData, generalParameters);
         this.audioParameters = merge({}, audioData, audioParameters);
         this.cubeTexturesParameters = merge({}, cubeTextureData, cubeTexturesParameters);
@@ -365,8 +364,6 @@ export default class ThumbRaiser {
         this.thirdPersonViewCameraParameters = merge({}, cameraData, thirdPersonViewCameraParameters);
         this.topViewCameraParameters = merge({}, cameraData, topViewCameraParameters);
         this.miniMapCameraParameters = merge({}, cameraData, miniMapCameraParameters);
-
-        this.floors = floors;
 
         // Set the game state
         this.gameRunning = false;
@@ -1197,7 +1194,7 @@ export default class ThumbRaiser {
 
                 // Add the maze, the player and the lights to the scene
                 
-                // this.scene.add(this.maze);
+                this.scene.add(this.maze);
                 this.scene.add(this.player);
                 this.scene.add(this.ambientLight);
                 this.scene.add(this.directionalLight);
@@ -1281,10 +1278,19 @@ export default class ThumbRaiser {
 
                 // Start the game
                 this.gameRunning = true;
+
+                this.mazeChanged = false;
             }
         }
-        else if(this.maze.loaded ){
-            this.scene.add(this.maze);
+        else {
+
+            if(this.mazeChanged && this.maze.loaded){
+                this.scene.add(this.maze);
+                this.mazeChanged = false;
+                
+            }else if(this.mazeChanged && !this.maze.loaded){
+                return;
+            }
 
             // Update the model animations
             const deltaT = this.clock.getDelta();
@@ -1433,6 +1439,24 @@ export default class ThumbRaiser {
                 this.renderer.render(this.frame, this.camera2D); // Render the frame
             }
         }
+    }
+
+    changeMaze(){
+        this.mazeChanged = true;
+
+        let newMaze = new Maze({
+            url: "./v3d/mazes/Loquitas_20x20.json",
+            designCredits: "Maze designed by Cecília Fernandes and Nikita.",
+            texturesCredits:
+              "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
+            scale: new THREE.Vector3(1.0, 1.0, 1.0),
+            helpersColor: new THREE.Color(0xffffff),
+          });
+
+        this.scene.remove(this.maze);  
+        this.maze = newMaze;
+       
+      
     }
 
     dispose() {
