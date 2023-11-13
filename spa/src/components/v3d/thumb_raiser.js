@@ -1196,7 +1196,8 @@ export default class ThumbRaiser {
                 });
 
                 // Add the maze, the player and the lights to the scene
-                this.scene.add(this.maze);
+                
+                // this.scene.add(this.maze);
                 this.scene.add(this.player);
                 this.scene.add(this.ambientLight);
                 this.scene.add(this.directionalLight);
@@ -1282,7 +1283,9 @@ export default class ThumbRaiser {
                 this.gameRunning = true;
             }
         }
-        else {
+        else if(this.maze.loaded ){
+            this.scene.add(this.maze);
+
             // Update the model animations
             const deltaT = this.clock.getDelta();
             this.animations.update(deltaT);

@@ -68,17 +68,22 @@ export default class UserInterface extends GUI {
           (floor) => floor.information === name
         );
         console.log("changed");
-        thumbRaiser.maze.url = "./v3d/mazes/Loquitas_20x20.json";
-        // thumbRaiser.maze = new Maze({
-        //   url: "./v3d/mazes/Loquitas_20x20.json",
-        //   designCredits: "Maze designed by Cecília Fernandes and Nikita.",
-        //   texturesCredits:
-        //     "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
-        //   scale: new THREE.Vector3(1.0, 1.0, 1.0),
-        //   helpersColor: new THREE.Color(0xffffff),
-        // });
-        thumbRaiser.update();
+        thumbRaiser.maze.url = "./v3d/mazes/floor_example.json";
+        
+        thumbRaiser.scene.remove(thumbRaiser.maze);
+
+        thumbRaiser.maze = new Maze({
+          url: "./v3d/mazes/Loquitas_20x20.json",
+          designCredits: "Maze designed by Cecília Fernandes and Nikita.",
+          texturesCredits:
+            "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
+          scale: new THREE.Vector3(1.0, 1.0, 1.0),
+          helpersColor: new THREE.Color(0xffffff),
+        });
+        // thumbRaiser.update();
       });
+      // thumbRaiser.scene.add(thumbRaiser.maze);
+
     floorsFolder.close();
 
     // floors on change
