@@ -1,6 +1,9 @@
 {
     "maze": {
-        "size": { "width": 20, "depth": 12 },
+        "size": {
+            "width": 20,
+            "depth": 12
+        },
         "map": [
             [3, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 2, 2, 2, 1],
             [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -151,8 +154,16 @@
         }
     ],
     "ground": {
-        "size": { "width": 20.0, "height": 0.0625, "depth": 12.0 },
-        "segments": { "width": 1, "height": 1, "depth": 1 },
+        "size": {
+            "width": 20.0,
+            "height": 0.0625,
+            "depth": 12.0
+        },
+        "segments": {
+            "width": 1,
+            "height": 1,
+            "depth": 1
+        },
         "primaryColor": "0xffffff",
         "maps": {
             "color": {
@@ -170,7 +181,10 @@
             "normal": {
                 "url": "assets/textures/ground_VennerWhiteOak/VeneerWhiteOakRandomMatched001_NRM_2K_METALNESS.png",
                 "type": 0,
-                "scale": { "x": 2.0, "y": 2.0 }
+                "scale": {
+                    "x": 2.0,
+                    "y": 2.0
+                }
             },
             "bump": {
                 "url": "",
@@ -183,13 +197,19 @@
         },
         "wrapS": 1,
         "wrapT": 1,
-        "repeat": { "u": 4.0, "v": 4.0 },
+        "repeat": {
+            "u": 4.0,
+            "v": 4.0
+        },
         "magFilter": 1,
         "minFilter": 5,
         "secondaryColor": "0x6b554b"
     },
     "wall": {
-        "segments": { "width": 1, "height": 1 },
+        "segments": {
+            "width": 1,
+            "height": 1
+        },
         "primaryColor": "0xffffff",
         "maps": {
             "color": {
@@ -207,8 +227,11 @@
             "normal": {
                 "url": "assets/textures/WallStoneBrick/StoneBricksSplitface001_NRM_3K.png",
                 "type": 0,
-                "scale": { "x": 2.0, "y": 2.0 }
-                },
+                "scale": {
+                    "x": 2.0,
+                    "y": 2.0
+                }
+            },
             "bump": {
                 "url": "assets/textures/WallStoneBrick/StoneBricksSplitface001_BUMP_3K.jpg",
                 "scale": 1.0
@@ -226,13 +249,19 @@
         },
         "wrapS": 1,
         "wrapT": 0,
-        "repeat": { "u": 2.0, "v": 1.0 },
+        "repeat": {
+            "u": 2.0,
+            "v": 1.0
+        },
         "magFilter": 1,
         "minFilter": 5,
         "secondaryColor": "0x6b554b"
     },
     "elevator": {
-        "segments": { "width": 1, "height": 1 },
+        "segments": {
+            "width": 1,
+            "height": 1
+        },
         "primaryColor": "0xffffff",
         "maps": {
             "map": {
@@ -241,13 +270,19 @@
         },
         "wrapS": 1,
         "wrapT": 0,
-        "repeat": { "u": 1.0, "v": 1.0 },
+        "repeat": {
+            "u": 1.0,
+            "v": 1.0
+        },
         "magFilter": 1,
         "minFilter": 5,
         "secondaryColor": "0x6b554b"
     },
     "door": {
-        "segments": { "width": 1, "height": 1 },
+        "segments": {
+            "width": 1,
+            "height": 1
+        },
         "primaryColor": "0xffffff",
         "maps": {
             "map": {
@@ -256,7 +291,10 @@
         },
         "wrapS": 1,
         "wrapT": 0,
-        "repeat": { "u": 1.0, "v": 1.0 },
+        "repeat": {
+            "u": 1.0,
+            "v": 1.0
+        },
         "magFilter": 1,
         "minFilter": 5,
         "secondaryColor": "0x6b554b"
