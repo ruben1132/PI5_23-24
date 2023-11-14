@@ -28,18 +28,17 @@ export default (app: Router) => {
 
     route.get('/:id', (req, res, next) => ctrl.getRoomById(req, res, next));
 
-    /*route.put(
+    route.put(
         '',
         celebrate({
             body: Joi.object({
                 id: Joi.string().required(),
-                building: Joi.string().required(),
-                number: Joi.number().required(),
-                information: Joi.string().required(),
+                number: Joi.string().required(),
+                floor: Joi.string().required(),
             }),
         }),
-        (req, res, next) => ctrl.updateFloor(req, res, next),
-    );*/
+        (req, res, next) => ctrl.updateRoom(req, res, next),
+    );
 
     route.delete('/:id', (req, res, next) => ctrl.deleteRoom(req, res, next));
 };

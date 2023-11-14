@@ -103,6 +103,49 @@ export default class RoomService implements IRoomService {
         }
     }
 
+    public async updateRoom(roomDTO: IRoomDTO): Promise<Result<IRoomDTO>> {
+        try {
+            const room = await this.roomRepo.findByDomainId(roomDTO.id);
+
+            if (room === null) {
+                return Result.fail<IRoomDTO>('Room not found');
+            }
+
+            // check if there's already a room with the same number in the floor TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+            /*const floorWithSameNumber = await this.floorRepo.getFloorByBuildingAndNumber(
+                floorDTO.building,
+                floorDTO.number,
+                floorDTO.id,
+            );
+            if (floorWithSameNumber) {
+                return Result.fail<IFloorDTO>('Floor with same number already exists in this building');
+            }*/
+
+            const number = await RoomNumber.create(roomDTO.number);
+            if (number.isFailure) {
+                return Result.fail<IRoomDTO>(number.errorValue());
+            }
+
+            // check if floor exists
+            const floorOrError = await this.getFloor(roomDTO.floor);
+            if (floorOrError.isFailure) {
+                return Result.fail<IRoomDTO>(floorOrError.errorValue());
+            }
+            let floor: Floor = floorOrError.getValue();
+
+            room.number = number.getValue();
+            room.floor = floor.id;
+
+            await this.roomRepo.save(room);
+
+            const roomDTOResult =RoomMap.toDTO(room) as IRoomDTO;
+
+            return Result.ok<IRoomDTO>(roomDTOResult);
+        } catch (e) {
+            throw e;
+        }
+    }
+
     public async deleteRoom(id: string): Promise<Result<void>> {
         try {
             const room = await this.roomRepo.findByDomainId(id);
