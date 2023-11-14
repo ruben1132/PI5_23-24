@@ -1,32 +1,26 @@
-"use client";
+'use client';
 
 // react
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 // react bootstrap components
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { Button } from "react-bootstrap";
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import { Button } from 'react-bootstrap';
 
 // notification component
-import { notify } from "@/components/notification/Notification";
+import { notify } from '@/components/notification/Notification';
 
 // config
-import config from "../../../config";
+import config from '../../../config';
 
 // custom hooks
-import {
-    useFetchData,
-    useSubmitData,
-    useFormNumberInput,
-    useFormStringInput,
-    useDeleteData,
-} from "@/util/customHooks";
+import { useFetchData, useSubmitData, useFormNumberInput, useFormStringInput, useDeleteData } from '@/util/customHooks';
 
 // model
-import { Robot, RobotWithRobotType } from "../../models/Robot";
-import { RobotType } from "../../models/RobotType";
+import { Robot, RobotWithRobotType } from '../../models/Robot';
+import { RobotType } from '../../models/RobotType';
 
 interface Props {
     item: {
@@ -38,29 +32,19 @@ interface Props {
 }
 
 export default function RobotForm(props: Props) {
-
-
-    const selectBoxRobotTypesDataFetch = useFetchData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.robottypes
-    ); // fetch floors for fromFloor
-
+    const selectBoxRobotTypesDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.robottypes); // fetch floors for fromFloor
 
     // form submitter
     const robotForm = useSubmitData(
         config.mgiAPI.baseUrl + config.mgiAPI.routes.robots,
-        props.action === "edit" ? "PUT" : "POST"
+        props.action === 'edit' ? 'PUT' : 'POST',
     );
 
     // robot uploader
-    const enableDisableRobot = useSubmitData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.robots,
-        "PATCH"
-    );
+    const enableDisableRobot = useSubmitData(config.mgiAPI.baseUrl + config.mgiAPI.routes.robots, 'PATCH');
 
     // deleter
-    const robotDeleter = useDeleteData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.robots + props.item?.value.id
-    );
+    const robotDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.robots + props.item?.value.id);
 
     // inputs
     const robotIdentification = useFormStringInput(props.item.value?.identification);
@@ -72,7 +56,6 @@ export default function RobotForm(props: Props) {
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
-
 
     // updates the robot and refreshes the table
     const handleSubmitData = async () => {
@@ -91,7 +74,6 @@ export default function RobotForm(props: Props) {
         item.description = robotDescription.value;
         item.state = true;
 
-
         // submit data
         let res = await robotForm.submit(item);
 
@@ -105,9 +87,7 @@ export default function RobotForm(props: Props) {
         setEnabled(true); // enable buttons
 
         // show alert
-        notify.success(
-            `Robot ${props.action == "edit" ? "edited" : "added"} successfully`
-        );
+        notify.success(`Robot ${props.action == 'edit' ? 'edited' : 'added'} successfully`);
     };
 
     const handleDeleteData = async () => {
@@ -174,32 +154,25 @@ export default function RobotForm(props: Props) {
         return <Form>Error</Form>;
     }
 
-
     // filter data so it removes the element already selected
     const filteredSelectBoxDataRobotTypes = selectBoxRobotTypesDataFetch.data.filter(
-        (item: any) => item.id !== props.item.value?.robotType?.id
+        (item: any) => item.id !== props.item.value?.robotType?.id,
     );
-
 
     // handle for selecting a robotType
     const handleSelectRobotType = (e: ChangeEvent<HTMLSelectElement>) => {
         robotType.handleLoad(e.target.value);
     };
 
-
     return (
         <Form>
-            {props.action === "edit" && (
+            {props.action === 'edit' && (
                 <>
                     <Row>
                         <Col sm={12}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Robot ID</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    defaultValue={props.item.value?.id}
-                                    disabled
-                                />
+                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
                             </Form.Group>
                         </Col>
                     </Row>
@@ -252,15 +225,11 @@ export default function RobotForm(props: Props) {
                         <Form.Label htmlFor="select">Robot Type</Form.Label>
 
                         <Form.Select
-                            defaultValue={
-                                props.item.value?.robotType?.type ?? filteredSelectBoxDataRobotTypes[0].id
-                            }
+                            defaultValue={props.item.value?.robotType?.type ?? filteredSelectBoxDataRobotTypes[0].id}
                             onChange={handleSelectRobotType}
                         >
                             {props.item.value?.robotType?.id && (
-                                <option defaultChecked={true}>
-                                    {props.item.value?.robotType?.type}
-                                </option>
+                                <option defaultChecked={true}>{props.item.value?.robotType?.type}</option>
                             )}
                             {filteredSelectBoxDataRobotTypes?.map((item: RobotType) => (
                                 <option key={item.id} value={item.id}>
@@ -271,7 +240,6 @@ export default function RobotForm(props: Props) {
                         </Form.Select>
                     </Form.Group>
                 </Col>
-
             </Row>
             <br />
             <Row>
@@ -294,7 +262,7 @@ export default function RobotForm(props: Props) {
                             required
                             type="text"
                             placeholder="Robot's State..."
-                            defaultValue={props.item.value?.state ?? "true"}
+                            defaultValue={props.item.value?.state ?? 'true'}
                             onChange={robotState.handleChange}
                             disabled
                         />
@@ -305,7 +273,7 @@ export default function RobotForm(props: Props) {
             <Row>
                 <Col sm={12}>
                     <Form.Group className="mb-12">
-                        {props.action === "edit" ? (
+                        {props.action === 'edit' ? (
                             <>
                                 {/* <Button
                                     variant="primary"
@@ -334,12 +302,12 @@ export default function RobotForm(props: Props) {
                                 variant="success"
                                 onClick={handleSubmitData}
                                 disabled={
-                                    robotIdentification.value === "" ||
-                                    robotNickname.value === "" ||
-                                    robotType.value === "" ||
-                                    robotSerialNumber.value === "" ||
-                                    robotDescription.value === "" ||
-                                    robotState.value === "" ||
+                                    robotIdentification.value === '' ||
+                                    robotNickname.value === '' ||
+                                    robotType.value === '' ||
+                                    robotSerialNumber.value === '' ||
+                                    robotDescription.value === '' ||
+                                    robotState.value === '' ||
                                     !enabled
                                 }
                             >

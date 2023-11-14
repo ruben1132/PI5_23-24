@@ -1,6 +1,6 @@
-import * as THREE from "three";
-import { merge } from "./merge.js";
-import Orientation from "./orientation.js";
+import * as THREE from 'three';
+import { merge } from './merge.js';
+import Orientation from './orientation.js';
 
 /*
  * parameters = {
@@ -180,11 +180,14 @@ export class FlashLight extends THREE.SpotLight {
 
     // Set this light's position, orientation and target (positive Y-semiaxis up)
     setLightingParameters() {
-        const playerOrientation = new THREE.Euler().setFromQuaternion(this.playerOrientation, "YXZ"); // Order: yaw, pitch and roll
+        const playerOrientation = new THREE.Euler().setFromQuaternion(this.playerOrientation, 'YXZ'); // Order: yaw, pitch and roll
         playerOrientation.x = THREE.MathUtils.radToDeg(-playerOrientation.x) + this.orientation.v;
         playerOrientation.y = THREE.MathUtils.radToDeg(playerOrientation.y) + this.orientation.h;
         playerOrientation.z = THREE.MathUtils.radToDeg(-playerOrientation.z);
-        const target = this.orientationToPosition(this.distance, new Orientation(playerOrientation.y, playerOrientation.x));
+        const target = this.orientationToPosition(
+            this.distance,
+            new Orientation(playerOrientation.y, playerOrientation.x),
+        );
         this.target.translateX(target.x);
         this.target.translateY(target.y);
         this.target.translateZ(target.z);

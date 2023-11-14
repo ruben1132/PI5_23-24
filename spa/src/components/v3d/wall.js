@@ -1,7 +1,7 @@
-import * as THREE from "three";
-import * as BufferGeometryUtils from "three/addons/utils/BufferGeometryUtils.js";
-import { merge } from "./merge.js";
-import MultiTexturedMaterial from "./material.js";
+import * as THREE from 'three';
+import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
+import { merge } from './merge.js';
+import MultiTexturedMaterial from './material.js';
 
 /*
  * parameters = {
@@ -52,17 +52,17 @@ export default class Wall extends THREE.Group {
 
         // Create the front face (a rectangle)
         let geometry = new THREE.PlaneGeometry(0.95, 0.5 + this.groundHeight, this.segments.x, this.segments.y);
-        let uv = geometry.getAttribute("uv");
+        let uv = geometry.getAttribute('uv');
         let uv1 = uv.clone();
-        geometry.setAttribute("uv1", uv1); // The aoMap requires a second set of UVs: https://threejs.org/docs/index.html?q=meshstand#api/en/materials/MeshStandardMaterial.aoMap
+        geometry.setAttribute('uv1', uv1); // The aoMap requires a second set of UVs: https://threejs.org/docs/index.html?q=meshstand#api/en/materials/MeshStandardMaterial.aoMap
         geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(0.0, -halfGroundHeight, 0.025));
         geometries.push(geometry);
 
         // Create the rear face (a rectangle)
         geometry = new THREE.PlaneGeometry(0.95, 0.5 + this.groundHeight, this.segments.x, this.segments.y);
-        uv = geometry.getAttribute("uv");
+        uv = geometry.getAttribute('uv');
         uv1 = uv.clone();
-        geometry.setAttribute("uv1", uv1); // The aoMap requires a second set of UVs: https://threejs.org/docs/index.html?q=meshstand#api/en/materials/MeshStandardMaterial.aoMap
+        geometry.setAttribute('uv1', uv1); // The aoMap requires a second set of UVs: https://threejs.org/docs/index.html?q=meshstand#api/en/materials/MeshStandardMaterial.aoMap
         geometry.applyMatrix4(new THREE.Matrix4().makeRotationY(Math.PI));
         geometry.applyMatrix4(new THREE.Matrix4().makeTranslation(0.0, -halfGroundHeight, -0.025));
         geometries.push(geometry);
@@ -75,35 +75,40 @@ export default class Wall extends THREE.Group {
 
         // Create the two left faces (a four-triangle mesh)
         let points = new Float32Array([
-            -0.475, -0.25 - this.groundHeight, 0.025,
-            -0.475, 0.25, 0.025,
-            -0.5, 0.25, 0.0,
-            -0.5, -0.25 - this.groundHeight, 0.0,
+            -0.475,
+            -0.25 - this.groundHeight,
+            0.025,
+            -0.475,
+            0.25,
+            0.025,
+            -0.5,
+            0.25,
+            0.0,
+            -0.5,
+            -0.25 - this.groundHeight,
+            0.0,
 
-            -0.5, 0.25, 0.0,
-            -0.475, 0.25, -0.025,
-            -0.475, -0.25 - this.groundHeight, -0.025,
-            -0.5, -0.25 - this.groundHeight, 0.0
+            -0.5,
+            0.25,
+            0.0,
+            -0.475,
+            0.25,
+            -0.025,
+            -0.475,
+            -0.25 - this.groundHeight,
+            -0.025,
+            -0.5,
+            -0.25 - this.groundHeight,
+            0.0,
         ]);
         let normals = new Float32Array([
-            -0.707, 0.0, 0.707,
-            -0.707, 0.0, 0.707,
-            -0.707, 0.0, 0.707,
-            -0.707, 0.0, 0.707,
+            -0.707, 0.0, 0.707, -0.707, 0.0, 0.707, -0.707, 0.0, 0.707, -0.707, 0.0, 0.707,
 
-            -0.707, 0.0, -0.707,
-            -0.707, 0.0, -0.707,
-            -0.707, 0.0, -0.707,
-            -0.707, 0.0, -0.707
+            -0.707, 0.0, -0.707, -0.707, 0.0, -0.707, -0.707, 0.0, -0.707, -0.707, 0.0, -0.707,
         ]);
-        let indices = [
-            0, 1, 2,
-            2, 3, 0,
-            4, 5, 6,
-            6, 7, 4
-        ];
-        geometry = new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(points, 3)); // itemSize = 3 because there are 3 values (X, Y and Z components) per vertex
-        geometry.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
+        let indices = [0, 1, 2, 2, 3, 0, 4, 5, 6, 6, 7, 4];
+        geometry = new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(points, 3)); // itemSize = 3 because there are 3 values (X, Y and Z components) per vertex
+        geometry.setAttribute('normal', new THREE.BufferAttribute(normals, 3));
         geometry.setIndex(indices);
         geometries.push(geometry);
 
@@ -114,29 +119,15 @@ export default class Wall extends THREE.Group {
 
         // Create the top face (a four-triangle mesh)
         points = new Float32Array([
-            -0.5, 0.25, 0.0,
-            -0.475, 0.25, 0.025,
-            -0.475, 0.25, -0.025,
-            0.475, 0.25, 0.025,
-            0.475, 0.25, -0.025,
-            0.5, 0.25, 0.0
+            -0.5, 0.25, 0.0, -0.475, 0.25, 0.025, -0.475, 0.25, -0.025, 0.475, 0.25, 0.025, 0.475, 0.25, -0.025, 0.5,
+            0.25, 0.0,
         ]);
         normals = new Float32Array([
-            0.0, 1.0, 0.0,
-            0.0, 1.0, 0.0,
-            0.0, 1.0, 0.0,
-            0.0, 1.0, 0.0,
-            0.0, 1.0, 0.0,
-            0.0, 1.0, 0.0,
+            0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0,
         ]);
-        indices = [
-            0, 1, 2,
-            2, 1, 3,
-            3, 4, 2,
-            4, 3, 5
-        ];
-        geometry = new THREE.BufferGeometry().setAttribute("position", new THREE.BufferAttribute(points, 3)); // itemSize = 3 because there are 3 values (X, Y and Z components) per vertex
-        geometry.setAttribute("normal", new THREE.BufferAttribute(normals, 3));
+        indices = [0, 1, 2, 2, 1, 3, 3, 4, 2, 4, 3, 5];
+        geometry = new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(points, 3)); // itemSize = 3 because there are 3 values (X, Y and Z components) per vertex
+        geometry.setAttribute('normal', new THREE.BufferAttribute(normals, 3));
         geometry.setIndex(indices);
         geometries.push(geometry);
 

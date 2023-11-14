@@ -1,17 +1,17 @@
-import { TaskType } from "./TaskType";
+import { TaskType } from './TaskType';
 
 export interface RobotType {
-  id: number;
-  type: string;
-  brand: string;
-  model: string;
-  tasksAllowed: string[];
+    id: number;
+    type: string;
+    brand: string;
+    model: string;
+    tasksAllowed: string[];
 }
 
 export interface RobotTypeWithTaskTypes {
-  id: number;
-  type: string;
-  brand: string;
-  model: string;
-  tasksAllowed: TaskType[];
+    id: number;
+    type: string;
+    brand: string;
+    model: string;
+    tasksAllowed: TaskType[];
 }

@@ -1,9 +1,9 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 export default class Animations {
     constructor(object) {
-        this.states = ["Idle", "Walking", "Running", "Dance", "Death", "Sitting", "Standing"];
-        this.emotes = ["Jump", "Yes", "No", "Wave", "Punch", "ThumbsUp"];
+        this.states = ['Idle', 'Walking', 'Running', 'Dance', 'Death', 'Sitting', 'Standing'];
+        this.emotes = ['Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp'];
 
         this.mixer = new THREE.AnimationMixer(object);
         this.actionInProgress = false;
@@ -19,7 +19,7 @@ export default class Animations {
             }
         }
         this.resetIdleTime();
-        this.activeName = "Idle";
+        this.activeName = 'Idle';
         this.actions[this.activeName].play();
     }
 
@@ -35,11 +35,11 @@ export default class Animations {
                 .fadeIn(duration)
                 .play();
             // Some actions must not be interrupted
-            if (this.activeName != "Idle" && this.activeName != "Walking" && this.activeName != "Running") {
-                this.mixer.addEventListener("finished", event => this.actionFinished(event));
+            if (this.activeName != 'Idle' && this.activeName != 'Walking' && this.activeName != 'Running') {
+                this.mixer.addEventListener('finished', (event) => this.actionFinished(event));
                 this.actionInProgress = true;
             }
-            if (this.activeName != "Idle") {
+            if (this.activeName != 'Idle') {
                 this.resetIdleTime();
             }
         }
@@ -48,7 +48,7 @@ export default class Animations {
     actionFinished() {
         if (this.actionInProgress) {
             this.actionInProgress = false;
-            this.mixer.removeEventListener("finished", this.actionInProgress);
+            this.mixer.removeEventListener('finished', this.actionInProgress);
         }
     }
 
@@ -69,7 +69,7 @@ export default class Animations {
         if (this.mixer) {
             this.mixer.update(deltaT);
         }
-        if (this.activeName == "Idle") {
+        if (this.activeName == 'Idle') {
             this.updateIdleTime(deltaT);
         }
     }

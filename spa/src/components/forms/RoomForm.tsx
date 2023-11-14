@@ -1,33 +1,26 @@
-"use client";
+'use client';
 
 // react
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 // react bootstrap components
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { Button } from "react-bootstrap";
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import { Button } from 'react-bootstrap';
 
 // notification component
-import { notify } from "@/components/notification/Notification";
+import { notify } from '@/components/notification/Notification';
 
 // config
-import config from "../../../config";
+import config from '../../../config';
 
 // custom hooks
-import {
-    useFetchData,
-    useSubmitData,
-    useFormNumberInput,
-    useFormStringInput,
-    useDeleteData,
-} from "@/util/customHooks";
+import { useFetchData, useSubmitData, useFormNumberInput, useFormStringInput, useDeleteData } from '@/util/customHooks';
 
 // models
-import { Floor, FloorWithBuilding } from "@/models/Floor";
-import { Room, RoomWithFloor } from "@/models/Room";
-
+import { Floor, FloorWithBuilding } from '@/models/Floor';
+import { Room, RoomWithFloor } from '@/models/Room';
 
 interface Props {
     item: {
@@ -40,20 +33,16 @@ interface Props {
 
 export default function RoomForm(props: Props) {
     // fetchers
-    const selectBoxFloorsDataFetch = useFetchData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.floors
-    ); // fetch floors
+    const selectBoxFloorsDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors); // fetch floors
 
     // form submitter
     const roomForm = useSubmitData(
         config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms,
-        props.action === "edit" ? "PUT" : "POST"
+        props.action === 'edit' ? 'PUT' : 'POST',
     );
 
     // deleter
-    const roomDeleter = useDeleteData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms + props.item?.value.id
-    );
+    const roomDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms + props.item?.value.id);
 
     // inputs
     const roomNumber = useFormStringInput(props.item.value?.number);
@@ -89,9 +78,7 @@ export default function RoomForm(props: Props) {
         setEnabled(true); // enable buttons
 
         // show alert
-        notify.success(
-            `Room ${props.action == "edit" ? "edited" : "added"} successfully`
-        );
+        notify.success(`Room ${props.action == 'edit' ? 'edited' : 'added'} successfully`);
     };
 
     const handleDeleteData = async () => {
@@ -135,7 +122,7 @@ export default function RoomForm(props: Props) {
 
     // filter data so it removes the element already selected
     const filteredSelectBoxData = selectBoxFloorsDataFetch.data.filter(
-        (item: any) => item.id !== props.item.value?.floor?.id
+        (item: any) => item.id !== props.item.value?.floor?.id,
     );
 
     // handle for selecting a floor
@@ -145,17 +132,13 @@ export default function RoomForm(props: Props) {
 
     return (
         <Form>
-            {props.action === "edit" && (
+            {props.action === 'edit' && (
                 <>
                     <Row>
                         <Col sm={12}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Room ID</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    defaultValue={props.item.value?.id}
-                                    disabled
-                                />
+                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
                             </Form.Group>
                         </Col>
                     </Row>
@@ -182,15 +165,11 @@ export default function RoomForm(props: Props) {
                         <Form.Label htmlFor="select">Floor</Form.Label>
 
                         <Form.Select
-                            defaultValue={
-                                props.item.value?.floor?.id ?? filteredSelectBoxData[0].id
-                            }
+                            defaultValue={props.item.value?.floor?.id ?? filteredSelectBoxData[0].id}
                             onChange={handleSelect}
                         >
                             {props.item.value?.floor?.id && (
-                                <option defaultChecked={true}>
-                                    {props.item.value?.floor?.information}
-                                </option>
+                                <option defaultChecked={true}>{props.item.value?.floor?.information}</option>
                             )}
 
                             {filteredSelectBoxData?.map((item: Floor) => (
@@ -208,16 +187,12 @@ export default function RoomForm(props: Props) {
             <Row>
                 <Col sm={12}>
                     <Form.Group className="mb-12">
-                        {props.action === "edit" ? (
+                        {props.action === 'edit' ? (
                             <>
                                 <Button
                                     variant="primary"
                                     onClick={handleSubmitData}
-                                    disabled={
-                                        roomNumber.value === "" ||
-                                        roomFloor.value === "" ||
-                                        !enabled
-                                    }
+                                    disabled={roomNumber.value === '' || roomFloor.value === '' || !enabled}
                                 >
                                     Update
                                 </Button>
@@ -230,11 +205,7 @@ export default function RoomForm(props: Props) {
                             <Button
                                 variant="success"
                                 onClick={handleSubmitData}
-                                disabled={
-                                    roomNumber.value === "" ||
-                                    roomFloor.value === "" ||
-                                    !enabled
-                                }
+                                disabled={roomNumber.value === '' || roomFloor.value === '' || !enabled}
                             >
                                 Add
                             </Button>

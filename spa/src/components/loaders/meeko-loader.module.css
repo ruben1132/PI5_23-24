@@ -1,23 +1,23 @@
 /* meeko-loader.module.css */
 @keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .pageContainer {
-  display: flex;
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
 }
 
 .loaderContainer {
-  text-align: center; /* Center the content within the container */
+    text-align: center; /* Center the content within the container */
 }
 
 .spinImage {
-  animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
 }

@@ -1,33 +1,28 @@
-"use client";
+'use client';
 
 // react
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 // react bootstrap components
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { Button } from "react-bootstrap";
-import ListGroup from "react-bootstrap/ListGroup";
-import CloseButton from "react-bootstrap/CloseButton";
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import { Button } from 'react-bootstrap';
+import ListGroup from 'react-bootstrap/ListGroup';
+import CloseButton from 'react-bootstrap/CloseButton';
 
 // notification component
-import { notify } from "@/components/notification/Notification";
+import { notify } from '@/components/notification/Notification';
 
 // custom hooks
-import {
-    useFetchData,
-    useSubmitData,
-    useDeleteData,
-    useFormStringInputWithRegex,
-} from "@/util/customHooks";
+import { useFetchData, useSubmitData, useDeleteData, useFormStringInputWithRegex } from '@/util/customHooks';
 
 // models
-import { RobotType, RobotTypeWithTaskTypes } from "@/models/RobotType";
+import { RobotType, RobotTypeWithTaskTypes } from '@/models/RobotType';
 
 // config
-import config from "../../../config";
-import { TaskType } from "@/models/TaskType";
+import config from '../../../config';
+import { TaskType } from '@/models/TaskType';
 
 interface Props {
     item: {
@@ -40,36 +35,23 @@ interface Props {
 
 export default function RobotTypeForm(props: Props) {
     // fetchers
-    const selectBoxTaskTypesDataFetch = useFetchData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.tasktypes
-    ); // fetch task types
+    const selectBoxTaskTypesDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.tasktypes); // fetch task types
 
     // form submitter
     const robotTypeForm = useSubmitData(
         config.mgiAPI.baseUrl + config.mgiAPI.routes.robottypes,
-        props.action === "edit" ? "PUT" : "POST"
+        props.action === 'edit' ? 'PUT' : 'POST',
     );
 
     // deleter
     const robotTypeDeleter = useDeleteData(
-        config.mgiAPI.baseUrl +
-        config.mgiAPI.routes.robottypes +
-        props.item?.value.id
+        config.mgiAPI.baseUrl + config.mgiAPI.routes.robottypes + props.item?.value.id,
     );
 
     // inputs
-    const robotTypeName = useFormStringInputWithRegex(
-        props.item.value?.type,
-        /^[A-Za-z0-9]{1,25}$/
-    );
-    const robotTypeBrand = useFormStringInputWithRegex(
-        props.item.value?.brand,
-        /^.{1,50}$/
-    );
-    const robotTypeModel = useFormStringInputWithRegex(
-        props.item.value?.model,
-        /^.{1,100}$/
-    );
+    const robotTypeName = useFormStringInputWithRegex(props.item.value?.type, /^[A-Za-z0-9]{1,25}$/);
+    const robotTypeBrand = useFormStringInputWithRegex(props.item.value?.brand, /^.{1,50}$/);
+    const robotTypeModel = useFormStringInputWithRegex(props.item.value?.model, /^.{1,100}$/);
     const [tasksAllowed, setTasksAllowed] = useState<TaskType[]>([]); // TODO:
 
     // button enables - used to prevent double clicks
@@ -103,9 +85,7 @@ export default function RobotTypeForm(props: Props) {
         setEnabled(true); // enable buttons
 
         // show alert
-        notify.success(
-            `Robot Type ${props.action == "edit" ? "edited" : "added"} successfully`
-        );
+        notify.success(`Robot Type ${props.action == 'edit' ? 'edited' : 'added'} successfully`);
     };
 
     const handleDeleteData = async () => {
@@ -132,7 +112,7 @@ export default function RobotTypeForm(props: Props) {
 
     // when the action changes, update the tasks allowed
     useEffect(() => {
-        if (props.action === "edit") {
+        if (props.action === 'edit') {
             setTasksAllowed(props.item.value.tasksAllowed);
         }
     }, [props.action]);
@@ -145,18 +125,14 @@ export default function RobotTypeForm(props: Props) {
     }
 
     // filter data so it removes the element(s) already selected
-    const filteredSelectBoxData = selectBoxTaskTypesDataFetch.data.filter(
-        (item: TaskType) => {
-            return !tasksAllowed.some((task) => task.id === item.id);
-        }
-    );
+    const filteredSelectBoxData = selectBoxTaskTypesDataFetch.data.filter((item: TaskType) => {
+        return !tasksAllowed.some((task) => task.id === item.id);
+    });
 
     // add the selected value
     const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = e.target.value;
-        const selectedType = selectBoxTaskTypesDataFetch.data.find(
-            (type: TaskType) => type.id === selectedValue
-        );
+        const selectedType = selectBoxTaskTypesDataFetch.data.find((type: TaskType) => type.id === selectedValue);
 
         const newArray: TaskType[] = [...tasksAllowed, selectedType];
         setTasksAllowed(newArray);
@@ -169,17 +145,13 @@ export default function RobotTypeForm(props: Props) {
 
     return (
         <Form>
-            {props.action === "edit" && (
+            {props.action === 'edit' && (
                 <>
                     <Row>
                         <Col sm={12}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Robot Type ID</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    defaultValue={props.item.value?.id}
-                                    disabled
-                                />
+                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
                             </Form.Group>
                         </Col>
                     </Row>
@@ -255,7 +227,7 @@ export default function RobotTypeForm(props: Props) {
             <Row>
                 <Col sm={12}>
                     <Form.Group className="mb-12">
-                        {props.action === "edit" ? (
+                        {props.action === 'edit' ? (
                             <>
                                 <Button
                                     variant="primary"

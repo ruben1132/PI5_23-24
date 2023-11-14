@@ -8,7 +8,6 @@
   @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
   @import "https://fonts.googleapis.com/css?family=Nunito+Sans:300,400,500,600,700"; */
 
-
 /* ---------------------------------------------------
       SIDEBAR STYLE
   ----------------------------------------------------- */
@@ -23,9 +22,8 @@
 
 .sidebar.is-open {
     margin-left: 0;
-    transition: .5s;
+    transition: 0.5s;
 }
-
 
 .sidebar-header {
     background: #313b4c;
@@ -66,10 +64,10 @@
 .nav-item:hover {
     background: #313b4c;
     color: #fff;
-    transition: .2s;
+    transition: 0.2s;
 }
 
-.nav-link a{
+.nav-link a {
     text-decoration: none;
 }
 
@@ -81,18 +79,17 @@ li a.dropdown-toggle::after {
     display: inline-flex;
     position: relative;
     left: 60%;
-    top: 10%
+    top: 10%;
 }
 
-.sidebar-header>button {
+.sidebar-header > button {
     position: relative;
     float: right;
-    margin: .5em;
+    margin: 0.5em;
     font-size: 2rem;
     cursor: pointer;
     display: none;
 }
-
 
 /* ---------------------------------------------------
       CONTENT STYLE
@@ -118,11 +115,13 @@ li a.dropdown-toggle::after {
         min-width: 100%;
         max-width: 100%;
         margin-left: 0;
-        transition: all 0.5s, height 0s;
+        transition:
+            all 0.5s,
+            height 0s;
         height: 100vh !important;
     }
 
-    .sidebar.is-open>.sidebar-header button {
+    .sidebar.is-open > .sidebar-header button {
         display: block;
     }
 
@@ -131,5 +130,4 @@ li a.dropdown-toggle::after {
         position: relative;
         left: 68%;
     }
-
 }

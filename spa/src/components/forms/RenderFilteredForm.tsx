@@ -1,12 +1,12 @@
-import BuildingForm from "./BuildingForm";
-import FloorForm from "./FloorForm";
-import RobotTypeForm from "./RobotTypeForm";
-import RoleForm from "./RoleForm";
-import TaskTypeForm from "./TaskTypeForm";
-import PassageForm from "./PassageForm";
-import ElevatorForm from "./ElevatorForm";
-import RobotForm from "./RobotForm";
-import RoomForm from "./RoomForm"
+import BuildingForm from './BuildingForm';
+import FloorForm from './FloorForm';
+import RobotTypeForm from './RobotTypeForm';
+import RoleForm from './RoleForm';
+import TaskTypeForm from './TaskTypeForm';
+import PassageForm from './PassageForm';
+import ElevatorForm from './ElevatorForm';
+import RobotForm from './RobotForm';
+import RoomForm from './RoomForm';
 
 interface Props {
     item: {
@@ -22,7 +22,7 @@ export function RenderFilteredForm(props: Props) {
     const filterForm = () => {
         {
             switch (props.item.type.toLocaleLowerCase()) {
-                case "building":
+                case 'building':
                     return (
                         <BuildingForm
                             item={{ value: props.item.value }}
@@ -31,7 +31,7 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                case "floor":
+                case 'floor':
                     return (
                         <FloorForm
                             item={{ value: props.item.value }}
@@ -40,7 +40,7 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                case "robottype":
+                case 'robottype':
                     return (
                         <RobotTypeForm
                             item={{ value: props.item.value }}
@@ -49,7 +49,7 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                case "tasktype":
+                case 'tasktype':
                     return (
                         <TaskTypeForm
                             item={{ value: props.item.value }}
@@ -58,7 +58,7 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                case "role":
+                case 'role':
                     return (
                         <RoleForm
                             item={{ value: props.item.value }}
@@ -67,7 +67,7 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                case "passage":
+                case 'passage':
                     return (
                         <PassageForm
                             item={{ value: props.item.value }}
@@ -76,7 +76,7 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                case "elevator":
+                case 'elevator':
                     return (
                         <ElevatorForm
                             item={{ value: props.item.value }}
@@ -85,7 +85,7 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                case "robot":
+                case 'robot':
                     return (
                         <RobotForm
                             item={{ value: props.item.value }}
@@ -94,7 +94,7 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                case "room":
+                case 'room':
                     return (
                         <RoomForm
                             item={{ value: props.item.value }}
