@@ -180,7 +180,7 @@
                 "url": "assets/textures/WallStoneBrick/StoneBricksSplitface001_NRM_3K.png",
                 "type": 0,
                 "scale": { "x": 2.0, "y": 2.0 }
-                },
+            },
             "bump": {
                 "url": "assets/textures/WallStoneBrick/StoneBricksSplitface001_BUMP_3K.jpg",
                 "scale": 1.0

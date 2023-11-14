@@ -74,7 +74,7 @@
                 "url": "./v3d/textures/concrete_0007_2k_xtGY5J/concrete_0007_normal_opengl_2k.png",
                 "type": 0,
                 "scale": { "x": 2.0, "y": 2.0 }
-                },
+            },
             "bump": {
                 "url": "",
                 "scale": 1.0
