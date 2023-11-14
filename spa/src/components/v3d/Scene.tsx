@@ -26,6 +26,7 @@ export default function Scene(props: Props) {
     let animationFrameId: number;
     const [thumbRaiser, setThumbRaiser] = React.useState<ThumbRaiser>();
 
+    console.log(props.floorMaps);
     useEffect(() => {
         let thumbRaiserr: ThumbRaiser;
 
@@ -231,7 +232,7 @@ export default function Scene(props: Props) {
                 }, // Cube texture parameters
                 {
                     data: props.floorMaps[0],
-                    url: './v3d/mazes/plantEdAFloor2.json',
+                    url: './v3d/mazes/' + props.floorMaps[0].file,
                     designCredits: '',
                     texturesCredits: '',
                     helpersColor: new THREE.Color(0xff0077),

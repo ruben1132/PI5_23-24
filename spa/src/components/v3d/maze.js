@@ -24,7 +24,6 @@ export default class Maze extends THREE.Group {
         this.loaded = false;
 
         this.onLoad = function (description) {
-            console.log(description);
 
             const normalMapTypes = [THREE.TangentSpaceNormalMap, THREE.ObjectSpaceNormalMap];
             const wrappingModes = [THREE.ClampToEdgeWrapping, THREE.RepeatWrapping, THREE.MirroredRepeatWrapping];
