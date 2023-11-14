@@ -36,27 +36,28 @@ export default class FloorMapRepo implements IFloorMapRepo {
 
         // looks for a floorMap with the same floor id
         const floorMapDocument = await this.floorMapSchema.findOne(query);
-
+        
         try {
             if (floorMapDocument === null) {
                 const rawFloorMap: any = FloorMapMap.toPersistence(floorMap);
-
+                
                 const floorMapCreated = await this.floorMapSchema.create(rawFloorMap);
-
-                return FloorMapMap.toDomain(floorMapCreated);
+                const idk = FloorMapMap.toDomain(floorMapCreated);
+                console.log("ss");
+                
+                return idk
             } else {
                 const fmPersistence = FloorMapMap.toPersistence(floorMap);
 
                 floorMapDocument.floor = floorMap.floor.toString();
-                floorMapDocument.map = fmPersistence.map;
+                floorMapDocument.maze = fmPersistence.maze;
                 floorMapDocument.fmRooms = fmPersistence.fmRooms;
                 floorMapDocument.fmDoors = fmPersistence.fmDoors;
                 floorMapDocument.fmElevator = fmPersistence.fmElevator;
                 floorMapDocument.fmPassages = fmPersistence.fmPassages;
-                floorMapDocument.wallTexture = fmPersistence.wallTexture;
-                floorMapDocument.groundTexture = fmPersistence.groundTexture;
-                floorMapDocument.doorTexture = fmPersistence.doorTexture;
-                floorMapDocument.elevatorTexture = fmPersistence.elevatorTexture;
+                floorMapDocument.ground = fmPersistence.ground;
+                floorMapDocument.wall = fmPersistence.wall;
+                floorMapDocument.player = fmPersistence.player;
 
                 await floorMapDocument.save();
 

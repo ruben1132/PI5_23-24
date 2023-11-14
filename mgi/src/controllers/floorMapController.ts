@@ -4,7 +4,7 @@ import config from "../../config";
 
 import IFloorMapController from "./IControllers/IFloorMapController";
 import IFloorMapService from '../services/IServices/IFloorMapService';
-import IFloorMapDTO from '../dto/IFloorMapDTO';
+import {IFloorMapDTO} from '../dto/IFloorMapDTO';
 
 import { Result } from "../core/logic/Result";
 

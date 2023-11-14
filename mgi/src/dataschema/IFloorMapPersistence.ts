@@ -98,11 +98,11 @@ export interface IFloorMapPersistence {
         initialDirection: number;
     };
     fmDoors: {
-        location: Position;
+        position: Position;
     }[];
     fmElevator: {
         elevatorId: string;
-        location: Position;
+        position: Position;
     };
     fmRooms: {
         roomId: string;
@@ -113,6 +113,6 @@ export interface IFloorMapPersistence {
     }[];
     fmPassages: {
         passageId: string;
-        location: Position;
+        position: Position;
     }[];
 }

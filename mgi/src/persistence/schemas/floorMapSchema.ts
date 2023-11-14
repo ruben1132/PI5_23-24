@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 
 const sizeSchema = new mongoose.Schema(
     {
-        width: { type: Number, required: true },
-        height: { type: Number },
-        depth: { type: Number, required: true },
+        width: { type: Number, required: false },
+        height: { type: Number,  required: false  },
+        depth: { type: Number, required: false },
     },
     {
         _id: false, // Disable _id for this subdocument
@@ -16,7 +16,7 @@ const positionSchema = new mongoose.Schema(
     {
         positionX: { type: Number, required: true },
         positionY: { type: Number, required: true },
-        direction: { type: String, required: true },
+        direction: { type: String, required: false },
     },
     {
         _id: false, // Disable _id for this subdocument
@@ -34,20 +34,20 @@ const colorMapSchema = new mongoose.Schema(
 
 const mapsSchema = new mongoose.Schema(
     {
-        color: { type: colorMapSchema, required: true },
-        ao: { url: { type: String, required: true }, intensity: { type: Number, required: true } },
+        color: { type: colorMapSchema, required: false },
+        ao: { url: { type: String, required: false }, intensity: { type: Number, required: false } },
         displacement: {
-            url: { type: String, required: true },
-            scale: { type: Number, required: true },
-            bias: { type: Number, required: true },
+            url: { type: String, required: false },
+            scale: { type: Number, required: false },
+            bias: { type: Number, required: false },
         },
         normal: {
-            url: { type: String, required: true },
-            type: { type: Number, required: true },
-            scale: { type: sizeSchema, required: true },
+            url: { type: String, required: false },
+            type: { type: Number, required: false },
+            scale: { type: sizeSchema, required: false },
         },
-        bump: { url: { type: String, required: true }, scale: { type: Number, required: true } },
-        roughness: { url: { type: String, required: true }, rough: { type: Number, required: true } },
+        bump: { url: { type: String, required: false }, scale: { type: Number, required: false } },
+        roughness: { url: { type: String, required: false }, rough: { type: Number, required: false } },
     },
     {
         _id: false, // Disable _id for this subdocument
@@ -56,16 +56,16 @@ const mapsSchema = new mongoose.Schema(
 
 const groundWallSchema = new mongoose.Schema(
     {
-        size: { type: sizeSchema, required: true },
+        size: { type: sizeSchema, required: false },
         segments: { type: sizeSchema, required: true },
-        primaryColor: { type: String, required: true },
+        primaryColor: { type: String, required: false },
         maps: { type: mapsSchema, required: true },
         wrapS: { type: Number, required: true },
         wrapT: { type: Number, required: true },
         repeat: { type: sizeSchema, required: true },
         magFilter: { type: Number, required: true },
         minFilter: { type: Number, required: true },
-        secondaryColor: { type: String, required: true },
+        secondaryColor: { type: String, required: false },
     },
     {
         _id: false, // Disable _id for this subdocument
@@ -74,7 +74,7 @@ const groundWallSchema = new mongoose.Schema(
 
 const fmDoorsSchema = new mongoose.Schema(
     {
-        location: { type: positionSchema, required: true },
+        position: { type: positionSchema, required: true },
     },
     {
         _id: false, // Disable _id for this subdocument
@@ -84,7 +84,7 @@ const fmDoorsSchema = new mongoose.Schema(
 const fmElevatorSchema = new mongoose.Schema(
     {
         elevatorId: { type: String, required: true },
-        location: { type: positionSchema, required: true },
+        position: { type: positionSchema, required: true },
     },
     {
         _id: false, // Disable _id for this subdocument
@@ -107,7 +107,7 @@ const fmRoomsSchema = new mongoose.Schema(
 const fmPassagesSchema = new mongoose.Schema(
     {
         passageId: { type: String, required: true },
-        location: { type: positionSchema, required: true },
+        position: { type: positionSchema, required: true },
     },
     {
         _id: false, // Disable _id for this subdocument

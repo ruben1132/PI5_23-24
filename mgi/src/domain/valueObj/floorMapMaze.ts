@@ -4,14 +4,13 @@ import { Guard } from "../../core/logic/Guard";
 import { FloorMapPosition } from "./floorMapPosition";
 import { FloorMapSize } from "./floorMapSize";
 
-interface FloorMapGroundProps {
+interface FloorMapMapProps {
     size: FloorMapSize;
     map: number[][];
-    position: FloorMapPosition;
     exitLocation: [number, number];
 }
 
-export class FloorMapGround extends ValueObject<FloorMapGroundProps> {
+export class FloorMapMaze extends ValueObject<FloorMapMapProps> {
  
     get size(): FloorMapSize {
         return this.props.size;
@@ -21,42 +20,41 @@ export class FloorMapGround extends ValueObject<FloorMapGroundProps> {
         this.props.size = value;
     }
 
-    get passage(): number[][] {
+    get map(): number[][] {
         return this.props.map;
     }
 
-    set passage(value: number[][]) {
+    set map(value: number[][]) {
         this.props.map = value;
     }
 
-    get position(): FloorMapPosition {
-        return this.props.position;
+    get exitLocation(): [number, number] {
+        return this.props.exitLocation;
     }
 
-    set position(value: FloorMapPosition) {
-        this.props.position = value;
+    set exitLocation(value: [number, number]) {
+        this.props.exitLocation = value;
     }
     
-    private constructor(props: FloorMapGroundProps) {
+    private constructor(props: FloorMapMapProps) {
         super(props);
     }
 
 
-    public static create(props: FloorMapGroundProps): Result<FloorMapGround> {
+    public static create(props: FloorMapMapProps): Result<FloorMapMaze> {
         const guardedProps = [
             { argument: props.size, argumentName: 'size' },
             { argument: props.map, argumentName: 'map' },
-            { argument: props.position, argumentName: 'position' },
             { argument: props.exitLocation, argumentName: 'exitLocation' },
         ];
 
         const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
         if (!guardResult.succeeded) {
-            return Result.fail<FloorMapGround>(guardResult.message)
+            return Result.fail<FloorMapMaze>(guardResult.message)
         }
         
-        return Result.ok<FloorMapGround>(new FloorMapGround({ ...props}))
+        return Result.ok<FloorMapMaze>(new FloorMapMaze({ ...props}))
 
     }
 }

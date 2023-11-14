@@ -30,7 +30,7 @@ export class FloorMapDirection extends ValueObject<FloorMapDirectionProps> {
         value = value.toLocaleLowerCase();
 
         // check if is valid
-        if (value == "north" || value == "weest" || value == "south" || value == "east") {
+        if (value == "north" || value == "west" || value == "south" || value == "east") {
             return Result.ok<FloorMapDirection>(new FloorMapDirection({ value: value }))
         }
 

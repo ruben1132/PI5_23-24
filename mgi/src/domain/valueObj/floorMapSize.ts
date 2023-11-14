@@ -1,15 +1,14 @@
-import { ValueObject } from "../../core/domain/ValueObject";
-import { Result } from "../../core/logic/Result";
-import { Guard } from "../../core/logic/Guard";
+import { ValueObject } from '../../core/domain/ValueObject';
+import { Result } from '../../core/logic/Result';
+import { Guard } from '../../core/logic/Guard';
 
 interface FloorMapSizeProps {
-    width: number;
+    width?: number;
     height?: number;
-    depth: number;
+    depth?: number;
 }
 
 export class FloorMapSize extends ValueObject<FloorMapSizeProps> {
-   
     get width(): number {
         return this.props.width;
     }
@@ -39,20 +38,6 @@ export class FloorMapSize extends ValueObject<FloorMapSizeProps> {
     }
 
     public static create(props: FloorMapSizeProps): Result<FloorMapSize> {
-
-        const guardedProps = [
-            { argument: props.width, argumentName: 'width' },
-            { argument: props.depth, argumentName: 'depth' },
-          ];
-      
-          const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
-          const guardResult2 = Guard.againstZeroOrNegativeBulk(guardedProps);
-      
-          if (!guardResult.succeeded || !guardResult2.succeeded) {
-            return Result.fail<FloorMapSize>(guardResult.message)
-          }    
-
-        return Result.ok<FloorMapSize>(new FloorMapSize({ ...props}))
-
+        return Result.ok<FloorMapSize>(new FloorMapSize({ ...props }));
     }
 }

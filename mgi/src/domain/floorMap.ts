@@ -9,19 +9,20 @@ import { FloorMapPassage } from "./valueObj/floorMapPassage";
 import { FloorMapRoom } from "./valueObj/floorMapRoom";
 import { Guard } from "../core/logic/Guard";
 import { FloorId } from "./valueObj/floorId";
-import { FloorMapMap } from "../mappers/FloorMapMap";
+import { FloorMapSurface } from "./valueObj/floorMapSurface";
+import { FloorMapPlayer } from "./floorMapPlayer";
+import { FloorMapMaze } from "./valueObj/floorMapMaze";
 
 interface FloorMapProps {
     floor: FloorId; 
-    map: FloorMapMap; 
-    fmRooms: FloorMapRoom[];
+    maze: FloorMapMaze; 
+    ground: FloorMapSurface;
+    wall: FloorMapSurface;
+    player: FloorMapPlayer;
     fmDoors: FloorMapDoor[]; 
     fmElevator: FloorMapElevator; 
+    fmRooms: FloorMapRoom[];
     fmPassages: FloorMapPassage[];
-    wallTexture: string;
-    groundTexture: string;
-    doorTexture: string;
-    elevatorTexture: string;
 }
 
 export class FloorMap extends AggregateRoot<FloorMapProps> {
@@ -33,81 +34,42 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
         return new FloorMapId(this.id.toValue());
     }
 
-    set floor(value: FloorId) {
-        this.props.floor = value;
-    }
-
     get floor(): FloorId {
         return this.props.floor;
     }
 
-    get map(): FloorMapMap {
-        return this.props.map;
+    get maze(): FloorMapMaze {
+        return this.props.maze;
     }
 
-    set map(value: FloorMapMap) {
-        this.props.map = value;
+    get ground(): FloorMapSurface {
+        return this.props.ground;
     }
 
-    get fmRooms(): FloorMapRoom[] {
-        return this.props.fmRooms;
+    get wall(): FloorMapSurface {
+        return this.props.wall;
     }
 
-    set fmRooms(value: FloorMapRoom[]) {
-        this.props.fmRooms = value;
+    get player(): FloorMapPlayer {
+        return this.props.player;
     }
 
     get fmDoors(): FloorMapDoor[] {
         return this.props.fmDoors;
     }
 
-    set fmDoors(value: FloorMapDoor[]) {
-        this.props.fmDoors = value;
-    }
-
     get fmElevator(): FloorMapElevator {
         return this.props.fmElevator;
     }
 
-    set fmElevator(value: FloorMapElevator) {
-        this.props.fmElevator = value;
+    get fmRooms(): FloorMapRoom[] {
+        return this.props.fmRooms;
     }
 
     get fmPassages(): FloorMapPassage[] {
         return this.props.fmPassages;
     }
 
-    set fmPassages(value: FloorMapPassage[]) {
-        this.props.fmPassages = value;
-    }
-
-    get wallTexture(): string {
-        return this.props.wallTexture;
-    }
-
-    set wallTexture(value: string) {
-        this.props.wallTexture = value;
-    }
-
-    get groundTexture(): string {
-        return this.props.groundTexture;
-    }
-
-    set groundTexture(value: string) {
-        this.props.groundTexture = value;
-    }
-
-    get doorTexture(): string {
-        return this.props.doorTexture;
-    }
-
-    set doorTexture(value: string) {
-        this.props.doorTexture = value;
-    }
-
-    get elevatorTexture(): string {
-        return this.props.elevatorTexture;
-    }
 
     private constructor(props: FloorMapProps, id?: UniqueEntityID) {
         super(props, id);
@@ -117,23 +79,20 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
 
         const guardedProps = [
             { argument: props.floor, argumentName: 'floor' },
-            { argument: props.map, argumentName: 'map' },
-            { argument: props.fmRooms, argumentName: 'fmRooms' },
+            { argument: props.maze, argumentName: 'maze' },
+            { argument: props.ground, argumentName: 'ground' },
+            { argument: props.wall, argumentName: 'wall' },
+            { argument: props.player, argumentName: 'player' },
             { argument: props.fmDoors, argumentName: 'fmDoors' },
             { argument: props.fmElevator, argumentName: 'fmElevator' },
+            { argument: props.fmRooms, argumentName: 'fmRooms' },
             { argument: props.fmPassages, argumentName: 'fmPassages' },
-            { argument: props.wallTexture, argumentName: 'wallTexture' },
-            { argument: props.groundTexture, argumentName: 'groundTexture' },
         ];
 
         const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
 
         if (!guardResult.succeeded) {
             return Result.fail<FloorMap>(guardResult.message)
-        }
-
-        if (props.map.length === 0) {
-            return Result.fail<FloorMap>("Map is empty")
         }
         
         const floorMap = new FloorMap({ ...props }, id);
