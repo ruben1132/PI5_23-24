@@ -107,30 +107,66 @@
     },
     "fmDoors": [
         {
-            "positionX": 6,
-            "positionY": 6,
-            "direction": "west"
+            "position": {
+                "positionX": 6,
+                "positionY": 6,
+                "direction": "west"
+            }
         },
         {
-            "positionX": 11,
-            "positionY": 5,
-            "direction": "north"
+            "position": {
+                "positionX": 11,
+                "positionY": 5,
+                "direction": "north"
+            }
         },
         {
-            "positionX": 11,
-            "positionY": 11,
-            "direction": "north"
+            "position": {
+                "positionX": 11,
+                "positionY": 11,
+                "direction": "north"
+            }
         },
         {
-            "positionX": 6,
-            "positionY": 14,
-            "direction": "north"
+            "position": {
+                "positionX": 6,
+                "positionY": 14,
+                "direction": "north"
+            }
         }
     ],
     "fmElevator": {
         "elevatorId": "089c4eff-652f-4b71-965a-a95ddb182e57",
-        "positionX": 1,
-        "positionY": 12,
-        "direction": "east"
-    }
+        "position": {
+            "positionX": 1,
+            "positionY": 12,
+            "direction": "east"
+        }
+    },
+    "fmRooms": [
+        {
+            "roomId": "366aee22-6886-4165-b58b-d1b3730e7438",
+            "startX": 0,
+            "startY": 0,
+            "endX": 4,
+            "endY": 4
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6
+        }
+    ],
+    "fmPassages": [
+        {
+            "passageId": "7ee9a627-5bf3-4f0a-8f69-db4f276d998d",
+            "position": {
+                "positionX": 10,
+                "positionY": 7,
+                "direction": "west"
+            }
+        }
+    ]
 }
