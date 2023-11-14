@@ -104,5 +104,28 @@
     "player": {
         "initialPosition": [6.0, 10.0],
         "initialDirection": 90.0
+    },
+    "fmDoors": [
+        {
+            "positionX": 3,
+            "positionY": 2,
+            "direction": "north"
+        },
+        {
+            "positionX": 6,
+            "positionY": 2,
+            "direction": "north"
+        },
+        {
+            "positionX": 6,
+            "positionY": 4,
+            "direction": "west"
+        }
+    ],
+    "fmElevator": {
+        "elevatorId": "089c4eff-652f-4b71-965a-a95ddb182e57",
+        "positionX": 8,
+        "positionY": 2,
+        "direction": "west"
     }
 }

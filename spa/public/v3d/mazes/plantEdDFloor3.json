@@ -1,0 +1,141 @@
+{
+    "maze": {
+        "size": { "width": 12, "depth": 20 },
+        "map": [
+            [3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [3, 2, 2, 2, 1, 0, 0, 0, 3, 2, 2, 2, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [3, 2, 2, 2, 1, 0, 0, 0, 3, 2, 2, 2, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+            [3, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0]
+        ],
+        "exitLocation": [11.5, 20.0]
+    },
+    "ground": {
+        "size": { "width": 12.0, "height": 0.0625, "depth": 20.0 },
+        "segments": { "width": 1, "height": 1, "depth": 1 },
+        "primaryColor": "0xffffff",
+        "maps": {
+            "color": {
+                "url": "./v3d/textures/wood_Plank_wdipfjw_2K/wdipfjw_2K_Albedo.jpg"
+            },
+            "ao": {
+                "url": "./v3d/textures/wood_Plank_wdipfjw_2K/wdipfjw_2K_AO.jpg",
+                "intensity": 1.0
+            },
+            "displacement": {
+                "url": "",
+                "scale": 1.0,
+                "bias": 0.0
+            },
+            "normal": {
+                "url": "./v3d/textures/wood_Plank_wdipfjw_2K/wdipfjw_2K_Normal.jpg",
+                "type": 0,
+                "scale": { "x": 2.0, "y": 2.0 }
+            },
+            "bump": {
+                "url": "",
+                "scale": 1.0
+            },
+            "roughness": {
+                "url": "./v3d/textures/wood_Plank_wdipfjw_2K/wdipfjw_2K_Roughness.jpg",
+                "rough": 1.0
+            }
+        },
+        "wrapS": 1,
+        "wrapT": 1,
+        "repeat": { "u": 4.0, "v": 4.0 },
+        "magFilter": 1,
+        "minFilter": 5,
+        "secondaryColor": "0x6b554b"
+    },
+    "wall": {
+        "segments": { "width": 1, "height": 1 },
+        "primaryColor": "0xffffff",
+        "maps": {
+            "color": {
+                "url": "./v3d/textures/marble_Tile_wgilchtv_2K/wgilchtv_2K_Albedo.jpg"
+            },
+            "ao": {
+                "url": "./v3d/textures/marble_Tile_wgilchtv_2K/wgilchtv_2K_AO.jpg",
+                "intensity": 1.0
+            },
+            "displacement": {
+                "url": "",
+                "scale": 1.0,
+                "bias": 0.0
+            },
+            "normal": {
+                "url": "./v3d/textures/marble_Tile_wgilchtv_2K/wgilchtv_2K_Normal.jpg",
+                "type": 0,
+                "scale": { "x": 2.0, "y": 2.0 }
+                },
+            "bump": {
+                "url": "",
+                "scale": 1.0
+            },
+            "roughness": {
+                "url": "./v3d/textures/marble_Tile_wgilchtv_2K/wgilchtv_2K_Roughness.jpg",
+                "rough": 1.0
+            }
+        },
+        "wrapS": 1,
+        "wrapT": 0,
+        "repeat": { "u": 2.0, "v": 1.0 },
+        "magFilter": 1,
+        "minFilter": 5,
+        "secondaryColor": "0x6b554b"
+    },
+    "player": {
+        "initialPosition": [5.0, 1.0],
+        "initialDirection": 5.1
+    },
+    "fmDoors": [
+        {
+            "positionX": 4,
+            "positionY": 8,
+            "direction": "west"
+        },
+        {
+            "positionX": 4,
+            "positionY": 10,
+            "direction": "west"
+        },
+        {
+            "positionX": 8,
+            "positionY": 8,
+            "direction": "west"
+        },
+        {
+            "positionX": 8,
+            "positionY": 10,
+            "direction": "west"
+        },
+        {
+            "positionX": 6,
+            "positionY": 15,
+            "direction": "north"
+        }
+    ],
+    "fmElevator": {
+        "elevatorId": "089c4eff-652f-4b71-965a-a95ddb182e57",
+        "positionX": 1,
+        "positionY": 1,
+        "direction": "east"
+    }
+}

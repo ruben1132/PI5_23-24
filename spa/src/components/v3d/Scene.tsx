@@ -1,7 +1,7 @@
 "use client";
 
 // react
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 
 // threejs and project itself
 import * as THREE from "three";
@@ -14,6 +14,7 @@ import "../../styles/v3d.css";
 // models
 import { FloorWithBuilding } from "@/models/Floor.jsx";
 import { Building } from "@/models/Building.js";
+import { Form } from "react-bootstrap";
 
 interface Props {
   floors: FloorWithBuilding[];
@@ -22,12 +23,13 @@ interface Props {
 
 export default function Scene(props: Props) {
   let animationFrameId: number;
-
+  const [thumbRaiser, setThumbRaiser] = React.useState<ThumbRaiser>();
+  
   useEffect(() => {
-    let thumbRaiser: ThumbRaiser;
+    let thumbRaiserr: ThumbRaiser;
 
     function initialize() {
-      thumbRaiser = new ThumbRaiser(
+      thumbRaiserr = new ThumbRaiser(
         {}, // General Parameters
         {
           enabled: true,
@@ -231,11 +233,13 @@ export default function Scene(props: Props) {
           selected: 2,
         }, // Cube texture parameters
         {
-          url: "./v3d/mazes/floor_example.json",
-          designCredits: "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
-          texturesCredits: "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
-          helpersColor: new THREE.Color(0xff0077)
-      }, // Maze parameters
+          url: "./v3d/mazes/plantEdAFloor2.json",
+          designCredits:
+            "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
+          texturesCredits:
+            "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
+          helpersColor: new THREE.Color(0xff0077),
+        }, // Maze parameters
         { helpersColor: new THREE.Color(0x0055ff) }, // Player parameters
         {
           intensity: 0.1,
@@ -329,14 +333,15 @@ export default function Scene(props: Props) {
           zoomMin: 0.64,
           zoomMax: 5.12,
         }, // Mini-map view camera parameters
-        props.floors // all floors
       );
+
+      setThumbRaiser(thumbRaiserr);
     }
 
     function animate() {
       animationFrameId = requestAnimationFrame(animate); // Store the animation frame ID
       // Update the game
-      thumbRaiser.update();
+      thumbRaiserr.update();
     }
 
     initialize();
@@ -346,7 +351,7 @@ export default function Scene(props: Props) {
       // Stop any ongoing animations or event listeners here
       // For example, you can stop the animation loop and remove event listeners
       cancelAnimationFrame(animationFrameId); // Make sure to store the animationFrameId when starting the animation
-      thumbRaiser.dispose(); // Dispose of any Three.js resources
+      thumbRaiserr.dispose(); // Dispose of any Three.js resources
     }
 
     // Return the cleanup function to be called when the component unmounts
@@ -355,6 +360,10 @@ export default function Scene(props: Props) {
       cleanup();
     };
   }, []);
+
+  const handleSelect = (event: ChangeEvent<HTMLSelectElement>): void => {
+    thumbRaiser?.changeMaze();
+  };
 
   return (
     <div id="scene">
@@ -443,19 +452,22 @@ export default function Scene(props: Props) {
                 <tr>
                   <td>
                     Buildings:
-                    <select id="view">
-                      {props.buildings.map((building) => (
-                        <option value={building.id}>{building.name}</option>
-                      ))}
-                    </select>
+                      <Form.Select onChange={handleSelect} >
+                        <option defaultChecked={true}>Select building</option>
+                        {props.buildings.map((building) => (
+                          <option value={building.id}>{building.name}</option>
+                        ))}
+                      </Form.Select>
+                 
                   </td>
                   <td>
                     Floors:
-                    <select id="view">
-                      {props.floors.map((floor) => (
+                      <Form.Select onChange={handleSelect} >
+                        <option defaultChecked={true}>Select floor</option>
+                        {props.floors.map((floor) => (
                         <option value={floor.id}>{floor.information}</option>
                       ))}
-                    </select>
+                      </Form.Select>
                   </td>
                 </tr>
               </tbody>
