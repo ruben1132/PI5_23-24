@@ -1,7 +1,7 @@
-import * as THREE from "three";
-import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
-import { merge } from "./merge.js";
-import { CylinderHelper, BoxHelper } from "./helpers.js";
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { merge } from './merge.js';
+import { CylinderHelper, BoxHelper } from './helpers.js';
 
 /*
  * parameters = {
@@ -25,7 +25,35 @@ export default class Player extends THREE.Group {
         this.defaultDirection = THREE.MathUtils.degToRad(this.defaultDirection);
 
         // Initialize keyboard key states
-        this.keyStates = { realisticViewMode: false, fixedView: false, firstPersonView: false, thirdPersonView: false, topView: false, miniMap: false, statistics: false, userInterface: false, help: false, boundingVolumes: false, ambientLight: false, directionalLight: false, spotLight: false, flashLight: false, shadows: false, fog: false, left: false, right: false, backward: false, forward: false, jump: false, yes: false, no: false, wave: false, punch: false, thumbsUp: false, shiftKey: false };
+        this.keyStates = {
+            realisticViewMode: false,
+            fixedView: false,
+            firstPersonView: false,
+            thirdPersonView: false,
+            topView: false,
+            miniMap: false,
+            statistics: false,
+            userInterface: false,
+            help: false,
+            boundingVolumes: false,
+            ambientLight: false,
+            directionalLight: false,
+            spotLight: false,
+            flashLight: false,
+            shadows: false,
+            fog: false,
+            left: false,
+            right: false,
+            backward: false,
+            forward: false,
+            jump: false,
+            yes: false,
+            no: false,
+            wave: false,
+            punch: false,
+            thumbsUp: false,
+            shiftKey: false,
+        };
 
         this.loaded = false;
 
@@ -53,9 +81,9 @@ export default class Player extends THREE.Group {
             this.radius = (this.halfSize.x + this.halfSize.z) / 2.0;
 
             // Get the objects's body, face and head end
-            this.body = this.getObjectByName("Body"); // When visible, collision helpers are children of the body
-            this.face = this.getObjectByName("Head_4"); // Required for computing the target of flashlight, first-person, third-person, and top-view cameras
-            this.headEnd = this.getObjectByName("Head_end"); // Required by realistic view mode
+            this.body = this.getObjectByName('Body'); // When visible, collision helpers are children of the body
+            this.face = this.getObjectByName('Head_4'); // Required for computing the target of flashlight, first-person, third-person, and top-view cameras
+            this.headEnd = this.getObjectByName('Head_end'); // Required by realistic view mode
 
             // Compute the body position and scale in world space
             this.body.worldPosition = new THREE.Vector3();
@@ -69,25 +97,41 @@ export default class Player extends THREE.Group {
 
             // Create the collision helpers, and set their positions and sizes
             this.cylinderHelper = new CylinderHelper(this.helpersColor); // Bounding cylinder
-            this.cylinderHelper.position.set((0.0 - this.body.worldPosition.x) / this.body.worldScale.x, (this.halfSize.y - this.body.worldPosition.y) / this.body.worldScale.y, (0.0 - this.body.worldPosition.z) / this.body.worldScale.z);
-            this.cylinderHelper.scale.set(this.radius / this.body.worldScale.x, this.halfSize.y / this.body.worldScale.y, this.radius / this.body.worldScale.z);
+            this.cylinderHelper.position.set(
+                (0.0 - this.body.worldPosition.x) / this.body.worldScale.x,
+                (this.halfSize.y - this.body.worldPosition.y) / this.body.worldScale.y,
+                (0.0 - this.body.worldPosition.z) / this.body.worldScale.z,
+            );
+            this.cylinderHelper.scale.set(
+                this.radius / this.body.worldScale.x,
+                this.halfSize.y / this.body.worldScale.y,
+                this.radius / this.body.worldScale.z,
+            );
             this.boxHelper = new BoxHelper(this.helpersColor); // Oriented bounding box
-            this.boxHelper.position.set((0.0 - this.body.worldPosition.x) / this.body.worldScale.x, (this.halfSize.y - this.body.worldPosition.y) / this.body.worldScale.y, (0.0 - this.body.worldPosition.z) / this.body.worldScale.z);
-            this.boxHelper.scale.set(this.halfSize.x / this.body.worldScale.x, this.halfSize.y / this.body.worldScale.y, this.halfSize.z / this.body.worldScale.z);
+            this.boxHelper.position.set(
+                (0.0 - this.body.worldPosition.x) / this.body.worldScale.x,
+                (this.halfSize.y - this.body.worldPosition.y) / this.body.worldScale.y,
+                (0.0 - this.body.worldPosition.z) / this.body.worldScale.z,
+            );
+            this.boxHelper.scale.set(
+                this.halfSize.x / this.body.worldScale.x,
+                this.halfSize.y / this.body.worldScale.y,
+                this.halfSize.z / this.body.worldScale.z,
+            );
 
             // Turn on shadows for this object
             this.setShadow();
 
             this.loaded = true;
-        }
+        };
 
         const onProgress = function (url, xhr) {
-            console.log("Resource '" + url + "' " + (100.0 * xhr.loaded / xhr.total).toFixed(0) + "% loaded.");
-        }
+            console.log("Resource '" + url + "' " + ((100.0 * xhr.loaded) / xhr.total).toFixed(0) + '% loaded.');
+        };
 
         const onError = function (url, error) {
-            console.error("Error loading resource '" + url + "' (" + error + ").");
-        }
+            console.error("Error loading resource '" + url + "' (" + error + ').');
+        };
 
         // Create a resource .gltf or .glb file loader
         const loader = new GLTFLoader();
@@ -98,18 +142,19 @@ export default class Player extends THREE.Group {
             this.url,
 
             // onLoad callback
-            description => this.onLoad(description),
+            (description) => this.onLoad(description),
 
             // onProgress callback
-            xhr => onProgress(this.url, xhr),
+            (xhr) => onProgress(this.url, xhr),
 
             // onError callback
-            error => onError(this.url, error)
+            (error) => onError(this.url, error),
         );
     }
 
     setShadow() {
-        this.traverseVisible(child => { // Modifying the scene graph inside the callback is discouraged: https://threejs.org/docs/index.html?q=object3d#api/en/core/Object3D.traverseVisible
+        this.traverseVisible((child) => {
+            // Modifying the scene graph inside the callback is discouraged: https://threejs.org/docs/index.html?q=object3d#api/en/core/Object3D.traverseVisible
             if (child instanceof THREE.Object3D) {
                 child.castShadow = true;
                 child.receiveShadow = true;

@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 /*
  * parameters = {
@@ -20,10 +20,10 @@ export default class CubeTexture {
             this[key] = value;
         }
 
-        if (this.name == "None") { // No cube texture selected
+        if (this.name == 'None') {
+            // No cube texture selected
             this.textures = null;
-        }
-        else {
+        } else {
             // Create a cube texture file loader
             const loader = new THREE.CubeTextureLoader();
 
@@ -37,7 +37,7 @@ export default class CubeTexture {
                     this.texturePositiveYUrl,
                     this.textureNegativeYUrl,
                     this.texturePositiveZUrl,
-                    this.textureNegativeZUrl
+                    this.textureNegativeZUrl,
                 ],
             );
         }

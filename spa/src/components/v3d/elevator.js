@@ -1,7 +1,6 @@
-import * as THREE from "three";
-import { merge } from "./merge.js";
-import { GLTFLoader } from "three/examples/jsm/Addons.js";
-
+import * as THREE from 'three';
+import { merge } from './merge.js';
+import { GLTFLoader } from 'three/examples/jsm/Addons.js';
 
 /*
  * parameters = {
@@ -18,22 +17,37 @@ export default class Elevator extends THREE.Group {
         this.loaded = false;
 
         this.onLoad = function (object) {
-
-            switch(this.elevator.position.direction){
-                case "north":
-                    object.scene.position.set(this.elevator.position.positionX - this.halfSize.width + 0.5, 0.5, this.elevator.position.positionY - this.halfSize.depth);
+            switch (this.elevator.position.direction) {
+                case 'north':
+                    object.scene.position.set(
+                        this.elevator.position.positionX - this.halfSize.width + 0.5,
+                        0.5,
+                        this.elevator.position.positionY - this.halfSize.depth,
+                    );
                     break;
-                case "south":
-                    object.scene.position.set(this.elevator.position.positionX - this.halfSize.width + 0.5, 0.5, this.elevator.position.positionY - this.halfSize.depth);
+                case 'south':
+                    object.scene.position.set(
+                        this.elevator.position.positionX - this.halfSize.width + 0.5,
+                        0.5,
+                        this.elevator.position.positionY - this.halfSize.depth,
+                    );
                     object.scene.rotateY(Math.PI);
                     break;
-                case "east":
-                    object.scene.position.set(this.elevator.position.positionX - this.halfSize.width, 0.5, this.elevator.position.positionY - this.halfSize.depth + 0.5);
-                    object.scene.rotateY(Math.PI/2);
+                case 'east':
+                    object.scene.position.set(
+                        this.elevator.position.positionX - this.halfSize.width,
+                        0.5,
+                        this.elevator.position.positionY - this.halfSize.depth + 0.5,
+                    );
+                    object.scene.rotateY(Math.PI / 2);
                     break;
-                case "west":
-                    object.scene.position.set(this.elevator.position.positionX - this.halfSize.width, 0.5, this.elevator.position.positionY - this.halfSize.depth + 0.5);
-                    object.scene.rotateY(-Math.PI/2);
+                case 'west':
+                    object.scene.position.set(
+                        this.elevator.position.positionX - this.halfSize.width,
+                        0.5,
+                        this.elevator.position.positionY - this.halfSize.depth + 0.5,
+                    );
+                    object.scene.rotateY(-Math.PI / 2);
                     break;
             }
 
@@ -42,35 +56,33 @@ export default class Elevator extends THREE.Group {
             this.add(object.scene);
 
             this.loaded = true;
-        }
+        };
 
         const onProgress = function (url, xhr) {
-            console.log("Resource '" + url + "' " + (100.0 * xhr.loaded / xhr.total).toFixed(0) + "% loaded.");
-        }
+            console.log("Resource '" + url + "' " + ((100.0 * xhr.loaded) / xhr.total).toFixed(0) + '% loaded.');
+        };
 
         const onError = function (url, error) {
-            console.error("Error loading resource '" + url + "' (" + error + ").");
-        }
+            console.error("Error loading resource '" + url + "' (" + error + ').');
+        };
 
         // Create a resource .gltf or .glb file loader
         const loader = new GLTFLoader();
 
         // Load a model description resource file
-        this.url = "./v3d/models/elevator/elevator.glb";
+        this.url = './v3d/models/elevator/elevator.glb';
         loader.load(
             //Resource URL
             this.url,
 
             // onLoad callback
-            object => this.onLoad(object),
+            (object) => this.onLoad(object),
 
             // onProgress callback
-            xhr => onProgress(this.url, xhr),
+            (xhr) => onProgress(this.url, xhr),
 
             // onError callback
-            error => onError(this.url, error)
+            (error) => onError(this.url, error),
         );
     }
-
-
 }

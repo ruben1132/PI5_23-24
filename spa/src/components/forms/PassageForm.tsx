@@ -1,32 +1,26 @@
-"use client";
+'use client';
 
 // react
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 // react bootstrap components
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { Button } from "react-bootstrap";
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import { Button } from 'react-bootstrap';
 
 // notification component
-import { notify } from "@/components/notification/Notification";
+import { notify } from '@/components/notification/Notification';
 
 // config
-import config from "../../../config";
+import config from '../../../config';
 
 // custom hooks
-import {
-    useFetchData,
-    useSubmitData,
-    useFormNumberInput,
-    useFormStringInput,
-    useDeleteData,
-} from "@/util/customHooks";
+import { useFetchData, useSubmitData, useFormNumberInput, useFormStringInput, useDeleteData } from '@/util/customHooks';
 
 // model
-import { Passage, PassageWithFloor } from "@/models/Passage";
-import { Floor } from "@/models/Floor";
+import { Passage, PassageWithFloor } from '@/models/Passage';
+import { Floor } from '@/models/Floor';
 
 interface Props {
     item: {
@@ -38,42 +32,29 @@ interface Props {
 }
 
 export default function PassageForm(props: Props) {
+    const selectBoxFromFloorDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors); // fetch floors for fromFloor
 
-
-    const selectBoxFromFloorDataFetch = useFetchData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.floors
-    ); // fetch floors for fromFloor
-
-    const selectBoxToFloorDataFetch = useFetchData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.floors
-    ); // fetch floors for toFloor
+    const selectBoxToFloorDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors); // fetch floors for toFloor
 
     // form submitter
     const passageForm = useSubmitData(
         config.mgiAPI.baseUrl + config.mgiAPI.routes.passages,
-        props.action === "edit" ? "PUT" : "POST"
+        props.action === 'edit' ? 'PUT' : 'POST',
     );
 
     // passage uploader
-    const uploadPassage = useSubmitData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.passages,
-        "PATCH"
-    );
+    const uploadPassage = useSubmitData(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages, 'PATCH');
 
     // deleter
-    const passageDeleter = useDeleteData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.passages + props.item?.value.id
-    );
-
+    const passageDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages + props.item?.value.id);
 
     // inputs
     const passageDesignation = useFormStringInput(props.item.value?.designation);
     const fromFloor = useFormStringInput(props.item.value?.fromFloor?.id);
     const toFloor = useFormStringInput(props.item.value?.toFloor?.id);
-    
+
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
-
 
     // updates the passage and refreshes the table
     const handleSubmitData = async () => {
@@ -103,9 +84,7 @@ export default function PassageForm(props: Props) {
         setEnabled(true); // enable buttons
 
         // show alert
-        notify.success(
-            `Passage ${props.action == "edit" ? "edited" : "added"} successfully`
-        );
+        notify.success(`Passage ${props.action == 'edit' ? 'edited' : 'added'} successfully`);
     };
 
     const handleDeleteData = async () => {
@@ -145,7 +124,6 @@ export default function PassageForm(props: Props) {
         }
 
         toFloor.handleLoad(selectBoxToFloorDataFetch.data[0].id);
-
     }, [selectBoxFromFloorDataFetch.data, selectBoxToFloorDataFetch.data]);
 
     if (selectBoxFromFloorDataFetch.isLoading) {
@@ -164,12 +142,12 @@ export default function PassageForm(props: Props) {
 
     // filter data so it removes the element already selected
     const filteredSelectBoxDataFromFloor = selectBoxFromFloorDataFetch.data.filter(
-        (item: any) => item.id !== props.item.value?.fromFloor?.id
+        (item: any) => item.id !== props.item.value?.fromFloor?.id,
     );
 
     // filter data so it removes the element already selected
     const filteredSelectBoxDataToFloor = selectBoxToFloorDataFetch.data.filter(
-        (item: any) => item.id !== props.item.value?.toFloor?.id
+        (item: any) => item.id !== props.item.value?.toFloor?.id,
     );
 
     // handle for selecting a fromFloor
@@ -184,17 +162,13 @@ export default function PassageForm(props: Props) {
 
     return (
         <Form>
-            {props.action === "edit" && (
+            {props.action === 'edit' && (
                 <>
                     <Row>
                         <Col sm={12}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Passage ID</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    defaultValue={props.item.value?.id}
-                                    disabled
-                                />
+                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
                             </Form.Group>
                         </Col>
                     </Row>
@@ -223,15 +197,11 @@ export default function PassageForm(props: Props) {
                         <Form.Label htmlFor="select">From Floor</Form.Label>
 
                         <Form.Select
-                            defaultValue={
-                                props.item.value?.fromFloor ?? filteredSelectBoxDataFromFloor[0].id
-                            }
+                            defaultValue={props.item.value?.fromFloor ?? filteredSelectBoxDataFromFloor[0].id}
                             onChange={handleSelectFromFloor}
                         >
                             {props.item.value?.fromFloor?.id && (
-                                <option defaultChecked={true}>
-                                    {props.item.value?.fromFloor?.information}
-                                </option>
+                                <option defaultChecked={true}>{props.item.value?.fromFloor?.information}</option>
                             )}
                             {filteredSelectBoxDataFromFloor?.map((item: Floor) => (
                                 <option key={item.id} value={item.id}>
@@ -247,15 +217,11 @@ export default function PassageForm(props: Props) {
                         <Form.Label htmlFor="select">To Floor</Form.Label>
 
                         <Form.Select
-                            defaultValue={
-                                props.item.value?.toFloor ?? filteredSelectBoxDataToFloor[0].id
-                            }
+                            defaultValue={props.item.value?.toFloor ?? filteredSelectBoxDataToFloor[0].id}
                             onChange={handleSelectToFloor}
                         >
                             {props.item.value?.toFloor?.id && (
-                                <option defaultChecked={true}>
-                                    {props.item.value?.toFloor?.information}
-                                </option>
+                                <option defaultChecked={true}>{props.item.value?.toFloor?.information}</option>
                             )}
                             {filteredSelectBoxDataToFloor?.map((item: Floor) => (
                                 <option key={item.id} value={item.id}>
@@ -271,15 +237,15 @@ export default function PassageForm(props: Props) {
             <Row>
                 <Col sm={12}>
                     <Form.Group className="mb-12">
-                        {props.action === "edit" ? (
+                        {props.action === 'edit' ? (
                             <>
                                 <Button
                                     variant="primary"
                                     onClick={handleSubmitData}
                                     disabled={
-                                        passageDesignation.value === "" ||
-                                        fromFloor.value === "" ||
-                                        toFloor.value === "" ||
+                                        passageDesignation.value === '' ||
+                                        fromFloor.value === '' ||
+                                        toFloor.value === '' ||
                                         !enabled
                                     }
                                 >
@@ -295,9 +261,9 @@ export default function PassageForm(props: Props) {
                                 variant="success"
                                 onClick={handleSubmitData}
                                 disabled={
-                                    passageDesignation.value === "" ||
-                                    fromFloor.value === "" ||
-                                    toFloor.value === "" ||
+                                    passageDesignation.value === '' ||
+                                    fromFloor.value === '' ||
+                                    toFloor.value === '' ||
                                     !enabled
                                 }
                             >

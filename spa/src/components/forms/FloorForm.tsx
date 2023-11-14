@@ -1,33 +1,26 @@
-"use client";
+'use client';
 
 // react
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 // react bootstrap components
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { Button } from "react-bootstrap";
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import { Button } from 'react-bootstrap';
 
 // notification component
-import { notify } from "@/components/notification/Notification";
+import { notify } from '@/components/notification/Notification';
 
 // config
-import config from "../../../config";
+import config from '../../../config';
 
 // custom hooks
-import {
-    useFetchData,
-    useSubmitData,
-    useFormNumberInput,
-    useFormStringInput,
-    useDeleteData,
-} from "@/util/customHooks";
+import { useFetchData, useSubmitData, useFormNumberInput, useFormStringInput, useDeleteData } from '@/util/customHooks';
 
 // models
-import { Floor, FloorWithBuilding } from "@/models/Floor";
-import { Building } from "@/models/Building";
-
+import { Floor, FloorWithBuilding } from '@/models/Floor';
+import { Building } from '@/models/Building';
 
 interface Props {
     item: {
@@ -41,31 +34,22 @@ interface Props {
 export default function FloorForm(props: Props) {
     // fetchers
     const fetchFloorMap = useFetchData(
-        config.mgiAPI.baseUrl +
-        config.mgiAPI.routes.floormapsWithFloor +
-        props.item.value.id
+        config.mgiAPI.baseUrl + config.mgiAPI.routes.floormapsWithFloor + props.item.value.id,
     ); // fetch floor map
 
-    const selectBoxBuildingsDataFetch = useFetchData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings
-    ); // fetch buildings
+    const selectBoxBuildingsDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings); // fetch buildings
 
     // form submitter
     const floorForm = useSubmitData(
         config.mgiAPI.baseUrl + config.mgiAPI.routes.floors,
-        props.action === "edit" ? "PUT" : "POST"
+        props.action === 'edit' ? 'PUT' : 'POST',
     );
 
     // floor map uploader
-    const uploadFloorMap = useSubmitData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.floormaps,
-        "PATCH"
-    );
+    const uploadFloorMap = useSubmitData(config.mgiAPI.baseUrl + config.mgiAPI.routes.floormaps, 'PATCH');
 
     // deleter
-    const floorDeleter = useDeleteData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + props.item?.value.id
-    );
+    const floorDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + props.item?.value.id);
 
     // inputs
     const floorInformation = useFormStringInput(props.item.value?.information);
@@ -78,14 +62,14 @@ export default function FloorForm(props: Props) {
     // handle upload to floormap to server
     const handleUpload = async (file: File | undefined) => {
         if (!file) {
-            console.log("no file");
+            console.log('no file');
 
             // TODO: show alert that there's no file
             return;
         }
 
         let formData = new FormData();
-        formData.append("jsonFile", file);
+        formData.append('jsonFile', file);
         let res = await uploadFloorMap.submit(formData);
 
         if (res.error) {
@@ -131,9 +115,7 @@ export default function FloorForm(props: Props) {
         setEnabled(true); // enable buttons
 
         // show alert
-        notify.success(
-            `Floor ${props.action == "edit" ? "edited" : "added"} successfully`
-        );
+        notify.success(`Floor ${props.action == 'edit' ? 'edited' : 'added'} successfully`);
     };
 
     const handleDeleteData = async () => {
@@ -177,7 +159,7 @@ export default function FloorForm(props: Props) {
 
     // filter data so it removes the element already selected
     const filteredSelectBoxData = selectBoxBuildingsDataFetch.data.filter(
-        (item: any) => item.id !== props.item.value?.building?.id
+        (item: any) => item.id !== props.item.value?.building?.id,
     );
 
     // handle for selecting a building
@@ -187,17 +169,13 @@ export default function FloorForm(props: Props) {
 
     return (
         <Form>
-            {props.action === "edit" && (
+            {props.action === 'edit' && (
                 <>
                     <Row>
                         <Col sm={12}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Floor ID</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    defaultValue={props.item.value?.id}
-                                    disabled
-                                />
+                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
                             </Form.Group>
                         </Col>
                     </Row>
@@ -235,23 +213,19 @@ export default function FloorForm(props: Props) {
                         <Form.Label htmlFor="select">Building</Form.Label>
 
                         <Form.Select
-                            defaultValue={
-                                props.item.value?.building?.id ?? filteredSelectBoxData[0].id
-                            }
+                            defaultValue={props.item.value?.building?.id ?? filteredSelectBoxData[0].id}
                             onChange={handleSelect}
                         >
                             {props.item.value?.building?.id && (
                                 <option defaultChecked={true}>
-                                    {props.item.value?.building.code +
-                                        " - " +
-                                        props.item.value?.building.name}
+                                    {props.item.value?.building.code + ' - ' + props.item.value?.building.name}
                                 </option>
                             )}
 
                             {filteredSelectBoxData?.map((item: Building) => (
                                 <option key={item.id} value={item.id}>
                                     {/* show 2nd prop from item, 1st prop is the id */}
-                                    {item.code + " - " + item.name}
+                                    {item.code + ' - ' + item.name}
                                 </option>
                             ))}
                         </Form.Select>
@@ -266,7 +240,7 @@ export default function FloorForm(props: Props) {
                                 type="file"
                                 onChange={(e) => {
                                     handleUpload((e.target as HTMLInputElement).files?.[0]);
-                                    e.target.value = "";
+                                    e.target.value = '';
                                 }}
                             />
                         </Form.Group>
@@ -278,10 +252,10 @@ export default function FloorForm(props: Props) {
                     <Form.Group controlId="preview" className="mb-3">
                         <Form.Label>Floor map</Form.Label>
                         <Form.Control
-                            as={"textarea"}
+                            as={'textarea'}
                             value={JSON.stringify(fetchFloorMap.data, null, 2)}
                             disabled={true}
-                            style={{ height: "500px" }}
+                            style={{ height: '500px' }}
                         />
                     </Form.Group>
                 </Col>
@@ -291,13 +265,13 @@ export default function FloorForm(props: Props) {
             <Row>
                 <Col sm={12}>
                     <Form.Group className="mb-12">
-                        {props.action === "edit" ? (
+                        {props.action === 'edit' ? (
                             <>
                                 <Button
                                     variant="primary"
                                     onClick={handleSubmitData}
                                     disabled={
-                                        floorInformation.value === "" ||
+                                        floorInformation.value === '' ||
                                         floorInformation.value === undefined ||
                                         !floorNumber.value ||
                                         !enabled
@@ -315,7 +289,7 @@ export default function FloorForm(props: Props) {
                                 variant="success"
                                 onClick={handleSubmitData}
                                 disabled={
-                                    floorInformation.value === "" ||
+                                    floorInformation.value === '' ||
                                     floorInformation.value === undefined ||
                                     !floorNumber.value ||
                                     !enabled

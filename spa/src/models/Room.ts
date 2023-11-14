@@ -1,13 +1,13 @@
-import { Floor } from "./Floor";
+import { Floor } from './Floor';
 
 export interface RoomWithFloor {
     id: string;
-    number: string; 
+    number: string;
     floor: Floor;
 }
 
 export interface Room {
-	id: string;
-    number: string; 
+    id: string;
+    number: string;
     floor: string;
 }

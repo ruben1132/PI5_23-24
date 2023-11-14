@@ -1,4 +1,4 @@
-import * as THREE from "three";
+import * as THREE from 'three';
 
 /*
  * parameters = {
@@ -54,14 +54,14 @@ export default class Camera {
         this.initialize();
     }
 
-    percentageToPixels(viewport, windowWidth, windowHeight) { // Convert viewport position and size from % to pixels
+    percentageToPixels(viewport, windowWidth, windowHeight) {
+        // Convert viewport position and size from % to pixels
         let width = viewport.width;
         let height = viewport.height;
-        if (this.view != "mini-map") {
+        if (this.view != 'mini-map') {
             width *= windowWidth;
             height *= windowHeight;
-        }
-        else {
+        } else {
             const windowSizeMin = Math.min(windowWidth, windowHeight);
             width *= windowSizeMin;
             height *= windowSizeMin;
@@ -73,18 +73,18 @@ export default class Camera {
         return new THREE.Vector4(x, y, width, height);
     }
 
-    pixelsToPercentage(viewport, windowWidth, windowHeight) { // Convert viewport position and size from pixels to %
+    pixelsToPercentage(viewport, windowWidth, windowHeight) {
+        // Convert viewport position and size from pixels to %
         const deltaWidth = windowWidth - viewport.width;
         const x = deltaWidth == 0 ? 0 : viewport.x / deltaWidth;
         const deltaHeight = windowHeight - viewport.height;
         const y = deltaHeight == 0 ? 0 : viewport.y / deltaHeight;
         let width = viewport.width;
         let height = viewport.height;
-        if (this.view != "mini-map") {
+        if (this.view != 'mini-map') {
             width /= windowWidth;
             height /= windowHeight;
-        }
-        else {
+        } else {
             const windowSizeMin = Math.min(windowWidth, windowHeight);
             width /= windowSizeMin;
             height /= windowSizeMin;
@@ -100,8 +100,9 @@ export default class Camera {
      *      Z
      */
 
-    setViewingParameters() { // Set the camera's position, orientation and target (positive Y-semiaxis up)
-        const playerOrientation = new THREE.Euler().setFromQuaternion(this.playerOrientation, "YXZ"); // Order: yaw, pitch and roll
+    setViewingParameters() {
+        // Set the camera's position, orientation and target (positive Y-semiaxis up)
+        const playerOrientation = new THREE.Euler().setFromQuaternion(this.playerOrientation, 'YXZ'); // Order: yaw, pitch and roll
         playerOrientation.x = -playerOrientation.x + THREE.MathUtils.degToRad(this.orientation.v);
         playerOrientation.y += THREE.MathUtils.degToRad(this.orientation.h - 180.0);
         playerOrientation.z = -playerOrientation.z;
@@ -110,11 +111,10 @@ export default class Camera {
 
         this.perspective.position.set(this.target.x, this.target.y, this.target.z);
         this.orthographic.position.set(this.target.x, this.target.y, this.target.z);
-        if (this.view == "first-person") {
+        if (this.view == 'first-person') {
             this.perspective.translateZ(-0.9 * this.playerRadius);
             this.orthographic.translateZ(-0.9 * this.playerRadius);
-        }
-        else {
+        } else {
             this.perspective.translateZ(this.distance);
             this.orthographic.translateZ(this.distance);
         }
@@ -126,13 +126,16 @@ export default class Camera {
         // Adjust the camera's field-of-view if needed; Set the left, right, top and bottom clipping planes
         let fov, left, right, top, bottom;
         if (this.aspectRatio < 1.0) {
-            fov = 2.0 * THREE.MathUtils.radToDeg(Math.atan(Math.tan(THREE.MathUtils.degToRad(this.initialFov / 2.0)) / this.aspectRatio));
+            fov =
+                2.0 *
+                THREE.MathUtils.radToDeg(
+                    Math.atan(Math.tan(THREE.MathUtils.degToRad(this.initialFov / 2.0)) / this.aspectRatio),
+                );
             right = this.initialHalfSize;
             left = -right;
             top = right / this.aspectRatio;
             bottom = -top;
-        }
-        else {
+        } else {
             fov = this.initialFov;
             top = this.initialHalfSize;
             bottom = -top;
@@ -161,10 +164,9 @@ export default class Camera {
 
     setActiveProjection(projection) {
         this.projection = projection;
-        if (this.projection != "orthographic") {
+        if (this.projection != 'orthographic') {
             this.activeProjection = this.perspective;
-        }
-        else {
+        } else {
             this.activeProjection = this.orthographic;
         }
     }
@@ -183,80 +185,90 @@ export default class Camera {
         this.setViewingParameters();
 
         // Set the default camera projection: mini-map: orthographic; remaining views: perspective
-        if (this.view != "mini-map") {
-            this.setActiveProjection("perspective");
-        }
-        else {
-            this.setActiveProjection("orthographic");
+        if (this.view != 'mini-map') {
+            this.setActiveProjection('perspective');
+        } else {
+            this.setActiveProjection('orthographic');
         }
     }
 
     roundViewport(viewport) {
-        return new THREE.Vector4(Math.round(viewport.x), Math.round(viewport.y), Math.round(viewport.width), Math.round(viewport.height));
+        return new THREE.Vector4(
+            Math.round(viewport.x),
+            Math.round(viewport.y),
+            Math.round(viewport.width),
+            Math.round(viewport.height),
+        );
     }
 
     snapPosition(data) {
-        const snapPositions = this.snapPositions.map(snapPosition => Math.round(snapPosition * data.size)); // Convert snap positions from % to pixels
-        const deltaPositions = snapPositions.map(snapPosition => Math.abs(data.currentPosition - snapPosition));
+        const snapPositions = this.snapPositions.map((snapPosition) => Math.round(snapPosition * data.size)); // Convert snap positions from % to pixels
+        const deltaPositions = snapPositions.map((snapPosition) => Math.abs(data.currentPosition - snapPosition));
         data.minDelta = Math.min(...deltaPositions);
-        data.newPosition = data.minDelta < this.snapThreshold * data.size ? snapPositions[deltaPositions.indexOf(data.minDelta)] : data.currentPosition;
+        data.newPosition =
+            data.minDelta < this.snapThreshold * data.size
+                ? snapPositions[deltaPositions.indexOf(data.minDelta)]
+                : data.currentPosition;
     }
 
-    snapViewport(frame) { // drag: "none"; resize: string identifying the pointed frame
+    snapViewport(frame) {
+        // drag: "none"; resize: string identifying the pointed frame
         let west, east;
-        if (frame == "none" || frame.includes("west")) {
+        if (frame == 'none' || frame.includes('west')) {
             west = { size: window.innerWidth, currentPosition: this.viewport.x };
             this.snapPosition(west);
         }
-        if (frame == "none" || frame.includes("east")) {
-            east = { size: window.innerWidth, currentPosition: (this.viewport.x + this.viewport.width) };
+        if (frame == 'none' || frame.includes('east')) {
+            east = { size: window.innerWidth, currentPosition: this.viewport.x + this.viewport.width };
             this.snapPosition(east);
         }
-        if (frame == "none") {
+        if (frame == 'none') {
             if (west.minDelta < east.minDelta) {
                 this.viewport.x = west.newPosition;
-            }
-            else {
+            } else {
                 this.viewport.x = east.newPosition - this.viewport.width;
             }
-        }
-        else if (frame.includes("west")) {
+        } else if (frame.includes('west')) {
             this.viewport.x = west.newPosition;
-        }
-        else if (frame.includes("east")) {
+        } else if (frame.includes('east')) {
             this.viewport.width = east.newPosition - this.viewport.x;
         }
 
         let south, north;
-        if (frame == "none" || frame.includes("south")) {
+        if (frame == 'none' || frame.includes('south')) {
             south = { size: window.innerHeight, currentPosition: this.viewport.y };
             this.snapPosition(south);
         }
-        if (frame == "none" || frame.includes("north")) {
-            north = { size: window.innerHeight, currentPosition: (this.viewport.y + this.viewport.height) };
+        if (frame == 'none' || frame.includes('north')) {
+            north = { size: window.innerHeight, currentPosition: this.viewport.y + this.viewport.height };
             this.snapPosition(north);
         }
-        if (frame == "none") {
+        if (frame == 'none') {
             if (south.minDelta < north.minDelta) {
                 this.viewport.y = south.newPosition;
-            }
-            else {
+            } else {
                 this.viewport.y = north.newPosition - this.viewport.height;
             }
-        }
-        else if (frame.includes("south")) {
+        } else if (frame.includes('south')) {
             this.viewport.y = south.newPosition;
-        }
-        else if (frame.includes("north")) {
+        } else if (frame.includes('north')) {
             this.viewport.height = north.newPosition - this.viewport.y;
         }
     }
 
     dragViewport(mouse) {
         const increment = mouse.currentPosition.clone().sub(mouse.initialPosition);
-        this.viewport.x = THREE.MathUtils.clamp(this.previousViewport.x + increment.x, 0, window.innerWidth - this.viewport.width);
-        this.viewport.y = THREE.MathUtils.clamp(this.previousViewport.y + increment.y, 0, window.innerHeight - this.viewport.height);
-        this.snapViewport("none");
+        this.viewport.x = THREE.MathUtils.clamp(
+            this.previousViewport.x + increment.x,
+            0,
+            window.innerWidth - this.viewport.width,
+        );
+        this.viewport.y = THREE.MathUtils.clamp(
+            this.previousViewport.y + increment.y,
+            0,
+            window.innerHeight - this.viewport.height,
+        );
+        this.snapViewport('none');
         this.viewport = this.roundViewport(this.viewport);
         this.currentViewport = this.pixelsToPercentage(this.viewport, window.innerWidth, window.innerHeight);
     }
@@ -264,46 +276,94 @@ export default class Camera {
     resizeViewport(frame, mouse) {
         const increment = mouse.currentPosition.clone().sub(mouse.initialPosition);
         switch (frame) {
-            case "southwest":
-                this.viewport.x = THREE.MathUtils.clamp(this.previousViewport.x + increment.x, 0, this.previousViewport.x + this.previousViewport.width - this.viewportWidthMin);
-                this.viewport.y = THREE.MathUtils.clamp(this.previousViewport.y + increment.y, 0, this.previousViewport.y + this.previousViewport.height - this.viewportHeightMin);
+            case 'southwest':
+                this.viewport.x = THREE.MathUtils.clamp(
+                    this.previousViewport.x + increment.x,
+                    0,
+                    this.previousViewport.x + this.previousViewport.width - this.viewportWidthMin,
+                );
+                this.viewport.y = THREE.MathUtils.clamp(
+                    this.previousViewport.y + increment.y,
+                    0,
+                    this.previousViewport.y + this.previousViewport.height - this.viewportHeightMin,
+                );
                 this.snapViewport(frame);
                 this.viewport.width = this.previousViewport.width - (this.viewport.x - this.previousViewport.x);
                 this.viewport.height = this.previousViewport.height - (this.viewport.y - this.previousViewport.y);
                 break;
-            case "northwest":
-                this.viewport.x = THREE.MathUtils.clamp(this.previousViewport.x + increment.x, 0, this.previousViewport.x + this.previousViewport.width - this.viewportWidthMin);
-                this.viewport.height = THREE.MathUtils.clamp(this.previousViewport.height + increment.y, this.viewportHeightMin, window.innerHeight - this.viewport.y);
+            case 'northwest':
+                this.viewport.x = THREE.MathUtils.clamp(
+                    this.previousViewport.x + increment.x,
+                    0,
+                    this.previousViewport.x + this.previousViewport.width - this.viewportWidthMin,
+                );
+                this.viewport.height = THREE.MathUtils.clamp(
+                    this.previousViewport.height + increment.y,
+                    this.viewportHeightMin,
+                    window.innerHeight - this.viewport.y,
+                );
                 this.snapViewport(frame);
                 this.viewport.width = this.previousViewport.width - (this.viewport.x - this.previousViewport.x);
                 break;
-            case "west":
-                this.viewport.x = THREE.MathUtils.clamp(this.previousViewport.x + increment.x, 0, this.previousViewport.x + this.previousViewport.width - this.viewportWidthMin);
+            case 'west':
+                this.viewport.x = THREE.MathUtils.clamp(
+                    this.previousViewport.x + increment.x,
+                    0,
+                    this.previousViewport.x + this.previousViewport.width - this.viewportWidthMin,
+                );
                 this.snapViewport(frame);
                 this.viewport.width = this.previousViewport.width - (this.viewport.x - this.previousViewport.x);
                 break;
-            case "southeast":
-                this.viewport.y = THREE.MathUtils.clamp(this.previousViewport.y + increment.y, 0, this.previousViewport.y + this.previousViewport.height - this.viewportHeightMin);
-                this.viewport.width = THREE.MathUtils.clamp(this.previousViewport.width + increment.x, this.viewportWidthMin, window.innerWidth - this.viewport.x);
+            case 'southeast':
+                this.viewport.y = THREE.MathUtils.clamp(
+                    this.previousViewport.y + increment.y,
+                    0,
+                    this.previousViewport.y + this.previousViewport.height - this.viewportHeightMin,
+                );
+                this.viewport.width = THREE.MathUtils.clamp(
+                    this.previousViewport.width + increment.x,
+                    this.viewportWidthMin,
+                    window.innerWidth - this.viewport.x,
+                );
                 this.snapViewport(frame);
                 this.viewport.height = this.previousViewport.height - (this.viewport.y - this.previousViewport.y);
                 break;
-            case "northeast":
-                this.viewport.width = THREE.MathUtils.clamp(this.previousViewport.width + increment.x, this.viewportWidthMin, window.innerWidth - this.viewport.x);
-                this.viewport.height = THREE.MathUtils.clamp(this.previousViewport.height + increment.y, this.viewportHeightMin, window.innerHeight - this.viewport.y);
+            case 'northeast':
+                this.viewport.width = THREE.MathUtils.clamp(
+                    this.previousViewport.width + increment.x,
+                    this.viewportWidthMin,
+                    window.innerWidth - this.viewport.x,
+                );
+                this.viewport.height = THREE.MathUtils.clamp(
+                    this.previousViewport.height + increment.y,
+                    this.viewportHeightMin,
+                    window.innerHeight - this.viewport.y,
+                );
                 this.snapViewport(frame);
                 break;
-            case "east":
-                this.viewport.width = THREE.MathUtils.clamp(this.previousViewport.width + increment.x, this.viewportWidthMin, window.innerWidth - this.viewport.x);
+            case 'east':
+                this.viewport.width = THREE.MathUtils.clamp(
+                    this.previousViewport.width + increment.x,
+                    this.viewportWidthMin,
+                    window.innerWidth - this.viewport.x,
+                );
                 this.snapViewport(frame);
                 break;
-            case "south":
-                this.viewport.y = THREE.MathUtils.clamp(this.previousViewport.y + increment.y, 0, this.previousViewport.y + this.previousViewport.height - this.viewportHeightMin);
+            case 'south':
+                this.viewport.y = THREE.MathUtils.clamp(
+                    this.previousViewport.y + increment.y,
+                    0,
+                    this.previousViewport.y + this.previousViewport.height - this.viewportHeightMin,
+                );
                 this.snapViewport(frame);
                 this.viewport.height = this.previousViewport.height - (this.viewport.y - this.previousViewport.y);
                 break;
-            case "north":
-                this.viewport.height = THREE.MathUtils.clamp(this.previousViewport.height + increment.y, this.viewportHeightMin, window.innerHeight - this.viewport.y);
+            case 'north':
+                this.viewport.height = THREE.MathUtils.clamp(
+                    this.previousViewport.height + increment.y,
+                    this.viewportHeightMin,
+                    window.innerHeight - this.viewport.y,
+                );
                 this.snapViewport(frame);
                 break;
         }
@@ -312,13 +372,13 @@ export default class Camera {
         this.setProjectionParameters();
     }
 
-    adjustViewport() { // Secondary (mini-map) viewport only; make sure that its width and height are the same
+    adjustViewport() {
+        // Secondary (mini-map) viewport only; make sure that its width and height are the same
         const delta = (this.viewport.height - this.viewport.width) / 2.0;
         if (delta < 0.0) {
             this.viewport.x -= delta;
             this.viewport.width = this.viewport.height;
-        }
-        else if (delta > 0.0) {
+        } else if (delta > 0.0) {
             this.viewport.y += delta;
             this.viewport.height = this.viewport.width;
         }
@@ -327,14 +387,15 @@ export default class Camera {
         this.setProjectionParameters();
     }
 
-    setViewport(viewport) { // Expressed in fraction of window width and window height
+    setViewport(viewport) {
+        // Expressed in fraction of window width and window height
         if (viewport !== undefined) {
             this.currentViewport = viewport;
         }
         this.viewport = this.percentageToPixels(this.currentViewport, window.innerWidth, window.innerHeight);
         this.viewportWidthMin = Math.round(this.viewportSizeMin * window.innerWidth);
         this.viewportHeightMin = Math.round(this.viewportSizeMin * window.innerHeight);
-        if (this.view == "mini-map") {
+        if (this.view == 'mini-map') {
             this.viewportHeightMin = this.viewportWidthMin = Math.max(this.viewportWidthMin, this.viewportHeightMin);
         }
         this.setProjectionParameters();

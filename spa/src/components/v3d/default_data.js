@@ -1,9 +1,9 @@
-import * as THREE from "three";
-import Orientation from "./orientation.js";
+import * as THREE from 'three';
+import Orientation from './orientation.js';
 
 export const generalData = {
-    setDevicePixelRatio: false
-}
+    setDevicePixelRatio: false,
+};
 
 export const audioData = {
     enabled: false,
@@ -17,47 +17,76 @@ export const audioData = {
     deathClips: [],
     danceClips: [],
     endClips: [],
-    credits: ""
-}
+    credits: '',
+};
 
 export const cubeTextureData = {
     skyboxes: [
         {
-            name: "None",
-            texturePath: "",
-            texturePositiveXUrl: "",
-            textureNegativeXUrl: "",
-            texturePositiveYUrl: "",
-            textureNegativeYUrl: "",
-            texturePositiveZUrl: "",
-            textureNegativeZUrl: "",
-            credits: ""
-        }
+            name: 'None',
+            texturePath: '',
+            texturePositiveXUrl: '',
+            textureNegativeXUrl: '',
+            texturePositiveYUrl: '',
+            textureNegativeYUrl: '',
+            texturePositiveZUrl: '',
+            textureNegativeZUrl: '',
+            credits: '',
+        },
     ],
-    selected: 0
-}
+    selected: 0,
+};
 
 export const mazeData = {
-    url: "./v3d/mazes/Loquitas_10x10.json",
-    designCredits: "Maze designed by Cecília Fernandes and Nikita.",
-    texturesCredits: "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
+    url: './v3d/mazes/Loquitas_10x10.json',
+    designCredits: 'Maze designed by Cecília Fernandes and Nikita.',
+    texturesCredits:
+        "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
     scale: new THREE.Vector3(1.0, 1.0, 1.0),
-    helpersColor: new THREE.Color(0xffffff)
-}
+    helpersColor: new THREE.Color(0xffffff),
+};
 
 export const playerData = {
-    url: "./v3d/models/robot/RobotExpressive.glb",
+    url: './v3d/models/robot/RobotExpressive.glb',
     // url: "./v3d/models/robot/WALL_E_GF.glb",
     // url: "./v3d/models/robot/R2D2.glb",
-    credits: "Model and related code snippets created by <a href='https://www.patreon.com/quaternius' target='_blank' rel='noopener'>Tomás Laulhé</a>. CC0 1.0. Modified by <a href='https://donmccurdy.com/' target='_blank' rel='noopener'>Don McCurdy</a>.",
+    credits:
+        "Model and related code snippets created by <a href='https://www.patreon.com/quaternius' target='_blank' rel='noopener'>Tomás Laulhé</a>. CC0 1.0. Modified by <a href='https://donmccurdy.com/' target='_blank' rel='noopener'>Don McCurdy</a>.",
     scale: new THREE.Vector3(0.1, 0.1, 0.1),
     helpersColor: new THREE.Color(0xffffff),
     walkingSpeed: 0.75,
     defaultDirection: 0.0, // Expressed in degrees
     turningSpeed: 75.0, // Expressed in degrees / second
     runningFactor: 2.0, // Affects walking speed and turning speed
-    keyCodes: { realisticViewMode: "KeyR", fixedView: "Digit1", firstPersonView: "Digit2", thirdPersonView: "Digit3", topView: "Digit4", miniMap: "KeyM", statistics: "KeyZ", userInterface: "KeyU", help: "KeyH", boundingVolumes: "KeyB", ambientLight: "KeyA", directionalLight: "KeyD", spotLight: "KeyS", flashLight: "KeyF", shadows: "KeyX", fog: "KeyG", left: "ArrowLeft", right: "ArrowRight", backward: "ArrowDown", forward: "ArrowUp", jump: "KeyJ", yes: "KeyY", no: "KeyN", wave: "KeyW", punch: "KeyP", thumbsUp: "KeyT" }
-}
+    keyCodes: {
+        realisticViewMode: 'KeyR',
+        fixedView: 'Digit1',
+        firstPersonView: 'Digit2',
+        thirdPersonView: 'Digit3',
+        topView: 'Digit4',
+        miniMap: 'KeyM',
+        statistics: 'KeyZ',
+        userInterface: 'KeyU',
+        help: 'KeyH',
+        boundingVolumes: 'KeyB',
+        ambientLight: 'KeyA',
+        directionalLight: 'KeyD',
+        spotLight: 'KeyS',
+        flashLight: 'KeyF',
+        shadows: 'KeyX',
+        fog: 'KeyG',
+        left: 'ArrowLeft',
+        right: 'ArrowRight',
+        backward: 'ArrowDown',
+        forward: 'ArrowUp',
+        jump: 'KeyJ',
+        yes: 'KeyY',
+        no: 'KeyN',
+        wave: 'KeyW',
+        punch: 'KeyP',
+        thumbsUp: 'KeyT',
+    },
+};
 
 export const ambientLightData = {
     visible: true,
@@ -65,8 +94,8 @@ export const ambientLightData = {
     intensity: 1.0,
     intensityMin: 0.0,
     intensityMax: 1.0,
-    intensityStep: 0.01
-}
+    intensityStep: 0.01,
+};
 
 export const directionalLightData = {
     visible: true,
@@ -83,16 +112,17 @@ export const directionalLightData = {
     castShadow: false,
     shadow: {
         mapSize: new THREE.Vector2(512, 512), // Shadow map size
-        camera: { // The light's view of the world
+        camera: {
+            // The light's view of the world
             left: -5.0,
             right: 5.0,
             top: 5.0,
             bottom: -5.0,
             near: 0.5,
-            far: 500.0
-        }
-    }
-}
+            far: 500.0,
+        },
+    },
+};
 
 export const spotLightData = {
     visible: true,
@@ -120,13 +150,14 @@ export const spotLightData = {
     castShadow: false,
     shadow: {
         mapSize: new THREE.Vector2(512, 512), // Shadow map size
-        camera: { // The light's view of the world
+        camera: {
+            // The light's view of the world
             near: 0.5,
-            far: 500.0
+            far: 500.0,
         },
-        focus: 1.0
-    }
-}
+        focus: 1.0,
+    },
+};
 
 export const flashLightData = {
     visible: true,
@@ -154,18 +185,19 @@ export const flashLightData = {
     castShadow: false,
     shadow: {
         mapSize: new THREE.Vector2(512, 512), // Shadow map size
-        camera: { // The light's view of the world
+        camera: {
+            // The light's view of the world
             near: 0.5,
-            far: 500.0
+            far: 500.0,
         },
-        focus: 1.0
-    }
-}
+        focus: 1.0,
+    },
+};
 
 export const shadowsData = {
     enabled: true,
-    type: THREE.PCFShadowMap // THREE.BasicShadowMap, THREE.PCFShadowMap, THREE.PCFSoftShadowMap or THREE.VSMShadowMap
-}
+    type: THREE.PCFShadowMap, // THREE.BasicShadowMap, THREE.PCFShadowMap, THREE.PCFSoftShadowMap or THREE.VSMShadowMap
+};
 
 export const fogData = {
     enabled: false,
@@ -173,16 +205,16 @@ export const fogData = {
     // The initial fog density varies depending on the camera; so, it is defined in cameraData
     densityMin: 0.01,
     densityMax: 1.0,
-    densityStep: 0.01
-}
+    densityStep: 0.01,
+};
 
 export const collisionDetectionData = {
-    method: "bc-aabb", // Bounding cylinder / axis-aligned bounding box: "bc-aabb"; oriented bounding box / axis-aligned bounding box: "obb-aabb"
-    boundingVolumes: { visible: false }
-}
+    method: 'bc-aabb', // Bounding cylinder / axis-aligned bounding box: "bc-aabb"; oriented bounding box / axis-aligned bounding box: "obb-aabb"
+    boundingVolumes: { visible: false },
+};
 
 export const cameraData = {
-    view: "fixed", // Fixed view: "fixed"; first-person view: "first-person"; third-person view: "third-person"; top view: "top"; mini-map: "mini-map"
+    view: 'fixed', // Fixed view: "fixed"; first-person view: "first-person"; third-person view: "third-person"; top view: "top"; mini-map: "mini-map"
     backgroundColor: new THREE.Color(0x222222),
     frameColor: new THREE.Color(0xffffff),
     initialViewport: new THREE.Vector4(0.0, 0.0, 1.0, 1.0), // Viewport position and size: fraction of window width and window height; MUST BE REDEFINED when creating an instance of ThumbRaiser() so that each view is assigned a different viewport
@@ -206,5 +238,5 @@ export const cameraData = {
     initialFov: 45.0, // Field-of-view (expressed in degrees)
     near: 0.01, // Front clipping plane
     far: 100.0, // Back clipping plane
-    initialFogDensity: 0.00025 // Doesn't apply to mini-map camera
-}
+    initialFogDensity: 0.00025, // Doesn't apply to mini-map camera
+};

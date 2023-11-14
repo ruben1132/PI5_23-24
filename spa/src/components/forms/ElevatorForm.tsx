@@ -1,34 +1,28 @@
-"use client";
+'use client';
 
 // react
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 // react bootstrap components
-import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import { Button } from "react-bootstrap";
-import ListGroup from "react-bootstrap/ListGroup";
-import CloseButton from "react-bootstrap/CloseButton";
+import Form from 'react-bootstrap/Form';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
+import { Button } from 'react-bootstrap';
+import ListGroup from 'react-bootstrap/ListGroup';
+import CloseButton from 'react-bootstrap/CloseButton';
 
 // notification component
-import { notify } from "@/components/notification/Notification";
+import { notify } from '@/components/notification/Notification';
 
 // config
-import config from "../../../config";
+import config from '../../../config';
 
 // custom hooks
-import {
-    useFetchData,
-    useSubmitData,
-    useFormNumberInput,
-    useFormStringInput,
-    useDeleteData,
-} from "@/util/customHooks";
+import { useFetchData, useSubmitData, useFormNumberInput, useFormStringInput, useDeleteData } from '@/util/customHooks';
 
 // model
-import { Elevator, ElevatorWithFloor } from "@/models/Elevator";
-import { Floor } from "@/models/Floor";
+import { Elevator, ElevatorWithFloor } from '@/models/Elevator';
+import { Floor } from '@/models/Floor';
 
 interface Props {
     item: {
@@ -40,21 +34,17 @@ interface Props {
 }
 
 export default function ElevatorForm(props: Props) {
-
-
-    const selectBoxFloorsAllowedDataFetch = useFetchData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.floors
-    ); // fetch floors for fromFloor
+    const selectBoxFloorsAllowedDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors); // fetch floors for fromFloor
 
     // form submitter
     const elevatorForm = useSubmitData(
         config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators,
-        props.action === "edit" ? "PUT" : "POST"
+        props.action === 'edit' ? 'PUT' : 'POST',
     );
 
     // deleter
     const elevatorDeleter = useDeleteData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators + props.item?.value.id
+        config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators + props.item?.value.id,
     );
 
     // inputs
@@ -64,7 +54,6 @@ export default function ElevatorForm(props: Props) {
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
-
 
     // updates the Elevator and refreshes the table
     const handleSubmitData = async () => {
@@ -92,9 +81,7 @@ export default function ElevatorForm(props: Props) {
         setEnabled(true); // enable buttons
 
         // show alert
-        notify.success(
-            `Elevator ${props.action == "edit" ? "edited" : "added"} successfully`
-        );
+        notify.success(`Elevator ${props.action == 'edit' ? 'edited' : 'added'} successfully`);
     };
 
     const handleDeleteData = async () => {
@@ -121,7 +108,7 @@ export default function ElevatorForm(props: Props) {
 
     // when Elevators load, load them to the select box
     useEffect(() => {
-        if (props.action === "edit") {
+        if (props.action === 'edit') {
             setFloorsAllowed(props.item.value.floorsAllowed);
         }
     }, [props.action]);
@@ -134,18 +121,14 @@ export default function ElevatorForm(props: Props) {
     }
 
     // filter data so it removes the element(s) already selected
-    const filteredSelectBoxData = selectBoxFloorsAllowedDataFetch.data.filter(
-        (item: Floor) => {
-            return !floorsAllowed.some((floor) => floor.id === item.id);
-        }
-    );
+    const filteredSelectBoxData = selectBoxFloorsAllowedDataFetch.data.filter((item: Floor) => {
+        return !floorsAllowed.some((floor) => floor.id === item.id);
+    });
 
     // add the selected value
     const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
         const selectedValue = e.target.value;
-        const selectedFloor = selectBoxFloorsAllowedDataFetch.data.find(
-            (f: Floor) => f.id === selectedValue
-        );
+        const selectedFloor = selectBoxFloorsAllowedDataFetch.data.find((f: Floor) => f.id === selectedValue);
 
         const newArray: Floor[] = [...floorsAllowed, selectedFloor];
         setFloorsAllowed(newArray);
@@ -158,17 +141,13 @@ export default function ElevatorForm(props: Props) {
 
     return (
         <Form>
-            {props.action === "edit" && (
+            {props.action === 'edit' && (
                 <>
                     <Row>
                         <Col sm={12}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Elevator ID</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    defaultValue={props.item.value?.id}
-                                    disabled
-                                />
+                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
                             </Form.Group>
                         </Col>
                     </Row>
@@ -222,15 +201,13 @@ export default function ElevatorForm(props: Props) {
             <Row>
                 <Col sm={12}>
                     <Form.Group className="mb-12">
-                        {props.action === "edit" ? (
+                        {props.action === 'edit' ? (
                             <>
                                 <Button
                                     variant="primary"
                                     onClick={handleSubmitData}
                                     disabled={
-                                        elevatorDesignation.value === "" ||
-                                        floorsAllowed.length === 0 ||
-                                        !enabled
+                                        elevatorDesignation.value === '' || floorsAllowed.length === 0 || !enabled
                                     }
                                 >
                                     Update
@@ -244,11 +221,7 @@ export default function ElevatorForm(props: Props) {
                             <Button
                                 variant="success"
                                 onClick={handleSubmitData}
-                                disabled={
-                                    elevatorDesignation.value === "" ||
-                                    floorsAllowed.length === 0 ||
-                                    !enabled
-                                }
+                                disabled={elevatorDesignation.value === '' || floorsAllowed.length === 0 || !enabled}
                             >
                                 Add
                             </Button>

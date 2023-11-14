@@ -1,4 +1,4 @@
-import { Floor } from "./Floor";
+import { Floor } from './Floor';
 
 export interface Passage {
     id: string;

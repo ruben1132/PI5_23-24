@@ -1,5 +1,5 @@
-import * as THREE from "three";
-import { merge } from "./merge.js";
+import * as THREE from 'three';
+import { merge } from './merge.js';
 
 /*
  * parameters = {
