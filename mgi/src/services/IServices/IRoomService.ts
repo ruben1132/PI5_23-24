@@ -6,6 +6,6 @@ export default interface IRoomService {
   createRoom(roomDTO: IRoomDTO): Promise<Result<IRoomDTO>>;
   getRooms (): Promise<Result<Array<IRoomWithFloorDTO>>>;
   deleteRoom(roomId: string): Promise<Result<void>>;
-
+  updateRoom(roomDTO: IRoomDTO): Promise<Result<IRoomDTO>>;
   getRoomById(roomId: string): Promise<Result<IRoomWithFloorDTO>>;
 }

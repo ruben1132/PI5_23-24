@@ -77,6 +77,7 @@ export default function RoomForm(props: Props) {
 
         // submit data
         let res = await roomForm.submit(item);
+        console.log(res);
 
         if (res.error) {
             setEnabled(true);
@@ -188,16 +189,14 @@ export default function RoomForm(props: Props) {
                         >
                             {props.item.value?.floor?.id && (
                                 <option defaultChecked={true}>
-                                    {props.item.value?.floor.number +
-                                        " - " +
-                                        props.item.value?.floor.information}
+                                    {props.item.value?.floor?.information}
                                 </option>
                             )}
 
                             {filteredSelectBoxData?.map((item: Floor) => (
                                 <option key={item.id} value={item.id}>
                                     {/* show 2nd prop from item, 1st prop is the id */}
-                                    {item.number + " - " + item.information}
+                                    {item.information}
                                 </option>
                             ))}
                         </Form.Select>
@@ -215,7 +214,8 @@ export default function RoomForm(props: Props) {
                                     variant="primary"
                                     onClick={handleSubmitData}
                                     disabled={
-                                        !roomNumber.value ||
+                                        roomNumber.value === "" ||
+                                        roomFloor.value === "" ||
                                         !enabled
                                     }
                                 >
@@ -231,7 +231,8 @@ export default function RoomForm(props: Props) {
                                 variant="success"
                                 onClick={handleSubmitData}
                                 disabled={
-                                    !roomNumber.value ||
+                                    roomNumber.value === "" ||
+                                    roomFloor.value === "" ||
                                     !enabled
                                 }
                             >

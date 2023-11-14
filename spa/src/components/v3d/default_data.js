@@ -46,7 +46,9 @@ export const mazeData = {
 }
 
 export const playerData = {
-    url: "https://threejs.org/examples/models/gltf/RobotExpressive/RobotExpressive.glb",
+    // url: "./v3d/models/robot/RobotExpressive.glb",
+    // url: "./v3d/models/robot/WALL_E_GF.glb",
+    url: "./v3d/models/robot/R2D2.glb",
     credits: "Model and related code snippets created by <a href='https://www.patreon.com/quaternius' target='_blank' rel='noopener'>Tomás Laulhé</a>. CC0 1.0. Modified by <a href='https://donmccurdy.com/' target='_blank' rel='noopener'>Don McCurdy</a>.",
     scale: new THREE.Vector3(0.1, 0.1, 0.1),
     helpersColor: new THREE.Color(0xffffff),
