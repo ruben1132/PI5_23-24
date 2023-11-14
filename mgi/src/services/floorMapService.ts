@@ -1,6 +1,6 @@
 import { Service, Inject } from 'typedi';
 import config from "../../config";
-import IFloorMapDTO from '../dto/IFloorMapDTO';
+import {IFloorMapDTO} from '../dto/IFloorMapDTO';
 import { FloorMap } from "../domain/floorMap";
 import IFloorMapRepo from './IRepos/IFloorMapRepo';
 import IFloorMapService from './IServices/IFloorMapService';

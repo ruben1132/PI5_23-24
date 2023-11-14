@@ -29,15 +29,30 @@ async function fetchBuildings() {
   return response.data;
 }
 
+async function fetchFloorMaps() {
+  const response = await axios(
+    config.mgiAPI.baseUrl + config.mgiAPI.routes.floormaps,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  return response.data;
+}
+
 export default async function Page() {
   const floors = await fetchFloors();
   const buildings = await fetchBuildings();
+  const floorMaps = await fetchFloorMaps();
 
   return (
     <div>
       <p>V3D</p>
 
-      <Scene floors={floors} buildings={buildings}/>
+      <Scene floors={floors} buildings={buildings} floorMaps={floorMaps} />
     </div>
   );
 }

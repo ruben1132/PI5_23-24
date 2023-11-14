@@ -9,10 +9,11 @@ import { FloorMapPassage } from "./valueObj/floorMapPassage";
 import { FloorMapRoom } from "./valueObj/floorMapRoom";
 import { Guard } from "../core/logic/Guard";
 import { FloorId } from "./valueObj/floorId";
+import { FloorMapMap } from "../mappers/FloorMapMap";
 
 interface FloorMapProps {
     floor: FloorId; 
-    map: number[][]; 
+    map: FloorMapMap; 
     fmRooms: FloorMapRoom[];
     fmDoors: FloorMapDoor[]; 
     fmElevator: FloorMapElevator; 
@@ -40,11 +41,11 @@ export class FloorMap extends AggregateRoot<FloorMapProps> {
         return this.props.floor;
     }
 
-    get map(): number[][] {
+    get map(): FloorMapMap {
         return this.props.map;
     }
 
-    set map(value: number[][]) {
+    set map(value: FloorMapMap) {
         this.props.map = value;
     }
 

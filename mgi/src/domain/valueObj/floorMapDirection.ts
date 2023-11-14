@@ -23,14 +23,14 @@ export class FloorMapDirection extends ValueObject<FloorMapDirectionProps> {
 
         // check if is null
         if (value == null || value == undefined) {
-            return Result.fail<FloorMapDirection>("Direction is invalid");
+            return Result.ok<FloorMapDirection>(new FloorMapDirection({ value: "" }))
         }
 
         // to lower case
         value = value.toLocaleLowerCase();
 
         // check if is valid
-        if (value == "norte" || value == "oeste") {
+        if (value == "north" || value == "weest" || value == "south" || value == "east") {
             return Result.ok<FloorMapDirection>(new FloorMapDirection({ value: value }))
         }
 
