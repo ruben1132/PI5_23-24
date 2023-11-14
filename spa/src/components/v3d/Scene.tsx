@@ -233,7 +233,7 @@ export default function Scene(props: Props) {
           selected: 2,
         }, // Cube texture parameters
         {
-          url: "./v3d/mazes/plantEdBFloor1.json",
+          url: "./v3d/mazes/plantEdCFloor3.json",
           designCredits:
             "Maze designed by <a href='https://www.123rf.com/profile_ckarzx' target='_blank' rel='noopener'>ckarzx</a>.",
           texturesCredits:
