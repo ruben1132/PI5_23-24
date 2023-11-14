@@ -1,4 +1,5 @@
 {
+    "floor": "fsfdesfesfsefsefse",
     "maze": {
         "size": {
             "width": 20,
@@ -21,135 +22,95 @@
         ],
         "exitLocation": [16, 9]
     },
-    "room": [
+    "fmDoors": [
         {
-            "roomId": "6548deaf5c1f0f0111c718d8",
-            "dimension": {
-                "pos1": 0,
-                "pos2": 0,
-                "pos3": 4,
-                "pos4": 2
-            },
-            "location": {
+            "position": {
                 "positionX": 16,
                 "positionY": 9,
                 "direction": "west"
             }
         },
         {
-            "roomId": "6548ded25c1f0f0111c718dc",
-            "dimension": {
-                "pos1": 6,
-                "pos2": 2,
-                "pos3": 0,
-                "pos4": 0
-            },
-            "location": {
+            "position": {
                 "positionX": 14,
                 "positionY": 5,
                 "direction": "west"
             }
         },
         {
-            "roomId": "6548ded25c1f0f0111c718dc",
-            "dimension": {
-                "pos1": 6,
-                "pos2": 2,
-                "pos3": 0,
-                "pos4": 0
-            },
-            "location": {
+            "position": {
                 "positionX": 12,
                 "positionY": 3,
                 "direction": "west"
             }
         },
         {
-            "roomId": "6548ded25c1f0f0111c718dc",
-            "dimension": {
-                "pos1": 6,
-                "pos2": 2,
-                "pos3": 0,
-                "pos4": 0
-            },
-            "location": {
+            "position": {
                 "positionX": 11,
                 "positionY": 8,
                 "direction": "north"
             }
         },
         {
-            "roomId": "6548ded25c1f0f0111c718dc",
-            "dimension": {
-                "pos1": 6,
-                "pos2": 2,
-                "pos3": 0,
-                "pos4": 0
-            },
-            "location": {
+            "position": {
                 "positionX": 5,
                 "positionY": 8,
                 "direction": "north"
             }
         },
         {
-            "roomId": "6548ded25c1f0f0111c718dc",
-            "dimension": {
-                "pos1": 6,
-                "pos2": 2,
-                "pos3": 0,
-                "pos4": 0
-            },
-            "location": {
+            "position": {
                 "positionX": 2,
                 "positionY": 8,
                 "direction": "north"
             }
         },
         {
-            "roomId": "6548ded25c1f0f0111c718dc",
-            "dimension": {
-                "pos1": 6,
-                "pos2": 2,
-                "pos3": 0,
-                "pos4": 0
-            },
-            "location": {
+            "position": {
                 "positionX": 4,
                 "positionY": 4,
                 "direction": "west"
             }
         },
         {
-            "roomId": "6548ded25c1f0f0111c718dc",
-            "dimension": {
-                "pos1": 6,
-                "pos2": 2,
-                "pos3": 0,
-                "pos4": 0
-            },
-            "location": {
+            "position": {
                 "positionX": 10,
                 "positionY": 3,
                 "direction": "west"
             }
         }
     ],
-    "floorElevator": {
+    "fmElevator": {
         "elevatorId": "6548df025c1f0f0111c718e1",
-        "location": {
+        "position": {
             "positionX": 13,
             "positionY": 11,
-            "direction": "north"
+            "direction": "south"
         }
     },
-    "passage": [
+    "fmRooms": [
         {
-            "passageId": "6547ccee1ce30663f62d7204",
-            "location": {
-                "positionX": 15,
-                "positionY": 10,
-                "direction": "north"
+            "roomId": "366aee22-6886-4165-b58b-d1b3730e7438",
+            "startX": 0,
+            "startY": 0,
+            "endX": 4,
+            "endY": 4
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6
+        }
+    ],
+    "fmPassages": [
+        {
+            "passageId": "7ee9a627-5bf3-4f0a-8f69-db4f276d998d",
+            "position": {
+                "positionX": 10,
+                "positionY": 7,
+                "direction": "west"
             }
         }
     ],
@@ -167,10 +128,10 @@
         "primaryColor": "0xffffff",
         "maps": {
             "color": {
-                "url": "assets/textures/ground_VennerWhiteOak/VeneerWhiteOakRandomMatched001_COL_2K_METALNESS.png"
+                "url": "./v3d/textures/wood_Plank_wdipfjw_2K/wdipfjw_2K_Albedo.jpg"
             },
             "ao": {
-                "url": "assets/textures/ground_VennerWhiteOak/VeneerWhiteOakRandomMatched001_AO_2K_METALNESS.png",
+                "url": "./v3d/textures/wood_Plank_wdipfjw_2K/wdipfjw_2K_AO.jpg",
                 "intensity": 1.0
             },
             "displacement": {
@@ -179,7 +140,7 @@
                 "bias": 0.0
             },
             "normal": {
-                "url": "assets/textures/ground_VennerWhiteOak/VeneerWhiteOakRandomMatched001_NRM_2K_METALNESS.png",
+                "url": "./v3d/textures/wood_Plank_wdipfjw_2K/wdipfjw_2K_Normal.jpg",
                 "type": 0,
                 "scale": {
                     "x": 2.0,
@@ -191,7 +152,7 @@
                 "scale": 1.0
             },
             "roughness": {
-                "url": "assets/textures/ground_VennerWhiteOak/VeneerWhiteOakRandomMatched001_ROUGHNESS_2K_METALNESS.png",
+                "url": "./v3d/textures/wood_Plank_wdipfjw_2K/wdipfjw_2K_Roughness.jpg",
                 "rough": 1.0
             }
         },
@@ -213,10 +174,10 @@
         "primaryColor": "0xffffff",
         "maps": {
             "color": {
-                "url": "assets/textures/WallStoneBrick/StoneBricksSplitface001_COL_3K.jpg"
+                "url": "./v3d/textures/marble_Tile_wgilchtv_2K/wgilchtv_2K_Albedo.jpg"
             },
             "ao": {
-                "url": "assets/textures/WallStoneBrick/StoneBricksSplitface001_AO_3K.jpg",
+                "url": "./v3d/textures/marble_Tile_wgilchtv_2K/wgilchtv_2K_AO.jpg",
                 "intensity": 1.0
             },
             "displacement": {
@@ -225,7 +186,7 @@
                 "bias": 0.0
             },
             "normal": {
-                "url": "assets/textures/WallStoneBrick/StoneBricksSplitface001_NRM_3K.png",
+                "url": "./v3d/textures/marble_Tile_wgilchtv_2K/wgilchtv_2K_Normal.jpg",
                 "type": 0,
                 "scale": {
                     "x": 2.0,
@@ -233,66 +194,18 @@
                 }
             },
             "bump": {
-                "url": "assets/textures/WallStoneBrick/StoneBricksSplitface001_BUMP_3K.jpg",
+                "url": "",
                 "scale": 1.0
             },
             "roughness": {
-                "url": "",
+                "url": "./v3d/textures/marble_Tile_wgilchtv_2K/wgilchtv_2K_Roughness.jpg",
                 "rough": 1.0
-            },
-            "gloss": {
-                "url": "assets/textures/WallStoneBrick/StoneBricksSplitface001_GLOSS_3K.jpg"
-            },
-            "reflection": {
-                "url": "assets/textures/WallStoneBrick/StoneBricksSplitface001_REFL_3K.jpg"
             }
         },
         "wrapS": 1,
         "wrapT": 0,
         "repeat": {
             "u": 2.0,
-            "v": 1.0
-        },
-        "magFilter": 1,
-        "minFilter": 5,
-        "secondaryColor": "0x6b554b"
-    },
-    "elevator": {
-        "segments": {
-            "width": 1,
-            "height": 1
-        },
-        "primaryColor": "0xffffff",
-        "maps": {
-            "map": {
-                "url": "assets/models/Elevator/3d-elevator.obj"
-            }
-        },
-        "wrapS": 1,
-        "wrapT": 0,
-        "repeat": {
-            "u": 1.0,
-            "v": 1.0
-        },
-        "magFilter": 1,
-        "minFilter": 5,
-        "secondaryColor": "0x6b554b"
-    },
-    "door": {
-        "segments": {
-            "width": 1,
-            "height": 1
-        },
-        "primaryColor": "0xffffff",
-        "maps": {
-            "map": {
-                "url": "assets/models/WoodDoubleDoor/WoodDoubleDoor.obj"
-            }
-        },
-        "wrapS": 1,
-        "wrapT": 0,
-        "repeat": {
-            "u": 1.0,
             "v": 1.0
         },
         "magFilter": 1,
