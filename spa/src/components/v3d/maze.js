@@ -179,13 +179,25 @@ export default class Maze extends THREE.Group {
             let elevator = description.fmElevator;
             const loader = new GLTFLoader();
             loader.load("./v3d/models/elevator/elevator.glb", (object) => {
-                if(elevator.direction === "north"){
-                    object.scene.position.set(elevator.positionX - this.halfSize.width + 0.5, 0.5, elevator.positionY - this.halfSize.depth);
-                }else{
-                    object.scene.position.set(elevator.positionX - this.halfSize.width, 0.5, elevator.positionY - this.halfSize.depth + 0.5);
-                    object.scene.rotateY((Math.PI/2));
+
+                switch(elevator.direction){
+                    case "north":
+                        object.scene.position.set(elevator.positionX - this.halfSize.width + 0.5, 0.5, elevator.positionY - this.halfSize.depth);
+                        break;
+                    case "south":
+                        object.scene.position.set(elevator.positionX - this.halfSize.width + 0.5, 0.5, elevator.positionY - this.halfSize.depth);
+                        object.scene.rotateY(Math.PI);
+                        break;
+                    case "east":
+                        object.scene.position.set(elevator.positionX - this.halfSize.width, 0.5, elevator.positionY - this.halfSize.depth + 0.5);
+                        object.scene.rotateY(Math.PI/2);
+                        break;
+                    case "west":
+                        object.scene.position.set(elevator.positionX - this.halfSize.width, 0.5, elevator.positionY - this.halfSize.depth + 0.5);
+                        object.scene.rotateY(-Math.PI/2);
+                        break;
                 }
-                
+
                 // Set the scale after loading textures
                 object.scene.scale.set(0.008, 0.003, 0.006);
                 this.add(object.scene);
