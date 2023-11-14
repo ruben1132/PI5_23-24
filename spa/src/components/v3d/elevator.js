@@ -19,20 +19,20 @@ export default class Elevator extends THREE.Group {
 
         this.onLoad = function (object) {
 
-            switch(this.elevator.direction){
+            switch(this.elevator.position.direction){
                 case "north":
-                    object.scene.position.set(this.elevator.positionX - this.halfSize.width + 0.5, 0.5, this.elevator.positionY - this.halfSize.depth);
+                    object.scene.position.set(this.elevator.position.positionX - this.halfSize.width + 0.5, 0.5, this.elevator.position.positionY - this.halfSize.depth);
                     break;
                 case "south":
-                    object.scene.position.set(this.elevator.positionX - this.halfSize.width + 0.5, 0.5, this.elevator.positionY - this.halfSize.depth);
+                    object.scene.position.set(this.elevator.position.positionX - this.halfSize.width + 0.5, 0.5, this.elevator.position.positionY - this.halfSize.depth);
                     object.scene.rotateY(Math.PI);
                     break;
                 case "east":
-                    object.scene.position.set(this.elevator.positionX - this.halfSize.width, 0.5, this.elevator.positionY - this.halfSize.depth + 0.5);
+                    object.scene.position.set(this.elevator.position.positionX - this.halfSize.width, 0.5, this.elevator.position.positionY - this.halfSize.depth + 0.5);
                     object.scene.rotateY(Math.PI/2);
                     break;
                 case "west":
-                    object.scene.position.set(this.elevator.positionX - this.halfSize.width, 0.5, this.elevator.positionY - this.halfSize.depth + 0.5);
+                    object.scene.position.set(this.elevator.position.positionX - this.halfSize.width, 0.5, this.elevator.position.positionY - this.halfSize.depth + 0.5);
                     object.scene.rotateY(-Math.PI/2);
                     break;
             }
