@@ -4,11 +4,8 @@ import { OBB } from "three/addons/math/OBB.js";
 import { merge } from "./merge.js";
 import Ground from "./ground.js";
 import Wall from "./wall.js";
-
-// doors
-import { FBXLoader, GLTFLoader } from "three/examples/jsm/Addons.js";
-import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
-import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import Elevator from "./elevator.js";
+import Door from "./door.js";
 
 /*
  * parameters = {
@@ -144,73 +141,20 @@ export default class Maze extends THREE.Group {
                 }
             }
 
-            // add doors
-            description.fmDoors.forEach(door => {
-                const loaderr = new FBXLoader();
-                loaderr.load("./v3d/models/door/3d-model.fbx", (object) => {
-                    object.scale.set(0.1, 0.1, 0.1);
-                    if(door.direction === "north"){
-                        object.position.set(door.positionX - this.halfSize.width + 0.5, 0, door.positionY - this.halfSize.depth);
-                    }else{
-                        object.position.set(door.positionX - this.halfSize.width, 0, door.positionY - this.halfSize.depth + 0.5);
-                        object.rotateY(Math.PI/2);
-                    }
-                   
-                    // Create a material with light brown color
-                    const material = new THREE.MeshPhongMaterial({ color: 0xD2B48C }); // Use the color code for light brown
-
-                    // Assign the material to the object's children (assuming the model has child meshes)
-                    object.traverse(child => {
-                        if (child.isMesh) {
-                            child.material = material;
-                        }
-                    });
-
-                    // Set the scale after loading textures
-                    object.scale.set(0.018, 0.0055, 0.025);
-
-                    // Add the door object to the scene
-                    this.add(object);
-
-                });
+            // create the elevator
+            const elevator = new Elevator({
+                elevator: description.fmElevator,
+                halfSize: this.halfSize,
             });
+            this.add(elevator);
 
-            // add elevator
-            let elevator = description.fmElevator;
-            const loader = new GLTFLoader();
-            loader.load("./v3d/models/elevator/elevator.glb", (object) => {
-
-                switch(elevator.direction){
-                    case "north":
-                        object.scene.position.set(elevator.positionX - this.halfSize.width + 0.5, 0.5, elevator.positionY - this.halfSize.depth);
-                        break;
-                    case "south":
-                        object.scene.position.set(elevator.positionX - this.halfSize.width + 0.5, 0.5, elevator.positionY - this.halfSize.depth);
-                        object.scene.rotateY(Math.PI);
-                        break;
-                    case "east":
-                        object.scene.position.set(elevator.positionX - this.halfSize.width, 0.5, elevator.positionY - this.halfSize.depth + 0.5);
-                        object.scene.rotateY(Math.PI/2);
-                        break;
-                    case "west":
-                        object.scene.position.set(elevator.positionX - this.halfSize.width, 0.5, elevator.positionY - this.halfSize.depth + 0.5);
-                        object.scene.rotateY(-Math.PI/2);
-                        break;
-                }
-
-                // Set the scale after loading textures
-                object.scene.scale.set(0.008, 0.003, 0.006);
-                this.add(object.scene);
-
-                // double the elevator
-                // let object2 = object.scene.clone();
-                // if(elevator.direction === "north"){
-                //     object2.position.set((elevator.positionX+1) - this.halfSize.width + 0.5, 0.5, elevator.positionY - this.halfSize.depth);
-                // }else{
-                //     object2.position.set(elevator.positionX - this.halfSize.width, 0.5, (elevator.positionY+1) - this.halfSize.depth + 0.5);
-                // }
-
-                // this.add(object2);
+            // create doors
+            description.fmDoors.forEach(d => {
+                const door = new Door({
+                    door: d,
+                    halfSize: this.halfSize,
+                });
+                this.add(door);
             });
 
             let mergedGeometry, mesh;
