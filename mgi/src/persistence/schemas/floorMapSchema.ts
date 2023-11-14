@@ -54,6 +54,16 @@ const mapsSchema = new mongoose.Schema(
     },
 );
 
+const repeatSchema = new mongoose.Schema(
+    {
+        u: { type: Number, required: true },
+        v: { type: Number, required: true },
+    },
+    {
+        _id: false, // Disable _id for this subdocument
+    },
+);
+
 const groundWallSchema = new mongoose.Schema(
     {
         size: { type: sizeSchema, required: false },
@@ -62,7 +72,7 @@ const groundWallSchema = new mongoose.Schema(
         maps: { type: mapsSchema, required: true },
         wrapS: { type: Number, required: true },
         wrapT: { type: Number, required: true },
-        repeat: { type: sizeSchema, required: true },
+        repeat: { type: repeatSchema, required: true },
         magFilter: { type: Number, required: true },
         minFilter: { type: Number, required: true },
         secondaryColor: { type: String, required: false },

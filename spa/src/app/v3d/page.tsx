@@ -2,45 +2,60 @@ import Scene from "@/components/v3d/Scene";
 import axios from "axios";
 import config from "../../../config";
 async function fetchFloors() {
-  const response = await axios(
-    config.mgiAPI.baseUrl + config.mgiAPI.routes.floors,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  try {
+    const response = await axios(
+      config.mgiAPI.baseUrl + config.mgiAPI.routes.floors,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  return response.data;
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
 }
 
 async function fetchBuildings() {
-  const response = await axios(
-    config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  try {
+    const response = await axios(
+      config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  return response.data;
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
 }
 
 async function fetchFloorMaps() {
-  const response = await axios(
-    config.mgiAPI.baseUrl + config.mgiAPI.routes.floormaps,
-    {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
+  try {
+    const response = await axios(
+      config.mgiAPI.baseUrl + config.mgiAPI.routes.floormaps,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-  return response.data;
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    return [];
+  }
 }
 
 export default async function Page() {

@@ -51,7 +51,10 @@ export interface IFloorMapPersistence {
         };
         wrapS: number;
         wrapT: number;
-        repeat: Size;
+        repeat: {
+            u: number;
+            v: number;
+        };
         magFilter: number;
         minFilter: number;
         secondaryColor: string;
@@ -88,7 +91,10 @@ export interface IFloorMapPersistence {
         };
         wrapS: number;
         wrapT: number;
-        repeat: Size;
+        repeat: {
+            u: number;
+            v: number;
+        };
         magFilter: number;
         minFilter: number;
         secondaryColor: string;
