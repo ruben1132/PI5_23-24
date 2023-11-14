@@ -18,17 +18,17 @@ export default class Door extends THREE.Group {
 
     this.onLoad = function (object) {
       object.scale.set(0.1, 0.1, 0.1);
-      if (this.door.direction === "north") {
+      if (this.door.position.direction === "north") {
         object.position.set(
-          this.door.positionX - this.halfSize.width + 0.5,
+          this.door.position.positionX - this.halfSize.width + 0.5,
           0,
-          this.door.positionY - this.halfSize.depth
+          this.door.position.positionY - this.halfSize.depth
         );
       } else {
         object.position.set(
-          this.door.positionX - this.halfSize.width,
+          this.door.position.positionX - this.halfSize.width,
           0,
-          this.door.positionY - this.halfSize.depth + 0.5
+          this.door.position.positionY - this.halfSize.depth + 0.5
         );
         object.rotateY(Math.PI / 2);
       }

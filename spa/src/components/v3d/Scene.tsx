@@ -26,7 +26,6 @@ export default function Scene(props: Props) {
   let animationFrameId: number;
   const [thumbRaiser, setThumbRaiser] = React.useState<ThumbRaiser>();
   
-  console.log(props.floorMaps);
   
   useEffect(() => {
     let thumbRaiserr: ThumbRaiser;
@@ -236,6 +235,7 @@ export default function Scene(props: Props) {
           selected: 2,
         }, // Cube texture parameters
         {
+          data: props.floorMaps[0],
           url: "./v3d/mazes/plantEdAFloor2.json",
           designCredits:
             "",
