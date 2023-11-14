@@ -42,22 +42,13 @@ export default class FloorMapRepo implements IFloorMapRepo {
                 const rawFloorMap: any = FloorMapMap.toPersistence(floorMap);
                 
                 const floorMapCreated = await this.floorMapSchema.create(rawFloorMap);
-                const idk = FloorMapMap.toDomain(floorMapCreated);
-                console.log("ss");
                 
-                return idk
+                return FloorMapMap.toDomain(floorMapCreated);
             } else {
                 const fmPersistence = FloorMapMap.toPersistence(floorMap);
 
                 floorMapDocument.floor = floorMap.floor.toString();
-                floorMapDocument.maze = fmPersistence.maze;
-                floorMapDocument.fmRooms = fmPersistence.fmRooms;
-                floorMapDocument.fmDoors = fmPersistence.fmDoors;
-                floorMapDocument.fmElevator = fmPersistence.fmElevator;
-                floorMapDocument.fmPassages = fmPersistence.fmPassages;
-                floorMapDocument.ground = fmPersistence.ground;
-                floorMapDocument.wall = fmPersistence.wall;
-                floorMapDocument.player = fmPersistence.player;
+                floorMapDocument.file = fmPersistence.file;
 
                 await floorMapDocument.save();
 

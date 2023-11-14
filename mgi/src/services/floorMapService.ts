@@ -1,6 +1,6 @@
 import { Service, Inject } from 'typedi';
 import config from '../../config';
-import { IFloorMapDTO } from '../dto/IFloorMapDTO';
+import { IFloorMapDTO, IFloorMapWithFileDTO } from '../dto/IFloorMapDTO';
 import { FloorMap } from '../domain/floorMap';
 import IFloorMapRepo from './IRepos/IFloorMapRepo';
 import IFloorMapService from './IServices/IFloorMapService';
@@ -14,6 +14,8 @@ import { Elevator } from '../domain/elevator';
 import { Passage } from '../domain/passage';
 import IRoomRepo from './IRepos/IRoomRepo';
 import IElevatorRepo from './IRepos/IElevatorRepo';
+import * as fs from 'fs';
+import * as path from 'path';
 
 @Service()
 export default class FloorMapService implements IFloorMapService {
@@ -25,31 +27,31 @@ export default class FloorMapService implements IFloorMapService {
         @Inject(config.repos.passage.name) private passageRepo: IPassageRepo,
     ) {}
 
-    public async createFloorMap(floorMapDTO: IFloorMapDTO): Promise<Result<IFloorMapDTO>> {
+    public async createFloorMap(floorMapDTO: IFloorMapDTO): Promise<Result<IFloorMapWithFileDTO>> {
         try {
             // check if floor exists
             let floor: Floor;
             const floorOrError = await this.getFloor(floorMapDTO.floor);
             if (floorOrError.isFailure) {
-                return Result.fail<IFloorMapDTO>(floorOrError.errorValue());
+                return Result.fail<IFloorMapWithFileDTO>(floorOrError.errorValue());
             }
             floor = floorOrError.getValue();
 
             // // check if rooms exists
             const roomsOrError = await this.getRooms(floorMapDTO.fmRooms.map(fmRoom => fmRoom.roomId));
             if (roomsOrError.isFailure) {
-                return Result.fail<IFloorMapDTO>(roomsOrError.errorValue());
+                return Result.fail<IFloorMapWithFileDTO>(roomsOrError.errorValue());
             }
 
             // check if it found all the rooms
             if (roomsOrError.getValue().length !== floorMapDTO.fmRooms.length) {
-                return Result.fail<IFloorMapDTO>("Couldn't find all the rooms by the given ids");
+                return Result.fail<IFloorMapWithFileDTO>("Couldn't find all the rooms by the given ids");
             }
 
             // check if elevators exists
             const elevatorOrError = await this.getElevator(floorMapDTO.fmElevator.elevatorId);
             if (elevatorOrError.isFailure) {
-                return Result.fail<IFloorMapDTO>(elevatorOrError.errorValue());
+                return Result.fail<IFloorMapWithFileDTO>(elevatorOrError.errorValue());
             }
 
             // check if passages exists
@@ -57,50 +59,56 @@ export default class FloorMapService implements IFloorMapService {
                 floorMapDTO.fmPassages.map(fmPassage => fmPassage.passageId),
             );
             if (passagesOrError.isFailure) {
-                return Result.fail<IFloorMapDTO>(passagesOrError.errorValue());
+                return Result.fail<IFloorMapWithFileDTO>(passagesOrError.errorValue());
             }
 
             // check if it found all the passages
             if (passagesOrError.getValue().length !== floorMapDTO.fmPassages.length) {
-                return Result.fail<IFloorMapDTO>("Couldn't find all the passages by the given ids");
+                return Result.fail<IFloorMapWithFileDTO>("Couldn't find all the passages by the given ids");
             }
 
-            
-            const floorMap = await FloorMapMap.toDomain(floorMapDTO);
+            // save file
+            const fileName = floorMapDTO.floor + '.json';
+            const filePath = path.join(__dirname, '..', '..', '..', 'spa', 'public', 'v3d', 'mazes', fileName);
+            fs.writeFileSync(filePath, JSON.stringify(floorMapDTO));
+
+            const floorMap = await FloorMapMap.toDomain({ floor: floorMapDTO.floor, file: fileName });
 
             const floorMapSaved = await this.floorMapRepo.save(floorMap);
 
-            const floorMapDTOResult = FloorMapMap.toDTO(floorMapSaved) as IFloorMapDTO;
-            return Result.ok<IFloorMapDTO>(floorMapDTOResult);
+            const floorMapDTOResult = FloorMapMap.toDTO(floorMapSaved) as IFloorMapWithFileDTO;
+            return Result.ok<IFloorMapWithFileDTO>(floorMapDTOResult);
         } catch (e) {
             throw e;
         }
     }
 
-    public async getFloorMaps(): Promise<Result<Array<IFloorMapDTO>>> {
+    public async getFloorMaps(): Promise<Result<Array<IFloorMapWithFileDTO>>> {
         try {
             const floorMaps = await this.floorMapRepo.getFloorMaps();
 
             if (floorMaps === null) {
-                return Result.fail<Array<IFloorMapDTO>>('FloorMaps not found');
+                return Result.fail<Array<IFloorMapWithFileDTO>>('FloorMaps not found');
             } else {
-                const floorMapsDTOResult = floorMaps.map(floorMap => FloorMapMap.toDTO(floorMap) as IFloorMapDTO);
-                return Result.ok<Array<IFloorMapDTO>>(floorMapsDTOResult);
+                const floorMapsDTOResult = floorMaps.map(
+                    floorMap => FloorMapMap.toDTO(floorMap) as IFloorMapWithFileDTO,
+                );
+                return Result.ok<Array<IFloorMapWithFileDTO>>(floorMapsDTOResult);
             }
         } catch (e) {
             throw e;
         }
     }
 
-    public async getFloorMapByFloorId(floorId: string): Promise<Result<IFloorMapDTO>> {
+    public async getFloorMapByFloorId(floorId: string): Promise<Result<IFloorMapWithFileDTO>> {
         try {
             const floorMap = await this.floorMapRepo.getFloorMapByFloorId(floorId);
 
             if (floorMap === null) {
-                return Result.fail<IFloorMapDTO>('FloorMap not found for the given floor');
+                return Result.fail<IFloorMapWithFileDTO>('FloorMap not found for the given floor');
             } else {
-                const floorMapsDTOResult = FloorMapMap.toDTO(floorMap) as IFloorMapDTO;
-                return Result.ok<IFloorMapDTO>(floorMapsDTOResult);
+                const floorMapsDTOResult = FloorMapMap.toDTO(floorMap) as IFloorMapWithFileDTO;
+                return Result.ok<IFloorMapWithFileDTO>(floorMapsDTOResult);
             }
         } catch (e) {
             throw e;
