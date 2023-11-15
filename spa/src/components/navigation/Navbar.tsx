@@ -17,7 +17,7 @@ interface NavBarProps {
 
 function NavBar(props: NavBarProps) {
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="light" expand="lg" className="" bsPrefix='navbar'>
             <Container fluid>
                 <Button variant="outline-info" onClick={props.toggle}>
                     <FontAwesomeIcon icon={faAlignLeft} />
@@ -26,15 +26,12 @@ function NavBar(props: NavBarProps) {
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
-                        <Link href={'/'}>
-                            <Nav.Item >Home</Nav.Item>
-                        </Link>
-                        <Nav.Link href="/aboutus">About Us</Nav.Link>
-                        <Nav.Link href="/termsandconditions">Terms of service</Nav.Link>
+                    <Link href={'/'} className='navbarLink'> Home </Link>
+                    <Link href={'/aboutus'} className='navbarLink'> About Us </Link>
+                    <Link href={'/termsandconditions'} className='navbarLink'> Terms of service</Link>
                     </Nav>
                     <Form className="d-flex">
-                        <Form.Control type="search" placeholder="Search" className="me-2" aria-label="Search" />
-                        <Button variant="outline-success">Search</Button>
+                        User Here
                     </Form>
                 </Navbar.Collapse>
             </Container>

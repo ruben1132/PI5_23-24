@@ -57,7 +57,7 @@ function Sidebar(props: SidebarProps) {
             <Nav className="flex-column pt-2">
                 {config.routes.map((page: { routeName: string; displayName: string }, index: number) => (
                     <Link href={'/' + page.routeName} key={index}>
-                        <Nav.Item className="active">
+                        <Nav.Item className="">
                             <FontAwesomeIcon
                                 icon={sideBarIcons[page.routeName as keyof typeof sideBarIcons]}
                                 className="mr-2"
