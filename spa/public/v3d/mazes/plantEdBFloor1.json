@@ -95,64 +95,6 @@
         "initialPosition": [5.0, 1.0],
         "initialDirection": 5.1
     },
-    "fmDoors": [
-        {
-            "position": {
-                "positionX": 2,
-                "positionY": 4,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 2,
-                "positionY": 6,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 5,
-                "positionY": 4,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 6,
-                "positionY": 8,
-                "direction": "west"
-            }
-        },
-        {
-            "position": {
-                "positionX": 13,
-                "positionY": 4,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 19,
-                "positionY": 4,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 16,
-                "positionY": 6,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 19,
-                "positionY": 8,
-                "direction": "north"
-            }
-        }
-    ],
     "fmElevator": {
         "elevatorId": "089c4eff-652f-4b71-965a-a95ddb182e57",
         "position": {
@@ -167,14 +109,112 @@
             "startX": 0,
             "startY": 0,
             "endX": 4,
-            "endY": 4
+            "endY": 4,
+            "door": {
+                "position": {
+                    "positionX": 2,
+                    "positionY": 4,
+                    "direction": "north"
+                }
+            }
         },
         {
             "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
             "startX": 4,
             "startY": 4,
             "endX": 6,
-            "endY": 6
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 2,
+                    "positionY": 6,
+                    "direction": "north"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 5,
+                    "positionY": 4,
+                    "direction": "north"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 6,
+                    "positionY": 8,
+                    "direction": "west"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 13,
+                    "positionY": 4,
+                    "direction": "north"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 19,
+                    "positionY": 4,
+                    "direction": "north"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 16,
+                    "positionY": 6,
+                    "direction": "north"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 19,
+                    "positionY": 8,
+                    "direction": "north"
+                }
+            }
         }
     ],
     "fmPassages": [

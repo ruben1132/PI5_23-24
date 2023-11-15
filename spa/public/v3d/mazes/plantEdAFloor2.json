@@ -35,7 +35,6 @@
         "maps": {
             "color": {
                 "url": "./v3d/textures/Marble_Polished_wjmief0l_4K/wjmief0l_4K_Albedo.jpg"
-
             },
             "ao": {
                 "url": "",
@@ -123,71 +122,7 @@
         "initialPosition": [5.0, 1.0],
         "initialDirection": 5.1
     },
-    "fmDoors": [
-        {
-            "position": {
-                "positionX": 3,
-                "positionY": 5,
-                "direction": "west"
-            }
-        },
-        {
-            "position": {
-                "positionX": 5,
-                "positionY": 3,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 7,
-                "positionY": 3,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 10,
-                "positionY": 3,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 13,
-                "positionY": 2,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 5,
-                "positionY": 6,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 8,
-                "positionY": 6,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 12,
-                "positionY": 6,
-                "direction": "north"
-            }
-        },
-        {
-            "position": {
-                "positionX": 16,
-                "positionY": 8,
-                "direction": "north"
-            }
-        }
-    ],
+
     "fmElevator": {
         "elevatorId": "089c4eff-652f-4b71-965a-a95ddb182e57",
         "position": {
@@ -202,14 +137,126 @@
             "startX": 0,
             "startY": 0,
             "endX": 4,
-            "endY": 4
+            "endY": 4,
+            "door": {
+                "position": {
+                    "positionX": 3,
+                    "positionY": 5,
+                    "direction": "west"
+                }
+            }
         },
         {
             "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
             "startX": 4,
             "startY": 4,
             "endX": 6,
-            "endY": 6
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 5,
+                    "positionY": 3,
+                    "direction": "north"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 7,
+                    "positionY": 3,
+                    "direction": "north"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 10,
+                    "positionY": 3,
+                    "direction": "north"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 13,
+                    "positionY": 2,
+                    "direction": "north"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 5,
+                    "positionY": 6,
+                    "direction": "north"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 8,
+                    "positionY": 6,
+                    "direction": "north"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 12,
+                    "positionY": 6,
+                    "direction": "north"
+                }
+            }
+        },
+        {
+            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "startX": 4,
+            "startY": 4,
+            "endX": 6,
+            "endY": 6,
+            "door": {
+                "position": {
+                    "positionX": 16,
+                    "positionY": 8,
+                    "direction": "north"
+                }
+            }
         }
     ],
     "fmPassages": [
