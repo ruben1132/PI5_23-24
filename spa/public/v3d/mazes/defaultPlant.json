@@ -18,10 +18,7 @@
             [1, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1],
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0]
         ],
-        "exitLocation": [
-            9.5,
-            6
-        ]
+        "exitLocation": [9.5, 6]
     },
     "ground": {
         "size": {
@@ -122,10 +119,7 @@
         "secondaryColor": "0x6b554b"
     },
     "player": {
-        "initialPosition": [
-            5,
-            1
-        ],
+        "initialPosition": [5, 1],
         "initialDirection": 5.1
     }
 }
