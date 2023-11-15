@@ -128,10 +128,10 @@
         "primaryColor": "0xffffff",
         "maps": {
             "color": {
-                "url": "./v3d/textures/wood_Plank_wdipfjw_2K/wdipfjw_2K_Albedo.jpg"
+                "url": "./v3d/textures/Marble_Polished_wjmief0l_4K/wjmief0l_4K_Albedo.jpg"
             },
             "ao": {
-                "url": "./v3d/textures/wood_Plank_wdipfjw_2K/wdipfjw_2K_AO.jpg",
+                "url": "",
                 "intensity": 1.0
             },
             "displacement": {
@@ -140,7 +140,7 @@
                 "bias": 0.0
             },
             "normal": {
-                "url": "./v3d/textures/wood_Plank_wdipfjw_2K/wdipfjw_2K_Normal.jpg",
+                "url": "",
                 "type": 0,
                 "scale": {
                     "x": 2.0,
@@ -152,7 +152,7 @@
                 "scale": 1.0
             },
             "roughness": {
-                "url": "./v3d/textures/wood_Plank_wdipfjw_2K/wdipfjw_2K_Roughness.jpg",
+                "url": "./v3d/textures/Marble_Polished_wjmief0l_4K/wjmief0l_4K_Roughness.jpg",
                 "rough": 1.0
             }
         },
@@ -174,10 +174,10 @@
         "primaryColor": "0xffffff",
         "maps": {
             "color": {
-                "url": "./v3d/textures/marble_Tile_wgilchtv_2K/wgilchtv_2K_Albedo.jpg"
+                "url": "./v3d/textures/Marble_Polished_wlhkfhqv_4K/wlhkfhqv_4K_Albedo.jpg"
             },
             "ao": {
-                "url": "./v3d/textures/marble_Tile_wgilchtv_2K/wgilchtv_2K_AO.jpg",
+                "url": "",
                 "intensity": 1.0
             },
             "displacement": {
@@ -186,7 +186,7 @@
                 "bias": 0.0
             },
             "normal": {
-                "url": "./v3d/textures/marble_Tile_wgilchtv_2K/wgilchtv_2K_Normal.jpg",
+                "url": "",
                 "type": 0,
                 "scale": {
                     "x": 2.0,
@@ -198,7 +198,7 @@
                 "scale": 1.0
             },
             "roughness": {
-                "url": "./v3d/textures/marble_Tile_wgilchtv_2K/wgilchtv_2K_Roughness.jpg",
+                "url": "./v3d/textures/Marble_Polished_wlhkfhqv_4K/wlhkfhqv_4K_Roughness.jpg",
                 "rough": 1.0
             }
         },

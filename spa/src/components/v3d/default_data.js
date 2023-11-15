@@ -50,6 +50,7 @@ export const playerData = {
     url: './v3d/models/robot/RobotExpressive.glb',
     // url: "./v3d/models/robot/WALL_E_GF.glb",
     // url: "./v3d/models/robot/R2D2.glb",
+    // url: "./v3d/models/robot/Horse.glb",
     credits:
         "Model and related code snippets created by <a href='https://www.patreon.com/quaternius' target='_blank' rel='noopener'>Tomás Laulhé</a>. CC0 1.0. Modified by <a href='https://donmccurdy.com/' target='_blank' rel='noopener'>Don McCurdy</a>.",
     scale: new THREE.Vector3(0.1, 0.1, 0.1),
