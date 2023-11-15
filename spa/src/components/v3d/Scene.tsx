@@ -736,7 +736,7 @@ export default function Scene(props: Props) {
                 </div>
             </div>
 
-            <div id="scene"> </div>
+            <div id="scene" style={{paddingTop: 100}}> </div>
         </>
     );
 }
