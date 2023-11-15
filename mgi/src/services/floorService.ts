@@ -77,7 +77,12 @@ export default class FloorService implements IFloorService {
                 floorDTO.number,
                 floorDTO.id,
             );
+
+            console.log('floorDTO', floorDTO);
+            
             if (floorWithSameNumber) {
+                console.log('floorWithSameNumber', floorWithSameNumber);
+                
                 return Result.fail<IFloorDTO>('Floor with same number already exists in this building');
             }
 

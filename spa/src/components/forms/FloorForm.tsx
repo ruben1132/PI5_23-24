@@ -62,9 +62,7 @@ export default function FloorForm(props: Props) {
     // handle upload to floormap to server
     const handleUpload = async (file: File | undefined) => {
         if (!file) {
-            console.log('no file');
-
-            // TODO: show alert that there's no file
+            notify.warning(`There is no file to upload`);
             return;
         }
 
@@ -147,7 +145,9 @@ export default function FloorForm(props: Props) {
             return;
         }
 
-        floorBuilding.handleLoad(selectBoxBuildingsDataFetch.data[0].id);
+        if(!props.item.value?.building?.id){
+            floorBuilding.handleLoad(selectBoxBuildingsDataFetch.data[0].id);
+        }
     }, [selectBoxBuildingsDataFetch.data]);
 
     if (selectBoxBuildingsDataFetch.isLoading) {
@@ -220,7 +220,7 @@ export default function FloorForm(props: Props) {
                         <Form.Label htmlFor="select">Building</Form.Label>
 
                         <Form.Select
-                            defaultValue={props.item.value?.building?.id ?? filteredSelectBoxData[0].id}
+                            // defaultValue={props.item.value?.building?.id ?? filteredSelectBoxData[0].id}
                             onChange={handleSelect}
                         >
                             {props.item.value?.building?.id && (
@@ -258,12 +258,7 @@ export default function FloorForm(props: Props) {
                 <Col sm={12}>
                     <Form.Group controlId="preview" className="mb-3">
                         <Form.Label>Floor map</Form.Label>
-                        <Form.Control
-                            as={'textarea'}
-                            value={JSON.stringify(fetchFloorMap.data, null, 2)}
-                            disabled={true}
-                            style={{ height: '500px' }}
-                        />
+                        <Form.Control as={'textarea'} value={'dsadsada'} disabled={true} style={{ height: '100px' }} />
                     </Form.Group>
                 </Col>
             )}
