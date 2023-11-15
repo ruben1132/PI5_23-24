@@ -8,6 +8,8 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAlignLeft } from '@fortawesome/free-solid-svg-icons';
+// nextjs
+import Link from 'next/link';
 
 interface NavBarProps {
     toggle: () => void;
@@ -24,7 +26,9 @@ function NavBar(props: NavBarProps) {
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
-                        <Nav.Link href="/">Home</Nav.Link>
+                        <Link href={'/'}>
+                            <Nav.Item >Home</Nav.Item>
+                        </Link>
                         <Nav.Link href="/aboutus">About Us</Nav.Link>
                         <Nav.Link href="/termsandconditions">Terms of service</Nav.Link>
                     </Nav>

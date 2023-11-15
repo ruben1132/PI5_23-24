@@ -7,6 +7,7 @@ import Modal from '../modals/Modal';
 import MeekoLoader from '../loaders/MeekoLoader';
 import Button from 'react-bootstrap/Button';
 import RowItem from './RowItem';
+import SadRaccoon from '../noData/SadRaccoon';
 
 interface Props {
     type: string;
@@ -24,8 +25,6 @@ function ContentTable(props: Props) {
     if (useFetchdata.isError) return <div>failed to load</div>;
     if (useFetchdata.isLoading) return <MeekoLoader />;
 
-    const filteredColumns = Object.keys(useFetchdata.data[0]).filter((column: string) => column !== 'id');
-
     const handleRowClick = (item: any) => {
         setItemClicked(item);
         setModalType('edit');
@@ -38,7 +37,15 @@ function ContentTable(props: Props) {
         contentModal.handleOpen();
     };
 
-    // ON CLOSE THE MODAL, FETCH DATA TO UPDATE TABLE!!
+    // if there is no data to show
+    if(useFetchdata.data === undefined || useFetchdata.data === null || useFetchdata.data.length <= 0) return (
+        <>
+        <SadRaccoon />
+        </>
+    )
+
+    // filter out the id column
+    const filteredColumns = Object.keys(useFetchdata.data[0]).filter((column: string) => column !== 'id');
 
     return (
         <>

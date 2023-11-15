@@ -45,8 +45,7 @@
     background: #313b4c;
 }
 
-.nav-item {
-    /*color: #ced4da;*/
+/* .nav-item {
     color: #adb5bd;
     font-weight: 300;
 }
@@ -67,13 +66,13 @@
     transition: 0.2s;
 }
 
-.nav-link a {
-    text-decoration: none;
-}
-
 .nav-item .svg-inline--fa {
     color: inherit;
-}
+} */
+
+/* .nav-link a {
+    text-decoration: none;
+} */
 
 li a.dropdown-toggle::after {
     display: inline-flex;

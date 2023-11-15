@@ -7,7 +7,7 @@ export default function MeekoLoader() {
         <>
             <Container className={styles.pageContainer}>
                 <div className={styles.loaderContainer}>
-                    <Image src="/meeko.png" width={90} height={100} alt="Meeko" className={styles.spinImage} />
+                    <Image src="/meeko.png" width={90} height={100} alt="Meeko" className={styles.spinImage} priority={true} />
                     <p>
                         Oh! Don&apos;t mind me here!
                         <br />
