@@ -123,6 +123,13 @@ export default function RobotTypeForm(props: Props) {
     if (selectBoxTaskTypesDataFetch.isError) {
         return <Form>Error</Form>;
     }
+    if (
+        selectBoxTaskTypesDataFetch.data === undefined ||
+        selectBoxTaskTypesDataFetch.data === null ||
+        selectBoxTaskTypesDataFetch.data.length <= 0
+    ) {
+        return <Form>Try adding task types first!</Form>;
+    }
 
     // filter data so it removes the element(s) already selected
     const filteredSelectBoxData = selectBoxTaskTypesDataFetch.data.filter((item: TaskType) => {

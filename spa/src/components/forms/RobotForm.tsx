@@ -140,7 +140,11 @@ export default function RobotForm(props: Props) {
     // when robots load, load them to the select box
     useEffect(() => {
         // if there's no data, return
-        if (!selectBoxRobotTypesDataFetch.data) {
+        if (
+            selectBoxRobotTypesDataFetch.data === undefined ||
+            selectBoxRobotTypesDataFetch.data === null ||
+            selectBoxRobotTypesDataFetch.data.length <= 0
+        ) {
             return;
         }
 
@@ -152,6 +156,13 @@ export default function RobotForm(props: Props) {
     }
     if (selectBoxRobotTypesDataFetch.isError) {
         return <Form>Error</Form>;
+    }
+    if (
+        selectBoxRobotTypesDataFetch.data === undefined ||
+        selectBoxRobotTypesDataFetch.data === null ||
+        selectBoxRobotTypesDataFetch.data.length <= 0
+    ) {
+        return <Form>Try adding robot types first!</Form>;
     }
 
     // filter data so it removes the element already selected
@@ -262,7 +273,7 @@ export default function RobotForm(props: Props) {
                             required
                             type="text"
                             placeholder="Robot's State..."
-                            defaultValue={props.item.value?.state ?? 'true'}
+                            defaultValue={props.item.value?.state.toString()}
                             onChange={robotState.handleChange}
                             disabled
                         />
