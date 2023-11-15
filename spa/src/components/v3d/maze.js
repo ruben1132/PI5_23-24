@@ -182,13 +182,12 @@ export default class Maze extends THREE.Group {
             }
 
             // create the elevator
-            if(!description.fmElevator) {
-
-            const elevator = new Elevator({
-                elevator: description.fmElevator,
-                halfSize: this.halfSize,
-            });
-            this.add(elevator);
+            if(description.fmElevator) {
+                const elevator = new Elevator({
+                    elevator: description.fmElevator,
+                    halfSize: this.halfSize,
+                });
+                this.add(elevator);
             }
 
             // create doors
