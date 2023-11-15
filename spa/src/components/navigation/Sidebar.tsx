@@ -3,7 +3,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { Nav, Button } from 'react-bootstrap';
+import { Nav, Button, Col } from 'react-bootstrap';
 import classNames from 'classnames';
 import config from '../../../config';
 import {
@@ -56,14 +56,17 @@ function Sidebar(props: SidebarProps) {
 
             <Nav className="flex-column pt-2">
                 {config.routes.map((page: { routeName: string; displayName: string }, index: number) => (
-                    <Link href={'/' + page.routeName} key={index}>
-                        <Nav.Item className="">
-                            <FontAwesomeIcon
-                                icon={sideBarIcons[page.routeName as keyof typeof sideBarIcons]}
-                                className="mr-2"
-                            />
-                            {page.displayName}
+                    <Link href={'/' + page.routeName} key={index} style={{ textDecoration: 'none', padding: '2px' }}>
+                        <Nav.Item className="nav-item">
+                            <Col sm={3}>
+                                <FontAwesomeIcon
+                                    icon={sideBarIcons[page.routeName as keyof typeof sideBarIcons]}
+                                    style={{ color: '#fff', paddingLeft: '15px' }}
+                                />
+                            </Col>
+                            <Col sm={9}>{page.displayName}</Col>
                         </Nav.Item>
+                        <hr style={{ color: '#ffff' }} />
                     </Link>
                 ))}
             </Nav>
