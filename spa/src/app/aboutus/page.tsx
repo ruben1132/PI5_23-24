@@ -6,7 +6,8 @@ export default function AboutUs() {
         <>
             <div>
                 <h1>Sobre o RobDroneGo</h1>
-
+                <br/>
+                
                 <h2>Objeto Pretendido</h2>
                 <p>
                     O RobDroneGo é um protótipo desenvolvido para a gestão de uma frota de robots e drones no campus do

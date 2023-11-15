@@ -6,7 +6,8 @@ export default function TermsAndConditions() {
         <>
             <div>
                 <h1>Termos e Condições</h1>
-
+                <br/>
+                
                 <h2>1. Aceitação dos Termos</h2>
                 <p>
                     Ao acessar ou usar o RobDroneGo, você concorda em ficar vinculado a estes Termos e Condições de Uso.

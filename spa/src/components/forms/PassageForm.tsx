@@ -32,17 +32,13 @@ interface Props {
 }
 
 export default function PassageForm(props: Props) {
-    const fetchPassages = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages); // fetch passages
-
+    const fetchFloors = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors); // fetch floors for fromFloor
 
     // form submitter
     const passageForm = useSubmitData(
         config.mgiAPI.baseUrl + config.mgiAPI.routes.passages,
         props.action === 'edit' ? 'PUT' : 'POST',
     );
-
-    // passage uploader
-    const uploadPassage = useSubmitData(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages, 'PATCH');
 
     // deleter
     const passageDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages + props.item?.value.id);
@@ -111,41 +107,41 @@ export default function PassageForm(props: Props) {
     // when passages load, load them to the select box
     useEffect(() => {
         // if there's no data, return
-        if (!fetchPassages.data || fetchPassages.data.length <= 0) {
+        if (!fetchFloors.data || fetchFloors.data.length <= 0) {
             return;
         }
 
-        fromFloor.handleLoad(fetchPassages.data[0].id);
+        fromFloor.handleLoad(fetchFloors.data[0].id);
 
         // if there's no data, return
-        if (!fetchPassages.data) {
+        if (!fetchFloors.data) {
             return;
         }
 
-        toFloor.handleLoad(fetchPassages.data[0].id);
-    }, [fetchPassages.data]);
+        toFloor.handleLoad(fetchFloors.data[0].id);
+    }, [fetchFloors.data]);
 
-    if (fetchPassages.isLoading) {
+    if (fetchFloors.isLoading) {
         return <Form>Loading...</Form>;
     }
-    if (fetchPassages.isError) {
+    if (fetchFloors.isError) {
         return <Form>Error</Form>;
     }
     if (
-        fetchPassages.data === undefined ||
-        fetchPassages.data === null ||
-        fetchPassages.data.length <= 0
+        fetchFloors.data === undefined ||
+        fetchFloors.data === null ||
+        fetchFloors.data.length <= 0
     ) {
         return <Form>Try adding floors first!</Form>;
     }
 
     // filter data so it removes the element already selected
-    const filteredSelectBoxDataFromFloor = fetchPassages.data.filter(
+    const filteredSelectBoxDataFromFloor = fetchFloors.data.filter(
         (item: any) => item.id !== props.item.value?.fromFloor?.id,
     );
 
     // filter data so it removes the element already selected
-    const filteredSelectBoxDataToFloor = fetchPassages.data.filter(
+    const filteredSelectBoxDataToFloor = fetchFloors.data.filter(
         (item: any) => item.id !== props.item.value?.toFloor?.id,
     );
 
@@ -176,7 +172,7 @@ export default function PassageForm(props: Props) {
             )}
 
             <Row>
-                <Col sm={6}>
+                <Col sm={12}>
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Designation</Form.Label>
                         <Form.Control
@@ -196,7 +192,7 @@ export default function PassageForm(props: Props) {
                         <Form.Label htmlFor="select">From Floor</Form.Label>
 
                         <Form.Select
-                            defaultValue={props.item.value?.fromFloor?.id ?? fetchPassages.data[0].id}
+                            defaultValue={props.item.value?.fromFloor?.id ?? fetchFloors.data[0].id}
                             onChange={handleSelectFromFloor}
                         >
                             {props.item.value?.fromFloor?.id && (
@@ -216,7 +212,7 @@ export default function PassageForm(props: Props) {
                         <Form.Label htmlFor="select">To Floor</Form.Label>
 
                         <Form.Select
-                            defaultValue={props.item.value?.toFloor?.id ?? fetchPassages.data[0].id}
+                            defaultValue={props.item.value?.toFloor?.id ?? fetchFloors.data[0].id}
                             onChange={handleSelectToFloor}
                         >
                             {props.item.value?.toFloor?.id && (
