@@ -63,12 +63,6 @@
     background: #2d3646 !important;
 }
 
-.nav-item:hover {
-    background: #313b4c;
-    color: #fff;
-    transition: 0.2s;
-}
-
 
 .nav-item .svg-inline--fa {
     color: inherit;
@@ -100,9 +94,7 @@ li a.dropdown-toggle::after {
     margin-right: 5px;
   }
   
-  .navbarLink:hover {
-    color: #000; /* Set a different color on hover if desired */
-  }
+
 
 /* ---------------------------------------------------
       CONTENT STYLE
