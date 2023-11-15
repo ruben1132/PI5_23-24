@@ -143,7 +143,7 @@ export default function FloorForm(props: Props) {
     // when floors load, load them to the select box
     useEffect(() => {
         // if there's no data, return
-        if (!selectBoxBuildingsDataFetch.data) {
+        if (!selectBoxBuildingsDataFetch.data || selectBoxBuildingsDataFetch.data.length <= 0) {
             return;
         }
 
@@ -155,6 +155,13 @@ export default function FloorForm(props: Props) {
     }
     if (selectBoxBuildingsDataFetch.isError) {
         return <Form>Error</Form>;
+    }
+    if (
+        selectBoxBuildingsDataFetch.data === undefined ||
+        selectBoxBuildingsDataFetch.data === null ||
+        selectBoxBuildingsDataFetch.data.length <= 0
+    ) {
+        return <Form>Try adding buildings first!</Form>;
     }
 
     // filter data so it removes the element already selected

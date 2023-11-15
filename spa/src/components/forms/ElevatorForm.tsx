@@ -119,6 +119,13 @@ export default function ElevatorForm(props: Props) {
     if (selectBoxFloorsAllowedDataFetch.isError) {
         return <Form>Error</Form>;
     }
+    if (
+        selectBoxFloorsAllowedDataFetch.data === undefined ||
+        selectBoxFloorsAllowedDataFetch.data === null ||
+        selectBoxFloorsAllowedDataFetch.data.length <= 0
+    ) {
+        return <Form>Try adding floors first!</Form>;
+    }
 
     // filter data so it removes the element(s) already selected
     const filteredSelectBoxData = selectBoxFloorsAllowedDataFetch.data.filter((item: Floor) => {

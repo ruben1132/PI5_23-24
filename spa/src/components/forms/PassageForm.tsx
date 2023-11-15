@@ -32,9 +32,8 @@ interface Props {
 }
 
 export default function PassageForm(props: Props) {
-    const selectBoxFromFloorDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors); // fetch floors for fromFloor
+    const fetchPassages = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages); // fetch passages
 
-    const selectBoxToFloorDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors); // fetch floors for toFloor
 
     // form submitter
     const passageForm = useSubmitData(
@@ -112,41 +111,41 @@ export default function PassageForm(props: Props) {
     // when passages load, load them to the select box
     useEffect(() => {
         // if there's no data, return
-        if (!selectBoxFromFloorDataFetch.data) {
+        if (!fetchPassages.data || fetchPassages.data.length <= 0) {
             return;
         }
 
-        fromFloor.handleLoad(selectBoxFromFloorDataFetch.data[0].id);
+        fromFloor.handleLoad(fetchPassages.data[0].id);
 
         // if there's no data, return
-        if (!selectBoxToFloorDataFetch.data) {
+        if (!fetchPassages.data) {
             return;
         }
 
-        toFloor.handleLoad(selectBoxToFloorDataFetch.data[0].id);
-    }, [selectBoxFromFloorDataFetch.data, selectBoxToFloorDataFetch.data]);
+        toFloor.handleLoad(fetchPassages.data[0].id);
+    }, [fetchPassages.data]);
 
-    if (selectBoxFromFloorDataFetch.isLoading) {
+    if (fetchPassages.isLoading) {
         return <Form>Loading...</Form>;
     }
-    if (selectBoxFromFloorDataFetch.isError) {
+    if (fetchPassages.isError) {
         return <Form>Error</Form>;
     }
-
-    if (selectBoxToFloorDataFetch.isLoading) {
-        return <Form>Loading...</Form>;
-    }
-    if (selectBoxToFloorDataFetch.isError) {
-        return <Form>Error</Form>;
+    if (
+        fetchPassages.data === undefined ||
+        fetchPassages.data === null ||
+        fetchPassages.data.length <= 0
+    ) {
+        return <Form>Try adding floors first!</Form>;
     }
 
     // filter data so it removes the element already selected
-    const filteredSelectBoxDataFromFloor = selectBoxFromFloorDataFetch.data.filter(
+    const filteredSelectBoxDataFromFloor = fetchPassages.data.filter(
         (item: any) => item.id !== props.item.value?.fromFloor?.id,
     );
 
     // filter data so it removes the element already selected
-    const filteredSelectBoxDataToFloor = selectBoxToFloorDataFetch.data.filter(
+    const filteredSelectBoxDataToFloor = fetchPassages.data.filter(
         (item: any) => item.id !== props.item.value?.toFloor?.id,
     );
 
@@ -197,7 +196,7 @@ export default function PassageForm(props: Props) {
                         <Form.Label htmlFor="select">From Floor</Form.Label>
 
                         <Form.Select
-                            defaultValue={props.item.value?.fromFloor ?? filteredSelectBoxDataFromFloor[0].id}
+                            defaultValue={props.item.value?.fromFloor?.id ?? fetchPassages.data[0].id}
                             onChange={handleSelectFromFloor}
                         >
                             {props.item.value?.fromFloor?.id && (
@@ -217,7 +216,7 @@ export default function PassageForm(props: Props) {
                         <Form.Label htmlFor="select">To Floor</Form.Label>
 
                         <Form.Select
-                            defaultValue={props.item.value?.toFloor ?? filteredSelectBoxDataToFloor[0].id}
+                            defaultValue={props.item.value?.toFloor?.id ?? fetchPassages.data[0].id}
                             onChange={handleSelectToFloor}
                         >
                             {props.item.value?.toFloor?.id && (

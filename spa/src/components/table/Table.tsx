@@ -37,12 +37,32 @@ function ContentTable(props: Props) {
         contentModal.handleOpen();
     };
 
+    const addButton = (
+        <Button variant="success" onClick={handleAddButtonClick}>
+            Add {props.type}
+        </Button>
+    );
+
+    const modal = (
+        <Modal
+            action={modalType}
+            item={{ value: itemClicked, type: props.type }}
+            fade={false}
+            show={contentModal.show}
+            close={contentModal.handleClose}
+            reFetchData={useFetchdata.revalidate}
+        />
+    );
+
     // if there is no data to show
-    if(useFetchdata.data === undefined || useFetchdata.data === null || useFetchdata.data.length <= 0) return (
-        <>
-        <SadRaccoon />
-        </>
-    )
+    if (useFetchdata.data === undefined || useFetchdata.data === null || useFetchdata.data.length <= 0)
+        return (
+            <>
+                <SadRaccoon />
+                {addButton}
+                {contentModal.show && modal}
+            </>
+        );
 
     // filter out the id column
     const filteredColumns = Object.keys(useFetchdata.data[0]).filter((column: string) => column !== 'id');
@@ -50,19 +70,10 @@ function ContentTable(props: Props) {
     return (
         <>
             {contentModal.show && (
-                <Modal
-                    action={modalType}
-                    item={{ value: itemClicked, type: props.type }}
-                    fade={false}
-                    show={contentModal.show}
-                    close={contentModal.handleClose}
-                    reFetchData={useFetchdata.revalidate}
-                />
+                modal
             )}
 
-            <Button variant="success" onClick={handleAddButtonClick}>
-                Add {props.type}
-            </Button>
+            {addButton}
 
             <Table striped>
                 <thead>
