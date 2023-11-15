@@ -96,7 +96,8 @@ li a.dropdown-toggle::after {
   .navbarLink {
     text-decoration: none; /* Remove underline */
     color: #000; /* Set your desired link color */
-    margin-right: 10px;
+    margin-left: 20px;
+    margin-right: 5px;
   }
   
   .navbarLink:hover {
