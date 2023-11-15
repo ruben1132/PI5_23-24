@@ -7,17 +7,15 @@ liga(g,h).
 liga(h,i).
 liga(i,j).
 
-pisos(a,[a1]).
-pisos(b,[b1,b2,b3,b4]).
-pisos(g,[g2,g3,g4]).
-pisos(h,[h1,h2,h3,h4]).
-pisos(i,[i1,i2,i3,i4]).
-pisos(j,[j1,j2,j3,j4]).
+pisos(a,[a1,a2]).
+pisos(b,[b1,b2,b3]).
+pisos(c,[c1,c2,c3,c4]).
+pisos(d,[d1,d2,d3]).
 
-elevador(b,[b1,b2,b3,b4]).
-elevador(g,[g2,g3,g4]).
-elevador(i,[i1,i2,i3,i4]).
-elevador(j,[j1,j2,j3,j4]).
+elevador(a,[a1,a2]).
+elevador(b,[b1,b2,b3]).
+elevador(c,[c1,c2,c3,c4]).
+elevador(d,[d1,d2,d3]).
 
 sala(a101, a, a1).
 sala(b101, b, b1).
@@ -25,52 +23,48 @@ sala(b202, b, b2).
 sala(b303, b, b3).
 sala(b404, b, b4).
 
-passagem(a,h,a1,h2).
-passagem(b,g,b2,g2).
-passagem(b,g,b3,g3).
-passagem(b,i,b3,i3).
-passagem(g,h,g2,h2).
-passagem(g,h,g3,h3).
-passagem(h,i,h2,i2).
-passagem(i,j,i1,j1).
-passagem(i,j,i2,j2).
-passagem(i,j,i3,j3).
+passagem(a,b,a2,b2).
+passagem(b,c,b2,c3).
+passagem(b,d,b2,d3).
+passagem(b,c,b3,c4).
+passagem(c,d,c2,d2).
+passagem(c,d,c3,d3).
 
 % coordenadas das salas
-coordenadas_sala(a101, a1, (4, 0)).
-coordenadas_sala(b101, b1, (0, 4)).
-coordenadas_sala(b202, b2, (8, 0)).
-coordenadas_sala(b303, b3, (0, 8)).
-coordenadas_sala(b404, b4, (12, 0)).
+coordenadas(a101, a1, 4, 0).
+coordenadas(b101, b1, 0, 4).
+coordenadas(b202, b2, 8, 0).
+coordenadas(b303, b3, 0, 8).
+coordenadas(b404, b4, 12, 0).
 
 % coordenadas dos elevadores
-coordenadas_elevador(b1, (1, 1)).
-coordenadas_elevador(b2, (1, 1)).
-coordenadas_elevador(b3, (1, 1)).
-coordenadas_elevador(b4, (1, 1)).
-coordenadas_elevador(g2, (2, 2)).
-coordenadas_elevador(g3, (2, 2)).
-coordenadas_elevador(g4, (2, 2)).
-coordenadas_elevador(i1, (1, 1)).
-coordenadas_elevador(i2, (1, 1)).
-coordenadas_elevador(i3, (1, 1)).
-coordenadas_elevador(i4, (1, 1)).
-coordenadas_elevador(j1, (2, 2)).
-coordenadas_elevador(j2, (2, 2)).
-coordenadas_elevador(j3, (2, 2)).
-coordenadas_elevador(j4, (2, 2)).
+coordenadas(b1, 1, 1).
+coordenadas(b2, 1, 1).
+coordenadas(b3, 1, 1).
+coordenadas(b4, 1, 1).
+coordenadas(g2, 2, 2).
+coordenadas(g3, 2, 2).
+coordenadas(g4, 2, 2).
+coordenadas(i1, 1, 1).
+coordenadas(i2, 1, 1).
+coordenadas(i3, 1, 1).
+coordenadas(i4, 1, 1).
+coordenadas(j1, 2, 2).
+coordenadas(j2, 2, 2).
+coordenadas(j3, 2, 2).
+coordenadas(j4, 2, 2).
 
 % Coordenadas das passagens
-coordenadas_passagem(a,h,a1,h2, (23, 11), (11, 23)).
-coordenadas_passagem(b,g,b2,g2, (23, 11), (11, 23)).
-coordenadas_passagem(b,g,b3,g3, (23, 11), (11, 23)).
-coordenadas_passagem(b,i,b3,i3, (23, 11), (11, 23)).
-coordenadas_passagem(g,h,g2,h2, (23, 11), (11, 23)).
-coordenadas_passagem(g,h,g3,h3, (23, 11), (11, 23)).
-coordenadas_passagem(h,i,h2,i2, (23, 11), (11, 23)).
-coordenadas_passagem(i,j,i1,j1, (23, 11), (11, 23)).
-coordenadas_passagem(i,j,i2,j2, (23, 11), (11, 23)).
-coordenadas_passagem(i,j,i3,j3, (23, 11), (11, 23)).
+coordenadas(a1,h2, 23, 11, 11, 23).
+coordenadas(b2,g2, 23, 11, 11, 23).
+coordenadas(b3,g3, 23, 11, 11, 23).
+coordenadas(b3,i3, 23, 11, 11, 23).
+coordenadas(g2,h2, 23, 11, 11, 23).
+coordenadas(g3,h3, 23, 11, 11, 23).
+coordenadas(h2,i2, 23, 11, 11, 23).
+coordenadas(i1,j1, 23, 11, 11, 23).
+coordenadas(i2,j2, 23, 11, 11, 23).
+coordenadas(i3,j3, 23, 11, 11, 23).
 
 
 %a encontrar um caminho entre edificios 
