@@ -191,9 +191,9 @@ export default class Maze extends THREE.Group {
             }
 
             // create doors
-            description.fmDoors?.forEach((d) => {
+            description.fmRooms?.forEach((r) => {
                 const door = new Door({
-                    door: d,
+                    door: r.door,
                     halfSize: this.halfSize,
                 });
                 this.add(door);

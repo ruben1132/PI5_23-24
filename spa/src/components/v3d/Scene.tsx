@@ -237,7 +237,7 @@ export default function Scene(props: Props) {
                     selected: 2,
                 }, // Cube texture parameters
                 {
-                    url: './v3d/mazes/plantEdAFloor2.json',
+                    url: './v3d/mazes/defaultPlant.json',
                     designCredits: '',
                     texturesCredits: '',
                     helpersColor: new THREE.Color(0xff0077),
@@ -374,7 +374,7 @@ export default function Scene(props: Props) {
             }
 
             setFloors(response.data);
-        } catch (e) { }
+        } catch (e) {}
     };
 
     const handleSelectFloor = (event: ChangeEvent<HTMLSelectElement>): void => {
