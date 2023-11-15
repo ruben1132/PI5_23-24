@@ -1,7 +1,7 @@
 'use client';
 
 // react
-import React, { ChangeEvent, useEffect } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 // threejs and project itself
 import * as THREE from 'three';
@@ -24,7 +24,9 @@ interface Props {
 
 export default function Scene(props: Props) {
     let animationFrameId: number;
-    const [thumbRaiser, setThumbRaiser] = React.useState<ThumbRaiser>();
+    const [thumbRaiser, setThumbRaiser] = useState<ThumbRaiser>();
+    const [selectedBuilding, setSelectedBuilding] = useState<string>();
+    const [selectedFloor, setSelectedFloor] = useState<string>();
 
     console.log(props.floorMaps);
     useEffect(() => {
@@ -232,7 +234,7 @@ export default function Scene(props: Props) {
                 }, // Cube texture parameters
                 {
                     data: props.floorMaps[0],
-                    url: './v3d/mazes/' + props.floorMaps[0].file,
+                    url: './v3d/mazes/defaultPlant.json',
                     designCredits: '',
                     texturesCredits: '',
                     helpersColor: new THREE.Color(0xff0077),
@@ -358,12 +360,15 @@ export default function Scene(props: Props) {
         };
     }, []);
 
-    const handleSelect = (event: ChangeEvent<HTMLSelectElement>): void => {
-        thumbRaiser?.changeMaze();
+    const handleSelectBuilding = (event: ChangeEvent<HTMLSelectElement>): void => {
+    };
+
+    const handleSelectFloor = (event: ChangeEvent<HTMLSelectElement>): void => {
+        thumbRaiser?.changeMaze(event.target.value + '.json');
     };
 
     return (
-        <div id="scene">
+        <>
             <div id="canvas" className="v3dcanvas">
                 <div id="container">
                     <div id="views-panel">
@@ -420,7 +425,7 @@ export default function Scene(props: Props) {
                                 <tr>
                                     <td>
                                         Buildings:
-                                        <Form.Select onChange={handleSelect}>
+                                        <Form.Select onChange={handleSelectBuilding}>
                                             <option defaultChecked={true}>Select building</option>
                                             {props.buildings.map((building) => (
                                                 <option value={building.id}>{building.name}</option>
@@ -429,10 +434,10 @@ export default function Scene(props: Props) {
                                     </td>
                                     <td>
                                         Floors:
-                                        <Form.Select onChange={handleSelect}>
+                                        <Form.Select onChange={handleSelectFloor}>
                                             <option defaultChecked={true}>Select floor</option>
                                             {props.floors.map((floor) => (
-                                                <option value={floor.id}>{floor.information}</option>
+                                                <option value={floor.id}>{floor.id}</option>
                                             ))}
                                         </Form.Select>
                                     </td>
@@ -712,6 +717,8 @@ export default function Scene(props: Props) {
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div id="scene"> </div>
+        </>
     );
 }

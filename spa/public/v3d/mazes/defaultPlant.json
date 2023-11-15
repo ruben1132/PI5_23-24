@@ -1,0 +1,131 @@
+{
+    "floor": "f3483019-0f1b-4283-aab1-e5338ec3a7b3",
+    "maze": {
+        "size": {
+            "width": 10,
+            "depth": 10
+        },
+        "map": [
+            [3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1],
+            [1, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 3, 2, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+            [1, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1],
+            [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0]
+        ],
+        "exitLocation": [
+            9.5,
+            6
+        ]
+    },
+    "ground": {
+        "size": {
+            "width": 10,
+            "height": 0.0625,
+            "depth": 10
+        },
+        "segments": {
+            "width": 1,
+            "height": 1,
+            "depth": 1
+        },
+        "primaryColor": "0xffffff",
+        "maps": {
+            "color": {
+                "url": "./v3d/textures/Marble_Polished_wjmief0l_4K/wjmief0l_4K_Albedo.jpg"
+            },
+            "ao": {
+                "url": "",
+                "intensity": 1
+            },
+            "displacement": {
+                "url": "",
+                "scale": 1,
+                "bias": 0
+            },
+            "normal": {
+                "url": "",
+                "type": 0,
+                "scale": {
+                    "x": 2,
+                    "y": 2
+                }
+            },
+            "bump": {
+                "url": "",
+                "scale": 1
+            },
+            "roughness": {
+                "url": "./v3d/textures/Marble_Polished_wjmief0l_4K/wjmief0l_4K_Roughness.jpg",
+                "rough": 1
+            }
+        },
+        "wrapS": 1,
+        "wrapT": 1,
+        "repeat": {
+            "u": 4,
+            "v": 4
+        },
+        "magFilter": 1,
+        "minFilter": 5,
+        "secondaryColor": "0x6b554b"
+    },
+    "wall": {
+        "segments": {
+            "width": 1,
+            "height": 1
+        },
+        "primaryColor": "0xffffff",
+        "maps": {
+            "color": {
+                "url": "./v3d/textures/Marble_Polished_wlhkfhqv_4K/wlhkfhqv_4K_Albedo.jpg"
+            },
+            "ao": {
+                "url": "",
+                "intensity": 1
+            },
+            "displacement": {
+                "url": "",
+                "scale": 1,
+                "bias": 0
+            },
+            "normal": {
+                "url": "",
+                "type": 0,
+                "scale": {
+                    "x": 2,
+                    "y": 2
+                }
+            },
+            "bump": {
+                "url": "",
+                "scale": 1
+            },
+            "roughness": {
+                "url": "./v3d/textures/Marble_Polished_wlhkfhqv_4K/wlhkfhqv_4K_Roughness.jpg",
+                "rough": 1
+            }
+        },
+        "wrapS": 1,
+        "wrapT": 0,
+        "repeat": {
+            "u": 2,
+            "v": 1
+        },
+        "magFilter": 1,
+        "minFilter": 5,
+        "secondaryColor": "0x6b554b"
+    },
+    "player": {
+        "initialPosition": [
+            5,
+            1
+        ],
+        "initialDirection": 5.1
+    }
+}

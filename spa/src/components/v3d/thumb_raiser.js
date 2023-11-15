@@ -1596,14 +1596,13 @@ export default class ThumbRaiser {
         }
     }
 
-    changeMaze() {
+    changeMaze(newMazeUrl) {
         this.mazeChanged = true;
 
         let newMaze = new Maze({
-            url: './v3d/mazes/Loquitas_20x20.json',
-            designCredits: 'Maze designed by Cecília Fernandes and Nikita.',
-            texturesCredits:
-                "Maze textures downloaded from <a href='https://www.texturecan.com/' target='_blank' rel='noopener'>TextureCan</a>.",
+            url: './v3d/mazes/' + newMazeUrl,
+            designCredits: 'GRUPO 100',
+            texturesCredits:"",
             scale: new THREE.Vector3(1.0, 1.0, 1.0),
             helpersColor: new THREE.Color(0xffffff),
         });
