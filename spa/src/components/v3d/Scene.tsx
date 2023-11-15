@@ -2,33 +2,37 @@
 
 // react
 import React, { ChangeEvent, useEffect, useState } from 'react';
+// axios
+import axios from 'axios';
+
+// config
+import config from '../../../config';
+
+// css
+import '../../styles/v3d.css';
+
+// models
+import { Floor } from '@/models/Floor.jsx';
+import { Building } from '@/models/Building.js';
+import { Form } from 'react-bootstrap';
 
 // threejs and project itself
 import * as THREE from 'three';
 import Orientation from './orientation.js';
 import ThumbRaiser from './thumb_raiser.js';
 
-// css
-import '../../styles/v3d.css';
-
-// models
-import { FloorWithBuilding } from '@/models/Floor.jsx';
-import { Building } from '@/models/Building.js';
-import { Form } from 'react-bootstrap';
+// notification component
+import { notify } from '@/components/notification/Notification';
 
 interface Props {
-    floors: FloorWithBuilding[];
     buildings: Building[];
-    floorMaps: any[];
 }
 
 export default function Scene(props: Props) {
     let animationFrameId: number;
     const [thumbRaiser, setThumbRaiser] = useState<ThumbRaiser>();
-    const [selectedBuilding, setSelectedBuilding] = useState<string>();
-    const [selectedFloor, setSelectedFloor] = useState<string>();
+    const [floors, setFloors] = useState<Floor[]>([]);
 
-    console.log(props.floorMaps);
     useEffect(() => {
         let thumbRaiserr: ThumbRaiser;
 
@@ -233,7 +237,6 @@ export default function Scene(props: Props) {
                     selected: 2,
                 }, // Cube texture parameters
                 {
-                    data: props.floorMaps[0],
                     url: './v3d/mazes/defaultPlant.json',
                     designCredits: '',
                     texturesCredits: '',
@@ -360,7 +363,18 @@ export default function Scene(props: Props) {
         };
     }, []);
 
-    const handleSelectBuilding = (event: ChangeEvent<HTMLSelectElement>): void => {
+    const handleSelectBuilding = async (event: ChangeEvent<HTMLSelectElement>) => {
+        try {
+            const response = await axios.get(
+                config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + 'buildingId/' + event.target.value,
+            );
+            if (response.status !== 200) {
+                notify.error('Error fetching floors');
+                return;
+            }
+
+            setFloors(response.data);
+        } catch (e) {}
     };
 
     const handleSelectFloor = (event: ChangeEvent<HTMLSelectElement>): void => {
@@ -433,13 +447,17 @@ export default function Scene(props: Props) {
                                         </Form.Select>
                                     </td>
                                     <td>
-                                        Floors:
-                                        <Form.Select onChange={handleSelectFloor}>
-                                            <option defaultChecked={true}>Select floor</option>
-                                            {props.floors.map((floor) => (
-                                                <option value={floor.id}>{floor.id}</option>
-                                            ))}
-                                        </Form.Select>
+                                        {floors.length > 0 && (
+                                            <>
+                                                <span> Floors:</span>
+                                                <Form.Select onChange={handleSelectFloor}>
+                                                    <option defaultChecked={true}>Select floor</option>
+                                                    {floors.map((floor) => (
+                                                        <option value={floor.id}>{floor.information}</option>
+                                                    ))}
+                                                </Form.Select>
+                                            </>
+                                        )}
                                     </td>
                                 </tr>
                             </tbody>

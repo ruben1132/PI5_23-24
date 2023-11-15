@@ -17,7 +17,6 @@ export default class Elevator extends THREE.Group {
         this.loaded = false;
 
         this.onLoad = function (object) {
-            console.log(object);
             switch (this.elevator.position.direction) {
                 case 'north':
                     object.scene.position.set(

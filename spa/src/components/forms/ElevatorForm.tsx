@@ -18,15 +18,15 @@ import { notify } from '@/components/notification/Notification';
 import config from '../../../config';
 
 // custom hooks
-import { useFetchData, useSubmitData, useFormNumberInput, useFormStringInput, useDeleteData } from '@/util/customHooks';
+import { useFetchData, useSubmitData, useFormStringInput, useDeleteData } from '@/util/customHooks';
 
 // model
-import { Elevator, ElevatorWithFloor } from '@/models/Elevator';
+import { Elevator, ElevatorWithFloors } from '@/models/Elevator';
 import { Floor } from '@/models/Floor';
 
 interface Props {
     item: {
-        value: ElevatorWithFloor;
+        value: ElevatorWithFloors;
     };
     action: string;
     reFetchData: () => void;
