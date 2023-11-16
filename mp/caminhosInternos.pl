@@ -129,3 +129,4 @@ bfs2(Dest,[LA|Outros],Cam):-
 	append(Outros,Novos,Todos),
 	bfs2(Dest,Todos,Cam).
 
+
