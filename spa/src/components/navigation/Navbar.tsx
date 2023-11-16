@@ -19,10 +19,10 @@ function NavBar(props: NavBarProps) {
     return (
         <Navbar bg="light" expand="lg" className="" bsPrefix='navbar'>
             <Container fluid>
-                <Button variant="outline-info" onClick={props.toggle}>
+                <Button variant="outline-secondary" onClick={props.toggle}>
                     <FontAwesomeIcon icon={faAlignLeft} />
                 </Button>
-                <Navbar.Brand href="#">ISEP</Navbar.Brand>
+                <Navbar.Brand href="#" style={{paddingLeft: "15px"}}>ISEP</Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>

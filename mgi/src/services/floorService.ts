@@ -77,7 +77,9 @@ export default class FloorService implements IFloorService {
                 floorDTO.number,
                 floorDTO.id,
             );
-            if (floorWithSameNumber) {
+
+            
+            if (floorWithSameNumber) {                
                 return Result.fail<IFloorDTO>('Floor with same number already exists in this building');
             }
 
