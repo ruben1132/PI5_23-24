@@ -148,7 +148,9 @@ export default function RobotForm(props: Props) {
             return;
         }
 
-        robotType.handleLoad(selectBoxRobotTypesDataFetch.data[0].id);
+        if (!props.item.value?.id) {
+            robotType.handleLoad(selectBoxRobotTypesDataFetch.data[0].id);
+        }
     }, [selectBoxRobotTypesDataFetch.data]);
 
     if (selectBoxRobotTypesDataFetch.isLoading) {
