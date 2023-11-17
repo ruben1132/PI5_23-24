@@ -26,9 +26,6 @@ function NavBar(props: NavBarProps) {
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
-                    <Link href={'/'} className='navbarLink'> Home </Link>
-                    <Link href={'/aboutus'} className='navbarLink'> About Us </Link>
-                    <Link href={'/termsandconditions'} className='navbarLink'> Terms of service</Link>
                     </Nav>
                     <Form className="d-flex">
                         User Here
