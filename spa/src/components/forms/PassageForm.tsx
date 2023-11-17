@@ -111,14 +111,14 @@ export default function PassageForm(props: Props) {
             return;
         }
 
-        fromFloor.handleLoad(fetchFloors.data[0].id);
-
-        // if there's no data, return
-        if (!fetchFloors.data) {
-            return;
+        if (!props.item.value?.id) {            
+            fromFloor.handleLoad(fetchFloors.data[0].id);
         }
 
-        toFloor.handleLoad(fetchFloors.data[0].id);
+
+        if (!props.item.value?.id) {
+            toFloor.handleLoad(fetchFloors.data[0].id);
+        }
     }, [fetchFloors.data]);
 
     if (fetchFloors.isLoading) {
@@ -127,11 +127,7 @@ export default function PassageForm(props: Props) {
     if (fetchFloors.isError) {
         return <Form>Error</Form>;
     }
-    if (
-        fetchFloors.data === undefined ||
-        fetchFloors.data === null ||
-        fetchFloors.data.length <= 0
-    ) {
+    if (fetchFloors.data === undefined || fetchFloors.data === null || fetchFloors.data.length <= 0) {
         return <Form>Try adding floors first!</Form>;
     }
 
