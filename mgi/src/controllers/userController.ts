@@ -115,7 +115,7 @@ export default class UserController implements IUserController /* TODO: extends 
     public async logout(req: Request, res: Response, next: NextFunction) {
         try {
             // destroy cookie
-
+            res.clearCookie(config.cookieName);
             return res.json({}).status(201);
         } catch (e) {
             return next(e);
