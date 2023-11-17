@@ -1,11 +1,11 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import Cookies from 'js-cookie';
 
 interface User {
   username: string;
   userRole: string;
-  // Add other user-related fields as needed
 }
 
 interface AuthContextProps {
@@ -21,15 +21,27 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(() => {
+    // Retrieve user data from cookies on component mount
+    const storedUser = Cookies.get('robdronego:user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
 
   const login = (userData: User) => {
-    setUser(userData);
+      // store user data in local storage and update the state
+      Cookies.set('robdronego:user', JSON.stringify(userData));
+      setUser(userData);
   };
 
   const logout = () => {
-    setUser(null);
+      // remove user data cookie and update the state
+      Cookies.remove('robdronego:user');
+      setUser(null);
   };
+
+  useEffect(() => {
+     
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>

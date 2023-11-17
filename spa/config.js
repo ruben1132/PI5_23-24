@@ -1,4 +1,5 @@
 export default {
+    dashboardBaseRoute: "dashboard/",
     routes: [
         {
             routeName: 'buildings',
