@@ -16,7 +16,7 @@ export default function IndexNavBar() {
     return (
         <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
             <Container>
-                <Navbar.Brand href="#home">RoboDroneGo</Navbar.Brand>
+                <Navbar.Brand href="">RoboDroneGo</Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
                     <Nav className="me-auto" navbarScroll>

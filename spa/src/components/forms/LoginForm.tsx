@@ -39,24 +39,24 @@ export default function UserForm() {
                     onChange={handleUserNameChange}
                 />
             </Form.Group>
-
+            <br />
             <Form.Group controlId="formUserRole">
                 <Form.Label>User Role</Form.Label>
                 <Form.Select as="select" value={userRole} onChange={handleUserRoleChange}>
                     {fetchRoles.isError && <option>Error loading roles!</option>}
                     {fetchRoles.isLoading && <option>Loading...</option>}
-                    {!fetchRoles.isError && !fetchRoles.isLoading && (
-                        <>
-                            <option value="">Select a role</option>
-                            <option value="admin">Admin</option>
-                            <option value="user">User</option>
-                        </>
-                    )}
+                    {!fetchRoles.isError &&
+                        !fetchRoles.isLoading &&
+                        fetchRoles.data.map((role: any) => (
+                            <option key={role.id} value={role.id}>
+                                {role.name}
+                            </option>
+                        ))}
                 </Form.Select>
             </Form.Group>
-
-            <Button variant="primary" type="submit">
-                Submit
+            <br />
+            <Button variant="success" type="submit">
+                Login
             </Button>
         </Form>
     );
