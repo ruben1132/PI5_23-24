@@ -31,11 +31,41 @@ passagem(c,d,c2,d2).
 passagem(c,d,c3,d3).
 
 % coordenadas das salas
-coordenadas(a101, a1, 4, 0).
-coordenadas(b101, b1, 0, 4).
-coordenadas(b202, b2, 8, 0).
-coordenadas(b303, b3, 0, 8).
-coordenadas(b404, b4, 12, 0).
+% BC - Coordenadas Salas Edificio A - Piso 1
+coordenadas(apn, a1, 10, 5).
+coordenadas(beng, a1, 12, 2).
+coordenadas(k1, a1, 16, 2).
+coordenadas(k2, a1, 19, 2).
+coordenadas(r1, a1, 12, 8).
+coordenadas(r2, a1, 20, 8).
+
+% BC - Coordenadas Salas Edificio B - Piso 1
+coordenadas(b101, b1, 2, 4).
+coordenadas(b102, b1, 2, 6).
+coordenadas(b103, b1, 5, 4).
+coordenadas(b104, b1, 6, 8).
+coordenadas(b105, b1, 13, 4).
+coordenadas(b106, b1, 16, 6).
+coordenadas(b107, b1, 19, 4).
+coordenadas(b108, b1, 19, 8).
+
+% BC - Coordenadas Salas Edificio C - Piso 2
+coordenadas(c201, c2, 2, 8).
+coordenadas(c202, c2, 4, 4).
+coordenadas(c203, c2, 5, 8).
+coordenadas(c204, c2, 14, 5).
+coordenadas(c205, c2, 10, 3).
+coordenadas(c206, c2, 12, 3).
+coordenadas(c207, c2, 11, 8).
+coordenadas(c209, c2, 16, 9).
+
+% BC - Coordenadas Salas Edificio D - Piso 2
+coordenadas(d201, d2, 4, 8).
+coordenadas(d202, d2, 9, 6).
+coordenadas(d203, d2, 9, 8).
+coordenadas(d204, d2, 13, 4).
+coordenadas(d205, d2, 13, 8).
+coordenadas(d206, d2, 16, 5).
 
 % coordenadas dos elevadores
 coordenadas(b1, 1, 1).
