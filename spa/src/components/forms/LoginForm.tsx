@@ -55,10 +55,15 @@ export default function UserForm() {
         setDisableSubmit(false);
 
         // redirect to the dashboard page
-        // router.push('/dashboard');
+        router.push('/dashboard');
     };
 
-    useEffect(() => {}, []);
+    useEffect(() => {
+        // set default user role
+        if (fetchRoles.data && fetchRoles.data.length > 0) {
+            setUserRole(fetchRoles.data[0].name);
+        }
+    }, [fetchRoles.data]);
 
     return (
         <Form>
@@ -80,14 +85,18 @@ export default function UserForm() {
                     {!fetchRoles.isError &&
                         !fetchRoles.isLoading &&
                         fetchRoles.data.map((role: any) => (
-                            <option key={role.id} value={role.id}>
+                            <option key={role.id} value={role.name}>
                                 {role.name}
                             </option>
                         ))}
                 </Form.Select>
             </Form.Group>
             <br />
-            <Button variant="success" onClick={handleSubmit} disabled={disableSubmit}>
+            <Button
+                variant="success"
+                onClick={handleSubmit}
+                disabled={disableSubmit || userName === '' || userRole === ''}
+            >
                 Login
             </Button>
         </Form>
