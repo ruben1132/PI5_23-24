@@ -12,7 +12,6 @@ import IndexNavBar from '@/components/navigation/IndexNavbar';
 
 // Auth provider
 import { AuthProvider } from '@/context/AuthContext';
-import LoginRoute from '@/privateRoute/LoginRoute';
 
 export const metadata: Metadata = {
     title: 'RobDroneGo',
@@ -24,10 +23,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html>
             <body>
                 <AuthProvider>
-                    <LoginRoute>
-                        <IndexNavBar />
-                        {children}
-                    </LoginRoute>
+                    <IndexNavBar />
+                    {children}
                 </AuthProvider>
             </body>
         </html>

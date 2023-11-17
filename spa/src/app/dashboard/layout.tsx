@@ -12,10 +12,7 @@ import Navigation from '../../components/navigation/Navigation';
 import Notification from '../../components/notification/Notification';
 
 // Auth context
-import { AuthProvider } from '../../context/AuthContext';
-
-// Private route
-import PrivateRoute from '@/privateRoute/DashboardRoute';
+import { AuthProvider } from '@/context/AuthContext';
 
 export const metadata: Metadata = {
     title: 'Dashboard',
@@ -31,12 +28,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <html>
             <body>
                 <AuthProvider>
-                    <PrivateRoute>
-                        <Navigation>
-                            <Notification />
-                            {children}
-                        </Navigation>
-                    </PrivateRoute>
+                    <Navigation>
+                        <Notification />
+                        {children}
+                    </Navigation>
                 </AuthProvider>
             </body>
         </html>
