@@ -1,8 +1,22 @@
+import IRoleDTO from "./IRoleDTO";
 
-export interface IUserDTO {
-  firstName: string;
-  lastName: string;
+export interface IUserDTO{
+  id: string;
+  username: string;
   email: string;
   password: string;
-  role: string
+  role: string;
+}
+
+export interface IUserWithRoleDTO {
+  id: string;
+  username: string;
+  email: string;
+  password: string;
+  role: IRoleDTO;
+}
+
+export interface IUserLoginDTO {
+  email: string;
+  password: string;
 }

@@ -9,8 +9,7 @@ import { RoleId } from "./valueObj/roleId";
 
 
 interface UserProps {
-  firstName: string;
-  lastName: string;
+  username: string;
   email: UserEmail;
   password: UserPassword;
   role: RoleId;
@@ -29,16 +28,24 @@ export class User extends AggregateRoot<UserProps> {
     return this.props.email;
   }
 
-  get firstName(): string {
-    return this.props.firstName
+  set email(value: UserEmail) {
+    this.props.email = value;
   }
 
-  get lastName(): string {
-    return this.props.lastName;
+  get username(): string {
+    return this.props.username;
+  }
+
+  set username(value: string) {
+    this.props.username = value;
   }
 
   get password(): UserPassword {
     return this.props.password;
+  }
+
+  set password(value: UserPassword) {
+    this.props.password = value;
   }
 
   get role(): RoleId {
@@ -56,8 +63,7 @@ export class User extends AggregateRoot<UserProps> {
   public static create(props: UserProps, id?: UniqueEntityID): Result<User> {
 
     const guardedProps = [
-      { argument: props.firstName, argumentName: 'firstName' },
-      { argument: props.lastName, argumentName: 'lastName' },
+      { argument: props.username, argumentName: 'username' },
       { argument: props.email, argumentName: 'email' },
       { argument: props.role, argumentName: 'role' },
       { argument: props.password, argumentName: 'password' },

@@ -40,5 +40,13 @@ export default (app: Router) => {
         (req, res, next) => ctrl.updateRoom(req, res, next),
     );
 
-    route.delete('/:id', (req, res, next) => ctrl.deleteRoom(req, res, next));
+    route.delete(
+        '/:id',
+        celebrate({
+            params: Joi.object({
+                id: Joi.string().required(),
+            }),
+        }),
+        (req, res, next) => ctrl.deleteRoom(req, res, next),
+    );
 };

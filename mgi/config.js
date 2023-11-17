@@ -21,9 +21,15 @@ export default {
         'mongodb://mongoadmin:ca7408396943512431f6af8a@vsgate-s1.dei.isep.ipp.pt:10937/?authMechanism=SCRAM-SHA-1',
     ),
 
+    // cookie name
+    cookieName: "mgiAPI:authCookie",
 
     // Your secret sauce
     jwtSecret: getEnvVariable('JWT_SECRET', 'secret'),
+
+    // 
+    clientURL: getEnvVariable('CLIENT_URL', 'http://localhost:3000/'),
+
 
     // Logging configuration
     logs: {
@@ -80,6 +86,10 @@ export default {
         robot: {
             name: 'RobotController',
             path: '../controllers/robotController',
+        },
+        user: {
+            name: 'UserController',
+            path: '../controllers/userController',
         },
     },
 
@@ -170,6 +180,10 @@ export default {
         robot: {
             name: 'RobotService',
             path: '../services/robotService',
+        },
+        user: {
+            name: 'UserService',
+            path: '../services/userService',
         },
     },
 
