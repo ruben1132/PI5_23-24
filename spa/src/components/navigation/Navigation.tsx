@@ -60,8 +60,6 @@ export default function Navigation({ children }: NavigationProps) {
     };
 
     return (
-        <html>
-            <body>
                 <main>
                     <div className="App wrapper">
                         <Sidebar toggle={toggle} isOpen={isOpen} />
@@ -73,7 +71,5 @@ export default function Navigation({ children }: NavigationProps) {
                         </Container>
                     </div>
                 </main>
-            </body>
-        </html>
     );
 }

@@ -1,14 +1,37 @@
 'use client';
 
+// react
 import React, { useEffect, useState } from 'react';
-import { Form, Button, Col } from 'react-bootstrap';
+
+// config
 import config from '../../../config';
+
+// react bootstrap components
+import { Form, Button } from 'react-bootstrap';
+
+// fetch data
 import { useFetchData } from '@/util/customHooks';
 
+// auht context
+import { useAuth } from '@/context/AuthContext';
+
+// nextjs
+import { useRouter } from 'next/navigation';
+
 export default function UserForm() {
+    // fetch roles
     const fetchRoles = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.roles); // fetch roles for userRole
+
+    // inputs and button
     const [userName, setUserName] = useState('');
     const [userRole, setUserRole] = useState('');
+    const [disableSubmit, setDisableSubmit] = useState(false);
+
+    // auth context
+    const { login } = useAuth();
+
+    // router
+    const router = useRouter();
 
     const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserName(e.target.value);
@@ -18,18 +41,27 @@ export default function UserForm() {
         setUserRole(e.target.value);
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        // Add your form submission logic here
-        console.log('Username:', userName);
-        console.log('User Role:', userRole);
-        // You can send the form data to your server or perform other actions.
+    const handleSubmit = () => {
+        setDisableSubmit(true);
+
+        // user data
+        const userData = {
+            username: userName,
+            userRole: userRole,
+        };
+
+        // call the login function to set the user in the context
+        login(userData);
+        setDisableSubmit(false);
+
+        // redirect to the dashboard page
+        // router.push('/dashboard');
     };
 
     useEffect(() => {}, []);
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form>
             <Form.Group controlId="formUserName">
                 <Form.Label>User Name</Form.Label>
                 <Form.Control
@@ -55,7 +87,7 @@ export default function UserForm() {
                 </Form.Select>
             </Form.Group>
             <br />
-            <Button variant="success" type="submit">
+            <Button variant="success" onClick={handleSubmit} disabled={disableSubmit}>
                 Login
             </Button>
         </Form>

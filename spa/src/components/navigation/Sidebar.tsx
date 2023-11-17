@@ -56,7 +56,7 @@ function Sidebar(props: SidebarProps) {
 
             <Nav className="flex-column pt-2">
                 {config.routes.map((page: { routeName: string; displayName: string }, index: number) => (
-                    <Link href={'/' + page.routeName} key={index} style={{ textDecoration: 'none', padding: '2px' }}>
+                    <Link href={'/'+ config.dashboardBaseRoute + page.routeName} key={index} style={{ textDecoration: 'none', padding: '2px' }}>
                         <Nav.Item className="nav-item">
                             <Col sm={3}>
                                 <FontAwesomeIcon

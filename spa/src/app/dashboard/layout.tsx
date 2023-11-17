@@ -15,7 +15,7 @@ import Notification from '../../components/notification/Notification';
 import { AuthProvider } from '../../context/AuthContext';
 
 // Private route
-import PrivateRoute from '@/privateRoute/PrivateRoute';
+import PrivateRoute from '@/privateRoute/DashboardRoute';
 
 export const metadata: Metadata = {
     title: 'Dashboard',
@@ -28,13 +28,17 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
     return (
-        <AuthProvider>
-            <PrivateRoute>
-                <Navigation>
-                    <Notification />
-                    {children}
-                </Navigation>
-            </PrivateRoute>
-        </AuthProvider>
+        <html>
+            <body>
+                <AuthProvider>
+                    <PrivateRoute>
+                        <Navigation>
+                            <Notification />
+                            {children}
+                        </Navigation>
+                    </PrivateRoute>
+                </AuthProvider>
+            </body>
+        </html>
     );
 }
