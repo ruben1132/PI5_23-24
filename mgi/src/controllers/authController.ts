@@ -83,9 +83,6 @@ export default class AuthController implements IAuthController /* TODO: extends 
                 return res.status(400).send({ error: result.errorValue() });
             }
 
-            console.log("sucesso");
-            
-
             const userDTO = result.getValue();
 
             return res.json(userDTO).status(201);

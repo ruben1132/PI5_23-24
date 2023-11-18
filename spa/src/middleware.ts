@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import conf from '../config';
 import { User } from '@/models/User';
-import jwt from 'jsonwebtoken';
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -10,10 +9,20 @@ export async function middleware(request: NextRequest) {
 
     try {
         const currentUser = request.cookies.get(conf.cookieName)?.value;
-        // console.log('cookie:', currentUser);
 
-        // validate token
-        jwt
+        // Manually set the cookie in the request headers
+        const headers = new Headers({
+            Authorization: `Bearer ${currentUser}`,
+            Cookie: `${conf.cookieName}=${currentUser}; HttpOnly; Secure; SameSite=None; Path=/`,
+        });
+
+        const response = await fetch(conf.mgiAPI.baseUrl + conf.mgiAPI.routes.session, {
+            headers,
+            credentials: 'include',
+            method: 'GET',
+        });
+
+        const user = await response.json();
 
         if (!user) {
             return NextResponse.redirect(url);
@@ -21,37 +30,39 @@ export async function middleware(request: NextRequest) {
 
         // if user is logged in and is trying to access auth routes
         if (user && conf.authRoutes.includes(pathname)) {
+            url.pathname = '/dashboard';
             return NextResponse.redirect(url);
         }
 
-        // if user role is not admin and is trying to access admin routes
-        if (user.role.name !== conf.userRole.ADMIN && conf.adminRoutes.includes(pathname)) {
-            return NextResponse.redirect(url);
+        // if user role is admin and is trying to access admin routes
+        if (user.role.name === conf.userRole.ADMIN && conf.adminRoutes.includes(pathname)) {
+            return NextResponse.next(); // Continue to the next Middleware or route handler
         }
 
-        // if user role is not utente and is trying to access utente routes
-        if (user.role.name !== conf.userRole.UTENTE && conf.utenteRoutes.includes(pathname)) {
-            return NextResponse.redirect(url);
+        // if user role is utente and is trying to access utente routes
+        if (user.role.name === conf.userRole.UTENTE && conf.utenteRoutes.includes(pathname)) {
+            return NextResponse.next(); // Continue to the next Middleware or route handler
         }
 
-        // if user role is not gestor frota and is trying to access gestor frota routes
-        if (user.role.name !== conf.userRole.GESTOR_FROTA && conf.gestorFrotaRoutes.includes(pathname)) {
-            return NextResponse.redirect(url);
+        // if user role is gestor frota and is trying to access gestor frota routes
+        if (user.role.name === conf.userRole.GESTOR_FROTA && conf.gestorFrotaRoutes.includes(pathname)) {
+            return NextResponse.next(); // Continue to the next Middleware or route handler
         }
 
-        // if user role is not gestor campus and is trying to access gestor campus routes
+        // if user role is gestor campus and is trying to access gestor campus routes
         if (user.role.name === conf.userRole.GESTOR_CAMPUS && conf.gestorCampusRoutes.includes(pathname)) {
-            return NextResponse.redirect(url);
+            return NextResponse.next(); // Continue to the next Middleware or route handler
         }
 
-        return NextResponse.next(); // Continue to the next Middleware or route handler
+        // public routes
+        if (conf.nullRoutes.includes(pathname)) {
+            return NextResponse.next(); // Continue to the next Middleware or route handler
+        }
+
+        console.log('no role');
+        return NextResponse.redirect(url);
     } catch (error: any) {
-        console.log('ererrre');
-        if (conf.nullRoutes.includes(pathname) || conf.authRoutes.includes(pathname)) {
-            return NextResponse.next();
-        }
-
-        // return NextResponse.redirect(url);
+        return NextResponse.redirect(url);
     }
 }
 

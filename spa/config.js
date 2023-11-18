@@ -79,15 +79,15 @@ export default {
         },
     },
 
-    authAPI: {
-        baseUrl: process.env.NODE_ENV === 'production' ? process.env.AUTH_API_URL : 'http://localhost:4000/auth/',
-        routes: {
-            login: 'login/',
-            logout: 'logout/',
-            signin: 'signin/',
-            sesion: 'session/',
-        },
-    },
+    // authAPI: {
+    //     baseUrl: process.env.NODE_ENV === 'production' ? process.env.AUTH_API_URL : 'http://localhost:4000/auth/',
+    //     routes: {
+    //         login: 'login/',
+    //         logout: 'logout/',
+    //         signin: 'signin/',
+    //         sesion: 'session/',
+    //     },
+    // },
 
     tokenName: 'robdronego:token',
 
@@ -104,7 +104,7 @@ export default {
 
     utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/taks'],
 
-    adminRoutes: ['/dashboard/roles', '/dashboard/users'],
+    adminRoutes: ['/dashboard', '/dashboard/roles', '/dashboard/users'],
 
     gestorFrotaRoutes: [
         '/dashboard',
