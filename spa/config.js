@@ -1,57 +1,79 @@
+const userRole = {
+    ADMIN: 'admin',
+    GESTOR_FROTA: 'gestor frota',
+    GESTOR_CAMPUS: 'gestor campus',
+    UTENTE: 'utente',
+};
+
 export default {
+    userRole,
+
     dashboardBaseRoute: 'dashboard/',
     routes: [
         {
             routeName: 'buildings',
             displayName: 'Buildings',
+            permissions: [userRole.GESTOR_CAMPUS],
         },
         {
             routeName: 'floors',
             displayName: 'Floors',
+            permissions: [userRole.GESTOR_CAMPUS],
         },
         {
             routeName: 'passages',
             displayName: 'Passages',
+            permissions: [userRole.GESTOR_CAMPUS],
         },
         {
             routeName: 'robots',
             displayName: 'Robots',
+            permissions: [userRole.GESTOR_FROTA],
         },
         {
             routeName: 'robottypes',
             displayName: 'Robot Types',
+            permissions: [userRole.GESTOR_FROTA],
         },
         // {
         //   routeName: "tasks",
         //   displayName: "Tasks",
+        //   permissions: [userRole.GESTOR_CAMPUS],
         // },
         {
             routeName: 'tasktypes',
             displayName: 'Task Types',
+            permissions: [userRole.GESTOR_FROTA],
         },
         {
             routeName: 'users',
             displayName: 'Users',
+            permissions: [userRole.ADMIN],
         },
         // {
         //   routeName: "floormaps",
         //   displayName: "Floor Maps" ,
+        //   permissions: [userRole.GESTOR_CAMPUS],
         // },
         {
             routeName: 'roles',
             displayName: 'Roles',
+            permissions: [userRole.ADMIN],
         },
         {
             routeName: 'elevators',
             displayName: 'Elevators',
+            permissions: [userRole.GESTOR_CAMPUS],
         },
         {
             routeName: 'rooms',
             displayName: 'Rooms',
+            permissions: [userRole.GESTOR_CAMPUS],
         },
         {
             routeName: 'v3d',
             displayName: '3D Viewer',
+            permissions: [userRole.UTENTE, userRole.GESTOR_FROTA],
         },
     ],
 
@@ -91,13 +113,6 @@ export default {
 
     tokenName: 'robdronego:token',
 
-    userRole: {
-        ADMIN: 'admin',
-        GESTOR_FROTA: 'gestor frota',
-        GESTOR_CAMPUS: 'gestor campus',
-        UTENTE: 'utente',
-    },
-
     nullRoutes: ['/', '/aboutus', '/termsandconditions'],
 
     authRoutes: ['/login', '/signin'],
@@ -125,5 +140,5 @@ export default {
         '/dashboard/rooms',
     ],
 
-    cookieName: "mgiAPI:authCookie"
+    cookieName: 'mgiAPI:authCookie',
 };

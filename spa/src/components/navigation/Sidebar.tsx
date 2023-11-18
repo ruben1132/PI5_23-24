@@ -1,11 +1,20 @@
 'use client';
 
+// react
 import React from 'react';
+
+// react bootstrap components
+import { Nav, Button, Col } from 'react-bootstrap';
+import Spinner from 'react-bootstrap/Spinner';
+
+import classNames from 'classnames';
+
+// config
+import config from '../../../config';
+
+// icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { Nav, Button, Col } from 'react-bootstrap';
-import classNames from 'classnames';
-import config from '../../../config';
 import {
     faBuilding,
     faLayerGroup,
@@ -19,6 +28,9 @@ import {
     faBorderAll,
     faGear,
 } from '@fortawesome/free-solid-svg-icons';
+
+// auth context
+import { useAuth } from '@/context/AuthContext';
 
 // nextjs
 import Link from 'next/link';
@@ -45,6 +57,8 @@ const sideBarIcons = {
 };
 
 function Sidebar(props: SidebarProps) {
+    const { user } = useAuth();
+
     return (
         <div className={classNames('sidebar', { 'is-open': props.isOpen })}>
             <div className="sidebar-header">
@@ -55,20 +69,41 @@ function Sidebar(props: SidebarProps) {
             </div>
 
             <Nav className="flex-column pt-2">
-                {config.routes.map((page: { routeName: string; displayName: string }, index: number) => (
-                    <Link href={'/'+ config.dashboardBaseRoute + page.routeName} key={index} style={{ textDecoration: 'none', padding: '2px' }}>
-                        <Nav.Item className="nav-item">
-                            <Col sm={3}>
-                                <FontAwesomeIcon
-                                    icon={sideBarIcons[page.routeName as keyof typeof sideBarIcons]}
-                                    style={{ color: '#fff', paddingLeft: '15px' }}
-                                />
-                            </Col>
-                            <Col sm={9}>{page.displayName}</Col>
-                        </Nav.Item>
-                        <hr style={{ color: '#ffff' }} />
-                    </Link>
-                ))}
+                {user?.id ? (
+                    <>
+                        {config.routes.map(
+                            (
+                                page: { routeName: string; displayName: string; permissions: string[] },
+                                index: number,
+                            ) => {
+                                // Check if user.role.name is included in the permissions array
+                                const isUserAuthorized = user.role.name && page.permissions.includes(user.role.name);
+
+                                // Render the Link only if user is authorized
+                                return isUserAuthorized ? (
+                                    <Link
+                                        href={'/' + config.dashboardBaseRoute + page.routeName}
+                                        key={index}
+                                        style={{ textDecoration: 'none', padding: '2px' }}
+                                    >
+                                        <Nav.Item className="nav-item">
+                                            <Col sm={3}>
+                                                <FontAwesomeIcon
+                                                    icon={sideBarIcons[page.routeName as keyof typeof sideBarIcons]}
+                                                    style={{ color: '#fff', paddingLeft: '15px' }}
+                                                />
+                                            </Col>
+                                            <Col sm={9}>{page.displayName}</Col>
+                                        </Nav.Item>
+                                        <hr style={{ color: '#ffff' }} />
+                                    </Link>
+                                ) : null;
+                            },
+                        )}
+                    </>
+                ) : (
+                    <Spinner as="span" animation="border" role="status" aria-hidden="true" />
+                )}
             </Nav>
         </div>
     );

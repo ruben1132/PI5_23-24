@@ -6,10 +6,10 @@ import React from 'react';
 // react bootstrap components
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Spinner from 'react-bootstrap/Spinner';
 
 // icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -54,7 +54,15 @@ function NavBar(props: NavBarProps) {
                     <NavDropdown
                         style={{ color: 'black' }}
                         className="d-flex"
-                        title={user?.username + '-' + user?.role.name}
+                        title={
+                            user?.username ? (
+                                user?.username + '-' + user?.role.name
+                            ) : (
+                                <>
+                                    <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
+                                </>
+                            )
+                        }
                         id="collapsible-nav-dropdown"
                     >
                         <NavDropdown.Item>Profile (soon)</NavDropdown.Item>
