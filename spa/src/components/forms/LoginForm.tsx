@@ -1,10 +1,7 @@
 'use client';
 
 // react
-import React, { useEffect, useState } from 'react';
-
-// config
-import config from '../../../config';
+import React, { useState } from 'react';
 
 // react bootstrap components
 import { Form, Button } from 'react-bootstrap';
@@ -42,14 +39,8 @@ export default function UserForm() {
     const handleSubmit = async() => {
         setDisableSubmit(true);
 
-        // user data
-        const userData = {
-            email: email,
-            password: password,
-        };
-
         // call the login function to set the user in the context
-        const log = await login(userData);
+        const log = await login(email, password);
         if (!log) {
             setDisableSubmit(false);
             notify.error('Invalid credentials');

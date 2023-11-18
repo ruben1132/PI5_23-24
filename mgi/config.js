@@ -27,7 +27,7 @@ export default {
     // Your secret sauce
     jwtSecret: getEnvVariable('JWT_SECRET', 'secret'),
 
-    // 
+    // client URL
     clientURL: getEnvVariable('CLIENT_URL', 'http://localhost:3000'),
 
 

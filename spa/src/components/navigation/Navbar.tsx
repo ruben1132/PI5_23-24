@@ -18,6 +18,9 @@ import { faAlignLeft } from '@fortawesome/free-solid-svg-icons';
 // auth context
 import { useAuth } from '@/context/AuthContext';
 
+// nextjs
+import { useRouter } from 'next/navigation';
+
 interface NavBarProps {
     toggle: () => void;
 }
@@ -25,8 +28,15 @@ interface NavBarProps {
 function NavBar(props: NavBarProps) {
     const { logout, user } = useAuth();
 
-    const logOut = () => {
-        logout();
+    // router
+    const router = useRouter();
+
+    const logOut = async () => {
+        const res = await logout();
+
+        if (res) {
+            router.push('/login');
+        }
     };
 
     return (
@@ -40,8 +50,13 @@ function NavBar(props: NavBarProps) {
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="navbarScroll" />
                 <Navbar.Collapse id="navbarScroll">
-                    <Nav  className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll></Nav>
-                    <NavDropdown style={{color:"black"}} className="d-flex" title={ user?.username + "-" + user?.userRole} id="collapsible-nav-dropdown">
+                    <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll></Nav>
+                    <NavDropdown
+                        style={{ color: 'black' }}
+                        className="d-flex"
+                        title={user?.username + '-' + user?.role.name}
+                        id="collapsible-nav-dropdown"
+                    >
                         <NavDropdown.Item>Profile (soon)</NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item onClick={logOut}>Logout</NavDropdown.Item>

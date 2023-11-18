@@ -51,14 +51,12 @@ export async function middleware(request: NextRequest) {
         return NextResponse.next(); // Continue to the next Middleware or route handler
     } catch (error: any) {
         
-        console.log(pathname);
-
-        if (conf.nullRoutes.includes(pathname) || conf.authRoutes.includes(pathname)) {
+        // if (conf.nullRoutes.includes(pathname) || conf.authRoutes.includes(pathname)) {
             
-            return NextResponse.next();
-        }
+        //     return NextResponse.next();
+        // }
 
-        return NextResponse.redirect(url);
+        // return NextResponse.redirect(url);
     }
 }
 

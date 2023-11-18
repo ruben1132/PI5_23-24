@@ -21,6 +21,10 @@ export default class AuthController implements IAuthController /* TODO: extends 
 
             const { token, userDTO } = result.getValue();
 
+            res.header('Access-Control-Allow-Credentials', 'true');
+            res.header('Access-Control-Allow-Origin', config.clientURL);
+
+
             this.setCookie(res, token);
 
             return res.json(userDTO).status(201);
@@ -52,9 +56,12 @@ export default class AuthController implements IAuthController /* TODO: extends 
 
     public async logout(req: Request, res: Response, next: NextFunction) {
         try {
+            res.header('Access-Control-Allow-Credentials', 'true');
+            res.header('Access-Control-Allow-Origin', config.clientURL);
+            
             // destroy cookie
             res.clearCookie(config.cookieName);
-            return res.json({message: "logged out successfully!"}).status(201);
+            return res.json({ message: 'logged out successfully!' }).status(201);
         } catch (e) {
             return next(e);
         }
@@ -62,9 +69,11 @@ export default class AuthController implements IAuthController /* TODO: extends 
 
     public async session(req: Request, res: Response, next: NextFunction) {
         try {
-  
-            const token = req.cookies[config.cookieName];
-                
+            res.header('Access-Control-Allow-Credentials', 'true');
+            res.header('Access-Control-Allow-Origin', config.clientURL);
+
+            const token = req.cookies[config.cookieName];            
+
             if (!token) {
                 return res.status(401).json({ message: 'Unauthorized: Missing token' });
             }
@@ -84,12 +93,26 @@ export default class AuthController implements IAuthController /* TODO: extends 
     }
 
     private setCookie(res: Response, token: string) {
-        const cookieOptions: CookieOptions = {
-            httpOnly: true,
-            sameSite: 'strict', // Allows cross-origin cookies
-            secure: process.env.NODE_ENV === 'production', // Requires HTTPS if in production
-            maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        };
+        let cookieOptions: CookieOptions = {};
+
+        if (process.env.NODE_ENV === 'production') {
+            cookieOptions = {
+                httpOnly: true,
+                sameSite: 'none', // Allows cross-origin cookies
+                secure: true, // Requires HTTPS if in production
+                maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+                path: '/',
+            };
+        } else {
+            cookieOptions = {
+                httpOnly: true,
+                path: '/', // path = where the cookie is valid
+                domain: 'localhost', // domain = what domain the cookie is valid on
+                secure: false,
+                sameSite: "lax", // "strict" | "lax" | "none" (secure must be true)
+                maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+            };
+        }
 
         res.cookie(config.cookieName, token, cookieOptions);
     }

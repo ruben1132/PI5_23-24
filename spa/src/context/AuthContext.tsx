@@ -3,16 +3,12 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
 import config from '../../config';
-
-interface User {
-    email: string;
-    password: string;
-}
+import {User} from "../models/User";
 
 interface AuthContextProps {
     user: User | null;
-    login: (userData: User) => Promise<boolean>;
-    logout: () => void;
+    login: (email: string, password: string) => Promise<boolean>;
+    logout: () => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
@@ -28,16 +24,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const response = await request(config.mgiAPI.baseUrl + config.mgiAPI.routes.session, 'GET');
 
         if (response) {
-            const { user } = response;
-            setUser(user);
+            setUser(response);
         }
     };
 
-    const login = async (userData: User) => {
-        const response = await request(config.mgiAPI.baseUrl + config.mgiAPI.routes.login, 'POST', userData);
+    const login = async (email: string, password: string) => {
+        const response = await request(config.mgiAPI.baseUrl + config.mgiAPI.routes.login, 'POST', {
+            email,
+            password,
+        });
+
         if (!response) {
             return false;
         }
+
+        console.log(response)
         setUser(response);
         return true
     };
@@ -46,7 +47,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const response = await request(config.mgiAPI.baseUrl + config.mgiAPI.routes.logout, 'POST');
         if (response) {
             setUser(null);
+            return true;
         }
+        return false;
     };
 
     useEffect(() => {
