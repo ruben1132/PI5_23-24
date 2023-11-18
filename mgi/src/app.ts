@@ -8,18 +8,23 @@ import Logger from './loaders/logger';
 
 import cors from 'cors';
 
+import cookieParser from 'cookie-parser';
+
 async function startServer() {
     const app = express();
 
-    await require('./loaders').default({ expressApp: app });
+    // cookies middleware
+    app.use(cookieParser());
 
     // Use the cors middleware
     app.use(
         cors({
-            origin: config.clientURL,
+            origin: '*',
             credentials: true,
         }),
     );
+
+    await require('./loaders').default({ expressApp: app });
 
     app.listen(config.port, () => {
         console.log('Server listening on port:: ' + config.port);

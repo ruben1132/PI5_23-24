@@ -1,6 +1,5 @@
 import { Service, Inject } from 'typedi';
 
-import jwt from 'jsonwebtoken';
 import config from '../../config';
 import * as bcrypt from 'bcrypt';
 
@@ -27,41 +26,15 @@ export default class UserService implements IUserService {
         @Inject('logger') private logger,
     ) {}
 
-    public async login(email: string, password: string): Promise<Result<{ userDTO: IUserWithRoleDTO; token: string }>> {
-        try {
-            const user = await this.userRepo.findByEmail(email);
-
-            if (!user) {
-                return Result.fail<{ userDTO: IUserWithRoleDTO; token: string }>('User not found');
-            }
-
-            const passwordMatch = await bcrypt.compare(password, user.password.value);
-
-            if (!passwordMatch) {
-                return Result.fail<{ userDTO: IUserWithRoleDTO; token: string }>('Invalid password');
-            }
-
-            // get role
-            const role = await this.getRole(user.role.toString());
-
-            if (role.isFailure) {
-                return Result.fail<{ userDTO: IUserWithRoleDTO; token: string }>('Role doesnt exist!');
-            }
-
-            const userDTO = UserMap.toDTO(user, role.getValue());
-
-            const token = this.generateToken(userDTO);
-
-
-            return Result.ok<{ userDTO: IUserWithRoleDTO; token: string }>({ userDTO, token });
-        } catch (e) {
-            this.logger.error(e);
-            return Result.fail<{ userDTO: IUserWithRoleDTO; token: string }>('Internal Server Error');
-        }
-    }
-
     public async createUser(newUser: IUserDTO): Promise<Result<IUserWithRoleDTO>> {
         try {
+
+            const userAlreadyExists = await this.userRepo.findByEmail(newUser.email);
+
+            if (userAlreadyExists) {
+                return Result.fail<IUserWithRoleDTO>('User already exists with the given email');
+            }
+
             // check if role exists
             const role = await this.getRole(newUser.role);
 
@@ -190,26 +163,6 @@ export default class UserService implements IUserService {
             this.logger.error(e);
             return Result.fail<void>('Internal Server Error');
         }
-    }
-
-    private generateToken(user: IUserWithRoleDTO) {
-        const today = new Date();
-        const exp = new Date(today);
-        exp.setDate(today.getDate() + 90);
-
-        const id = user.id.toString();
-        const email = user.email;
-        const role = user.role.name;
-
-        return jwt.sign(
-            {
-                id: id,
-                email: email, // We are gonna use this in the middleware 'isAuth'
-                role: role,
-                exp: exp.getTime() / 1000,
-            },
-            config.jwtSecret,
-        );
     }
 
     private async getRole(roleId: string): Promise<Result<Role>> {

@@ -27,10 +27,9 @@ export class UserMap extends Mapper<User> {
         } as IUserWithRoleDTO;
     }
 
-    public static async toDomain(raw: any): Promise<User> {
+    public static toDomain(raw: any): User {
         const userEmailOrError = UserEmail.create(raw.email);
         const userPasswordOrError = UserPassword.create({ value: raw.password, hashed: true });
-        const repo = Container.get(RoleRepo);
 
         const userOrError = User.create(
             {

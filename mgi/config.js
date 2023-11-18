@@ -91,6 +91,10 @@ export default {
             name: 'UserController',
             path: '../controllers/userController',
         },
+        auth: {
+            name: 'AuthController',
+            path: '../controllers/authController',
+        },
     },
 
     repos: {
@@ -184,6 +188,10 @@ export default {
         user: {
             name: 'UserService',
             path: '../services/userService',
+        },
+        auth: {
+            name: 'AuthService',
+            path: '../services/authService',
         },
     },
 

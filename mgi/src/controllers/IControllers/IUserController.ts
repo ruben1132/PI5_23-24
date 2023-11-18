@@ -6,6 +6,4 @@ export default interface IUserController {
     updateUser(req: Request, res: Response, next: NextFunction);
     getUserById(req: Request, res: Response, next: NextFunction);
     deleteUser(req: Request, res: Response, next: NextFunction);
-    login(req: Request, res: Response, next: NextFunction);
-    logout(req: Request, res: Response, next: NextFunction);
 }

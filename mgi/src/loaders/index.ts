@@ -86,6 +86,11 @@ export default async ({ expressApp }) => {
         path: config.controllers.user.path,
     };
 
+    const authController = {
+        name: config.controllers.auth.name,
+        path: config.controllers.auth.path,
+    };
+
     const buildingController = {
         name: config.controllers.building.name,
         path: config.controllers.building.path,
@@ -198,6 +203,11 @@ export default async ({ expressApp }) => {
         path: config.services.user.path,
     };
 
+    const authService = {
+        name: config.services.auth.name,
+        path: config.services.auth.path,
+    };
+
     const buildingService = {
         name: config.services.building.name,
         path: config.services.building.path,
@@ -264,6 +274,7 @@ export default async ({ expressApp }) => {
         controllers: [
             roleController,
             userController,
+            authController,
             buildingController,
             floorController,
             floorMapController,
@@ -290,6 +301,7 @@ export default async ({ expressApp }) => {
         services: [
             roleService,
             userService,
+            authService,
             buildingService,
             floorService,
             floorMapService,

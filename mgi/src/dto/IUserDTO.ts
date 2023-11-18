@@ -8,6 +8,13 @@ export interface IUserDTO{
   role: string;
 }
 
+export interface IUserSignupDTO{
+  username: string;
+  email: string;
+  password: string;
+  role: string;
+}
+
 export interface IUserWithRoleDTO {
   id: string;
   username: string;
