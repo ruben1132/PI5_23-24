@@ -4,67 +4,54 @@ export default {
         {
             routeName: 'buildings',
             displayName: 'Buildings',
-            permissions: ['gestor campus'],
         },
         {
             routeName: 'floors',
             displayName: 'Floors',
-            permissions: ['gestor campus'],
         },
         {
             routeName: 'passages',
             displayName: 'Passages',
-            permissions: ['gestor campus'],
         },
         {
             routeName: 'robots',
             displayName: 'Robots',
-            permissions: ['gestor frota'],
         },
         {
             routeName: 'robottypes',
             displayName: 'Robot Types',
-            permissions: ['gestor frota'],
         },
         // {
         //   routeName: "tasks",
         //   displayName: "Tasks",
-        //   permissions: ["utente"],
         // },
         {
             routeName: 'tasktypes',
             displayName: 'Task Types',
-            permissions: ['gestor frota'],
         },
-        // {
-        //   routeName: "users",
-        //   displayName: "Users",
-        //   permissions: ["admin"],
-        // },
+        {
+            routeName: 'users',
+            displayName: 'Users',
+        },
         // {
         //   routeName: "floormaps",
         //   displayName: "Floor Maps" ,
-        //   permissions: ["gestor campus"]
         // },
         {
             routeName: 'roles',
             displayName: 'Roles',
-            permissions: ['admin'],
         },
         {
             routeName: 'elevators',
             displayName: 'Elevators',
-            permissions: ['gestor campus'],
         },
         {
             routeName: 'rooms',
             displayName: 'Rooms',
-            permissions: ['gestor campus'],
         },
         {
             routeName: 'v3d',
             displayName: '3D Viewer',
-            permissions: ['gestor campus', 'gestor frota'],
         },
     ],
 
@@ -84,6 +71,11 @@ export default {
             roles: 'roles/',
             elevators: 'elevators/',
             rooms: 'rooms/',
+            users: 'users/',
+            signup: 'auth/signup',
+            login: 'auth/login',
+            logout: 'auth/logout',
+            session: 'auth/session',
         },
     },
 
@@ -92,8 +84,8 @@ export default {
         routes: {
             login: 'login/',
             logout: 'logout/',
-            register: 'register/',
-            refresh: 'refresh/',
+            signin: 'signin/',
+            sesion: 'session/',
         },
     },
 
@@ -106,23 +98,30 @@ export default {
         UTENTE: 'utente',
     },
 
-    utenteRoutes: ['/dashboard/v3d', '/dashboard/taks'],
+    nullRoutes: ['/', '/aboutus', '/termsandconditions'],
 
-    adminRoutes: ['/dashboard/roles/', '/dashboard/users/'],
+    authRoutes: ['/login', '/signin'],
+
+    utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/taks'],
+
+    adminRoutes: ['/dashboard/roles', '/dashboard/users'],
 
     gestorFrotaRoutes: [
-        ...utenteRoutes,
-        '/dashboard/robottypes/',
-        '/dashboard/tasktypes/',
-        '/dashboard/tasktypes/',
-        '/dashboard/robots/',
+        '/dashboard',
+        '/dashboard/v3d',
+        '/dashboard/taks',
+        '/dashboard/robottypes',
+        '/dashboard/tasktypes',
+        '/dashboard/tasktypes',
+        '/dashboard/robots',
     ],
 
     gestorCampusRoutes: [
-        '/dashboard/buildings/',
-        '/dashboard/elevators/',
-        '/dashboard/floors/',
-        '/dashboard/passages/',
-        '/dashboard/rooms/',
+        '/dashboard',
+        '/dashboard/buildings',
+        '/dashboard/elevators',
+        '/dashboard/floors',
+        '/dashboard/passages',
+        '/dashboard/rooms',
     ],
 };

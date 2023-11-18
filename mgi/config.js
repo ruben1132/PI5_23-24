@@ -28,7 +28,7 @@ export default {
     jwtSecret: getEnvVariable('JWT_SECRET', 'secret'),
 
     // 
-    clientURL: getEnvVariable('CLIENT_URL', 'http://localhost:3000/'),
+    clientURL: getEnvVariable('CLIENT_URL', 'http://localhost:3000'),
 
 
     // Logging configuration

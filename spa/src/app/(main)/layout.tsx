@@ -13,6 +13,9 @@ import IndexNavBar from '@/components/navigation/IndexNavbar';
 // Auth provider
 import { AuthProvider } from '@/context/AuthContext';
 
+// components
+import Notification from '../../components/notification/Notification';
+
 export const metadata: Metadata = {
     title: 'RobDroneGo',
     description: 'dashboard for RobDroneGo',
@@ -24,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <body>
                 <AuthProvider>
                     <IndexNavBar />
+                    <Notification />
                     {children}
                 </AuthProvider>
             </body>

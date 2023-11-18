@@ -64,7 +64,7 @@ export default class AuthController implements IAuthController /* TODO: extends 
         try {
   
             const token = req.cookies[config.cookieName];
-            
+                
             if (!token) {
                 return res.status(401).json({ message: 'Unauthorized: Missing token' });
             }
@@ -86,7 +86,7 @@ export default class AuthController implements IAuthController /* TODO: extends 
     private setCookie(res: Response, token: string) {
         const cookieOptions: CookieOptions = {
             httpOnly: true,
-            sameSite: 'none', // Allows cross-origin cookies
+            sameSite: 'strict', // Allows cross-origin cookies
             secure: process.env.NODE_ENV === 'production', // Requires HTTPS if in production
             maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
         };

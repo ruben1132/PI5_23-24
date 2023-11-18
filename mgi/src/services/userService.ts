@@ -28,7 +28,6 @@ export default class UserService implements IUserService {
 
     public async createUser(newUser: IUserDTO): Promise<Result<IUserWithRoleDTO>> {
         try {
-
             const userAlreadyExists = await this.userRepo.findByEmail(newUser.email);
 
             if (userAlreadyExists) {
@@ -84,6 +83,7 @@ export default class UserService implements IUserService {
                     return Result.fail<IUserWithRoleDTO[]>('Role doesnt exist!');
                 }
                 const userDTO = UserMap.toDTO(user, role.getValue());
+                userDTO.password = '';
                 usersWithRole.push(userDTO);
             }
 
@@ -109,9 +109,20 @@ export default class UserService implements IUserService {
                 return Result.fail<IUserWithRoleDTO>('User not found');
             }
 
+            // check if email is already taken
+            const userAlreadyExists = await this.userRepo.findByEmail(u.email);
+
+            if (userAlreadyExists && userAlreadyExists.id.toString() !== u.id) {
+                return Result.fail<IUserWithRoleDTO>('User already exists with the given email');
+            }
+
             user.email = UserEmail.create(u.email).getValue();
             user.username = u.username;
             user.role = role.getValue().id;
+            if (u.password) {
+                const hashedPassword = await bcrypt.hash(u.password, 10); // 10 is the number of salt rounds
+                user.password = UserPassword.create({ value: hashedPassword }).getValue();
+            }
 
             await this.userRepo.save(user);
 
