@@ -13,7 +13,6 @@ async function fetchBuildings() {
 
         return response.data;
     } catch (e) {
-        console.log(e);
         return [];
     }
 }

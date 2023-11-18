@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import conf from '../config';
 import { User } from '@/models/User';
-import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -9,15 +9,11 @@ export async function middleware(request: NextRequest) {
     url.pathname = '/login';
 
     try {
-        const response = await axios({
-            method: 'GET',
-            withCredentials: true,
-            url: conf.authAPI.baseUrl + conf.authAPI.routes.sesion,
-        });
+        const currentUser = request.cookies.get(conf.cookieName)?.value;
+        // console.log('cookie:', currentUser);
 
-        if (!response.data) return NextResponse.redirect(url);
-
-        const user = response.data as User;
+        // validate token
+        jwt
 
         if (!user) {
             return NextResponse.redirect(url);
@@ -50,11 +46,10 @@ export async function middleware(request: NextRequest) {
 
         return NextResponse.next(); // Continue to the next Middleware or route handler
     } catch (error: any) {
-        
-        // if (conf.nullRoutes.includes(pathname) || conf.authRoutes.includes(pathname)) {
-            
-        //     return NextResponse.next();
-        // }
+        console.log('ererrre');
+        if (conf.nullRoutes.includes(pathname) || conf.authRoutes.includes(pathname)) {
+            return NextResponse.next();
+        }
 
         // return NextResponse.redirect(url);
     }
@@ -63,5 +58,5 @@ export async function middleware(request: NextRequest) {
 // this lets all the assets load
 export const config = {
     // matcher: '/:lng*'
-    matcher: ['/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)']
-  }
+    matcher: ['/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)'],
+};

@@ -38,7 +38,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             return false;
         }
 
-        console.log(response)
         setUser(response);
         return true
     };
@@ -53,7 +52,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     useEffect(() => {
-        fetchSession();
+        // fetchSession();
     }, []);
 
     return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
@@ -78,7 +77,6 @@ const request = async (url: string, method: string, data?: any): Promise<any> =>
 
         return response.data;
     } catch (error: any) {
-        console.log(error);
         return null;
     }
 };

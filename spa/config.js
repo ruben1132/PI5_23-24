@@ -124,4 +124,6 @@ export default {
         '/dashboard/passages',
         '/dashboard/rooms',
     ],
+
+    cookieName: "mgiAPI:authCookie"
 };

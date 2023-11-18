@@ -46,7 +46,6 @@ export default function UserForm() {
             notify.error('Invalid credentials');
             return;
         }
-        console.log('logged in')
         // redirect to the dashboard page
         router.push('/dashboard');
     };

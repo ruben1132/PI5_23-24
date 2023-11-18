@@ -24,7 +24,6 @@ export default class AuthController implements IAuthController /* TODO: extends 
             res.header('Access-Control-Allow-Credentials', 'true');
             res.header('Access-Control-Allow-Origin', config.clientURL);
 
-
             this.setCookie(res, token);
 
             return res.json(userDTO).status(201);
@@ -58,7 +57,7 @@ export default class AuthController implements IAuthController /* TODO: extends 
         try {
             res.header('Access-Control-Allow-Credentials', 'true');
             res.header('Access-Control-Allow-Origin', config.clientURL);
-            
+
             // destroy cookie
             res.clearCookie(config.cookieName);
             return res.json({ message: 'logged out successfully!' }).status(201);
@@ -72,10 +71,10 @@ export default class AuthController implements IAuthController /* TODO: extends 
             res.header('Access-Control-Allow-Credentials', 'true');
             res.header('Access-Control-Allow-Origin', config.clientURL);
 
-            const token = req.cookies[config.cookieName];            
+            const token = req.cookies[config.cookieName];
 
             if (!token) {
-                return res.status(401).json({ message: 'Unauthorized: Missing token' });
+                return res.status(401).send({ error: 'Unauthorized: Missing token'});
             }
 
             const result = await this.authServiceInstance.session(token);
@@ -83,6 +82,9 @@ export default class AuthController implements IAuthController /* TODO: extends 
             if (result.isFailure) {
                 return res.status(400).send({ error: result.errorValue() });
             }
+
+            console.log("sucesso");
+            
 
             const userDTO = result.getValue();
 
@@ -109,7 +111,7 @@ export default class AuthController implements IAuthController /* TODO: extends 
                 path: '/', // path = where the cookie is valid
                 domain: 'localhost', // domain = what domain the cookie is valid on
                 secure: false,
-                sameSite: "lax", // "strict" | "lax" | "none" (secure must be true)
+                sameSite: 'lax', // "strict" | "lax" | "none" (secure must be true)
                 maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
             };
         }
