@@ -1600,7 +1600,7 @@ export default class ThumbRaiser {
         this.mazeChanged = true;
 
         let newMaze = new Maze({
-            url: './v3d/mazes/' + newMazeUrl,
+            url: '/v3d/mazes/' + newMazeUrl,
             designCredits: 'GRUPO 100',
             texturesCredits:"",
             scale: new THREE.Vector3(1.0, 1.0, 1.0),

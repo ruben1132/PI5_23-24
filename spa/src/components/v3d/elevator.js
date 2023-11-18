@@ -70,7 +70,7 @@ export default class Elevator extends THREE.Group {
         const loader = new GLTFLoader();
 
         // Load a model description resource file
-        this.url = './v3d/models/elevator/elevator.glb';
+        this.url = '/v3d/models/elevator/elevator.glb';
         loader.load(
             //Resource URL
             this.url,

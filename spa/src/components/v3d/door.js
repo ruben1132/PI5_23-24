@@ -63,7 +63,7 @@ export default class Door extends THREE.Group {
         const loader = new FBXLoader();
 
         // Load a model description resource file
-        this.url = './v3d/models/door/3d-model.fbx';
+        this.url = '/v3d/models/door/3d-model.fbx';
         loader.load(
             //Resource URL
             this.url,

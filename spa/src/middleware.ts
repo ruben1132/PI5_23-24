@@ -89,6 +89,6 @@ export const config = {
          * - _next/static (static files)
          * - favicon.ico (favicon file)
          */
-        '/((?!api|admin|_next/static|_next/image|_ipx|assets|favicon.ico|under-development.svg|public).*)',
+        '/((?!api|admin|_next/static|_next/image|_ipx|assets|favicon.ico|under-development.svg|public|v3d).*)',
     ],
 };

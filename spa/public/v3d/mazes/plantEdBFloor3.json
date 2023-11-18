@@ -22,7 +22,7 @@
         "primaryColor": "0xffffff",
         "maps": {
             "color": {
-                "url": "./v3d/textures/Marble_Polished_wjmief0l_4K/wjmief0l_4K_Albedo.jpg"
+                "url": "/v3d/textures/Marble_Polished_wjmief0l_4K/wjmief0l_4K_Albedo.jpg"
             },
             "ao": {
                 "url": "",
@@ -43,7 +43,7 @@
                 "scale": 1.0
             },
             "roughness": {
-                "url": "./v3d/textures/Marble_Polished_wjmief0l_4K/wjmief0l_4K_Roughness.jpg",
+                "url": "/v3d/textures/Marble_Polished_wjmief0l_4K/wjmief0l_4K_Roughness.jpg",
                 "rough": 1.0
             }
         },
@@ -59,7 +59,7 @@
         "primaryColor": "0xffffff",
         "maps": {
             "color": {
-                "url": "./v3d/textures/Marble_Polished_wlhkfhqv_4K/wlhkfhqv_4K_Albedo.jpg"
+                "url": "/v3d/textures/Marble_Polished_wlhkfhqv_4K/wlhkfhqv_4K_Albedo.jpg"
             },
             "ao": {
                 "url": "",
@@ -80,7 +80,7 @@
                 "scale": 1.0
             },
             "roughness": {
-                "url": "./v3d/textures/Marble_Polished_wlhkfhqv_4K/wlhkfhqv_4K_Roughness.jpg",
+                "url": "/v3d/textures/Marble_Polished_wlhkfhqv_4K/wlhkfhqv_4K_Roughness.jpg",
                 "rough": 1.0
             }
         },

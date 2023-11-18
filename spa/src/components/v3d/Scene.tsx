@@ -43,7 +43,7 @@ export default function Scene(props: Props) {
                     enabled: true,
                     introductionClips: [
                         {
-                            url: './v3d/clips/el-gringo-12613.mp3',
+                            url: '/v3d/clips/el-gringo-12613.mp3',
                             position: 'initial', // Global (non-positional) audio object: ""; positional audio object: "scene x y z" (scene specific position in cartesian coordinates), "maze line column" (maze specific position in cell coordinates), "exit" (maze exit location), "initial" (player initial position), "player" (player current position), "spotlight" (spotlight current position)
                             referenceDistance: 1.0,
                             loop: false,
@@ -52,21 +52,21 @@ export default function Scene(props: Props) {
                     ],
                     idleClips: [
                         {
-                            url: './v3d/clips/Clearing-Throat-Moderate-Speed-www.fesliyanstudios.com.mp3',
+                            url: '/v3d/clips/Clearing-Throat-Moderate-Speed-www.fesliyanstudios.com.mp3',
                             position: 'player',
                             referenceDistance: 1.0,
                             loop: false,
                             volume: 0.75,
                         },
                         {
-                            url: './v3d/clips/Small-Double-Cough-1-www.fesliyanstudios.com.mp3',
+                            url: '/v3d/clips/Small-Double-Cough-1-www.fesliyanstudios.com.mp3',
                             position: 'player',
                             referenceDistance: 1.0,
                             loop: false,
                             volume: 0.75,
                         },
                         {
-                            url: './v3d/clips/Yawn-A2-www.fesliyanstudios.com.mp3',
+                            url: '/v3d/clips/Yawn-A2-www.fesliyanstudios.com.mp3',
                             position: 'player',
                             referenceDistance: 1.0,
                             loop: false,
@@ -75,14 +75,14 @@ export default function Scene(props: Props) {
                     ],
                     jumpClips: [
                         {
-                            url: './v3d/clips/Cheering-A6-www.fesliyanstudios.com.mp3',
+                            url: '/v3d/clips/Cheering-A6-www.fesliyanstudios.com.mp3',
                             position: 'player',
                             referenceDistance: 1.0,
                             loop: false,
                             volume: 0.75,
                         },
                         {
-                            url: './v3d/clips/Cheering-A7-www.fesliyanstudios.com.mp3',
+                            url: '/v3d/clips/Cheering-A7-www.fesliyanstudios.com.mp3',
                             position: 'player',
                             referenceDistance: 1.0,
                             loop: false,
@@ -91,14 +91,14 @@ export default function Scene(props: Props) {
                     ],
                     deathClips: [
                         {
-                            url: './v3d/clips/176653326.mp3',
+                            url: '/v3d/clips/176653326.mp3',
                             position: 'player',
                             referenceDistance: 1.0,
                             loop: false,
                             volume: 0.75,
                         },
                         {
-                            url: './v3d/clips/Horn+Squeeze+Clown.mp3',
+                            url: '/v3d/clips/Horn+Squeeze+Clown.mp3',
                             position: 'player',
                             referenceDistance: 1.0,
                             loop: false,
@@ -107,7 +107,7 @@ export default function Scene(props: Props) {
                     ],
                     danceClips: [
                         {
-                            url: './v3d/clips/best-buddies-12609.mp3',
+                            url: '/v3d/clips/best-buddies-12609.mp3',
                             position: 'exit',
                             referenceDistance: 1.0,
                             loop: true,
@@ -116,21 +116,21 @@ export default function Scene(props: Props) {
                     ],
                     endClips: [
                         {
-                            url: './v3d/clips/Ba-Bum-Tss-Joke-Drum-A1-www.fesliyanstudios.com.mp3',
+                            url: '/v3d/clips/Ba-Bum-Tss-Joke-Drum-A1-www.fesliyanstudios.com.mp3',
                             position: 'exit',
                             referenceDistance: 1.0,
                             loop: false,
                             volume: 2.0,
                         },
                         {
-                            url: './v3d/clips/yay-6326.mp3',
+                            url: '/v3d/clips/yay-6326.mp3',
                             position: 'exit',
                             referenceDistance: 1.0,
                             loop: false,
                             volume: 0.75,
                         },
                         {
-                            url: './v3d/clips/crowd-cheer-ii-6263.mp3',
+                            url: '/v3d/clips/crowd-cheer-ii-6263.mp3',
                             position: 'exit',
                             referenceDistance: 1.0,
                             loop: false,
@@ -145,7 +145,7 @@ export default function Scene(props: Props) {
                         {
                             // Stormy days
                             name: 'Stormy days',
-                            texturePath: './v3d/cube_textures/envmap_stormydays/',
+                            texturePath: '/v3d/cube_textures/envmap_stormydays/',
                             texturePositiveXUrl: 'stormydays_ft.jpg',
                             textureNegativeXUrl: 'stormydays_bk.jpg',
                             texturePositiveYUrl: 'stormydays_up.jpg',
@@ -158,7 +158,7 @@ export default function Scene(props: Props) {
                         {
                             // Miramar
                             name: 'Miramar',
-                            texturePath: './v3d/cube_textures/red-eclipse-skyboxes/skyboxes/',
+                            texturePath: '/v3d/cube_textures/red-eclipse-skyboxes/skyboxes/',
                             texturePositiveXUrl: 'miramar_ft.jpg',
                             textureNegativeXUrl: 'miramar_bk.jpg',
                             texturePositiveYUrl: 'miramar_up.jpg',
@@ -171,7 +171,7 @@ export default function Scene(props: Props) {
                         {
                             // Flat sunset
                             name: 'Flat sunset',
-                            texturePath: './v3d/cube_textures/red-eclipse-skyboxes/skyboxes/',
+                            texturePath: '/v3d/cube_textures/red-eclipse-skyboxes/skyboxes/',
                             texturePositiveXUrl: 'sunsetflat_ft.jpg',
                             textureNegativeXUrl: 'sunsetflat_bk.jpg',
                             texturePositiveYUrl: 'sunsetflat_up.jpg',
@@ -223,7 +223,7 @@ export default function Scene(props: Props) {
                         {
                             // Heaven
                             name: 'Heaven',
-                            texturePath: './v3d/cube_textures/xonotic-skyboxes/skyboxes/heaven/',
+                            texturePath: '/v3d/cube_textures/xonotic-skyboxes/skyboxes/heaven/',
                             texturePositiveXUrl: 'heaven_ft.jpg',
                             textureNegativeXUrl: 'heaven_bk.jpg',
                             texturePositiveYUrl: 'heaven_up.jpg',
@@ -237,7 +237,7 @@ export default function Scene(props: Props) {
                     selected: 2,
                 }, // Cube texture parameters
                 {
-                    url: './v3d/mazes/defaultPlant.json',
+                    url: '/v3d/mazes/defaultPlant.json',
                     designCredits: '',
                     texturesCredits: '',
                     helpersColor: new THREE.Color(0xff0077),
