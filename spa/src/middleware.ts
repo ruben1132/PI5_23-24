@@ -10,6 +10,13 @@ export async function middleware(request: NextRequest) {
     try {
         const currentUser = request.cookies.get(conf.cookieName)?.value;
 
+        if (!currentUser) {
+            if (conf.authRoutes.includes(pathname) || conf.nullRoutes.includes(pathname)) {
+                return NextResponse.next(); // Continue to the next Middleware or route handler
+            }
+            return NextResponse.redirect(url);
+        }
+
         // Manually set the cookie in the request headers
         const headers = new Headers({
             Authorization: `Bearer ${currentUser}`,
@@ -24,7 +31,10 @@ export async function middleware(request: NextRequest) {
 
         const user = await response.json();
 
-        if (!user) {
+        if (!user?.id) {
+            if (conf.authRoutes.includes(pathname) || conf.nullRoutes.includes(pathname)) {
+                return NextResponse.next(); // Continue to the next Middleware or route handler
+            }
             return NextResponse.redirect(url);
         }
 
@@ -62,12 +72,23 @@ export async function middleware(request: NextRequest) {
         console.log('no role');
         return NextResponse.redirect(url);
     } catch (error: any) {
-        return NextResponse.redirect(url);
+        if (conf.authRoutes.includes(pathname)) {
+            return NextResponse.next(); // Continue to the next Middleware or route handler
+        }
+        // return NextResponse.redirect(url);
     }
 }
 
 // this lets all the assets load
 export const config = {
     // matcher: '/:lng*'
-    matcher: ['/((?!api|_next/static|_next/image|assets|favicon.ico|sw.js).*)'],
+    matcher: [
+        /*
+         * Match all request paths except for the ones starting with:
+         * - api (API routes)
+         * - _next/static (static files)
+         * - favicon.ico (favicon file)
+         */
+        '/((?!api|admin|_next/static|_next/image|_ipx|assets|favicon.ico|under-development.svg|public).*)',
+    ],
 };
