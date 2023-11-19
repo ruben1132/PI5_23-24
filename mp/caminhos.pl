@@ -82,14 +82,14 @@ coordenadas(c108, c1, 8, 14).
 coordenadas(c110, c1, 8, 18).
 
 % Coordenadas Salas Edificio C - Piso 2
-coordenadas(c201, c2, 2, 8).
-coordenadas(c202, c2, 4, 4).
-coordenadas(c203, c2, 5, 8).
-coordenadas(c204, c2, 14, 5).
-coordenadas(c205, c2, 10, 3).
-coordenadas(c206, c2, 12, 3).
-coordenadas(c207, c2, 11, 8).
-coordenadas(c209, c2, 16, 9).
+coordenadas(c201, c2, 4, 2).
+coordenadas(c202, c2, 7, 4).
+coordenadas(c203, c2, 4, 5).
+coordenadas(c204, c2, 7, 14).
+coordenadas(c205, c2, 9, 10).
+coordenadas(c206, c2, 9, 12).
+coordenadas(c207, c2, 4, 11).
+coordenadas(c209, c2, 3, 16).
 
 % Coordenadas Salas Edificio C - Piso 3
 coordenadas(c301, c3, 5, 6).
@@ -116,14 +116,13 @@ coordenadas(d104, d1, 7, 9).
 coordenadas(d106, d1, 7, 13).
 coordenadas(d108, d1, 7, 18).
 
-
 % Coordenadas Salas Edificio D - Piso 2
-coordenadas(d201, d2, 4, 8).
-coordenadas(d202, d2, 9, 6).
-coordenadas(d203, d2, 9, 8).
-coordenadas(d204, d2, 13, 4).
-coordenadas(d205, d2, 13, 8).
-coordenadas(d206, d2, 16, 5).
+coordenadas(d201, d2, 4, 4).
+coordenadas(d202, d2, 6, 9).
+coordenadas(d203, d2, 4, 9).
+coordenadas(d204, d2, 7, 14).
+coordenadas(d205, d2, 4, 14).
+coordenadas(d206, d2, 5, 16).
 
 % Coordenadas Salas Edificio D - Piso 3
 coordenadas(d301, d3, 4, 8).
@@ -147,17 +146,7 @@ coordenadas(d2, 0, 11).
 coordenadas(d3, 1, 1).
 
 % Coordenadas das passagens
-coordenadas(a1,h2, 23, 11, 11, 23).
-coordenadas(b2,g2, 23, 11, 11, 23).
-coordenadas(b3,g3, 23, 11, 11, 23).
-coordenadas(b3,i3, 23, 11, 11, 23).
-coordenadas(g2,h2, 23, 11, 11, 23).
-coordenadas(g3,h3, 23, 11, 11, 23).
-coordenadas(h2,i2, 23, 11, 11, 23).
-coordenadas(i1,j1, 23, 11, 11, 23).
-coordenadas(i2,j2, 23, 11, 11, 23).
-coordenadas(i3,j3, 23, 11, 11, 23).
-
+coordenadas(c2,d2, 0, 14, 12, 20).
 
 %a encontrar um caminho entre edificios 
 %?- caminho_edificios(j,a,LEdCam).
