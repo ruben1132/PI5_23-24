@@ -21,7 +21,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<User | null>(null);
 
     const fetchSession = async () => {
-        const response = await request(config.mgiAPI.baseUrl + config.mgiAPI.routes.session, 'GET');
+        const response = await request(config.authAPI.baseUrl + config.authAPI.routes.session, 'GET');
 
         if (response) {
             setUser(response);
@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     const login = async (email: string, password: string) => {
-        const response = await request(config.mgiAPI.baseUrl + config.mgiAPI.routes.login, 'POST', {
+        const response = await request(config.authAPI.baseUrl + config.authAPI.routes.login, 'POST', {
             email,
             password,
         });
@@ -43,7 +43,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     const logout = async () => {
-        const response = await request(config.mgiAPI.baseUrl + config.mgiAPI.routes.logout, 'POST');
+        const response = await request(config.authAPI.baseUrl + config.authAPI.routes.logout, 'POST');
         if (response) {
             setUser(null);
             return true;

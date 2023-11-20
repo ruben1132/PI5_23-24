@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
             Cookie: `${conf.cookieName}=${currentUser}; HttpOnly; Secure; SameSite=None; Path=/`,
         });
 
-        const response = await fetch(conf.mgiAPI.baseUrl + conf.mgiAPI.routes.session, {
+        const response = await fetch(conf.authAPI.baseUrl + conf.authAPI.routes.session, {
             headers,
             credentials: 'include',
             method: 'GET',

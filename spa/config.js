@@ -101,15 +101,15 @@ export default {
         },
     },
 
-    // authAPI: {
-    //     baseUrl: process.env.NODE_ENV === 'production' ? process.env.AUTH_API_URL : 'http://localhost:4000/auth/',
-    //     routes: {
-    //         login: 'login/',
-    //         logout: 'logout/',
-    //         signin: 'signin/',
-    //         sesion: 'session/',
-    //     },
-    // },
+    authAPI: {
+        baseUrl: process.env.NODE_ENV === 'production' ? process.env.AUTH_API_URL : 'http://localhost:4000/api/auth/',
+        routes: {
+            login: 'login/',
+            logout: 'logout/',
+            signin: 'signin/',
+            session: 'session/',
+        },
+    },
 
     tokenName: 'robdronego:token',
 
