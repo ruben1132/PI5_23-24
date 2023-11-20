@@ -6,7 +6,7 @@
             [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1],
-            [3, 2, 2, 2, 3, 0, 2, 0, 2, 2, 2, 2, 1],
+            [3, 2, 2, 2, 1, 0, 2, 0, 2, 2, 2, 2, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 3, 2, 2, 2, 2, 2, 1, 0, 1],
             [1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1],
@@ -17,7 +17,7 @@
             [3, 2, 2, 2, 0, 0, 0, 0, 3, 0, 2, 2, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
             [0, 0, 0, 0, 3, 2, 2, 0, 1, 0, 0, 0, 1],
-            [0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+            [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
             [1, 2, 2, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
             [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
             [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
@@ -27,11 +27,7 @@
         "exitLocation": [16, 9]
     },
     "ground": {
-        "size": {
-            "width": 22.0,
-            "height": 0.0625,
-            "depth": 10.0
-        },
+        "size": { "width": 12.0, "height": 0.0625, "depth": 20.0 },
         "segments": {
             "width": 1,
             "height": 1,
@@ -127,115 +123,129 @@
     "fmRooms": [
         {
             "roomId": "6548deaf5c1f0f0111c718d8",
-                "startX": 0,
-                "startY": 0,
-                "endX": 4,
-                "endY": 2,
-            "location": {
-                "positionX": 3,
-                "positionY": 16,
-                "direction": "north"
+            "startX": 0,
+            "startY": 0,
+            "endX": 4,
+            "endY": 2,
+            "door": {
+                "position": {
+                    "positionX": 3,
+                    "positionY": 16,
+                    "direction": "north"
+                }
             }
         },
         {
             "roomId": "6548ded25c1f0f0111c718dc",
-                "startX": 6,
-                "startY": 2,
-                "endX": 0,
-                "endY": 0,
-            "location": {
-                "positionX": 7,
-                "positionY": 14,
-                "direction": "north"
+            "startX": 6,
+            "startY": 2,
+            "endX": 0,
+            "endY": 0,
+            "door": {
+                "position": {
+                    "positionX": 7,
+                    "positionY": 14,
+                    "direction": "north"
+                }
             }
         },
         {
             "roomId": "6548ded25c1f0f0111c718dc",
-                "startX": 6,
-                "startY": 2,
-                "endX": 0,
-                "endY": 0,
-            "location": {
-                "positionX": 9,
-                "positionY": 12,
-                "direction": "north"
+            "startX": 6,
+            "startY": 2,
+            "endX": 0,
+            "endY": 0,
+            "door": {
+                "position": {
+                    "positionX": 9,
+                    "positionY": 12,
+                    "direction": "north"
+                }
             }
         },
         {
             "roomId": "6548ded25c1f0f0111c718dc",
-                "startX": 6,
-                "startY": 2,
-                "endX": 0,
-                "endY": 0,
-            "location": {
-                "positionX": 4,
-                "positionY": 11,
-                "direction": "west"
+            "startX": 6,
+            "startY": 2,
+            "endX": 0,
+            "endY": 0,
+            "door": {
+                "position": {
+                    "positionX": 4,
+                    "positionY": 11,
+                    "direction": "west"
+                }
             }
         },
         {
             "roomId": "6548ded25c1f0f0111c718dc",
-                "startX": 6,
-                "startY": 2,
-                "endX": 0,
-                "endY": 0,
-            "location": {
-                "positionX": 7,
-                "positionY": 4,
-                "direction": "north"
+            "startX": 6,
+            "startY": 2,
+            "endX": 0,
+            "endY": 0,
+            "door": {
+                "position": {
+                    "positionX": 7,
+                    "positionY": 4,
+                    "direction": "north"
+                }
             }
         },
         {
             "roomId": "6548ded25c1f0f0111c718dc",
-                "startX": 6,
-                "startY": 2,
-                "endX": 0,
-                "endY": 0,
-            "location": {
-                "positionX": 4,
-                "positionY": 2,
-                "direction": "west"
+            "startX": 6,
+            "startY": 2,
+            "endX": 0,
+            "endY": 0,
+            "door": {
+                "position": {
+                    "positionX": 4,
+                    "positionY": 2,
+                    "direction": "west"
+                }
             }
         },
         {
             "roomId": "6548ded25c1f0f0111c718dc",
-            "dimension": {
-                "startX": 6,
-                "startY": 2,
-                "endX": 0,
-                "endY": 0
-            },
-            "location": {
-                "positionX": 4,
-                "positionY": 5,
-                "direction": "west"
+            "startX": 6,
+            "startY": 2,
+            "endX": 0,
+            "endY": 0,
+            "door": {
+                "position": {
+                    "positionX": 4,
+                    "positionY": 5,
+                    "direction": "west"
+                }
             }
         },
         {
             "roomId": "6548ded25c1f0f0111c718dc",
-                "startX": 6,
-                "startY": 2,
-                "endX": 0,
-                "endY": 0,
-            "location": {
-                "positionX": 9,
-                "positionY": 10,
-                "direction": "north"
+            "startX": 6,
+            "startY": 2,
+            "endX": 0,
+            "endY": 0,
+            "door": {
+                "position": {
+                    "positionX": 9,
+                    "positionY": 10,
+                    "direction": "north"
+                }
             }
         }
     ],
     "fmElevator": {
         "elevatorId": "6548df025c1f0f0111c718e1",
-        "location": {
+        "position": {
             "positionX": 1,
             "positionY": 12,
-            "direction": "west"
+            "direction": "east"
         }
     },
     "fmPassages": [
         {
             "passageId": "6547ccee1ce30663f62d7204",
-            "location": {
+            "position": {
                 "positionX": 0,
                 "positionY": 14,
                 "direction": "west"

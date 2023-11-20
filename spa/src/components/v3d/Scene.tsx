@@ -237,7 +237,8 @@ export default function Scene(props: Props) {
                     selected: 2,
                 }, // Cube texture parameters
                 {
-                    url: '/v3d/mazes/plantEdCFloor1.json',
+                    // url: '/v3d/mazes/defaultPlant.json',
+                    url: '/v3d/mazes/plantEdBFloor3.json',
                     designCredits: '',
                     texturesCredits: '',
                     helpersColor: new THREE.Color(0xff0077),
