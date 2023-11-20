@@ -442,7 +442,7 @@ export default function Scene(props: Props) {
                                         <Form.Select onChange={handleSelectBuilding}>
                                             <option defaultChecked={true}>Select building</option>
                                             {props.buildings.map((building) => (
-                                                <option value={building.id}>{building.name}</option>
+                                                <option value={building.id} key={building.id}>{building.name}</option>
                                             ))}
                                         </Form.Select>
                                     </td>
@@ -453,7 +453,7 @@ export default function Scene(props: Props) {
                                                 <Form.Select onChange={handleSelectFloor}>
                                                     <option defaultChecked={true}>Select floor</option>
                                                     {floors.map((floor) => (
-                                                        <option value={floor.id}>{floor.information}</option>
+                                                        <option value={floor.id} key={floor.id}>{floor.information}</option>
                                                     ))}
                                                 </Form.Select>
                                             </>
