@@ -78,7 +78,7 @@ export default {
     ],
 
     mgiAPI: {
-        baseUrl: process.env.NODE_ENV === 'production' ? process.env.MGI_API_URL : 'http://localhost:4000/api/',
+        baseUrl: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MGI_API_URL : 'http://localhost:4000/api/',
         routes: {
             buildings: 'buildings/',
             floors: 'floors/',
@@ -102,7 +102,7 @@ export default {
     },
 
     authAPI: {
-        baseUrl: process.env.NODE_ENV === 'production' ? process.env.AUTH_API_URL : 'http://localhost:4000/api/auth/',
+        baseUrl: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_AUTH_API_URL : 'http://localhost:4000/api/auth/',
         routes: {
             login: 'login/',
             logout: 'logout/',
