@@ -8,7 +8,7 @@ export default function Login() {
                 {/* Logo */}
                 <Row className="mb-4">
                     <Col>
-                        <Image src="/logo.png" alt="Logo" width={90} height={100} />
+                        <Image src="/images/logo.png" alt="Logo" width={90} height={100} />
                     </Col>
                 </Row>
 

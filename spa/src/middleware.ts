@@ -69,7 +69,6 @@ export async function middleware(request: NextRequest) {
             return NextResponse.next(); // Continue to the next Middleware or route handler
         }
 
-        console.log('no role');
         return NextResponse.redirect(url);
     } catch (error: any) {
         if (conf.authRoutes.includes(pathname)) {
@@ -89,6 +88,6 @@ export const config = {
          * - _next/static (static files)
          * - favicon.ico (favicon file)
          */
-        '/((?!api|admin|_next/static|_next/image|_ipx|assets|favicon.ico|under-development.svg|public|v3d).*)',
+        '/((?!api|admin|_next/static|_next/image|_ipx|assets|favicon.ico|public|v3d|images).*)',
     ],
 };
