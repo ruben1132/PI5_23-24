@@ -1,7 +1,7 @@
 import TabInfo from '@/components/tab/TabInfo';
 
 export default function AboutUs() {
-    const tabs = ['Objeto Pretendido', 'Visão Geral', 'Mapa do Campus', 'Tarefas dos Robôs', 'Demonstração'];
+    const tabs = ['Objeto Pretendido', 'Visão Geral', 'Mapa do Campus', 'Tarefas dos Robôs', 'Demonstração', 'Contato'];
     const content = [
         <>
             <p>
@@ -50,6 +50,12 @@ export default function AboutUs() {
                 A solução será demonstrada com um campus composto por pelo menos 5 edifícios, interligados para
                 circulação entre todos os edifícios, cada piso com 3 a 5 pisos e em média 10 gabinetes/salas por piso.
             </p>
+        </>,
+        <>
+            <ul>
+                <li>robdronego@isep.ipp.pt</li>
+                <li>22 834 0500</li>
+            </ul>
         </>,
     ];
 
