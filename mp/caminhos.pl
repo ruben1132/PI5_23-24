@@ -2,7 +2,7 @@
 
 % campusBC.pl - edificios, elevadores, salas, passagens
 :- consult('campusBC.pl').
-
+:- consult('caminhosInternos.pl').
 
 
 
@@ -77,8 +77,8 @@ segue_pisos(PisoAct,PisoDest,[EdAct,EdSeg|LOutrosEd],[elev(PisoAct,PisoAct1),pas
 % d escolher o caminho que envolve menos utilizacoes de elevadores e em
 % caso de iguadade menos utilizacao de passagens, menos trocos
 %
-% ?- melhor_caminho_pisos(j2,g4,LLigMelhor).
-% LLigMelhor = [pass(j2, i2), pass(i2, h2), pass(h2, g2), elev(g2, g4)].
+% ?- melhor_caminho_pisos(a1,d3,L).
+% L = [elev(a1, a2), pass(a2, b2), pass(b2, d3)] 
 %
 %
 
@@ -96,4 +96,31 @@ menos_elevadores([LLig|OutrosLLig],LLigR,NElevR,NPassR):-
 conta([],0,0).
 conta([elev(_,_)|L],NElev,NPass):-conta(L,NElevL,NPass),NElev is NElevL+1.
 conta([pass(_,_)|L],NElev,NPass):-conta(L,NElev,NPassL),NPass is NPassL+1.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% auxiliar %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% predicado para processar cada piso da lista do caminho e chamar cria_grafo/3
+processar_caminho([]).                                          % chegou ao fim
+processar_caminho([Piso|Resto]):-
+                                dimensoes(Piso, Col, Lin),      % obtem as dimensões para o piso atual
+                                cria_grafo(Col, Lin, Piso),     % chama o cria_grafo/3 com as dimensões corretas
+                                processar_caminho(Resto).       % chamar recursivamente para o resto da lista
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTERFACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% predicado para o user - encontrar caminho entre 2 salas
+find_caminho_salas(SalaOr, SalaDest):-
+                      sala(SalaOr, PisoOr), sala(SalaDest, PisoDest),           % obter os pisos das salas
+                      find_caminho(PisoOr, PisoDest).                           % chamar o predicado para encontrar o melhor caminho
+
+% predicado para o user (integração do algoritmo do mlhr caminho e do algoritmo do robot)
+find_caminho(PisoOr, PisoDest):-
+                      melhor_caminho_pisos(PisoOr,PisoDest,Caminho),
+                      write('Melhor Caminho: '),write(Caminho),nl,
+                      processar_caminho(Caminho).
+
 
