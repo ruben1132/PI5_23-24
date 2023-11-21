@@ -111,24 +111,24 @@ processar_caminho([Elemento|Resto]):-
 
 % processa os pisos de um elemento do caminho
 processar_pisos_elemento(elev(Origem, Destino)) :-
-                                dimensoes(Origem, ColOrigem, LinOrigem),
-                                cria_grafo(ColOrigem, LinOrigem, Origem),       % chama o cria_grafo/3 para o piso de origem
-                                dimensoes(Destino, ColDestino, LinDestino),
-                                cria_grafo(ColDestino, LinDestino, Destino).    % chama o cria_grafo/3 para o piso de destino
+                                            dimensoes(Origem, ColOrigem, LinOrigem),
+                                            cria_grafo(ColOrigem, LinOrigem, Origem),       % chama o cria_grafo/3 para o piso de origem
+                                            dimensoes(Destino, ColDestino, LinDestino),
+                                            cria_grafo(ColDestino, LinDestino, Destino).    % chama o cria_grafo/3 para o piso de destino
 
 processar_pisos_elemento(pass(Origem, Destino)) :-
-                                dimensoes(Origem, ColOrigem, LinOrigem),
-                                cria_grafo(ColOrigem, LinOrigem, Origem),       % chama o cria_grafo/3 para o piso de origem
-                                dimensoes(Destino, ColDestino, LinDestino),
-                                cria_grafo(ColDestino, LinDestino, Destino).    % chama o cria_grafo/3 para o piso de destino
+                                            dimensoes(Origem, ColOrigem, LinOrigem),
+                                            cria_grafo(ColOrigem, LinOrigem, Origem),       % chama o cria_grafo/3 para o piso de origem
+                                            dimensoes(Destino, ColDestino, LinDestino),
+                                            cria_grafo(ColDestino, LinDestino, Destino).    % chama o cria_grafo/3 para o piso de destino
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTERFACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % predicado para o user - encontrar caminho entre 2 salas
 find_caminho_salas(SalaOr, SalaDest):-
-                      sala(SalaOr, PisoOr), sala(SalaDest, PisoDest),           % obter os pisos das salas
-                      find_caminho(PisoOr, PisoDest).                           % chamar o predicado para encontrar o melhor caminho
+                                sala(SalaOr, PisoOr), sala(SalaDest, PisoDest),           % obter os pisos das salas
+                                find_caminho(PisoOr, PisoDest).                           % chamar o predicado para encontrar o melhor caminho
 
 % predicado para o user (integração do algoritmo do mlhr caminho e do algoritmo do robot)
 find_caminho(PisoOr, PisoDest):-
