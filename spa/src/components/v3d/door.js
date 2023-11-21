@@ -44,7 +44,7 @@ export default class Door extends THREE.Group {
             });
 
             // Set the scale after loading textures
-            object.scale.set(0.018, 0.0055, 0.025);
+            object.scale.set(this.dScale[0], this.dScale[1], this.dScale[2]);
 
             // Add the door object to the scene
             this.add(object);

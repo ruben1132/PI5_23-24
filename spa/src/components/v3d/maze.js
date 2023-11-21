@@ -188,15 +188,15 @@ export default class Maze extends THREE.Group {
                 });
                 this.add(elevator);
             }
-
+            
             // create doors
             this.doors = []; // create array of doors to use for collisions detection
             description.fmRooms?.forEach((r) => {
                 const door = new Door({
                     door: r.door,
                     halfSize: this.halfSize,
-                    isOpen: false,
                     url: '/v3d/models/door/3d-model.fbx',
+                    dScale: [0.018, 0.0055, 0.025],
                 });
 
                 if (r?.door?.position?.positionX && r?.door?.position?.positionY) {
@@ -497,10 +497,10 @@ export default class Maze extends THREE.Group {
         this.mazeChanged = true;
 
         const door = new Door({
-            door: currentDoor.door,
+            door: r.door,
             halfSize: this.halfSize,
-            isOpen: false,
             url: '',
+            dScale: [0.018, 0.0055, 0.025],
         });
 
         this.remove(currentDoor); // remove current door
