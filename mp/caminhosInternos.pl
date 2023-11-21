@@ -8,23 +8,23 @@
 :- consult('coordenadasBC.pl').
 
 
-cria_grafo(_,0):-!.
-cria_grafo(Col,Lin):-cria_grafo_lin(Col,Lin),Lin1 is Lin-1,cria_grafo(Col,Lin1).
+cria_grafo(_,0, _):-!.
+cria_grafo(Col,Lin, Piso):-cria_grafo_lin(Col,Lin, Piso),Lin1 is Lin-1,cria_grafo(Col,Lin1, Piso).
 
 
-cria_grafo_lin(0,_):-!.
-cria_grafo_lin(Col,Lin):-m(Col,Lin,0),!,ColS is Col+1, ColA is Col-1, LinS is Lin+1,LinA is Lin-1,
-    ((m(ColS,Lin,0),assertz(ligacel(cel(Col,Lin),cel(ColS,Lin)));true)),
-    ((m(ColA,Lin,0),assertz(ligacel(cel(Col,Lin),cel(ColA,Lin)));true)),
-    ((m(Col,LinS,0),assertz(ligacel(cel(Col,Lin),cel(Col,LinS)));true)),
-    ((m(Col,LinA,0),assertz(ligacel(cel(Col,Lin),cel(Col,LinA)));true)),
-	((m(ColS,LinS,0), m(ColS,Lin,0), m(Col,LinS,0), assertz(ligacel(cel(Col,Lin),cel(ColS,LinS)));true)),
-	((m(ColA,LinA,0), m(ColA,Lin,0), m(Col,LinA,0), assertz(ligacel(cel(Col,Lin),cel(ColA,LinA)));true)),
-	((m(ColA,LinS,0), m(ColA,Lin,0), m(Col,LinS,0), assertz(ligacel(cel(Col,Lin),cel(ColA,LinS)));true)),
-	((m(ColS,LinA,0), m(ColS,Lin,0), m(Col,LinA,0), assertz(ligacel(cel(Col,Lin),cel(ColS,LinA)));true)),
+cria_grafo_lin(0,_,_):-!.
+cria_grafo_lin(Col,Lin,Piso):-m(Piso,Col,Lin,0),!,ColS is Col+1, ColA is Col-1, LinS is Lin+1,LinA is Lin-1,
+    ((m(Piso,ColS,Lin,0),assertz(ligacel(cel(Col,Lin),cel(ColS,Lin)));true)),
+    ((m(Piso,ColA,Lin,0),assertz(ligacel(cel(Col,Lin),cel(ColA,Lin)));true)),
+    ((m(Piso,Col,LinS,0),assertz(ligacel(cel(Col,Lin),cel(Col,LinS)));true)),
+    ((m(Piso,Col,LinA,0),assertz(ligacel(cel(Col,Lin),cel(Col,LinA)));true)),
+	((m(Piso,ColS,LinS,0), m(Piso,ColS,Lin,0), m(Piso,Col,LinS,0), assertz(ligacel(cel(Col,Lin),cel(ColS,LinS)));true)),
+	((m(Piso,ColA,LinA,0), m(Piso,ColA,Lin,0), m(Piso,Col,LinA,0), assertz(ligacel(cel(Col,Lin),cel(ColA,LinA)));true)),
+	((m(Piso,ColA,LinS,0), m(Piso,ColA,Lin,0), m(Piso,Col,LinS,0), assertz(ligacel(cel(Col,Lin),cel(ColA,LinS)));true)),
+	((m(Piso,ColS,LinA,0), m(Piso,ColS,Lin,0), m(Piso,Col,LinA,0), assertz(ligacel(cel(Col,Lin),cel(ColS,LinA)));true)),
     Col1 is Col-1,
-    cria_grafo_lin(Col1,Lin).
-cria_grafo_lin(Col,Lin):-Col1 is Col-1,cria_grafo_lin(Col1,Lin).
+    cria_grafo_lin(Col1,Lin,Piso).
+cria_grafo_lin(Col,Lin,Piso):-Col1 is Col-1,cria_grafo_lin(Col1,Lin,Piso).
 
 
 
