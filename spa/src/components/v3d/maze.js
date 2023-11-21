@@ -195,7 +195,8 @@ export default class Maze extends THREE.Group {
                 const door = new Door({
                     door: r.door,
                     halfSize: this.halfSize,
-                    isOpen: false
+                    isOpen: false,
+                    url: '/v3d/models/door/3d-model.fbx',
                 });
 
                 if (r?.door?.position?.positionX && r?.door?.position?.positionY) {
@@ -302,10 +303,7 @@ export default class Maze extends THREE.Group {
         const column = indices[1] + offsets[1];
 
         for (let i = 0; i < this.doors.length; i++) {
-            if (
-                this.doors[i].door.position.positionX === column &&
-                this.doors[i].door.position.positionY === row
-            ) {
+            if (this.doors[i].door.position.positionX === column && this.doors[i].door.position.positionY === row) {
                 if (orientation != 0) {
                     if (
                         Math.abs(position.x - (this.cellToCartesian([row, column]).x + delta.x * this.scale.x)) < radius
@@ -321,6 +319,11 @@ export default class Maze extends THREE.Group {
                         return true;
                     }
                 }
+
+                // change door
+                this.changeDoor(this.doors[i]);
+                this.doors.splice(i, 1); // remove from array
+
             }
         }
         return false;
@@ -487,5 +490,19 @@ export default class Maze extends THREE.Group {
             Math.abs(position.x - this.exitLocation.x) < 0.5 * this.scale.x &&
             Math.abs(position.z - this.exitLocation.z) < 0.5 * this.scale.z
         );
+    }
+
+    changeDoor(currentDoor) {
+        this.mazeChanged = true;
+
+        const door = new Door({
+            door: currentDoor.door,
+            halfSize: this.halfSize,
+            isOpen: false,
+            url: '',
+        });
+
+        this.remove(currentDoor); // remove current door
+        // this.add(door); // add new door
     }
 }
