@@ -5,6 +5,7 @@
 :- consult('caminhosInternos.pl').
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% algoritmos %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %a encontrar um caminho entre edificios 
 %?- caminho_edificios(j,a,LEdCam).
@@ -26,9 +27,6 @@ caminho_edificios2(EdAct,EdDest,LEdPassou,LEdCam):-(liga(EdAct,EdInt);liga(EdInt
 %
 
 todos_caminhos_edificios(EdOr,EdDest,LTCamEd):-findall(LEdCam,caminho_edificios(EdOr,EdDest,LEdCam),LTCamEd).
-
-
-
 
 
 
@@ -55,7 +53,6 @@ todos_caminhos_edificios(EdOr,EdDest,LTCamEd):-findall(LEdCam,caminho_edificios(
 %LEdCam = [j, i, h, g],
 % LLig = [elev(j2, j3), pass(j3, i3), elev(i3, i2), pass(i2, h2), pass(h2,g2), elev(g2, g4)]
 
-
 caminho_pisos(PisoOr,PisoDest,LEdCam,LLig):-pisos(EdOr,LPisosOr),member(PisoOr,LPisosOr),
                                  pisos(EdDest,LPisosDest),member(PisoDest,LPisosDest),
                                  caminho_edificios(EdOr,EdDest,LEdCam),
@@ -72,6 +69,7 @@ segue_pisos(PisoAct,PisoDest,[EdAct,EdSeg|LOutrosEd],[elev(PisoAct,PisoAct1),pas
     (passagem(EdAct,EdSeg,PisoAct1,PisoSeg);passagem(EdSeg,EdAct,PisoSeg,PisoAct1)),PisoAct1\==PisoAct,
     elevador(EdAct,LPisos),member(PisoAct,LPisos),member(PisoAct1,LPisos),
     segue_pisos(PisoSeg,PisoDest,[EdSeg|LOutrosEd],LOutrasLig).
+
 
 
 % d escolher o caminho que envolve menos utilizacoes de elevadores e em
