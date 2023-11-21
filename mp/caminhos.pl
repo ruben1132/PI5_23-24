@@ -174,7 +174,7 @@ todos_caminhos_edificios(EdOr,EdDest,LTCamEd):-findall(LEdCam,caminho_edificios(
 
 
 
-% c encontrar um caminho entre pisos de edificios usando passagemes e
+% c encontrar um caminho entre pisos de edificios usando passagens e
 % elevadores 
 %
 % ?- caminho_pisos(j2,g4,LEdCam,LLig).
