@@ -24,7 +24,6 @@ export default class Maze extends THREE.Group {
         this.loaded = false;
 
         this.onLoad = function (description) {
-
             const normalMapTypes = [THREE.TangentSpaceNormalMap, THREE.ObjectSpaceNormalMap];
             const wrappingModes = [THREE.ClampToEdgeWrapping, THREE.RepeatWrapping, THREE.MirroredRepeatWrapping];
             const magnificationFilters = [THREE.NearestFilter, THREE.LinearFilter];
@@ -182,7 +181,7 @@ export default class Maze extends THREE.Group {
             }
 
             // create the elevator
-            if(description.fmElevator) {
+            if (description.fmElevator) {
                 const elevator = new Elevator({
                     elevator: description.fmElevator,
                     halfSize: this.halfSize,
@@ -191,11 +190,17 @@ export default class Maze extends THREE.Group {
             }
 
             // create doors
+            this.doors = []; // create array of doors to use for collisions detection
             description.fmRooms?.forEach((r) => {
                 const door = new Door({
                     door: r.door,
                     halfSize: this.halfSize,
+                    isOpen: false
                 });
+
+                if (r?.door?.position?.positionX && r?.door?.position?.positionY) {
+                    this.doors.push(door);
+                }
                 this.add(door);
             });
 
@@ -280,6 +285,47 @@ export default class Maze extends THREE.Group {
         return false;
     }
 
+    doorCollision(position, halfSize) {
+        const indices = this.cartesianToCell(position);
+
+        if (
+            this.doorColli(indices, [0, 0], 0, position, { x: 0.0, z: -0.475 }, halfSize, 'north door') || // Collision with north door)
+            this.doorColli(indices, [0, 0], 1, position, { x: -0.475, z: 0.0 }, halfSize, 'west door') // Collision with west door
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    doorColli(indices, offsets, orientation, position, delta, radius, name) {
+        const row = indices[0] + offsets[0];
+        const column = indices[1] + offsets[1];
+
+        for (let i = 0; i < this.doors.length; i++) {
+            if (
+                this.doors[i].door.position.positionX === column &&
+                this.doors[i].door.position.positionY === row
+            ) {
+                if (orientation != 0) {
+                    if (
+                        Math.abs(position.x - (this.cellToCartesian([row, column]).x + delta.x * this.scale.x)) < radius
+                    ) {
+                        console.log('Collision with ' + name + '.');
+                        return true;
+                    }
+                } else {
+                    if (
+                        Math.abs(position.z - (this.cellToCartesian([row, column]).z + delta.z * this.scale.z)) < radius
+                    ) {
+                        console.log('Collision with ' + name + '.');
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     // Detect collision with walls (method: BC/AABB)
     wallCollision(indices, offsets, orientation, position, delta, radius, name) {
         const row = indices[0] + offsets[0];
@@ -299,6 +345,8 @@ export default class Maze extends THREE.Group {
         }
         return false;
     }
+
+    // this.wallCollision(indices, [0, 0], 0, position, { x: 0.0, z: -0.475 }, halfSize, 'north wall') || // Collision with north wall
 
     // Detect collision with walls and corners (method: OBB/AABB)
     wallAndCornerCollision(indices, offsets, orientation, obb, name) {

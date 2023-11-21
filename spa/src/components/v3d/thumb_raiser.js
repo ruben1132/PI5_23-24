@@ -1470,6 +1470,15 @@ export default class ThumbRaiser {
                     ) {
                         this.audio.play(this.audio.deathClips, false);
                         this.animations.fadeToAction('Death', 0.2);
+                    } else if (
+                        this.maze.doorCollision(
+                            position,
+                            this.collisionDetectionParameters.method != 'obb-aabb'
+                                ? this.player.radius
+                                : this.player.halfSize
+                        )
+                    ) {
+                        
                     } else if (this.player.keyStates.jump) {
                         this.audio.play(this.audio.jumpClips, true);
                         this.animations.fadeToAction('Jump', 0.2);
@@ -1602,7 +1611,7 @@ export default class ThumbRaiser {
         let newMaze = new Maze({
             url: '/v3d/mazes/' + newMazeUrl,
             designCredits: 'GRUPO 100',
-            texturesCredits:"",
+            texturesCredits: '',
             scale: new THREE.Vector3(1.0, 1.0, 1.0),
             helpersColor: new THREE.Color(0xffffff),
         });
