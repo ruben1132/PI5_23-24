@@ -4,7 +4,6 @@ import Sidebar from './Sidebar';
 import NavBar from './Navbar';
 import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
-import classNames from 'classnames';
 import '../../styles/navigation.css';
 
 interface NavigationProps {

@@ -7,7 +7,6 @@ import React from 'react';
 import { Nav, Button, Col } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 
-import classNames from 'classnames';
 
 // config
 import config from '../../../config';
