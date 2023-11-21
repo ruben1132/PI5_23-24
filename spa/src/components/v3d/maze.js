@@ -290,8 +290,10 @@ export default class Maze extends THREE.Group {
         const indices = this.cartesianToCell(position);
 
         if (
-            this.doorColli(indices, [0, 0], 0, position, { x: 0.0, z: -0.475 }, halfSize, 'north door') || // Collision with north door)
-            this.doorColli(indices, [0, 0], 1, position, { x: -0.475, z: 0.0 }, halfSize, 'west door') // Collision with west door
+            this.doorColli(indices, [0, 0], 0, position, { x: 0.0, z: -0.900 }, halfSize, 'north door') || // Collision with north door)
+            this.doorColli(indices, [0, 0], 1, position, { x: -0.900, z: 0.0 }, halfSize, 'west door')  || // Collision with west door
+            this.doorColli(indices, [1, 0], 0, position, { x: 0.0, z: -0.900 }, halfSize, 'south door') || // Collision with south wall
+            this.doorColli(indices, [0, 1], 1, position, { x: -0.900, z: 0.0 }, halfSize, 'east door')  // Collision with east wall
         ) {
             return true;
         }
@@ -308,22 +310,21 @@ export default class Maze extends THREE.Group {
                     if (
                         Math.abs(position.x - (this.cellToCartesian([row, column]).x + delta.x * this.scale.x)) < radius
                     ) {
-                        console.log('Collision with ' + name + '.');
+                        console.log('Collision1 with ' + name + '.');
+                        this.changeDoor(this.doors[i]); // change door
+                        this.doors.splice(i, 1); // remove from array
                         return true;
                     }
                 } else {
                     if (
                         Math.abs(position.z - (this.cellToCartesian([row, column]).z + delta.z * this.scale.z)) < radius
                     ) {
-                        console.log('Collision with ' + name + '.');
+                        console.log('Collision2 with ' + name + '.');
+                        this.changeDoor(this.doors[i]); // change door
+                        this.doors.splice(i, 1); // remove from array
                         return true;
                     }
                 }
-
-                // change door
-                this.changeDoor(this.doors[i]);
-                this.doors.splice(i, 1); // remove from array
-
             }
         }
         return false;
