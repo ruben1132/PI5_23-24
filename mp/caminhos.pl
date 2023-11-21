@@ -101,13 +101,26 @@ conta([pass(_,_)|L],NElev,NPass):-conta(L,NElev,NPassL),NPass is NPassL+1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% auxiliar %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% predicado para processar cada piso da lista do caminho e chamar cria_grafo/3
-processar_caminho([]).                                          % chegou ao fim
-processar_caminho([Piso|Resto]):-
-                                dimensoes(Piso, Col, Lin),      % obtem as dimensões para o piso atual
-                                cria_grafo(Col, Lin, Piso),     % chama o cria_grafo/3 com as dimensões corretas
-                                processar_caminho(Resto).       % chamar recursivamente para o resto da lista
+% processa cada piso da lista do caminho e chamar cria_grafo/3
+processar_caminho([]).                                                          % chegou ao fim
+processar_caminho([Elemento|Resto]):-
+                                processar_pisos_elemento(Elemento),             % processa os pisos do elemento atual
+                                processar_caminho(Resto).                       % chama recursivamente o resto da lista
 
+
+
+% processa os pisos de um elemento do caminho
+processar_pisos_elemento(elev(Origem, Destino)) :-
+                                dimensoes(Origem, ColOrigem, LinOrigem),
+                                cria_grafo(ColOrigem, LinOrigem, Origem),       % chama o cria_grafo/3 para o piso de origem
+                                dimensoes(Destino, ColDestino, LinDestino),
+                                cria_grafo(ColDestino, LinDestino, Destino).    % chama o cria_grafo/3 para o piso de destino
+
+processar_pisos_elemento(pass(Origem, Destino)) :-
+                                dimensoes(Origem, ColOrigem, LinOrigem),
+                                cria_grafo(ColOrigem, LinOrigem, Origem),       % chama o cria_grafo/3 para o piso de origem
+                                dimensoes(Destino, ColDestino, LinDestino),
+                                cria_grafo(ColDestino, LinDestino, Destino).    % chama o cria_grafo/3 para o piso de destino
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTERFACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -119,8 +132,8 @@ find_caminho_salas(SalaOr, SalaDest):-
 
 % predicado para o user (integração do algoritmo do mlhr caminho e do algoritmo do robot)
 find_caminho(PisoOr, PisoDest):-
-                      melhor_caminho_pisos(PisoOr,PisoDest,Caminho),
-                      write('Melhor Caminho: '),write(Caminho),nl,
-                      processar_caminho(Caminho).
+                            melhor_caminho_pisos(PisoOr,PisoDest,Caminho),      % obter o melhor caminho entre os pisos
+                            write('Melhor Caminho: '),write(Caminho),nl,        
+                            processar_caminho(Caminho).                         % chama recursivamente para processar o resto da lista
 
 
