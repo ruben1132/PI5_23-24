@@ -60,7 +60,7 @@ function Sidebar(props: SidebarProps) {
     const { user } = useAuth();
 
     return (
-        <div className={classNames('sidebar', { 'is-open': props.isOpen })}>
+        <div className={`sidebar ${props.isOpen ? 'is-open' : ''}`}>
             <div className="sidebar-header">
                 <Button variant="link" onClick={props.toggle} style={{ color: '#fff' }} className="mt-4">
                     <FontAwesomeIcon icon={faTimes} pull="right" size="xs" />

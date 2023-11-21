@@ -63,7 +63,7 @@ export default function Navigation({ children }: NavigationProps) {
                 <main>
                     <div className="App wrapper">
                         <Sidebar toggle={toggle} isOpen={isOpen} />
-                        <Container fluid className={classNames('content', { 'is-open': isOpen })}>
+                        <Container fluid className={`content ${isOpen ? 'is-open' : ''}`}>
                             <NavBar toggle={toggle} />
                             <br />
                             {/* Content */}
