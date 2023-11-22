@@ -35,11 +35,11 @@ export default {
             displayName: 'Robot Types',
             permissions: [userRole.GESTOR_FROTA],
         },
-        // {
-        //   routeName: "tasks",
-        //   displayName: "Tasks",
-        //   permissions: [userRole.GESTOR_CAMPUS],
-        // },
+        {
+           routeName: "tasks",
+           displayName: "Tasks",
+           permissions: [userRole.GESTOR_CAMPUS, userRole.UTENTE ],
+        },
         {
             routeName: 'tasktypes',
             displayName: 'Task Types',
@@ -75,11 +75,7 @@ export default {
             displayName: '3D Viewer',
             permissions: [userRole.UTENTE, userRole.GESTOR_FROTA],
         },
-        {
-            routeName: 'requestRobot',
-            displayName: 'RequestRobot',
-            permissions: [userRole.UTENTE, userRole.GESTOR_FROTA],
-        },
+        
     ],
 
     mgiAPI: {
@@ -103,7 +99,7 @@ export default {
             login: 'auth/login',
             logout: 'auth/logout',
             session: 'auth/session',
-            requestRobot: 'requestRobot/',
+           
         },
     },
 
