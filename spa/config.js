@@ -75,6 +75,11 @@ export default {
             displayName: '3D Viewer',
             permissions: [userRole.UTENTE, userRole.GESTOR_FROTA],
         },
+        {
+            routeName: 'requestRobot',
+            displayName: 'RequestRobot',
+            permissions: [userRole.UTENTE, userRole.GESTOR_FROTA],
+        },
     ],
 
     mgiAPI: {
@@ -98,6 +103,7 @@ export default {
             login: 'auth/login',
             logout: 'auth/logout',
             session: 'auth/session',
+            requestRobot: 'requestRobot/',
         },
     },
 
@@ -139,6 +145,7 @@ export default {
         '/dashboard/passages',
         '/dashboard/rooms',
     ],
+    
 
     cookieName: 'mgiAPI:authCookie',
 };
