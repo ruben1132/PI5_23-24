@@ -1,11 +1,9 @@
 % ALGORITMOS PARA OS MOVIMENTOS DO ROBO NO INTERIOR DE CADA PISO
-:-dynamic ligacel/2.
+:-dynamic ligacel/3.
 
 % floorMapsBC.pl - mapas dos pisos
 :- consult('floorMapsBC.pl').
 
-% coordenadasBC.pl - coordenadas dos elevadores, salas, passagens
-:- consult('coordenadasBC.pl').
 
 
 cria_grafo(_,0, _):-!.
@@ -14,14 +12,14 @@ cria_grafo(Col,Lin, Piso):-cria_grafo_lin(Col,Lin, Piso),Lin1 is Lin-1,cria_graf
 
 cria_grafo_lin(0,_,_):-!.
 cria_grafo_lin(Col,Lin,Piso):-m(Piso,Col,Lin,0),!,ColS is Col+1, ColA is Col-1, LinS is Lin+1,LinA is Lin-1,
-    ((m(Piso,ColS,Lin,0),assertz(ligacel(cel(Col,Lin),cel(ColS,Lin)));true)),
-    ((m(Piso,ColA,Lin,0),assertz(ligacel(cel(Col,Lin),cel(ColA,Lin)));true)),
-    ((m(Piso,Col,LinS,0),assertz(ligacel(cel(Col,Lin),cel(Col,LinS)));true)),
-    ((m(Piso,Col,LinA,0),assertz(ligacel(cel(Col,Lin),cel(Col,LinA)));true)),
-	((m(Piso,ColS,LinS,0), m(Piso,ColS,Lin,0), m(Piso,Col,LinS,0), assertz(ligacel(cel(Col,Lin),cel(ColS,LinS)));true)),
-	((m(Piso,ColA,LinA,0), m(Piso,ColA,Lin,0), m(Piso,Col,LinA,0), assertz(ligacel(cel(Col,Lin),cel(ColA,LinA)));true)),
-	((m(Piso,ColA,LinS,0), m(Piso,ColA,Lin,0), m(Piso,Col,LinS,0), assertz(ligacel(cel(Col,Lin),cel(ColA,LinS)));true)),
-	((m(Piso,ColS,LinA,0), m(Piso,ColS,Lin,0), m(Piso,Col,LinA,0), assertz(ligacel(cel(Col,Lin),cel(ColS,LinA)));true)),
+    ((m(Piso,ColS,Lin,0),assertz(ligacel(Piso,cel(Col,Lin),cel(ColS,Lin)));true)),
+    ((m(Piso,ColA,Lin,0),assertz(ligacel(Piso,cel(Col,Lin),cel(ColA,Lin)));true)),
+    ((m(Piso,Col,LinS,0),assertz(ligacel(Piso,cel(Col,Lin),cel(Col,LinS)));true)),
+    ((m(Piso,Col,LinA,0),assertz(ligacel(Piso,cel(Col,Lin),cel(Col,LinA)));true)),
+	((m(Piso,ColS,LinS,0), m(Piso,ColS,Lin,0), m(Piso,Col,LinS,0), assertz(ligacel(Piso,cel(Col,Lin),cel(ColS,LinS)));true)),
+	((m(Piso,ColA,LinA,0), m(Piso,ColA,Lin,0), m(Piso,Col,LinA,0), assertz(ligacel(Piso,cel(Col,Lin),cel(ColA,LinA)));true)),
+	((m(Piso,ColA,LinS,0), m(Piso,ColA,Lin,0), m(Piso,Col,LinS,0), assertz(ligacel(Piso,cel(Col,Lin),cel(ColA,LinS)));true)),
+	((m(Piso,ColS,LinA,0), m(Piso,ColS,Lin,0), m(Piso,Col,LinA,0), assertz(ligacel(Piso,cel(Col,Lin),cel(ColS,LinA)));true)),
     Col1 is Col-1,
     cria_grafo_lin(Col1,Lin,Piso).
 cria_grafo_lin(Col,Lin,Piso):-Col1 is Col-1,cria_grafo_lin(Col1,Lin,Piso).
@@ -65,4 +63,30 @@ bfs2(Dest,[LA|Outros],Cam):-
 	append(Outros,Novos,Todos),
 	bfs2(Dest,Todos,Cam).
 
+% A STAR
 
+% calcular a distância euclidiana entre duas células
+dist_euclidiana(cel(X1, Y1), cel(X2, Y2), Distancia) :-
+    Distancia is sqrt((X1 - X2)^2 + (Y1 - Y2)^2).
+
+% predicado principal do A*
+aStar(Orig, Dest, Cam, Custo) :-
+    aStar2(Dest, [(_, 0, [Orig])], Cam, Custo).
+
+% predicado auxiliar para o A*
+aStar2(Dest, [(_, Custo, [Dest|T])|_], Cam, Custo) :-
+    reverse([Dest|T], Cam).
+
+aStar2(Dest, [(_, Ca, LA)|Outros], Cam, Custo) :-
+    LA = [Act|_],
+    findall((CEX, CaX, [X|LA]),
+        (Dest \== Act, 
+        (ligacel(Act,X,CustoX);ligacel(X,Act,CustoX)),				% ligações bidirecionais
+        \+ member(X, LA),
+        CaX is CustoX + Ca, 
+        dist_euclidiana(X, Dest, EstX),
+        CEX is CaX + EstX),
+        Novos),
+    append(Outros, Novos, Todos),
+    sort(Todos, TodosOrd),
+    aStar2(Dest, TodosOrd, Cam, Custo).

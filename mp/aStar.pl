@@ -67,7 +67,7 @@ aStar2(Dest,[(_,Custo,[Dest|T])|_],Cam,Custo):-
 aStar2(Dest,[(_,Ca,LA)|Outros],Cam,Custo):-
 	LA=[Act|_],
 	findall((CEX,CaX,[X|LA]),
-		(Dest\==Act,edge(Act,X,CustoX),\+ member(X,LA),
+		(Dest\==Act,edge(Act,X,CustoX);edge(X,Act,CustoX),\+ member(X,LA),
 		CaX is CustoX + Ca, estimativa(X,Dest,EstX),
 		CEX is CaX +EstX),Novos),
 	append(Outros,Novos,Todos),
