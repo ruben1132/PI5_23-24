@@ -1,8 +1,9 @@
 % ALGORITMOS PARA ENCONTRAR OS CAMINHOS ENTRE EDIFICIOS E PISOS
 
-% campusBC.pl - edificios, elevadores, salas, passagens
-:- consult('campusBC.pl').
-:- consult('caminhosInternos.pl').
+
+:- consult('campusBC.pl').          % campusBC.pl - edificios, elevadores, salas, passagens
+:- consult('coordenadasBC.pl').     % coordenadasBC.pl - coordenadas dos elevadores, salas, passagens
+:- consult('caminhosInternos.pl').  % algoritmo para criar o grafo e algoritmos de pesquisa
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% algoritmos %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -100,25 +101,51 @@ conta([pass(_,_)|L],NElev,NPass):-conta(L,NElev,NPassL),NPass is NPassL+1.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% auxiliar %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % processa cada piso da lista do caminho e chamar cria_grafo/3
-processar_caminho([]).                                                          % chegou ao fim
+processar_caminho([]).                                                          
 processar_caminho([Elemento|Resto]):-
-                                processar_pisos_elemento(Elemento),             % processa os pisos do elemento atual
-                                processar_caminho(Resto).                       % chama recursivamente o resto da lista
+                        processa_rotas(Elemento),                       
+                        processar_caminho(Resto).                       % chama recursivamente o resto da lista
 
 
+% processa as rotas que o robo vai ter de fazer - elemento é um elevador
+processa_rotas(elev(Origem, Destino)) :-
+                        criar_grafos_pisos(Origem, Destino),                                        % cria os grafos dos pisos de origem e destino
+                        obter_coordenadas_elev(Origem, Destino, OrigX, OrigY, DestX, DestY),        % obtem as coordenadas
+                        find_caminho_robot(OrigX, OrigY, DestX, DestY).                             % encontra o caminho
 
-% processa os pisos de um elemento do caminho
-processar_pisos_elemento(elev(Origem, Destino)) :-
-                                            dimensoes(Origem, ColOrigem, LinOrigem),
-                                            cria_grafo(ColOrigem, LinOrigem, Origem),       % chama o cria_grafo/3 para o piso de origem
-                                            dimensoes(Destino, ColDestino, LinDestino),
-                                            cria_grafo(ColDestino, LinDestino, Destino).    % chama o cria_grafo/3 para o piso de destino
+% elemento é uma passagem
+processa_rotas(pass(Origem, Destino)) :-
+                        criar_grafos_pisos(Origem, Destino),                                        % cria os grafos dos pisos de origem e destino
+                        obter_coordenadas_pass(Origem, Destino, OrigX, OrigY, DestX, DestY),        % obtem as coordenadas
+                        find_caminho_robot(OrigX, OrigY, DestX, DestY).                             % encontra o caminho
 
-processar_pisos_elemento(pass(Origem, Destino)) :-
-                                            dimensoes(Origem, ColOrigem, LinOrigem),
-                                            cria_grafo(ColOrigem, LinOrigem, Origem),       % chama o cria_grafo/3 para o piso de origem
-                                            dimensoes(Destino, ColDestino, LinDestino),
-                                            cria_grafo(ColDestino, LinDestino, Destino).    % chama o cria_grafo/3 para o piso de destino
+
+% obtem as coordenadas dos elevadores
+obter_coordenadas_elev(Origem, Destino, OrigX, OrigY, DestX, DestY) :-
+                        coordenadas(Origem, OrigX, OrigY),                               % obtem as coordenadas do elevador origem  
+                        coordenadas(Destino, DestX, DestY).             
+
+% obtem as coordenadas das passagens
+obter_coordenadas_pass(Origem, Destino, OrigX, OrigY, DestX, DestY) :-                  
+                        coordenadas(Origem, Destino, OrigX, OrigY, DestX, DestY).        % obtem as coordenadas da passagem - origem e destino
+
+
+% cria os grafos dos pisos de origem e destino
+criar_grafos_pisos(Origem, Destino) :-
+                        dimensoes(Origem, ColOrigem, LinOrigem),                         % obtem as dimensoes do piso
+                        cria_grafo(ColOrigem, LinOrigem, Origem),                        % chama o cria_grafo/3 para o piso de origem
+                        dimensoes(Destino, ColDestino, LinDestino),      
+                        cria_grafo(ColDestino, LinDestino, Destino).    
+                                
+find_caminho_robot(OrigX, OrigY, DestX, DestY) :-                                
+                        aStar(cel(OrigX, OrigY), cel(DestX, DestY), Caminho, Custo),     % chama o A* para encontrar 
+                        write('Caminho: '), write(Caminho), nl,                         
+                        write('Custo: '), write(Custo), nl.
+                        % write('OrigX: '), write(OrigX), nl,                         
+                        % write('OrigY: '), write(OrigY), nl,
+                        % write('DestX: '), write(DestX), nl,                         
+                        % write('DestY: '), write(DestY), nl.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTERFACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -126,12 +153,12 @@ processar_pisos_elemento(pass(Origem, Destino)) :-
 % predicado para o user - encontrar caminho entre 2 salas
 find_caminho_salas(SalaOr, SalaDest):-
                                 sala(SalaOr, PisoOr), sala(SalaDest, PisoDest),           % obter os pisos das salas
-                                find_caminho(PisoOr, PisoDest).                           % chamar o predicado para encontrar o melhor caminho
+                                find_caminho(PisoOr, PisoDest).                           % encontrar o melhor caminho
 
 % predicado para o user (integração do algoritmo do mlhr caminho e do algoritmo do robot)
 find_caminho(PisoOr, PisoDest):-
-                            melhor_caminho_pisos(PisoOr,PisoDest,Caminho),      % obter o melhor caminho entre os pisos
+                            melhor_caminho_pisos(PisoOr,PisoDest,Caminho),                % obter o melhor caminho entre os pisos
                             write('Melhor Caminho: '),write(Caminho),nl,        
-                            processar_caminho(Caminho).                         % chama recursivamente para processar o resto da lista
+                            processar_caminho(Caminho).                                   % chama recursivamente para processar o resto da lista
 
 
