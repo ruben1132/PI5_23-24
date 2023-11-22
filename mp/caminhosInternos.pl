@@ -66,27 +66,27 @@ bfs2(Dest,[LA|Outros],Cam):-
 % A STAR
 
 % calcular a distância euclidiana entre duas células
-dist_euclidiana(cel(X1, Y1), cel(X2, Y2), Distancia) :-
+distancia_euclidiana_celula(cel(X1, Y1, _), cel(X2, Y2, _), Distancia) :-
     Distancia is sqrt((X1 - X2)^2 + (Y1 - Y2)^2).
 
 % predicado principal do A*
-aStar(Orig, Dest, Cam, Custo) :-
-    aStar2(Dest, [(_, 0, [Orig])], Cam, Custo).
+aStar(Orig, Dest, Cam, Custo, Piso) :-
+    aStar2(Piso, Dest, [(_, 0, [Orig])], Cam, Custo).
 
 % predicado auxiliar para o A*
-aStar2(Dest, [(_, Custo, [Dest|T])|_], Cam, Custo) :-
+aStar2(_, Dest, [(_, Custo, [Dest|T])|_], Cam, Custo) :-
     reverse([Dest|T], Cam).
 
-aStar2(Dest, [(_, Ca, LA)|Outros], Cam, Custo) :-
+aStar2(Piso, Dest, [(_, Ca, LA)|Outros], Cam, Custo) :-
     LA = [Act|_],
     findall((CEX, CaX, [X|LA]),
         (Dest \== Act, 
-        (ligacel(Act,X,CustoX);ligacel(X,Act,CustoX)),				% ligações bidirecionais
+        (ligacel(Piso, Act, X, CustoX);ligacel(Piso, X, Act, CustoX)),  % ligações bidirecionais
         \+ member(X, LA),
         CaX is CustoX + Ca, 
-        dist_euclidiana(X, Dest, EstX),
+        distancia_euclidiana_celula(X, Dest, EstX),
         CEX is CaX + EstX),
         Novos),
     append(Outros, Novos, Todos),
     sort(Todos, TodosOrd),
-    aStar2(Dest, TodosOrd, Cam, Custo).
+    aStar2(Piso, Dest, TodosOrd, Cam, Custo).

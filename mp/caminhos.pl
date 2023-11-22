@@ -98,67 +98,137 @@ conta([pass(_,_)|L],NElev,NPass):-conta(L,NElev,NPassL),NPass is NPassL+1.
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% auxiliar %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% auxiliar - processos %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % processa cada piso da lista do caminho e chamar cria_grafo/3
 processar_caminho([]).                                                          
-processar_caminho([Elemento|Resto]):-
-                        processa_rotas(Elemento),                       
-                        processar_caminho(Resto).                       % chama recursivamente o resto da lista
+processar_caminho([Elemento1, Elemento2|Resto]):-
+                        processar_elementos(Elemento1, Elemento2),                          % nao processa aos pares, processa em corrente, exemplo: 1,2  2,3  3,4 
+                        processar_caminho([Elemento2 | Resto]).
 
+% tem se deslocar entre pisos apenas - se o user mandar por exemplo elev(a1), elev(a2) - nao tem de fazer nada
+processar_elementos(elev(_), elev(_)).
 
-% processa as rotas que o robo vai ter de fazer - elemento é um elevador
-processa_rotas(elev(Origem, Destino)) :-
-                        criar_grafos_pisos(Origem, Destino),                                        % cria os grafos dos pisos de origem e destino
-                        obter_coordenadas_elev(Origem, Destino, OrigX, OrigY, DestX, DestY),        % obtem as coordenadas
-                        find_caminho_robot(OrigX, OrigY, DestX, DestY).                             % encontra o caminho
+% tem de se deslocar entre salas (pode acontecer se o user mandar 2 salas no mesmo piso)
+processar_elementos(sala(SalaOrig), sala(SalaDest)) :-
+                        sala(SalaOrig, Piso),                                               % obtem o piso da sala (que acaba por ser o mesmo pra ambas)
+                                                                             
+                        obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),                
+                        obter_coordenadas_sala(Piso, SalaDest, EndX, EndY), 
+                        write('Piso: '), write(Piso), nl,
+                        write('Sala Origem: '), write(SalaOrig), nl,
+                        write('Sala Destino: '), write(SalaDest), nl,
+                        write('Coordenadas Origem: '), write(StartX), write(' '), write(StartY), nl,
+                        write('Coordenadas Destino: '), write(EndX), write(' '), write(EndY), nl,
+                         criar_grafos_pisos(Piso),   
+                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY). 
 
-% elemento é uma passagem
-processa_rotas(pass(Origem, Destino)) :-
-                        criar_grafos_pisos(Origem, Destino),                                        % cria os grafos dos pisos de origem e destino
-                        obter_coordenadas_pass(Origem, Destino, OrigX, OrigY, DestX, DestY),        % obtem as coordenadas
-                        find_caminho_robot(OrigX, OrigY, DestX, DestY).                             % encontra o caminho
+% tem de se deslocar entre uma sala e um elevador (obviamente têm de ser do mesmo piso)
+processar_elementos(sala(SalaOrig), elev(Piso, _)) :-
+                        criar_grafos_pisos(Piso),                                                         
+                        obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),                
+                        obter_coordenadas_elev(Piso, EndX, EndY),   
+                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY).
 
+% tem de se deslocar entre uma sala e uma passagem (obviamente têm de ser do mesmo piso)
+processar_elementos(sala(SalaOrig), pass(Piso, _)) :-
+                        criar_grafos_pisos(Piso),                                                         
+                        obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),                
+                        obter_coordenadas_pass(Piso, Piso, EndX, EndY, _, _),   
+                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY).
+
+% tem de se deslocar entre uma passagem e um elevador
+processar_elementos(pass(PisoOrig,Piso), elev(Piso,_)) :-
+                        criar_grafos_pisos(Piso),                                                         
+                        obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),                
+                        obter_coordenadas_elev(Piso, EndX, EndY),   
+                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY).                             
+
+% tem de se deslocar entre um elevador e uma passagem
+processar_elementos(elev(_,Piso), pass(Piso,PisoDest)) :-
+                        criar_grafos_pisos(Piso),                                                  
+                        obter_coordenadas_elev(Piso, StartX, StartY),     
+                        obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),      
+                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY).                             
+
+% tem de se deslocar entre uma passagem e uma passagem
+processar_elementos(pass(PisoOrig, Piso), pass(Piso,PisoDest)) :-
+                        criar_grafos_pisos(Piso),                                       
+                        obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),      
+                        obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),      
+                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY).                            
+
+% tem de se deslocar entre um elevador e uma sala
+processar_elementos(elev(Piso, _), sala(SalaDest)) :-
+                        criar_grafos_pisos(Piso),                                       
+                        obter_coordenadas_elev(Piso, StartX, StartY),      
+                        obter_coordenadas_sala(Piso, SalaDest, EndX, EndY),      
+                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY).
+
+% tem de s deslocar entre uma passagem e uma sala
+processar_elementos(pass(PisoOrig, Piso), sala(SalaDest)) :-
+                        criar_grafos_pisos(Piso),                                       
+                        obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),      
+                        obter_coordenadas_sala(Piso, SalaDest, EndX, EndY),      
+                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY). 
 
 % obtem as coordenadas dos elevadores
-obter_coordenadas_elev(Origem, Destino, OrigX, OrigY, DestX, DestY) :-
-                        coordenadas(Origem, OrigX, OrigY),                               % obtem as coordenadas do elevador origem  
-                        coordenadas(Destino, DestX, DestY).             
+obter_coordenadas_elev(Piso, EleV, ElevY) :-
+                        coordenadas(Piso, EleV, ElevY).                                         
 
 % obtem as coordenadas das passagens
 obter_coordenadas_pass(Origem, Destino, OrigX, OrigY, DestX, DestY) :-                  
                         coordenadas(Origem, Destino, OrigX, OrigY, DestX, DestY).        % obtem as coordenadas da passagem - origem e destino
 
+% obtem as coordenadas das salas
+obter_coordenadas_sala(Piso, Sala, SalaX, SalaY) :-
+                        coordenadas(Sala, Piso, SalaX, SalaY).        
 
-% cria os grafos dos pisos de origem e destino
-criar_grafos_pisos(Origem, Destino) :-
-                        dimensoes(Origem, ColOrigem, LinOrigem),                         % obtem as dimensoes do piso
-                        cria_grafo(ColOrigem, LinOrigem, Origem),                        % chama o cria_grafo/3 para o piso de origem
-                        dimensoes(Destino, ColDestino, LinDestino),      
-                        cria_grafo(ColDestino, LinDestino, Destino).    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% auxiliar - interface %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% cria o grafo para um piso
+criar_grafos_pisos(Piso) :-
+                        dimensoes(Piso, Col, Lin),                         % obtem as dimensoes do piso
+                        cria_grafo(Col, Lin, Piso).                      
                                 
-find_caminho_robot(OrigX, OrigY, DestX, DestY) :-                                
-                        aStar(cel(OrigX, OrigY), cel(DestX, DestY), Caminho, Custo),     % chama o A* para encontrar 
+find_caminho_robot(Piso,StarX, StartY, EndX, EndY) :-                                
+                        aStar(cel(StarX, StartY), cel(EndX, EndY), Caminho, Custo, Piso),     % chama o A*
                         write('Caminho: '), write(Caminho), nl,                         
                         write('Custo: '), write(Custo), nl.
-                        % write('OrigX: '), write(OrigX), nl,                         
-                        % write('OrigY: '), write(OrigY), nl,
-                        % write('DestX: '), write(DestX), nl,                         
-                        % write('DestY: '), write(DestY), nl.
+
+
+% determinar o tipo da entidade recebida e buscar o piso
+determinar_tipo_entidade(sala(Elemento), Piso) :-
+                                sala(Elemento, Piso).                       % obtem o piso da sala
+
+determinar_tipo_entidade(elev(Piso), Piso).
+
+determinar_tipo_entidade(pass(Orig, Dest), Piso):-
+                                passagem(_,_, Orig, Dest), Piso = Orig.      % obtem o piso relevante da passagem
+
+
+% encontrar o melhor caminho entre os pisos
+find_caminho(PisoOr, PisoDest, Caminho):-
+                            melhor_caminho_pisos(PisoOr,PisoDest,Caminho).                % obter o melhor caminho entre os pisos
+                         
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTERFACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% predicado para o user - encontrar caminho entre 2 salas
-find_caminho_salas(SalaOr, SalaDest):-
-                                sala(SalaOr, PisoOr), sala(SalaDest, PisoDest),           % obter os pisos das salas
-                                find_caminho(PisoOr, PisoDest).                           % encontrar o melhor caminho
+% %%%% meter um predicado em q chama um predicado pra criar os grafos pra todos os pisos e criar um predicado em q realmente vai ser a interface
+% %%%% em q chama o predicado de criar os grafos e dps chama o find_caminho_salas (este predicado tem de ser alterado pra permitir receber 
+%  sala, piso | sala, elevador | sala, passagem | etc - basicamente fazer varios predicados pra cada tipo de elemento)
 
-% predicado para o user (integração do algoritmo do mlhr caminho e do algoritmo do robot)
-find_caminho(PisoOr, PisoDest):-
-                            melhor_caminho_pisos(PisoOr,PisoDest,Caminho),                % obter o melhor caminho entre os pisos
-                            write('Melhor Caminho: '),write(Caminho),nl,        
-                            processar_caminho(Caminho).                                   % chama recursivamente para processar o resto da lista
+% predicado para o user - encontrar caminho entre 2 pontos
+find_caminho_entidades(ElementoOr, ElementoDest) :-
+                     determinar_tipo_entidade(ElementoOr, PisoOr),                          % determinar o tipo e piso do elemento de origem
+                     determinar_tipo_entidade(ElementoDest, PisoDest),                            
+                     find_caminho(PisoOr, PisoDest, Caminho),                               % encontrar o melhor caminho entre os pisos
+                     append([ElementoOr|Caminho], [ElementoDest], CaminhoCompleto),         % add o ponto de partida e o ponto de chegada à lista do caminho
+                     write('Melhor Caminho: '),write(CaminhoCompleto),nl,        
+                     processar_caminho(CaminhoCompleto).                                  % processa o caminho encontrado
+
+
 
 
