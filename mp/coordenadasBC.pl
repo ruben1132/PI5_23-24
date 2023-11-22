@@ -116,4 +116,9 @@ coordenadas(d2, 0, 11).
 coordenadas(d3, 1, 1).
 
 % Coordenadas das passagens
-coordenadas(c2,d2, 0, 14, 12, 20).
+coordenadas(c2,d2, 0, 14, 12, 0).
+coordenadas(a2,b2, 22, 5, 0, 5).
+coordenadas(b2,c3, 22, 8, 0, 8).
+coordenadas(b2,d3, 21, 10, 10, 0).
+coordenadas(d3,c3, 12, 1, 0, 14).
+coordenadas(b3,c4, 22, 8, 0, 8).
