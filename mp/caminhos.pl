@@ -102,6 +102,7 @@ conta([pass(_,_)|L],NElev,NPass):-conta(L,NElev,NPassL),NPass is NPassL+1.
 
 % processa cada piso da lista do caminho e chamar cria_grafo/3
 processar_caminho([]).                                                          
+processar_caminho([_]):-write("fim").                                                        
 processar_caminho([Elemento1, Elemento2|Resto]):-
                         processar_elementos(Elemento1, Elemento2),                          % nao processa aos pares, processa em corrente, exemplo: 1,2  2,3  3,4 
                         processar_caminho([Elemento2 | Resto]).
@@ -111,8 +112,7 @@ processar_elementos(elev(_), elev(_)).
 
 % tem de se deslocar entre salas (pode acontecer se o user mandar 2 salas no mesmo piso)
 processar_elementos(sala(SalaOrig), sala(SalaDest)) :-
-                        sala(SalaOrig, Piso),                                               % obtem o piso da sala (que acaba por ser o mesmo pra ambas)
-                                                                             
+                        sala(SalaOrig, Piso),                                               % obtem o piso da sala (que acaba por ser o mesmo pra ambas)                            
                         obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),                
                         obter_coordenadas_sala(Piso, SalaDest, EndX, EndY), 
                         write('Piso: '), write(Piso), nl,
@@ -120,7 +120,9 @@ processar_elementos(sala(SalaOrig), sala(SalaDest)) :-
                         write('Sala Destino: '), write(SalaDest), nl,
                         write('Coordenadas Origem: '), write(StartX), write(' '), write(StartY), nl,
                         write('Coordenadas Destino: '), write(EndX), write(' '), write(EndY), nl,
-                         criar_grafos_pisos(Piso),   
+                        write('Grafo criado para o piso'), nl,
+                        criar_grafos_pisos(Piso),   
+                        % write('Pesquisar com o A*'), nl,
                         find_caminho_robot(Piso, StartX, StartY, EndX, EndY). 
 
 % tem de se deslocar entre uma sala e um elevador (obviamente têm de ser do mesmo piso)
@@ -191,7 +193,7 @@ criar_grafos_pisos(Piso) :-
                         dimensoes(Piso, Col, Lin),                         % obtem as dimensoes do piso
                         cria_grafo(Col, Lin, Piso).                      
                                 
-find_caminho_robot(Piso,StarX, StartY, EndX, EndY) :-                                
+find_caminho_robot(Piso,StarX, StartY, EndX, EndY) :-                          
                         aStar(cel(StarX, StartY), cel(EndX, EndY), Caminho, Custo, Piso),     % chama o A*
                         write('Caminho: '), write(Caminho), nl,                         
                         write('Custo: '), write(Custo), nl.
