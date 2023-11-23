@@ -1,7 +1,7 @@
 % coordenadas das salas
 % Coordenadas Salas Edificio A - Piso 1
-coordenadas(apn, a1, 10, 5).
-coordenadas(beng, a1, 12, 2).
+coordenadas(apn, a1, 10, 6).
+coordenadas(beng, a1, 12, 3).
 coordenadas(k1, a1, 16, 2).
 coordenadas(k2, a1, 19, 2).
 coordenadas(r1, a1, 12, 8).
