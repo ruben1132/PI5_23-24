@@ -67,6 +67,10 @@ export default {
             name: 'PassageController',
             path: '../controllers/passageController',
         },
+        task: {
+            name: 'TaskController',
+            path: '../controllers/taskController',
+        },
         taskType: {
             name: 'TaskTypeController',
             path: '../controllers/taskTypeController',
@@ -130,6 +134,10 @@ export default {
             name: 'RoomRepo',
             path: '../repos/roomRepo',
         },
+        task: {
+            name: 'TaskRepo',
+            path: '../repos/taskRepo',
+        },
         taskType: {
             name: 'TaskTypeRepo',
             path: '../repos/taskTypeRepo',
@@ -168,6 +176,10 @@ export default {
         passage: {
             name: 'PassageService',
             path: '../services/passageService',
+        },
+        task: {
+            name: 'TaskService',
+            path: '../services/taskService',
         },
         taskType: {
             name: 'TaskTypeService',
@@ -240,6 +252,11 @@ export default {
             name: 'buildingSchema',
             schema: '../persistence/schemas/buildingSchema',
         },
+        task: {
+            name: 'taskSchema',
+            schema: '../persistence/schemas/taskSchema',
+        },
+        
         taskType: {
             name: 'taskTypeSchema',
             schema: '../persistence/schemas/taskTypeSchema',

@@ -1,7 +1,7 @@
 'use client';
 
 // react
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 // react bootstrap components
 import Form from 'react-bootstrap/Form';
@@ -19,12 +19,12 @@ import config from '../../../config';
 import { useFormStringInput, useFormStringInputWithRegex, useSubmitData, useDeleteData, useFetchData } from '@/util/customHooks';
 
 // model
-import { Tasks, TasksWithBuildings } from '@/models/Tasks';
-import { Building } from '@/models/Building';
+import { Tasks, TasksWithLocationType } from '@/models/Task';
+
 
 interface Props {
     item: {
-        value: TasksWithBuildings;
+        value: TasksWithLocationType;
     };
     action: string;
     reFetchData: () => void;
@@ -32,23 +32,21 @@ interface Props {
 }
     export default function TaskForm(props: Props) {
 
+    const selectBoxRoomDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms);
+    const selectBoxElevatorDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators);
+    const selectBoxPassageDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages);
     // form submitter
-    const tasksForm = useSubmitData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks,
-        props.action === 'edit' ? 'PUT' : 'POST',
-    );
+    const tasksForm = useSubmitData(config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks,props.action === 'edit' ? 'PUT' : 'POST',);
 
     // deleter
     const TasksDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks + props.item?.value.id);
 
     // inputs
-    const TaskBuildinginicial = useFormStringInput(props.item.value?.buildinginicial?.id);
-    const TaskFloorInicial = useFormStringInput(props.item.value?.floorInicial?.id);
-    const TaskRoomInicial = useFormStringInput(props.item.value?.roomInicial?.id);
-    const TaskBuildingFinal = useFormStringInput(props.item.value?.buildingFinal?.id);
-    const TaskfloorFinal = useFormStringInput(props.item.value?.floorFinal?.id);
-    const TaskRoomFinal = useFormStringInput(props.item.value?.roomFinal?.id);
-    const Tasktype = useFormStringInput(props.item.value?.type?.id);
+    
+    const initialType = useFormStringInput(props.item.value?.initialType?.location);
+    const finalType = useFormStringInput(props.item.value?.finalType?.location);
+    const path = useFormStringInput(props.item.value?.path);
+    
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
@@ -59,24 +57,13 @@ interface Props {
         // set task data
         let item: Tasks = {
             ...props.item.value,
-            buildinginicial: props.item.value?.buildinginicial.id,
-            floorInicial: props.item.value?.floorInicial?.id,
-            roomInicial: props.item.value?.roomInicial?.id,
-            buildingFinal: props.item.value?.buildingFinal?.id,
-            floorFinal: props.item.value?.floorFinal?.id,
-            roomFinal: props.item.value?.roomFinal?.id,
-            type: props.item.value?.type?.id,
+            initialType: props.item.value?.initialType?.location,
+            finalType: props.item.value?.finalType?.location
         };
         item.id = props.item.value?.id;
-
-        item.buildinginicial = TaskBuildinginicial.value;
-        item.floorInicial = TaskFloorInicial.value;
-        item.roomInicial = TaskRoomInicial.value;
-        item.buildingFinal = TaskBuildingFinal.value;
-        item.floorFinal = TaskfloorFinal.value;
-        item.roomFinal = TaskRoomFinal.value;
-        item.type = Tasktype.value;
-        
+        item.initialType = initialType.value;
+        item.finalType = finalType.value;
+        item.path = path.value;
 
         // submit data
         let res = await tasksForm.submit(item);
@@ -113,34 +100,47 @@ interface Props {
 
         // close modal
         props.close();
+               
+    };
+    // when floors load, load them to the select box
+    useEffect(() => {
+        // if there's no data, return
+        if (!selectBoxRoomDataFetch.data || selectBoxRoomDataFetch.data.length <= 0) {
+            return;
+        }
 
-        
-    };
-     // handle for selecting a building
-     const handleSelectbuilidingInicial = (e: ChangeEvent<HTMLSelectElement>) => {
-        TaskBuildinginicial.handleLoad(e.target.value);
-    }; 
-    const handleSelectbuilidingFinal = (e: ChangeEvent<HTMLSelectElement>) => {
-        TaskBuildingFinal.handleLoad(e.target.value);
-    };
-     const handleSelectFloorInicial = (e: ChangeEvent<HTMLSelectElement>) => {
-        TaskFloorInicial.handleLoad(e.target.value);
-    }; 
-    const handleSelectFloorFinal = (e: ChangeEvent<HTMLSelectElement>) => {
-        TaskfloorFinal.handleLoad(e.target.value);
-    const handleSelectRoomInicial = (e: ChangeEvent<HTMLSelectElement>) => {
-        TaskBuildinginicial.handleLoad(e.target.value);
-    }; 
-    const handleSelectRoomFinal = (e: ChangeEvent<HTMLSelectElement>) => {
-        TaskRoomFinal.handleLoad(e.target.value);
-    }; 
-    const handleSelectType = (e: ChangeEvent<HTMLSelectElement>) => {
-        Tasktype.handleLoad(e.target.value);
+        if(!props.item.value?.initialType?.location){
+            initialType.handleLoad(selectBoxRoomDataFetch.data[0].location);
+        }
+    }, [selectBoxRoomDataFetch.data]);
+
+    if (selectBoxRoomDataFetch.isLoading) {
+        return <Form>Loading...</Form>;
+    }
+    if (selectBoxRoomDataFetch.isError) {
+        return <Form>Error</Form>;
+    }
+    if (
+        selectBoxRoomDataFetch.data === undefined ||
+        selectBoxRoomDataFetch.data === null ||
+        selectBoxRoomDataFetch.data.length <= 0
+    ) {
+        return <Form>Try adding buildings first!</Form>;
+    }
+
+    // filter data so it removes the element already selected
+    const filteredSelectBoxData = selectBoxRoomDataFetch.data.filter(
+        (item: any) => item.id !== props.item.value?.initialType?.location,
+    );
+
+    // handle for selecting a building
+    const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+        initialType.handleLoad(e.target.value);
     };
 
     return (
         <Form>
-            {props.action === 'edit' && (
+            {/* {props.action === 'edit' && (
                 <>
                     <Row>
                         <Col sm={12}>
@@ -150,7 +150,6 @@ interface Props {
                             </Form.Group>
                         </Col>
                     </Row>
-                    
                 <br />
                 </>
             )}
@@ -158,15 +157,14 @@ interface Props {
                 <Col sm={6}>
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Building Inicial</Form.Label>
-
                         <Form.Select
-                            onChange={handleSelectbuilidingInicial}
-                        >
-                            {props.item.value?.buildinginicial?.id && (
-                                <option defaultChecked={true}>
-                                    {props.item.value?.buildinginicial.code + ' - ' + props.item.value?.buildinginicial.name}
-                                </option>
-                            )}
+                                onChange={handleSelectbuilidingInicial}
+                            >
+                                {props.item.value?.buildinginicial?.id && (
+                                    <option defaultChecked={true}>
+                                        {props.item.value?.buildinginicial.code + ' - ' + props.item.value?.buildinginicial.name}
+                                    </option>
+                                )}
                         </Form.Select>
                     </Form.Group>
                 </Col>
@@ -318,9 +316,7 @@ interface Props {
                         )}
                     </Form.Group>
                 </Col>
-            </Row>
+            </Row> */}
         </Form>
     );
-}
-    
 }
