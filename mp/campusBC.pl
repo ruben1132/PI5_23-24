@@ -111,24 +111,24 @@ sala(c402, c4).
 sala(c403, c4).
 sala(c404, c4).
 
-% Salas Edificio D - Piso 1
-sala(d111, d1).
-sala(d113, d1).
-sala(d115, d1).
-sala(d113, d1).
-sala(d114, d1).
-sala(d116, d1).
-sala(d118, d1).
+% sala Salas Edificio D - Piso 1
+sala(d101, d1).
+sala(d103, d1).
+sala(d105, d1).
+sala(d102, d1).
+sala(d104, d1).
+sala(d106, d1).
+sala(d108, d1).
 
-% Salas Edificio D - Piso 2
-sala(d211, d2).
-sala(d212, d2).
-sala(d213, d2).
-sala(d214, d2).
-sala(d215, d2).
-sala(d216, d2).
+% sala Salas Edificio D - Piso 2
+sala(d201, d2).
+sala(d202, d2).
+sala(d203, d2).
+sala(d204, d2).
+sala(d205, d2).
+sala(d206, d2).
 
-% Salas Edificio D - Piso 3
+% sala Salas Edificio D - Piso 3
 sala(d301, d3).
 sala(d302, d3).
 sala(d303, d3).

@@ -141,7 +141,7 @@ bfs2(Piso,Dest,[LA|Outros],Cam):-
 		(Dest\==Act,(ligacel(Piso,Act,X,_);ligacel(Piso,X,Act,_)),\+ member(X,LA)),
 		Novos),
 	append(Outros,Novos,Todos),
-	bfs2(Dest,Todos,Cam).
+	bfs2(Piso,Dest,Todos,Cam).
 
 
 % A STAR
@@ -267,7 +267,7 @@ processar_elementos(pass(PisoOrig, Piso), pass(Piso,PisoDest)) :-
                         obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),      
                         obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),      
                         print_info_processar(Piso, pass(PisoOrig, Piso), pass(Piso,PisoDest), StartX, StartY, EndX, EndY), nl,  
-                        find_caminho_robot(dfs,Piso, StartX, StartY, EndX, EndY). 
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY). 
 
 
 % tem de se deslocar entre uma passagem e uma sala
@@ -298,11 +298,11 @@ processar_elementos(elev(_,Piso), pass(Piso,PisoDest)) :-
 
 
 % tem de se deslocar entre um elevador e uma sala
-processar_elementos(elev(Piso, _), sala(SalaDest)) :-
-                        criar_grafos_pisos(Piso),                                       
+processar_elementos(elev(PisoOrig, Piso), sala(SalaDest)) :-
+                        criar_grafos_pisos(Piso),                                             
                         obter_coordenadas_elev(Piso, StartX, StartY),      
                         obter_coordenadas_sala(Piso, SalaDest, EndX, EndY),  
-                        print_info_processar(Piso, elev(Piso, _), sala(SalaDest), StartX, StartY, EndX, EndY), nl,      
+                        print_info_processar(Piso, elev(PisoOrig, Piso), sala(SalaDest), StartX, StartY, EndX, EndY), nl,      
                         find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY).
 
 
