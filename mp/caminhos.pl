@@ -1,19 +1,20 @@
+:-dynamic ligacel/4.
+
 % ALGORITMOS PARA ENCONTRAR OS CAMINHOS ENTRE EDIFICIOS E PISOS
 
 
 :- consult('campusBC.pl').          % campusBC.pl - edificios, elevadores, salas, passagens
 :- consult('coordenadasBC.pl').     % coordenadasBC.pl - coordenadas dos elevadores, salas, passagens
-:- consult('caminhosInternos.pl').  % algoritmo para criar o grafo e algoritmos de pesquisa
+% :- consult('caminhosInternos.pl').  % algoritmo para criar o grafo e algoritmos de pesquisa
+:- consult('floorMapsBC.pl').
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% algoritmos %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% algoritmos caminho entre pisos %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %a encontrar um caminho entre edificios 
 %?- caminho_edificios(j,a,LEdCam).
 % LEdCam = [j, i, b, g, h, a] ;
 % LEdCam = [j, i, h, a] ;
 % false.
-
 caminho_edificios(EdOr,EdDest,LEdCam):-caminho_edificios2(EdOr,EdDest,[EdOr],LEdCam).
 
 caminho_edificios2(EdX,EdX,LEdInv,LEdCam):-!,reverse(LEdInv,LEdCam).
@@ -23,10 +24,6 @@ caminho_edificios2(EdAct,EdDest,LEdPassou,LEdCam):-(liga(EdAct,EdInt);liga(EdInt
 %b encontrar todos os caminhos entre edificios 
 %?- todos_caminhos_edificios(i,b,LTCamEd).
 % LTCamEd = [[i, b], [i, h, g, b]].
-%
-%
-%
-
 todos_caminhos_edificios(EdOr,EdDest,LTCamEd):-findall(LEdCam,caminho_edificios(EdOr,EdDest,LEdCam),LTCamEd).
 
 
@@ -37,23 +34,6 @@ todos_caminhos_edificios(EdOr,EdDest,LTCamEd):-findall(LEdCam,caminho_edificios(
 % ?- caminho_pisos(j2,g4,LEdCam,LLig).
 %LEdCam = [j, i, b, g],
 % LLig = [pass(j2, i2), elev(i2, i3), pass(i3, b3), pass(b3, g3), elev(g3,g4)] ;
-%LEdCam = [j, i, b, g],
-% LLig = [pass(j2, i2), elev(i2, i3), pass(i3, b3), elev(b3, b2), pass(b2,g2), elev(g2, g4)] ;
-%LEdCam = [j, i, b, g],
-% LLig = [elev(j2, j1), pass(j1, i1), elev(i1, i3), pass(i3, b3), pass(b3,g3), elev(g3, g4)] ;
-%LEdCam = [j, i, b, g],
-% LLig = [elev(j2, j1), pass(j1, i1), elev(i1, i3), pass(i3, b3), elev(b3,b2), pass(b2, g2), elev(g2, g4)] ;
-%LEdCam = [j, i, b, g],
-% LLig = [elev(j2, j3), pass(j3, i3), pass(i3, b3), pass(b3, g3), elev(g3,g4)] ;
-%LEdCam = [j, i, b, g],
-% LLig = [elev(j2, j3), pass(j3, i3), pass(i3, b3), elev(b3, b2), pass(b2,g2), elev(g2, g4)] ;
-%LEdCam = [j, i, h, g],
-%LLig = [pass(j2, i2), pass(i2, h2), pass(h2, g2), elev(g2, g4)] ;
-%LEdCam = [j, i, h, g],
-% LLig = [elev(j2, j1), pass(j1, i1), elev(i1, i2), pass(i2, h2), pass(h2,g2), elev(g2, g4)] ;
-%LEdCam = [j, i, h, g],
-% LLig = [elev(j2, j3), pass(j3, i3), elev(i3, i2), pass(i2, h2), pass(h2,g2), elev(g2, g4)]
-
 caminho_pisos(PisoOr,PisoDest,LEdCam,LLig):-pisos(EdOr,LPisosOr),member(PisoOr,LPisosOr),
                                  pisos(EdDest,LPisosDest),member(PisoDest,LPisosDest),
                                  caminho_edificios(EdOr,EdDest,LEdCam),
@@ -78,9 +58,6 @@ segue_pisos(PisoAct,PisoDest,[EdAct,EdSeg|LOutrosEd],[elev(PisoAct,PisoAct1),pas
 %
 % ?- melhor_caminho_pisos(a1,d3,L).
 % L = [elev(a1, a2), pass(a2, b2), pass(b2, d3)] 
-%
-%
-
 melhor_caminho_pisos(PisoOr,PisoDest,LLigMelhor):-
     findall(LLig,caminho_pisos(PisoOr,PisoDest,_,LLig),LLLig),
     menos_elevadores(LLLig,LLigMelhor,_,_).
@@ -98,7 +75,105 @@ conta([pass(_,_)|L],NElev,NPass):-conta(L,NElev,NPassL),NPass is NPassL+1.
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% auxiliar - processos %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% criar grafo e algoritmos de pesquisa %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+cria_grafo(_,_,0):-!.
+
+cria_grafo(Piso,Col,Lin):-
+   cria_grafo_lin(Piso,Col,Lin),
+   Lin1 is Lin-1,
+   cria_grafo(Piso,Col,Lin1).
+
+cria_grafo_lin(_,0,_):-!.
+
+cria_grafo_lin(Piso,Col,Lin):- 
+   m(Piso,Lin,Col,0),!,
+   ColS is Col+1, ColA is Col-1, 
+   LinS is Lin+1,LinA is Lin-1,
+   ((m(Piso,Lin,ColS,0),assertz(ligacel(Piso,cel(Col,Lin),cel(ColS,Lin),1));true)),
+   ((m(Piso,Lin,ColA,0),assertz(ligacel(Piso,cel(Col,Lin),cel(ColA,Lin),1));true)),
+   ((m(Piso,LinS,Col,0),assertz(ligacel(Piso,cel(Col,Lin),cel(Col,LinS),1));true)),
+   ((m(Piso,LinA,Col,0),assertz(ligacel(Piso,cel(Col,Lin),cel(Col,LinA),1));true)),
+   ((m(Piso,LinS,ColS,0), m(Piso,LinS,Col,0), m(Piso,Lin,ColS,0), assertz(ligacel(Piso,cel(Col,Lin),cel(ColS,LinS),sqrt(2)));true)),
+   ((m(Piso,LinA,ColA,0), m(Piso,LinA,Col,0), m(Piso,Lin,ColA,0), assertz(ligacel(Piso,cel(Col,Lin),cel(ColA,LinA),sqrt(2)));true)),
+   ((m(Piso,LinA,ColS,0), m(Piso,LinA,Col,0), m(Piso,Lin,ColS,0), assertz(ligacel(Piso,cel(Col,Lin),cel(ColS,LinA),sqrt(2)));true)),
+   ((m(Piso,LinS,ColA,0), m(Piso,Lin,ColA,0), m(Piso,LinS,Col,0), assertz(ligacel(Piso,cel(Col,Lin),cel(ColA,LinS),sqrt(2)));true)),
+   Col1 is Col-1,
+   cria_grafo_lin(Piso,Col1,Lin).
+
+cria_grafo_lin(Piso,Col,Lin):-
+   Col1 is Col-1,
+   cria_grafo_lin(Piso,Col1,Lin).
+
+
+dfs(Piso,Orig,Dest,Cam):-
+   dfs2(Piso,Orig,Dest,[Orig],Cam).
+
+dfs2(_,Dest,Dest,LA,Cam):-
+   reverse(LA,Cam).
+
+dfs2(Piso,Act,Dest,LA,Cam):-
+   (ligacel(Piso,Act,X,_); ligacel(Piso,X,Act,_)), \+ member(X,LA),
+   dfs2(Piso,X,Dest,[X|LA],Cam).
+
+all_dfs(Piso,Orig,Dest,LCam):-
+   findall(Cam,dfs(Piso,Orig,Dest,Cam),LCam).
+
+better_dfs(Piso,Orig,Dest,Cam):- 
+   all_dfs(Piso,Orig,Dest,LCam), shortlist(LCam,Cam,_).
+
+shortlist([L],L,N):-!,length(L,N).
+
+shortlist([L|LL],Lm,Nm):-
+   shortlist(LL,Lm1,Nm1), length(L,NL),
+   ((NL<Nm1,!,Lm=L,Nm is NL); (Lm=Lm1,Nm is Nm1)).
+
+
+bfs(Piso,Orig,Dest,Cam):-bfs2(Piso,Dest,[[Orig]],Cam).
+
+bfs2(_,Dest,[[Dest|T]|_],Cam):-
+	reverse([Dest|T],Cam).
+
+bfs2(Piso,Dest,[LA|Outros],Cam):-
+	LA=[Act|_],
+	findall([X|LA],
+		(Dest\==Act,(ligacel(Piso,Act,X,_);ligacel(Piso,X,Act,_)),\+ member(X,LA)),
+		Novos),
+	append(Outros,Novos,Todos),
+	bfs2(Dest,Todos,Cam).
+
+
+% A STAR
+% calcular a distância euclidiana entre duas células
+estimativa(cel(X1, Y1), cel(X2, Y2), Distancia) :-
+    Distancia is sqrt((X1 - X2)^2 + (Y1 - Y2)^2).
+
+% predicado principal do A*
+aStar(Orig, Dest, Cam, Custo, Piso) :-
+    aStar2(Piso, Dest, [(_, 0, [Orig])], Cam, Custo).
+
+% predicado auxiliar para o A*
+aStar2(_, Dest, [(_, Custo, [Dest|T])|_], Cam, Custo) :-
+    reverse([Dest|T], Cam).
+
+aStar2(Piso, Dest, [(_, Ca, LA)|Outros], Cam, Custo) :-
+    LA = [Act|_],
+    findall((CEX, CaX, [X|LA]),
+            (Dest \== Act, 
+                (ligacel(Piso, Act, X,CustoX);ligacel(Piso, X, Act,CustoX)), \+ member(X, LA), 
+                CaX is CustoX + Ca, estimativa(X, Dest, EstX),
+            CEX is CaX + EstX), 
+        Novos),
+    append(Outros, Novos, Todos),
+    % write('Novos='),write(Novos),nl,
+    sort(Todos, TodosOrd),
+    % write('TodosOrd='),write(TodosOrd),nl,
+    aStar2(Piso, Dest, TodosOrd, Cam, Custo).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% auxiliar - processar %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % processa cada piso da lista do caminho e chamar cria_grafo/3
 processar_caminho([]).                                                          
@@ -115,14 +190,8 @@ processar_elementos(sala(SalaOrig), sala(SalaDest)) :-
                         sala(SalaOrig, Piso),                                               % obtem o piso da sala (que acaba por ser o mesmo pra ambas)                            
                         obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),                
                         obter_coordenadas_sala(Piso, SalaDest, EndX, EndY), 
-                        write('Piso: '), write(Piso), nl,
-                        write('Sala Origem: '), write(SalaOrig), nl,
-                        write('Sala Destino: '), write(SalaDest), nl,
-                        write('Coordenadas Origem: '), write(StartX), write(' '), write(StartY), nl,
-                        write('Coordenadas Destino: '), write(EndX), write(' '), write(EndY), nl,
-                        write('Grafo criado para o piso'), nl,
+                        print_info_processar(Piso, sala(SalaOrig), sala(SalaDest), StartX, StartY, EndX, EndY), nl,
                         criar_grafos_pisos(Piso),   
-                        % write('Pesquisar com o A*'), nl,
                         find_caminho_robot(Piso, StartX, StartY, EndX, EndY). 
 
 % tem de se deslocar entre uma sala e um elevador (obviamente têm de ser do mesmo piso)
@@ -130,6 +199,7 @@ processar_elementos(sala(SalaOrig), elev(Piso, _)) :-
                         criar_grafos_pisos(Piso),                                                         
                         obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),                
                         obter_coordenadas_elev(Piso, EndX, EndY),   
+                        print_info_processar(Piso, sala(SalaOrig), elev(Piso, _), StartX, StartY, EndX, EndY), nl,
                         find_caminho_robot(Piso, StartX, StartY, EndX, EndY).
 
 % tem de se deslocar entre uma sala e uma passagem (obviamente têm de ser do mesmo piso)
@@ -137,6 +207,7 @@ processar_elementos(sala(SalaOrig), pass(Piso, _)) :-
                         criar_grafos_pisos(Piso),                                                         
                         obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),                
                         obter_coordenadas_pass(Piso, Piso, EndX, EndY, _, _),   
+                        print_info_processar(Piso, sala(SalaOrig), pass(Piso, _), StartX, StartY, EndX, EndY), nl,
                         find_caminho_robot(Piso, StartX, StartY, EndX, EndY).
 
 % tem de se deslocar entre uma passagem e um elevador
@@ -144,13 +215,15 @@ processar_elementos(pass(PisoOrig,Piso), elev(Piso,_)) :-
                         criar_grafos_pisos(Piso),                                                         
                         obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),                
                         obter_coordenadas_elev(Piso, EndX, EndY),   
+                        print_info_processar(Piso, pass(PisoOrig,Piso), elev(Piso,_), StartX, StartY, EndX, EndY), nl,
                         find_caminho_robot(Piso, StartX, StartY, EndX, EndY).                             
 
 % tem de se deslocar entre um elevador e uma passagem
 processar_elementos(elev(_,Piso), pass(Piso,PisoDest)) :-
                         criar_grafos_pisos(Piso),                                                  
                         obter_coordenadas_elev(Piso, StartX, StartY),     
-                        obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),      
+                        obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),    
+                        print_info_processar(Piso, elev(_,Piso), pass(Piso,PisoDest), StartX, StartY, EndX, EndY), nl,  
                         find_caminho_robot(Piso, StartX, StartY, EndX, EndY).                             
 
 % tem de se deslocar entre uma passagem e uma passagem
@@ -158,20 +231,23 @@ processar_elementos(pass(PisoOrig, Piso), pass(Piso,PisoDest)) :-
                         criar_grafos_pisos(Piso),                                       
                         obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),      
                         obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),      
+                        print_info_processar(Piso, pass(PisoOrig, Piso), pass(Piso,PisoDest), StartX, StartY, EndX, EndY), nl,  
                         find_caminho_robot(Piso, StartX, StartY, EndX, EndY).                            
 
 % tem de se deslocar entre um elevador e uma sala
 processar_elementos(elev(Piso, _), sala(SalaDest)) :-
                         criar_grafos_pisos(Piso),                                       
                         obter_coordenadas_elev(Piso, StartX, StartY),      
-                        obter_coordenadas_sala(Piso, SalaDest, EndX, EndY),      
+                        obter_coordenadas_sala(Piso, SalaDest, EndX, EndY),  
+                        print_info_processar(Piso, elev(Piso, _), sala(SalaDest), StartX, StartY, EndX, EndY), nl,      
                         find_caminho_robot(Piso, StartX, StartY, EndX, EndY).
 
 % tem de s deslocar entre uma passagem e uma sala
 processar_elementos(pass(PisoOrig, Piso), sala(SalaDest)) :-
                         criar_grafos_pisos(Piso),                                       
                         obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),      
-                        obter_coordenadas_sala(Piso, SalaDest, EndX, EndY),      
+                        obter_coordenadas_sala(Piso, SalaDest, EndX, EndY),  
+                        print_info_processar(Piso, pass(PisoOrig, Piso), sala(SalaDest), StartX, StartY, EndX, EndY), nl,         
                         find_caminho_robot(Piso, StartX, StartY, EndX, EndY). 
 
 % obtem as coordenadas dos elevadores
@@ -186,17 +262,30 @@ obter_coordenadas_pass(Origem, Destino, OrigX, OrigY, DestX, DestY) :-
 obter_coordenadas_sala(Piso, Sala, SalaX, SalaY) :-
                         coordenadas(Sala, Piso, SalaX, SalaY).        
 
+% print info do processar
+print_info_processar(Piso, Orig, Dest, StartX, StartY, EndX, EndY) :-
+                        nl,
+                        write('Piso: '), write(Piso), nl,
+                        write('Origem: '), write(Orig), write(" - "), 
+                        write('Destino: '), write(Dest),  nl,
+                        write('Coordenadas Origem: '), write(cel(StartX,StartY)), write(" - "),  
+                        write('Coordenadas Destino: '), write(cel(EndX,EndY)).
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% auxiliar - interface %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % cria o grafo para um piso
 criar_grafos_pisos(Piso) :-
+                        retractall(ligacel(Piso, _, _)),
                         dimensoes(Piso, Col, Lin),                         % obtem as dimensoes do piso
-                        cria_grafo(Col, Lin, Piso).                      
+                        cria_grafo(Piso,Col, Lin).                      
                                 
 find_caminho_robot(Piso,StarX, StartY, EndX, EndY) :-                          
-                        aStar(cel(StarX, StartY), cel(EndX, EndY), Caminho, Custo, Piso),     % chama o A*
-                        write('Caminho: '), write(Caminho), nl,                         
-                        write('Custo: '), write(Custo), nl.
+                        % aStar(cel(StarX, StartY), cel(EndX, EndY), Caminho, Custo, Piso),     % chama o A*
+                        % write('Custo: '), write(Custo), nl,
+                        dfs(Piso,cel(StarX, StartY), cel(EndX, EndY), Caminho),    
+                        write('Caminho: '), write(Caminho), nl.                         
 
 
 % determinar o tipo da entidade recebida e buscar o piso
@@ -229,7 +318,7 @@ find_caminho_entidades(ElementoOr, ElementoDest) :-
                      find_caminho(PisoOr, PisoDest, Caminho),                               % encontrar o melhor caminho entre os pisos
                      append([ElementoOr|Caminho], [ElementoDest], CaminhoCompleto),         % add o ponto de partida e o ponto de chegada à lista do caminho
                      write('Melhor Caminho: '),write(CaminhoCompleto),nl,        
-                     processar_caminho(CaminhoCompleto).                                  % processa o caminho encontrado
+                     processar_caminho(CaminhoCompleto).                                    % processa o caminho encontrado
 
 
 

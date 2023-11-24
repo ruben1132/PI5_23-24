@@ -1,7 +1,7 @@
 % coordenadas das salas
 % Coordenadas Salas Edificio A - Piso 1
-coordenadas(apn, a1, 10, 5).
-coordenadas(beng, a1, 12, 2).
+coordenadas(apn, a1, 10, 6).
+coordenadas(beng, a1, 12, 3).
 coordenadas(k1, a1, 16, 2).
 coordenadas(k2, a1, 19, 2).
 coordenadas(r1, a1, 12, 8).
@@ -117,7 +117,7 @@ coordenadas(d3, 1, 1).
 
 % Coordenadas das passagens
 coordenadas(c2,d2, 0, 14, 12, 0).
-coordenadas(a2,b2, 22, 5, 0, 5).
+coordenadas(a2,b2, 22, 5, 0, 4).
 coordenadas(b2,c3, 22, 8, 0, 8).
 coordenadas(b2,d3, 21, 10, 10, 0).
 coordenadas(d3,c3, 12, 1, 0, 14).
