@@ -267,8 +267,16 @@
         {
             "passageId": "7ee9a627-5bf3-4f0a-8f69-db4f276d998d",
             "position": {
-                "positionX": 10,
-                "positionY": 7,
+                "positionX": 0,
+                "positionY": 8,
+                "direction": "west"
+            }
+        },
+        {
+            "passageId": "7ee9a627-5bf3-4f0a-8f69-db4f276d998d",
+            "position": {
+                "positionX": 0,
+                "positionY": 14,
                 "direction": "west"
             }
         }

@@ -122,7 +122,6 @@
         "initialPosition": [5.0, 1.0],
         "initialDirection": 5.1
     },
-
     "fmElevator": {
         "elevatorId": "089c4eff-652f-4b71-965a-a95ddb182e57",
         "position": {
@@ -188,12 +187,12 @@
         },
         {
             "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
-            "startX": 14,
+            "startX": 10,
             "startY": 8,
-            "endX": 18,
+            "endX": 14,
             "endY": 10,
             "access": {
-                "positionX": 16,
+                "positionX": 12,
                 "positionY": 7
             } 
         },
@@ -207,16 +206,6 @@
                 "positionX": 20,
                 "positionY": 7
             } 
-        }
-    ],
-    "fmPassages": [
-        {
-            "passageId": "7ee9a627-5bf3-4f0a-8f69-db4f276d998d",
-            "position": {
-                "positionX": 10,
-                "positionY": 7,
-                "direction": "west"
-            }
         }
     ]
 }
