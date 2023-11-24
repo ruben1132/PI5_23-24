@@ -1,12 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
-  <div style="height: 2000px;">
-
-
-
 ## Contents
 - [System Overview](#System_Overview)
 - [Views](#views)
@@ -57,24 +48,3 @@ Para modelar/representar visualmente, tanto o que foi implementado como as ideia
 
 ## Nível 3
 [Nível 3](README_LV3.md)
-
-</div>
-
-
-<script>
-fetch('README.md')
-  .then(response => response.text())
-  .then(text => {
-    document.getElementById('content').innerHTML = text;
-  });
-
-      function scrollToTop() {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
-</script>
-
-</body>
-</html>
