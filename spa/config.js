@@ -38,7 +38,7 @@ export default {
         {
            routeName: "tasks",
            displayName: "Tasks",
-           permissions: [userRole.GESTOR_CAMPUS, userRole.UTENTE ],
+           permissions: [userRole.GESTOR_FROTA, userRole.UTENTE, userRole.GESTOR_CAMPUS ],
         },
         {
             routeName: 'tasktypes',
@@ -119,14 +119,14 @@ export default {
 
     authRoutes: ['/login', '/signin'],
 
-    utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/taks'],
+    utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/tasks'],
 
     adminRoutes: ['/dashboard', '/dashboard/roles', '/dashboard/users'],
 
     gestorFrotaRoutes: [
         '/dashboard',
         '/dashboard/v3d',
-        '/dashboard/taks',
+        '/dashboard/tasks',
         '/dashboard/robottypes',
         '/dashboard/tasktypes',
         '/dashboard/tasktypes',
@@ -140,6 +140,7 @@ export default {
         '/dashboard/floors',
         '/dashboard/passages',
         '/dashboard/rooms',
+        '/dashboard/tasks',
     ],
     
 
