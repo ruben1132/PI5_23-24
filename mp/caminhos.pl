@@ -182,49 +182,84 @@ processar_caminho([Elemento1, Elemento2|Resto]):-
                         processar_elementos(Elemento1, Elemento2),                          % nao processa aos pares, processa em corrente, exemplo: 1,2  2,3  3,4 
                         processar_caminho([Elemento2 | Resto]).
 
-% tem se deslocar entre pisos apenas - se o user mandar por exemplo elev(a1), elev(a2) - nao tem de fazer nada
-processar_elementos(elev(_), elev(_)).
+
 
 % tem de se deslocar entre salas (pode acontecer se o user mandar 2 salas no mesmo piso)
+% (sala(Nome) so aparece na lista como primeiro e ultimo elemento, pq significa q foi o q foi introduzido pelo user) 
 processar_elementos(sala(SalaOrig), sala(SalaDest)) :-
                         sala(SalaOrig, Piso),                                               % obtem o piso da sala (que acaba por ser o mesmo pra ambas)                            
                         obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),                
                         obter_coordenadas_sala(Piso, SalaDest, EndX, EndY), 
                         print_info_processar(Piso, sala(SalaOrig), sala(SalaDest), StartX, StartY, EndX, EndY), nl,
                         criar_grafos_pisos(Piso),   
-                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY). 
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY). 
 
-% tem de se deslocar entre uma sala e um elevador (obviamente têm de ser do mesmo piso)
-processar_elementos(sala(SalaOrig), elev(Piso, _)) :-
+
+% tem de se deslocar entre uma sala e uma pass do mesmo piso (so acontece se o user pedir por exemplo sala(a101) elev(a1))
+processar_elementos(sala(SalaOrig), elev(Piso)):-
+                        criar_grafos_pisos(Piso),                                                  
+                        obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),     
+                        obter_coordenadas_elev(Piso, EndX, EndY),     
+                        print_info_processar(Piso, sala(SalaOrig), elev(Piso), StartX, StartY, EndX, EndY), nl,  
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY).  
+
+
+% tem de se deslocar entre uma sala e um elevador (do mesmo piso)
+processar_elementos(sala(SalaOrig), elev(Piso, PisoDest)) :-
                         criar_grafos_pisos(Piso),                                                         
                         obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),                
                         obter_coordenadas_elev(Piso, EndX, EndY),   
-                        print_info_processar(Piso, sala(SalaOrig), elev(Piso, _), StartX, StartY, EndX, EndY), nl,
-                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY).
+                        print_info_processar(Piso, sala(SalaOrig), elev(Piso, PisoDest), StartX, StartY, EndX, EndY), nl,
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY).
 
-% tem de se deslocar entre uma sala e uma passagem (obviamente têm de ser do mesmo piso)
-processar_elementos(sala(SalaOrig), pass(Piso, _)) :-
+
+% tem de se deslocar entre uma sala e uma passagem do mesmo piso
+processar_elementos(sala(SalaOrig), pass(Piso, PisoDest)) :-
                         criar_grafos_pisos(Piso),                                                         
                         obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),                
-                        obter_coordenadas_pass(Piso, Piso, EndX, EndY, _, _),   
-                        print_info_processar(Piso, sala(SalaOrig), pass(Piso, _), StartX, StartY, EndX, EndY), nl,
-                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY).
+                        obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),   
+                        print_info_processar(Piso, sala(SalaOrig), pass(Piso, PisoDest), StartX, StartY, EndX, EndY), nl,
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY).
 
-% tem de se deslocar entre uma passagem e um elevador
-processar_elementos(pass(PisoOrig,Piso), elev(Piso,_)) :-
-                        criar_grafos_pisos(Piso),                                                         
-                        obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),                
-                        obter_coordenadas_elev(Piso, EndX, EndY),   
-                        print_info_processar(Piso, pass(PisoOrig,Piso), elev(Piso,_), StartX, StartY, EndX, EndY), nl,
-                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY).                             
+
+% tem se deslocar entre pisos apenas - se o user mandar por exemplo elev(a1), elev(a2) - nao tem de fazer nada
+processar_elementos(elev(_), elev(_)).
+
 
 % tem de se deslocar entre um elevador e uma passagem
-processar_elementos(elev(_,Piso), pass(Piso,PisoDest)) :-
+% (elev(Piso) so aparece na lista como primeiro e ultimo elemento, pq significa q foi o q foi introduzido pelo user) 
+processar_elementos(elev(Piso), pass(Piso, PisoDest)):-
                         criar_grafos_pisos(Piso),                                                  
                         obter_coordenadas_elev(Piso, StartX, StartY),     
                         obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),    
-                        print_info_processar(Piso, elev(_,Piso), pass(Piso,PisoDest), StartX, StartY, EndX, EndY), nl,  
-                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY).                             
+                        print_info_processar(Piso, elev(Piso), pass(Piso,PisoDest), StartX, StartY, EndX, EndY), nl,  
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY).  
+
+
+% tem de se deslocar entre um elevador e uma sala
+processar_elementos(elev(Piso), sala(SalaDest)) :-
+                        criar_grafos_pisos(Piso),                                       
+                        obter_coordenadas_elev(Piso, StartX, StartY),      
+                        obter_coordenadas_sala(Piso, SalaDest, EndX, EndY),  
+                        print_info_processar(Piso, elev(Piso), sala(SalaDest), StartX, StartY, EndX, EndY), nl,      
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY).
+
+
+% tem de se deslocar entre um elevador e um elevador (acontece quando na lista aparece elev(a1) elev(a1,a2))
+processar_elementos(elev(Piso), elev(Piso, PisoDest)):-                                    
+                        obter_coordenadas_elev(Piso, StartX, StartY),      
+                        print_info_processar(Piso, elev(Piso), elev(Piso, PisoDest), StartX, StartY, StartX, StartY), nl.
+
+
+
+% tem de se deslocar entre uma passagem e um elevador
+processar_elementos(pass(PisoOrig,Piso), elev(Piso,PisoDest)) :-
+                        criar_grafos_pisos(Piso),                                                         
+                        obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),                
+                        obter_coordenadas_elev(Piso, EndX, EndY),   
+                        print_info_processar(Piso, pass(PisoOrig,Piso), elev(Piso,PisoDest), StartX, StartY, EndX, EndY), nl,
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY).                             
+
 
 % tem de se deslocar entre uma passagem e uma passagem
 processar_elementos(pass(PisoOrig, Piso), pass(Piso,PisoDest)) :-
@@ -232,7 +267,35 @@ processar_elementos(pass(PisoOrig, Piso), pass(Piso,PisoDest)) :-
                         obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),      
                         obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),      
                         print_info_processar(Piso, pass(PisoOrig, Piso), pass(Piso,PisoDest), StartX, StartY, EndX, EndY), nl,  
-                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY).                            
+                        find_caminho_robot(dfs,Piso, StartX, StartY, EndX, EndY). 
+
+
+% tem de se deslocar entre uma passagem e uma sala
+processar_elementos(pass(PisoOrig, Piso), sala(SalaDest)) :-
+                        criar_grafos_pisos(Piso),                                       
+                        obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),      
+                        obter_coordenadas_sala(Piso, SalaDest, EndX, EndY),  
+                        print_info_processar(Piso, pass(PisoOrig, Piso), sala(SalaDest), StartX, StartY, EndX, EndY), nl,         
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY). 
+
+
+% tem de se deslocar entre uma passagem e um elev (acontece quando o user pede por exemplo pass(a1,a2) elev(a2))
+processar_elementos(pass(PisoOrig, Piso), elev(Piso)) :-
+                        criar_grafos_pisos(Piso),                                       
+                        obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),      
+                        obter_coordenadas_elev(Piso, EndX, EndY),  
+                        print_info_processar(Piso, pass(PisoOrig, Piso), elev(Piso), StartX, StartY, EndX, EndY), nl,         
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY). 
+
+
+% tem de se deslocar entre um elevador e uma passagem
+processar_elementos(elev(_,Piso), pass(Piso,PisoDest)) :-
+                        criar_grafos_pisos(Piso),                                                  
+                        obter_coordenadas_elev(Piso, StartX, StartY),     
+                        obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),    
+                        print_info_processar(Piso, elev(_,Piso), pass(Piso,PisoDest), StartX, StartY, EndX, EndY), nl,  
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY).                                                        
+
 
 % tem de se deslocar entre um elevador e uma sala
 processar_elementos(elev(Piso, _), sala(SalaDest)) :-
@@ -240,27 +303,30 @@ processar_elementos(elev(Piso, _), sala(SalaDest)) :-
                         obter_coordenadas_elev(Piso, StartX, StartY),      
                         obter_coordenadas_sala(Piso, SalaDest, EndX, EndY),  
                         print_info_processar(Piso, elev(Piso, _), sala(SalaDest), StartX, StartY, EndX, EndY), nl,      
-                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY).
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY).
 
-% tem de s deslocar entre uma passagem e uma sala
-processar_elementos(pass(PisoOrig, Piso), sala(SalaDest)) :-
-                        criar_grafos_pisos(Piso),                                       
-                        obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),      
-                        obter_coordenadas_sala(Piso, SalaDest, EndX, EndY),  
-                        print_info_processar(Piso, pass(PisoOrig, Piso), sala(SalaDest), StartX, StartY, EndX, EndY), nl,         
-                        find_caminho_robot(Piso, StartX, StartY, EndX, EndY). 
+
+% tem de se deslocar entre um elevador e um elevador (acontece quando na lista aparece por exemplo elev(a1,a2) elev(a2))
+processar_elementos(elev(PisoOrig, Piso), elev(Piso)):-                                    
+                        obter_coordenadas_elev(Piso, StartX, StartY),      
+                        print_info_processar(Piso, elev(PisoOrig, Piso), elev(Piso), StartX, StartY, StartX, StartY), nl.
+
+
 
 % obtem as coordenadas dos elevadores
 obter_coordenadas_elev(Piso, EleV, ElevY) :-
                         coordenadas(Piso, EleV, ElevY).                                         
 
+
 % obtem as coordenadas das passagens
 obter_coordenadas_pass(Origem, Destino, OrigX, OrigY, DestX, DestY) :-                  
                         coordenadas(Origem, Destino, OrigX, OrigY, DestX, DestY).        % obtem as coordenadas da passagem - origem e destino
 
+
 % obtem as coordenadas das salas
 obter_coordenadas_sala(Piso, Sala, SalaX, SalaY) :-
                         coordenadas(Sala, Piso, SalaX, SalaY).        
+
 
 % print info do processar
 print_info_processar(Piso, Orig, Dest, StartX, StartY, EndX, EndY) :-
@@ -280,22 +346,40 @@ criar_grafos_pisos(Piso) :-
                         retractall(ligacel(Piso, _, _, _)),
                         dimensoes(Piso, Col, Lin),                         % obtem as dimensoes do piso
                         cria_grafo(Piso,Col, Lin).                      
-                                
-find_caminho_robot(Piso,StarX, StartY, EndX, EndY) :-                          
-                        % aStar(cel(StarX, StartY), cel(EndX, EndY), Caminho, Custo, Piso),     % chama o A*
-                        % write('Custo: '), write(Custo), nl,
-                        dfs(Piso,cel(StarX, StartY), cel(EndX, EndY), Caminho),    
+
+
+find_caminho_robot(astar,Piso,StarX, StartY, EndX, EndY) :-                          
+                        aStar(cel(StarX, StartY), cel(EndX, EndY), Caminho, Custo, Piso),     % chama o A*
+                        write('Piso: '), write(Piso), nl,
+                        write(cel(StarX, StartY)), write(" - "), write(cel(EndX, EndY)), nl,  % print info
+                        write('Custo: '), write(Custo), nl,
                         write('Caminho: '), write(Caminho), nl.                         
+
+find_caminho_robot(dfs,Piso,StarX, StartY, EndX, EndY) :-                          
+                        dfs(Piso,cel(StarX, StartY), cel(EndX, EndY), Caminho),    
+                        write('Caminho: '), write(Caminho), nl.   
+
+
+find_caminho_robot(bdfs,Piso,StarX, StartY, EndX, EndY) :-                          
+                        better_dfs(Piso,cel(StarX, StartY), cel(EndX, EndY), Caminho),    
+                        write('Caminho: '), write(Caminho), nl.   
+
+
+find_caminho_robot(bfs,Piso,StarX, StartY, EndX, EndY) :-                          
+                        bfs(Piso,cel(StarX, StartY), cel(EndX, EndY), Caminho),    
+                        write('Caminho: '), write(Caminho), nl.   
 
 
 % determinar o tipo da entidade recebida e buscar o piso
 determinar_tipo_entidade(sala(Elemento), Piso) :-
-                                sala(Elemento, Piso).                       % obtem o piso da sala
+                                sala(Elemento, Piso).                                     % obtem o piso da sala
+
 
 determinar_tipo_entidade(elev(Piso), Piso).
 
+
 determinar_tipo_entidade(pass(Orig, Dest), Piso):-
-                                passagem(_,_, Orig, Dest), Piso = Orig.      % obtem o piso relevante da passagem
+                                passagem(_,_, Orig, Dest), Piso = Orig.                   % obtem o piso relevante da passagem
 
 
 % encontrar o melhor caminho entre os pisos
