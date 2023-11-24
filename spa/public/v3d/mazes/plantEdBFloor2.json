@@ -101,6 +101,10 @@
             "positionX": 21,
             "positionY": 7,
             "direction": "west"
+        },
+        "access": {
+            "positionX": 20,
+            "positionY": 7
         }
     },
     "fmRooms": [
@@ -116,6 +120,10 @@
                     "positionY": 6,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 6,
+                "positionY": 6
             }
         },
         {
@@ -130,6 +138,10 @@
                     "positionY": 3,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 13,
+                "positionY": 3
             }
         },
         {
@@ -144,6 +156,10 @@
                     "positionY": 6,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 20,
+                "positionY": 6
             }
         },
         {
@@ -158,6 +174,10 @@
                     "positionY": 3,
                     "direction": "north"
                 }
+            },
+            "access": {
+                "positionX": 20,
+                "positionY": 4
             }
         }
     ],
@@ -165,8 +185,24 @@
         {
             "passageId": "7ee9a627-5bf3-4f0a-8f69-db4f276d998d",
             "position": {
-                "positionX": 10,
-                "positionY": 7,
+                "positionX": 0,
+                "positionY": 4,
+                "direction": "west"
+            }
+        },
+        {
+            "passageId": "7ee9a627-5bf3-4f0a-8f69-db4f276d998d",
+            "position": {
+                "positionX": 22,
+                "positionY": 8,
+                "direction": "west"
+            }
+        },
+        {
+            "passageId": "7ee9a627-5bf3-4f0a-8f69-db4f276d998d",
+            "position": {
+                "positionX": 21,
+                "positionY": 10,
                 "direction": "west"
             }
         }

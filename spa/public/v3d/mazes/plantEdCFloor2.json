@@ -133,6 +133,10 @@
                     "positionY": 16,
                     "direction": "north"
                 }
+            },
+            "access": {
+                "positionX": 3,
+                "positionY": 15
             }
         },
         {
@@ -147,6 +151,10 @@
                     "positionY": 14,
                     "direction": "north"
                 }
+            },
+            "access": {
+                "positionX": 7,
+                "positionY": 13
             }
         },
         {
@@ -161,6 +169,10 @@
                     "positionY": 12,
                     "direction": "north"
                 }
+            },
+            "access": {
+                "positionX": 9,
+                "positionY": 11
             }
         },
         {
@@ -175,6 +187,10 @@
                     "positionY": 11,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 5,
+                "positionY": 11
             }
         },
         {
@@ -189,6 +205,10 @@
                     "positionY": 4,
                     "direction": "north"
                 }
+            },
+            "access": {
+                "positionX": 7,
+                "positionY": 5
             }
         },
         {
@@ -203,6 +223,10 @@
                     "positionY": 2,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 5,
+                "positionY": 2
             }
         },
         {
@@ -217,6 +241,10 @@
                     "positionY": 5,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 5,
+                "positionY": 5
             }
         },
         {
@@ -231,6 +259,10 @@
                     "positionY": 10,
                     "direction": "north"
                 }
+            },
+            "access": {
+                "positionX": 9,
+                "positionY": 11
             }
         }
     ],
@@ -238,9 +270,14 @@
         "elevatorId": "6548df025c1f0f0111c718e1",
         "position": {
             "positionX": 1,
-            "positionY": 12,
+            "positionY": 13,
             "direction": "east"
+        },
+        "access": {
+            "positionX": 2,
+            "positionY": 13
         }
+        
     },
     "fmPassages": [
         {

@@ -136,6 +136,10 @@
                     "positionY": 4,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 5,
+                "positionY": 4
             }
         },
         {
@@ -150,6 +154,10 @@
                     "positionY": 9,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 5,
+                "positionY": 9
             }
         },
         {
@@ -164,6 +172,10 @@
                     "positionY": 9,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 5,
+                "positionY": 9
             }
         },
         {
@@ -178,6 +190,10 @@
                     "positionY": 14,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 5,
+                "positionY": 14
             }
         },
         {
@@ -192,6 +208,10 @@
                     "positionY": 14,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 6,
+                "positionY": 14
             }
         },
         {
@@ -206,6 +226,10 @@
                     "positionY": 16,
                     "direction": "north"
                 }
+            },
+            "access": {
+                "positionX": 5,
+                "positionY": 15
             }
         }
     ],
@@ -213,8 +237,12 @@
         "elevatorId": "6548df025c1f0f0111c718e1",
         "position": {
             "positionX": 1,
-            "positionY": 0,
+            "positionY": 1,
             "direction": "east"
+        },
+        "access": {
+            "positionX": 2,
+            "positionY": 1
         }
     },
     "fmPassages": [
@@ -222,7 +250,7 @@
             "passageId": "6547ccee1ce30663f62d7204",
             "position": {
                 "positionX": 12,
-                "positionY": 20,
+                "positionY": 1,
                 "direction": "west"
             }
         }

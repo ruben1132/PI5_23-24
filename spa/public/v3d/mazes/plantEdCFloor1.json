@@ -111,6 +111,9 @@
             "positionX": 1,
             "positionY": 11,
             "direction": "east"
+        },"access": {
+            "positionX": 2,
+            "positionY": 11
         }
     },
     "fmRooms": [
@@ -126,6 +129,10 @@
                     "positionY": 2,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 6,
+                "positionY": 2
             }
         },
         {
@@ -140,6 +147,10 @@
                     "positionY": 5,
                     "direction": "east"
                 }
+            },
+            "access": {
+                "positionX": 6,
+                "positionY": 5
             }
         },
         {
@@ -154,6 +165,10 @@
                     "positionY": 2,
                     "direction": "east"
                 }
+            },
+            "access": {
+                "positionX": 7,
+                "positionY": 2
             }
         },
         {
@@ -168,6 +183,10 @@
                     "positionY": 6,
                     "direction": "east"
                 }
+            },
+            "access": {
+                "positionX": 7,
+                "positionY": 6
             }
         },
         {
@@ -182,6 +201,10 @@
                     "positionY": 10,
                     "direction": "east"
                 }
+            },
+            "access": {
+                "positionX": 7,
+                "positionY": 10
             }
         },
         {
@@ -196,6 +219,10 @@
                     "positionY": 14,
                     "direction": "east"
                 }
+            },
+            "access": {
+                "positionX": 7,
+                "positionY": 14
             }
         },
         {
@@ -210,6 +237,10 @@
                     "positionY": 18,
                     "direction": "east"
                 }
+            },
+            "access": {
+                "positionX": 7,
+                "positionY": 18
             }
         },
         {
@@ -224,16 +255,10 @@
                     "positionY": 18,
                     "direction": "west"
                 }
-            }
-        }
-    ],
-    "fmPassages": [
-        {
-            "passageId": "7ee9a627-5bf3-4f0a-8f69-db4f276d998d",
-            "position": {
-                "positionX": 10,
-                "positionY": 7,
-                "direction": "west"
+            },
+            "access": {
+                "positionX": 6,
+                "positionY": 18
             }
         }
     ]
