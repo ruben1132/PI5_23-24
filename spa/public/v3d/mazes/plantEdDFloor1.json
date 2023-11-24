@@ -111,6 +111,10 @@
             "positionX": 1,
             "positionY": 1,
             "direction": "east"
+        },
+        "access": {
+            "positionX": 2,
+            "positionY": 1
         }
     },
     "fmRooms": [
@@ -126,6 +130,10 @@
                     "positionY": 10,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 5,
+                "positionY": 10
             }
         },
         {
@@ -140,6 +148,10 @@
                     "positionY": 16,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 5,
+                "positionY": 16
             }
         },
         {
@@ -154,6 +166,10 @@
                     "positionY": 6,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 3,
+                "positionY": 6
             }
         },
         {
@@ -164,10 +180,14 @@
             "endY": 6,
             "door": {
                 "position": {
-                    "positionX": 7,
-                    "positionY": 5,
+                    "positionX": 3,
+                    "positionY": 6,
                     "direction": "east"
                 }
+            },
+            "access": {
+                "positionX": 4,
+                "positionY": 6
             }
         },
         {
@@ -182,6 +202,10 @@
                     "positionY": 9,
                     "direction": "east"
                 }
+            },
+            "access": {
+                "positionX": 6,
+                "positionY": 9
             }
         },
         {
@@ -196,6 +220,10 @@
                     "positionY": 13,
                     "direction": "east"
                 }
+            },
+            "access": {
+                "positionX": 6,
+                "positionY": 13
             }
         },
         {
@@ -210,6 +238,10 @@
                     "positionY": 18,
                     "direction": "east"
                 }
+            },
+            "access": {
+                "positionX": 6,
+                "positionY": 18
             }
         }
     ],

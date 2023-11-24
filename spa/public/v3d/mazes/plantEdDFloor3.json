@@ -111,6 +111,10 @@
             "positionX": 1,
             "positionY": 1,
             "direction": "east"
+        },
+        "access": {
+            "positionX": 2,
+            "positionY": 1
         }
     },
     "fmRooms": [
@@ -126,6 +130,10 @@
                     "positionY": 8,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 5,
+                "positionY": 8
             }
         },
         {
@@ -140,6 +148,10 @@
                     "positionY": 10,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 5,
+                "positionY": 10
             }
         },
         {
@@ -154,6 +166,10 @@
                     "positionY": 8,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 7,
+                "positionY": 8
             }
         },
         {
@@ -168,6 +184,10 @@
                     "positionY": 10,
                     "direction": "west"
                 }
+            },
+            "access": {
+                "positionX": 7,
+                "positionY": 10
             }
         },
         {
@@ -182,6 +202,10 @@
                     "positionY": 15,
                     "direction": "north"
                 }
+            },
+            "access": {
+                "positionX": 6,
+                "positionY": 14
             }
         }
     ],
