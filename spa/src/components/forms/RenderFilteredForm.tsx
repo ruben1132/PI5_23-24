@@ -7,6 +7,7 @@ import PassageForm from './PassageForm';
 import ElevatorForm from './ElevatorForm';
 import RobotForm from './RobotForm';
 import RoomForm from './RoomForm';
+import TaskForm from './TaskForm';
 
 interface Props {
     item: {
@@ -97,6 +98,15 @@ export function RenderFilteredForm(props: Props) {
                 case 'room':
                     return (
                         <RoomForm
+                            item={{ value: props.item.value }}
+                            action={props.action}
+                            reFetchData={props.reFetchData}
+                            close={props.close}
+                        />
+                    );
+                    case 'tasks':
+                    return (
+                        <TaskForm
                             item={{ value: props.item.value }}
                             action={props.action}
                             reFetchData={props.reFetchData}
