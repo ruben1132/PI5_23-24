@@ -277,7 +277,7 @@ print_info_processar(Piso, Orig, Dest, StartX, StartY, EndX, EndY) :-
 
 % cria o grafo para um piso
 criar_grafos_pisos(Piso) :-
-                        retractall(ligacel(Piso, _, _)),
+                        retractall(ligacel(Piso, _, _, _)),
                         dimensoes(Piso, Col, Lin),                         % obtem as dimensoes do piso
                         cria_grafo(Piso,Col, Lin).                      
                                 

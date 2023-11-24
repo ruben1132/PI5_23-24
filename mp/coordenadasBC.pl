@@ -108,7 +108,7 @@ coordenadas(b1, 21, 7).
 coordenadas(b2, 21, 7).
 coordenadas(b3, 21, 7).
 coordenadas(c1, 1, 11).
-coordenadas(c2, 13, 11).
+coordenadas(c2, 1, 13).
 coordenadas(c3, 1, 11).
 coordenadas(c4, 1, 12).
 coordenadas(d2, 1, 1).
