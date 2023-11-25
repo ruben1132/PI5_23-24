@@ -18,6 +18,8 @@ git pull
 
 cd mgi
 
+sh /home/ubuntu/API/generate_env.sh
+
 npm install
 
 # sudo node /home/ubuntu/API/startAPIScript.js
