@@ -28,7 +28,7 @@ export default {
     jwtSecret: getEnvVariable('JWT_SECRET', 'secret'),
 
     // client URL
-    clientURL: getEnvVariable('CLIENT_URL', 'http://localhost:3000'),
+    clientURL: getEnvVariable('CLIENT_URL', 'https://pi-5-23-24-izb1drbch-ruben1132s-projects.vercel.app'),
 
     // Logging configuration
     logs: {
