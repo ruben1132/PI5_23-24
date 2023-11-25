@@ -4,7 +4,9 @@
     "description": "Bulletproof node.js",
     "main": "src/app.ts",
     "scripts": {
-        "build": "tsc",
+        "build": "rimraf dist && tsc",
+        "ts.check": "tsc --project tsconfig.json",
+        "add-build": "git add dist",
         "heroku-postbuild": "npm run build",
         "start": "nodemon",
         "inspect": "nodemon --inspect src/app.ts",
@@ -15,6 +17,11 @@
         "lint:fix": "npm run lint:js -- --fix",
         "clean": "rm -rf node_modules && rm -rf package-lock.json && rm -rf build"
     },
+    "pre-commit": [
+        "ts.check",
+        "build",
+        "add-build"
+    ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/santiq/bulletproof-nodejs.git"

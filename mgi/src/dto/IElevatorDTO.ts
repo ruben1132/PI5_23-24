@@ -1,4 +1,4 @@
-import IFloorDTO from './IFloorDTO';
+import { IFloorDTO } from './IFloorDTO';
 
 export interface IElevatorDTO {
     id: string;

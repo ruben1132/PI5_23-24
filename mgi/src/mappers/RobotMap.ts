@@ -13,7 +13,7 @@ import { RobotNickname } from '../domain/valueObj/robotNickname';
 import { RobotSerialNumber } from '../domain/valueObj/robotSerialNumber';
 import { RobotDescription } from '../domain/valueObj/robotDescription';
 import { RobotState } from '../domain/valueObj/robotState';
-import IRobotTypeDTO from '../dto/IRobotTypeDTO';
+import { IRobotTypeDTO } from '../dto/IRobotTypeDTO';
 import { RobotType } from '../domain/robotType';
 import { TaskTypeId } from '../domain/valueObj/taskTypeId';
 
@@ -30,7 +30,7 @@ export class RobotMap extends Mapper<Robot> {
         } as IRobotDTO;
     }
 
-    public static toDTOWithRobotType(robot: Robot, robotType :RobotType): IRobotWithRobotTypeDTO {
+    public static toDTOWithRobotType(robot: Robot, robotType: RobotType): IRobotWithRobotTypeDTO {
         return {
             id: robot.id.toString(),
             identification: robot.identification.value,
@@ -40,7 +40,7 @@ export class RobotMap extends Mapper<Robot> {
                 type: robotType.type.value,
                 brand: robotType.brand.value,
                 model: robotType.model.value,
-                tasksAllowed: robotType.tasksAllowed.map((task) => task.toString()),
+                tasksAllowed: robotType.tasksAllowed.map(task => task.toString()),
             } as IRobotTypeDTO,
             serialNumber: robot.serialNumber.value,
             description: robot.description.value,
@@ -83,5 +83,4 @@ export class RobotMap extends Mapper<Robot> {
             state: robot.state.value,
         };
     }
-
 }
