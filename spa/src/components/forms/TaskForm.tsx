@@ -31,6 +31,7 @@ interface Props {
     close: () => void;
 }
     export default function TaskForm(props: Props) {
+    // const selectBoxLocationTypeDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms);
 
     const selectBoxRoomDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms);
     const selectBoxElevatorDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators);
@@ -111,22 +112,58 @@ interface Props {
 
         if(!props.item.value?.initialType?.location){
             initialType.handleLoad(selectBoxRoomDataFetch.data[0].location);
+            finalType.handleLoad(selectBoxRoomDataFetch.data[0].location);
         }
     }, [selectBoxRoomDataFetch.data]);
 
-    if (selectBoxRoomDataFetch.isLoading) {
+    useEffect(() => {
+        // if there's no data, return
+        if (!selectBoxElevatorDataFetch.data || selectBoxElevatorDataFetch.data.length <= 0) {
+            return;
+        }
+
+        if(!props.item.value?.initialType?.location){
+            initialType.handleLoad(selectBoxElevatorDataFetch.data[0].location);
+            finalType.handleLoad(selectBoxElevatorDataFetch.data[0].location);
+
+        }
+    }, [selectBoxElevatorDataFetch.data]);
+
+    useEffect(() => {
+        // if there's no data, return
+        if (!selectBoxPassageDataFetch.data || selectBoxPassageDataFetch.data.length <= 0) {
+            return;
+        }
+
+        if(!props.item.value?.initialType?.location){
+            initialType.handleLoad(selectBoxPassageDataFetch.data[0].location);
+            finalType.handleLoad(selectBoxPassageDataFetch.data[0].location);
+
+        }
+    }, [selectBoxPassageDataFetch.data]);
+
+
+    if (selectBoxRoomDataFetch.isLoading ||selectBoxPassageDataFetch.isLoading ||selectBoxElevatorDataFetch.isLoading) {
         return <Form>Loading...</Form>;
     }
-    if (selectBoxRoomDataFetch.isError) {
+    if (selectBoxRoomDataFetch.isError||selectBoxPassageDataFetch.isError ||selectBoxElevatorDataFetch.isError) {
         return <Form>Error</Form>;
     }
     if (
         selectBoxRoomDataFetch.data === undefined ||
         selectBoxRoomDataFetch.data === null ||
-        selectBoxRoomDataFetch.data.length <= 0
+        selectBoxRoomDataFetch.data.length <= 0||
+        selectBoxPassageDataFetch.data === undefined ||
+        selectBoxPassageDataFetch.data === null ||
+        selectBoxPassageDataFetch.data.length <= 0||
+        selectBoxElevatorDataFetch.data === undefined ||
+        selectBoxElevatorDataFetch.data === null ||
+        selectBoxElevatorDataFetch.data.length <= 0
+
     ) {
-        return <Form>Try adding buildings first!</Form>;
+        return <Form>Try adding room/ passage/ elevator first!</Form>;
     }
+    
 
     // filter data so it removes the element already selected
     const filteredSelectBoxData = selectBoxRoomDataFetch.data.filter(

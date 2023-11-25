@@ -1,8 +1,8 @@
 export interface ITaskPersistence {
-	id: string;
-    initialType: string;
-    finalType : string;
-    path : string;
+	_id: string;
+    designation: string; 
+    type: string;
+    assigned: string;
 
 }
   
