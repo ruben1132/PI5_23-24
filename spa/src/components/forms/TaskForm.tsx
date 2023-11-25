@@ -16,37 +16,58 @@ import { notify } from '@/components/notification/Notification';
 import config from '../../../config';
 
 // custom hooks
-import { useFormStringInput, useFormStringInputWithRegex, useSubmitData, useDeleteData, useFetchData } from '@/util/customHooks';
+import {
+    useFormStringInput,
+    useFormStringInputWithRegex,
+    useSubmitData,
+    useDeleteData,
+    useFetchData,
+} from '@/util/customHooks';
 
 // model
-import { Tasks, TasksWithLocationType } from '@/models/Task';
-
+import { Task } from '@/models/Task';
+import Elevator from '../v3d/elevator';
+import { Passage } from '@/models/Passage';
+import { Room } from '@/models/Room';
+import RoomSelectBox from '../selectBoxes/RoomSelectBox';
+import FloorSelectBox from '../selectBoxes/FloorSelectBox';
+import ElevatorSelectBox from '../selectBoxes/ElevatorSelectBox';
+import { ElevatorWithFloors } from '@/models/Elevator';
 
 interface Props {
     item: {
-        value: TasksWithLocationType;
+        value: Task;
     };
     action: string;
     reFetchData: () => void;
     close: () => void;
 }
-    export default function TaskForm(props: Props) {
+export default function TaskForm(props: Props) {
+    const [originRoute, setOriginRoute] = useState<string>(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms);
+    const [destinyRoute, setDestinyRoute] = useState<string>(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms);
 
-    const selectBoxRoomDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms);
-    const selectBoxElevatorDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators);
-    const selectBoxPassageDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages);
+    const selectBoxOrignRoomDataFetch = useFetchData(originRoute);
+    const selectBoxDestinyDataFetch = useFetchData(destinyRoute);
+
     // form submitter
-    const tasksForm = useSubmitData(config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks,props.action === 'edit' ? 'PUT' : 'POST',);
+    const tasksForm = useSubmitData(
+        config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks,
+        props.action === 'edit' ? 'PUT' : 'POST',
+    );
 
     // deleter
-    const TasksDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks + props.item?.value.id);
+    const taskDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks + props.item?.value.id);
 
     // inputs
-    
-    const initialType = useFormStringInput(props.item.value?.initialType?.location);
-    const finalType = useFormStringInput(props.item.value?.finalType?.location);
+    const originType = useFormStringInput('room');
+    const destinyType = useFormStringInput('room');
+    const origin = useFormStringInput(props.item.value?.origin);
+    const destiny = useFormStringInput(props.item.value?.destiny);
     const path = useFormStringInput(props.item.value?.path);
-    
+    const origFloor = useFormStringInput('');
+    const destFloor = useFormStringInput('');
+    const [origElevator, setOrigElevator] = useState<ElevatorWithFloors>();
+    const [destElevator, setDestElevator] = useState<ElevatorWithFloors>();
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
@@ -55,14 +76,10 @@ interface Props {
         setEnabled(false);
 
         // set task data
-        let item: Tasks = {
+        let item: Task = {
             ...props.item.value,
-            initialType: props.item.value?.initialType?.location,
-            finalType: props.item.value?.finalType?.location
         };
         item.id = props.item.value?.id;
-        item.initialType = initialType.value;
-        item.finalType = finalType.value;
         item.path = path.value;
 
         // submit data
@@ -84,7 +101,7 @@ interface Props {
         setEnabled(false);
 
         // delete data
-        let res = await TasksDeleter.del();
+        let res = await taskDeleter.del();
 
         if (res.error) {
             setEnabled(true);
@@ -100,58 +117,68 @@ interface Props {
 
         // close modal
         props.close();
-               
     };
-    // when floors load, load them to the select box
-    useEffect(() => {
-        // if there's no data, return
-        if (!selectBoxRoomDataFetch.data || selectBoxRoomDataFetch.data.length <= 0) {
-            return;
+
+    // handle for selecting origin type
+    const handleChangeOriginType = (e: ChangeEvent<HTMLSelectElement>) => {
+        originType.handleLoad(e.target.value);
+        const route = getRoute(e.target.value);
+
+        setOriginRoute(route);
+    };
+
+    // handle for selecting destiny type
+    const handleChangeDestinyType = (e: ChangeEvent<HTMLSelectElement>) => {
+        destinyType.handleLoad(e.target.value);
+        const route = getRoute(e.target.value);
+
+        setDestinyRoute(route);
+    };
+
+    const getRoute = (type: string): string => {
+        switch (type) {
+            case 'room':
+                return config.mgiAPI.routes.rooms;
+            case 'passage':
+                return config.mgiAPI.routes.passages;
+            case 'elevator':
+                return config.mgiAPI.routes.elevators;
+            default:
+                return '';
         }
-
-        if(!props.item.value?.initialType?.location){
-            initialType.handleLoad(selectBoxRoomDataFetch.data[0].location);
+    };
+    
+    // filter select box for origin
+    const OriginSelectBox = () => {
+        switch (originType.value) {
+            case 'room':
+                return <RoomSelectBox item={{}} setValue={origin.handleLoad} />;
+            case 'passage':
+                return <></>;
+            case 'elevator':
+                return <ElevatorSelectBox item={{}} setValue={origin.handleLoad} setObjValue={setOrigElevator} />;
+            default:
+                return <></>;
         }
-    }, [selectBoxRoomDataFetch.data]);
+    };
 
-    if (selectBoxRoomDataFetch.isLoading || selectBoxElevatorDataFetch.isLoading || selectBoxPassageDataFetch.isLoading) {
-        return <Form>Loading...</Form>;
-    }
-    if (selectBoxRoomDataFetch.isError || selectBoxElevatorDataFetch.isError || selectBoxPassageDataFetch.isError) {
-        return <Form>Error</Form>;
-    }
-    if (
-        selectBoxRoomDataFetch.data === undefined ||
-        selectBoxRoomDataFetch.data === null ||
-        selectBoxRoomDataFetch.data.length <= 0
-    ) {
-        return <Form>Try adding rooms first!</Form>;
-    }
-    if(selectBoxElevatorDataFetch.data === undefined ||
-        selectBoxElevatorDataFetch.data === null ||
-        selectBoxElevatorDataFetch.data.length <= 0){
-            return <Form>Try adding elevators first!</Form>;
+    // filter select box for destiny
+    const DestinySelectBox = () => {
+        switch (destinyType.value) {
+            case 'room':
+                return <RoomSelectBox item={{}} setValue={destiny.handleLoad} />;
+            case 'passage':
+                return <></>;
+            case 'elevator':
+                return <ElevatorSelectBox item={{}} setValue={destiny.handleLoad} setObjValue={setDestElevator} />;
+            default:
+                return <></>;
         }
-    if(selectBoxPassageDataFetch.data === undefined ||
-        selectBoxPassageDataFetch.data === null ||
-        selectBoxPassageDataFetch.data.length <= 0){
-            return <Form>Try adding passages first!</Form>;
-        }
-
-
-    // filter data so it removes the element already selected
-    const filteredSelectBoxData = selectBoxRoomDataFetch.data.filter(
-        (item: any) => item.id !== props.item.value?.initialType?.location,
-    );
-
-    // handle for selecting a building
-    const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-        initialType.handleLoad(e.target.value);
     };
 
     return (
         <Form>
-            {/* {props.action === 'edit' && (
+            {props.action === 'edit' && (
                 <>
                     <Row>
                         <Col sm={12}>
@@ -161,135 +188,69 @@ interface Props {
                             </Form.Group>
                         </Col>
                     </Row>
-                <br />
+                    <br />
                 </>
             )}
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Building Inicial</Form.Label>
-                        <Form.Select
-                                onChange={handleSelectbuilidingInicial}
-                            >
-                                {props.item.value?.buildinginicial?.id && (
-                                    <option defaultChecked={true}>
-                                        {props.item.value?.buildinginicial.code + ' - ' + props.item.value?.buildinginicial.name}
-                                    </option>
-                                )}
+                        <Form.Label htmlFor="select">Type of Origin</Form.Label>
+                        <Form.Select onChange={handleChangeOriginType}>
+                            <option defaultChecked={true}>Select a type</option>
+                            <option value={'room'}>Room</option>
+                            <option value={'passage'}>Passage</option>
+                            <option value={'elevator'}>Elevator</option>
                         </Form.Select>
                     </Form.Group>
                 </Col>
-               
+                <Col sm={6}>
+                    <Form.Group className="mb-6">
+                        <Form.Label htmlFor="select">Type of Destiny</Form.Label>
+                        <Form.Select onChange={handleChangeDestinyType}>
+                            <option defaultChecked={true}>Select a type</option>
+                            <option value={'room'}>Room</option>
+                            <option value={'passage'}>Passage</option>
+                            <option value={'elevator'}>Elevator</option>
+                        </Form.Select>
+                    </Form.Group>
+                </Col>
             </Row>
+            <br />
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Floor Inicial</Form.Label>
-
-                        <Form.Select
-                            onChange={handleSelectFloorInicial}
-                        >
-                            {props.item.value?.floorInicial?.id && (
-                                <option defaultChecked={true}>
-                                    {props.item.value?.floorInicial.id + ' - ' + props.item.value?.floorInicial.number}
-                                </option>
-                            )}
-                        </Form.Select>
+                        <Form.Label htmlFor="select">Origin</Form.Label>
+                        <OriginSelectBox />
                     </Form.Group>
                 </Col>
-               
-            </Row>
-            <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Room Inicial</Form.Label>
-
-                        <Form.Select
-                            onChange={handleSelectRoomInicial}
-                        >
-                            {props.item.value?.roomInicial?.id && (
-                                <option defaultChecked={true}>
-                                    {props.item.value?.roomInicial.id + ' - ' + props.item.value?.roomInicial.number}
-                                </option>
-                            )}
-                        </Form.Select>
+                        <Form.Label htmlFor="select">Destinity</Form.Label>
+                        <DestinySelectBox />
                     </Form.Group>
                 </Col>
-               
             </Row>
+            <br />
+
             <Row>
                 <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Building Final</Form.Label>
-
-                        <Form.Select
-                            onChange={handleSelectbuilidingFinal}
-                        >
-                            {props.item.value?.buildingFinal?.id && (
-                                <option defaultChecked={true}>
-                                    {props.item.value?.buildingFinal.code + ' - ' + props.item.value?.buildingFinal.name}
-                                </option>
-                            )}
-                        </Form.Select>
-                    </Form.Group>
+                    {originType.value === 'elevator' && (
+                        <Form.Group className="mb-6">
+                            <Form.Label htmlFor="select">Floor</Form.Label>
+                            <FloorSelectBox item={{}} setValue={origFloor.handleLoad} defaultData={origElevator?.floorsAllowed} />
+                        </Form.Group>
+                    )}
                 </Col>
-               
-            </Row>
-            <Row>
                 <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Floor Final</Form.Label>
-
-                        <Form.Select
-                            onChange={handleSelectFloorFinal}
-                        >
-                            {props.item.value?.floorFinal?.id && (
-                                <option defaultChecked={true}>
-                                    {props.item.value?.floorFinal.id + ' - ' + props.item.value?.floorFinal.number}
-                                </option>
-                            )}
-                        </Form.Select>
-                    </Form.Group>
+                    {destinyType.value === 'elevator' && (
+                        <Form.Group className="mb-6">
+                            <Form.Label htmlFor="select">Floor</Form.Label>
+                            <FloorSelectBox item={{}} setValue={destFloor.handleLoad} defaultData={destElevator?.floorsAllowed} />
+                        </Form.Group>
+                    )}
                 </Col>
-               
             </Row>
-            <Row>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Room Final</Form.Label>
-
-                        <Form.Select
-                            onChange={handleSelectRoomFinal}
-                        >
-                            {props.item.value?.roomFinal?.id && (
-                                <option defaultChecked={true}>
-                                    {props.item.value?.roomFinal.id + ' - ' + props.item.value?.roomFinal.number}
-                                </option>
-                            )}
-                        </Form.Select>
-                    </Form.Group>
-                </Col>
-               
-            </Row>
-            <Row>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Task Type</Form.Label>
-
-                        <Form.Select
-                            onChange={handleSelectType}
-                        >
-                            {props.item.value?.type?.id && (
-                                <option defaultChecked={true}>
-                                    {props.item.value?.type.id + ' - ' + props.item.value?.type.name}
-                                </option>
-                            )}
-                        </Form.Select>
-                    </Form.Group>
-                </Col>
-               
-            </Row>
-          
+            <br />
             <Row>
                 <Col sm={12}>
                     <Form.Group className="mb-12">
@@ -299,9 +260,11 @@ interface Props {
                                     variant="primary"
                                     onClick={handleSubmitData}
                                     disabled={
-                                        TaskBuildinginicial.value === '' ||
-                                        TaskFloorInicial.value === undefined ||
-                                        
+                                        origin.value === '' ||
+                                        origin.value === undefined ||
+                                        destiny.value === '' ||
+                                        destiny.value === undefined ||
+                                        path.value === '' ||
                                         !enabled
                                     }
                                 >
@@ -317,8 +280,11 @@ interface Props {
                                 variant="success"
                                 onClick={handleSubmitData}
                                 disabled={
-                                    TaskBuildinginicial.value === '' ||
-                                    
+                                    origin.value === '' ||
+                                    origin.value === undefined ||
+                                    destiny.value === '' ||
+                                    destiny.value === undefined ||
+                                    path.value === '' ||
                                     !enabled
                                 }
                             >
@@ -327,7 +293,7 @@ interface Props {
                         )}
                     </Form.Group>
                 </Col>
-            </Row> */}
+            </Row>
         </Form>
     );
 }

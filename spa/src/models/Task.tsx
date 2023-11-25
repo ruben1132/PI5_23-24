@@ -1,15 +1,9 @@
-import { locationType } from "./LocationType";
 
-export interface TasksWithLocationType {
+
+export interface Task {
     id: string;
-    initialType: locationType;
-    finalType : locationType;
-    path : string;
-}
-export interface Tasks {
-    id: string;
-    initialType: string;
-    finalType : string;
+    origin: string;
+    destiny: string;
     path : string;
 }
 
