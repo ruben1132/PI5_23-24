@@ -13,7 +13,7 @@ const getEnvVariable = (name, defaultValue) => {
 
 export default {
     // Your favorite port: optional change to 80 by JRT
-    port: parseInt(getEnvVariable('PORT', 80), 10),
+    port: parseInt(getEnvVariable('PORT', 8080), 10),
 
     // MongoDB connection URL
     databaseURL: getEnvVariable(
