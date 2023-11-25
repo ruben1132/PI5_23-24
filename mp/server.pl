@@ -1,4 +1,5 @@
 :- consult('caminhos.pl').
+:- consult('parsers.pl').
 
 :- use_module(library(http/thread_httpd)).
 :- use_module(library(http/http_dispatch)).
@@ -6,15 +7,44 @@
 :- use_module(library(http/http_json)).
 :- use_module(library(http/json)).
 
-:- http_handler('/findCaminho', find_caminho_handler, [method(get)]).
+
+% :- json_object movimentosTot_json_array(array:list(movimentos_json_array)).
+% :- json_object movimentos_json_array(list(string)).
+
+
+
+
+
+:- http_handler('/findCaminho', find_caminho_handler, [method(get), prefix]).
 
 find_caminho_handler(Request) :-
-    http_parameters(Request, [param1(Param1, [default('')]),
-                              param2(Param2, [default('')]),
-                              param3(Param3, [default('')])]),
-    find_caminho_entidades(Param1, Param2, Param3, Lista, Variavel),
-    reply_json(json([lista=Lista, variavel=Variavel])).
+
+    % For testing, use fixed values
+    Algoritmo = astar,
+    Origem = sala(apn),
+    Destino = sala(beng),
+    
+    % Calling the predicate with the fixed values
+    find_caminho_entidades(Algoritmo, Origem, Destino, ListaCaminho, ListaMovimentos, Custo),
+
+    convert_lista_caminho(ListaCaminho, CaminhoJson),
+    convert_lista_movimentos(ListaMovimentos, MovimentosJson),
+    reply_json(json{caminho: CaminhoJson, movimentos: MovimentosJson, variavel: Custo },[json_object(dict)]).
 
 
-% Inicie o servidor na porta 5000
-:- http_server(http_dispatch, [port(5000)]).
+% Starting the server on port 5000
+startServer(Port) :-
+    http_server(http_dispatch, [port(Port)]),
+    asserta(port(Port)).
+
+stopServer:-
+    retract(port(Port)),
+    http_stop_server(Port,_).
+
+
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
