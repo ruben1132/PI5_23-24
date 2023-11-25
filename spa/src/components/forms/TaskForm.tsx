@@ -114,10 +114,10 @@ interface Props {
         }
     }, [selectBoxRoomDataFetch.data]);
 
-    if (selectBoxRoomDataFetch.isLoading) {
+    if (selectBoxRoomDataFetch.isLoading || selectBoxElevatorDataFetch.isLoading || selectBoxPassageDataFetch.isLoading) {
         return <Form>Loading...</Form>;
     }
-    if (selectBoxRoomDataFetch.isError) {
+    if (selectBoxRoomDataFetch.isError || selectBoxElevatorDataFetch.isError || selectBoxPassageDataFetch.isError) {
         return <Form>Error</Form>;
     }
     if (
@@ -125,8 +125,19 @@ interface Props {
         selectBoxRoomDataFetch.data === null ||
         selectBoxRoomDataFetch.data.length <= 0
     ) {
-        return <Form>Try adding buildings first!</Form>;
+        return <Form>Try adding rooms first!</Form>;
     }
+    if(selectBoxElevatorDataFetch.data === undefined ||
+        selectBoxElevatorDataFetch.data === null ||
+        selectBoxElevatorDataFetch.data.length <= 0){
+            return <Form>Try adding elevators first!</Form>;
+        }
+    if(selectBoxPassageDataFetch.data === undefined ||
+        selectBoxPassageDataFetch.data === null ||
+        selectBoxPassageDataFetch.data.length <= 0){
+            return <Form>Try adding passages first!</Form>;
+        }
+
 
     // filter data so it removes the element already selected
     const filteredSelectBoxData = selectBoxRoomDataFetch.data.filter(

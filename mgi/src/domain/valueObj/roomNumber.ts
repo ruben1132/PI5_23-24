@@ -20,7 +20,7 @@ export class RoomNumber extends ValueObject<RoomNumberProps> {
     }
 
     public static create(number: string): Result<RoomNumber> {
-        const regex = /^[A-Z]\d{3}$/;
+        const regex = /^[A-Za-z]{1,4}\d{0,3}$/;
 
         const guardResult = Guard.againstNullOrUndefined(number, 'number');
 
@@ -30,7 +30,7 @@ export class RoomNumber extends ValueObject<RoomNumberProps> {
         }
 
         if (!regex.test(number)) {
-            return Result.fail<RoomNumber>("Room number must be in the format A001");
+            return Result.fail<RoomNumber>("Room number must be in the format A001 or ABC or ABCD");
         }
 
 

@@ -41,10 +41,14 @@ export default class FloorService implements IFloorService {
                 return Result.fail<IFloorDTO>(information.errorValue());
             }
 
+            // create floor code
+            const code = building.code.value.toLowerCase() + floorDTO.number.toString();
+
             const floorOrError = await Floor.create({
                 number: floorDTO.number,
                 information: information.getValue(),
                 building: new BuildingId(building.buildingId.toString()),
+                code: code,
             });
 
             if (floorOrError.isFailure) {
@@ -78,8 +82,7 @@ export default class FloorService implements IFloorService {
                 floorDTO.id,
             );
 
-            
-            if (floorWithSameNumber) {                
+            if (floorWithSameNumber) {
                 return Result.fail<IFloorDTO>('Floor with same number already exists in this building');
             }
 
@@ -95,9 +98,13 @@ export default class FloorService implements IFloorService {
             }
             let building: Building = buildingOrError.getValue();
 
+            // create floor code
+            const code = building.code.value.toLowerCase() + floorDTO.number.toString();
+
             floor.number = floorDTO.number;
             floor.information = information.getValue();
             floor.building = building.buildingId;
+            floor.code = code;
 
             await this.floorRepo.save(floor);
 

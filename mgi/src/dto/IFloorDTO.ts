@@ -2,6 +2,7 @@ import IBuildingDTO from './IBuildingDTO';
 
 export interface IFloorDTO {
     id: string;
+    code: string;
     number: number;
     information: string;
     building: string;
@@ -9,6 +10,7 @@ export interface IFloorDTO {
 
 export interface IFloorWithBuildingDTO {
     id: string;
+    code: string;
     number: number;
     information: string;
     building: IBuildingDTO;

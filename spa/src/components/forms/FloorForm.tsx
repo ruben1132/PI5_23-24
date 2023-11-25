@@ -99,6 +99,9 @@ export default function FloorForm(props: Props) {
         item.information = floorInformation.value;
         item.number = floorNumber.value;
         item.building = floorBuilding.value;
+        if ('code' in item) {
+            delete item.code; // delete code from item
+        }
 
         // submit data
         let res = await floorForm.submit(item);

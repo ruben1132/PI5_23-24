@@ -3,5 +3,6 @@ export interface IFloorPersistence {
     number: number; 
     information: string;
     building: string;
+    code: string;
 }
   

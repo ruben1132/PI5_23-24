@@ -8,7 +8,7 @@ export default async function Tasks() {
 
             <ContentTable
                 type="task"
-                routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks}
+                routeToFetch={""}
                 routeToPush={'/tasks/'}
             />
         </div>
