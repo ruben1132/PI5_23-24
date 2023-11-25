@@ -1,7 +1,0 @@
-sudo iptables -t nat -A PREROUTING -p tcp --dport 2225 -j REDIRECT --to-port 4000
-
-sudo apt-get update
-sudo apt-get install iptables-persistent
-
-
-sudo iptables-save > /etc/iptables/rules.v4

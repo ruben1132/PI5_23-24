@@ -12,6 +12,6 @@ DIRECTORY="/home/ubuntu/API/repo/mgi"
 mkdir -p "$DIRECTORY"
 
 # Write the content to a .env file in the specified directory
-echo -e "$ENV_CONTENT" > "$DIRECTORY/.env"
+echo "$ENV_CONTENT" > "$DIRECTORY/.env"
 
 echo ".env file generated successfully in $DIRECTORY."
