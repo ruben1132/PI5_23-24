@@ -12,8 +12,8 @@ const getEnvVariable = (name, defaultValue) => {
 };
 
 export default {
-    // Your favorite port: optional change to 4000 by JRT
-    port: parseInt(getEnvVariable('PORT', 4000), 10),
+    // Your favorite port: optional change to 2225 by JRT
+    port: parseInt(getEnvVariable('PORT', 2225), 10),
 
     // MongoDB connection URL
     databaseURL: getEnvVariable(
@@ -22,14 +22,13 @@ export default {
     ),
 
     // cookie name
-    cookieName: "mgiAPI:authCookie",
+    cookieName: 'mgiAPI:authCookie',
 
     // Your secret sauce
     jwtSecret: getEnvVariable('JWT_SECRET', 'secret'),
 
     // client URL
     clientURL: getEnvVariable('CLIENT_URL', 'http://localhost:3000'),
-
 
     // Logging configuration
     logs: {
@@ -239,7 +238,12 @@ export default {
         building: {
             name: 'buildingSchema',
             schema: '../persistence/schemas/buildingSchema',
-        },        
+        },
+        task: {
+            name: 'taskSchema',
+            schema: '../persistence/schemas/taskSchema',
+        },
+
         taskType: {
             name: 'taskTypeSchema',
             schema: '../persistence/schemas/taskTypeSchema',
