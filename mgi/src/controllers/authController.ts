@@ -94,14 +94,24 @@ export default class AuthController implements IAuthController /* TODO: extends 
     private setCookie(res: Response, token: string) {
         let cookieOptions: CookieOptions = {};
 
-        cookieOptions = {
-            httpOnly: true,
-            path: '/', // path = where the cookie is valid
-            // domain: 'localhost', // domain = what domain the cookie is valid on
-            secure: false,
-            sameSite: 'lax', // "strict" | "lax" | "none" (secure must be true)
-            maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        };
+        if (process.env.NODE_ENV === 'production') {
+            cookieOptions = {
+                httpOnly: true,
+                sameSite: 'none', // Allows cross-origin cookies
+                secure: true, // Requires HTTPS if in production
+                maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+                path: '/',
+            };
+        } else {
+            cookieOptions = {
+                httpOnly: true,
+                path: '/', // path = where the cookie is valid
+                domain: 'localhost', // domain = what domain the cookie is valid on
+                secure: false,
+                sameSite: 'lax', // "strict" | "lax" | "none" (secure must be true)
+                maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+            };
+        }
 
         res.cookie(config.cookieName, token, cookieOptions);
     }
