@@ -178,7 +178,10 @@ aStar2(Piso, Dest, [(_, Ca, LA)|Outros], Cam, Custo) :-
 % processa cada piso da lista do caminho e chamar cria_grafo/3
 processar_caminho(_, [], _, _) :- !.
 processar_caminho(_, [_], _, _) :-!.            
-                                         
+
+
+
+
 processar_caminho(Algorith, [Elemento1, Elemento2 | Resto], [Cam|CamResto], CustoTot) :-!,
                             processar_elementos(Algorith, Elemento1, Elemento2, Cam, Custo),
                             CustoTotNew is CustoTot + Custo,
@@ -398,17 +401,33 @@ find_caminho(PisoOr, PisoDest, Caminho):-
 %  sala, piso | sala, elevador | sala, passagem | etc - basicamente fazer varios predicados pra cada tipo de elemento)
 
 % predicado para o user - encontrar caminho entre 2 pontos
-find_caminho_entidades(Algorith,ElementoOr, ElementoDest, CaminhoCompleto, Movimentos, CustoTot) :-
-                     determinar_tipo_entidade(ElementoOr, PisoOr),                          % determinar o tipo e piso do elemento de origem
+find_caminho_entidades(Algorith,ElementoOr, ElementoDest, CaminhoCompleto2, Movimentos, CustoTot) :-
+                     determinar_tipo_entidade(ElementoOr, PisoOr),                                          % determinar o tipo e piso do elemento de origem
                      determinar_tipo_entidade(ElementoDest, PisoDest),                            
-                     find_caminho(PisoOr, PisoDest, Caminho),                               % encontrar o melhor caminho entre os pisos
-                     append([ElementoOr|Caminho], [ElementoDest], CaminhoCompleto),         % add o ponto de partida e o ponto de chegada à lista do caminho
-                    %  write('Melhor Caminho: '),write(CaminhoCompleto),nl,        
+                     find_caminho(PisoOr, PisoDest, Caminho),                                               % encontrar o melhor caminho entre os pisos
+                     append([ElementoOr|Caminho], [ElementoDest], CaminhoCompleto),                         % add o ponto de partida e o ponto de chegada à lista do caminho
+                     remove_consecutive_duplicates(CaminhoCompleto, CaminhoCompleto2),                       % remove elementos consecutivos repetidos (so acontece pq...codigo batata q fiz no determinar_tipo_entidade)
+                    %  write('Melhor Caminho: '),write(CaminhoCompleto2),nl,        
                      CustoTot = 0,
-                     processar_caminho(Algorith,CaminhoCompleto,Movimentos, CustoTot).                 % processa o caminho encontrado
-                    %  write("Caminho total: "), write(Movimentos), nl,                                         % print caminho
-                    %  write('Custo Total: '), write(CustoTot), nl.                               % print custo total
+                     processar_caminho(Algorith,CaminhoCompleto2,Movimentos, CustoTot).                      % processa o caminho encontrado
+                     %  write("Caminho total: "), write(Movimentos), nl,                                        
+                     %  write('Custo Total: '), write(CustoTot), nl.                               
 
 
 
 
+
+% Base case: an empty list has no consecutive duplicates
+remove_consecutive_duplicates([], []).
+
+% Case 1: If the list has only one element, it has no consecutive duplicates
+remove_consecutive_duplicates([X], [X]).
+
+% Case 2: If the first two elements are the same, skip the first one
+remove_consecutive_duplicates([X, X | T], Result) :-
+    remove_consecutive_duplicates([X | T], Result).
+
+% Case 3: If the first two elements are different, keep the first one and recurse
+remove_consecutive_duplicates([X, Y | T], [X | Result]) :-
+    X \= Y,
+    remove_consecutive_duplicates([Y | T], Result).
