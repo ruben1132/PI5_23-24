@@ -2,7 +2,7 @@ import 'reflect-metadata'; // We need this in order to use @Decorators
 
 import config from '../config';
 
-import express from 'express';
+import express, { Request, Response } from 'express';
 
 import Logger from './loaders/logger';
 
@@ -40,6 +40,10 @@ async function startServer() {
     // });
 
     await require('./loaders').default({ expressApp: app });
+
+    app.get('/', (req: Request, res: Response) => {
+        return res.send('Express Typescript on Vercel');
+    });
 
     app.listen(config.port, () => {
         console.log('Server listening on port:: ' + config.port);
