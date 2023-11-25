@@ -10,9 +10,6 @@ import cors from 'cors';
 
 import cookieParser from 'cookie-parser';
 
-import https from 'https'; // Import HTTPS module
-import fs from 'fs'; // Import file system module
-
 async function startServer() {
     const app = express();
 
@@ -31,42 +28,32 @@ async function startServer() {
         }),
     );
 
-    let httpsServer;
+    // app.use((req, res, next) => {
+    //     const origin = req.get('origin');
+    //     if (!origin || allowedOrigins.includes(origin)) {
+    //       res.header('Access-Control-Allow-Credentials', 'true');
+    //       res.header('Access-Control-Allow-Origin', origin);
+    //       res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    //       res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    //     }
+    //     next();
+    // });
 
-    // if (process.env.NODE_ENV === 'production') {
-    //     console.log('production');
-    //     const privateKeyPath = '/home/ubuntu/API/key.pem'; // Path to private key
-    //     const certificatePath = '/home/ubuntu/API/cert.pem'; // Path to certificate
+    await require('./loaders').default({ expressApp: app });
 
-    //     const privateKey = fs.readFileSync(privateKeyPath, 'utf8'); // Read private key file
-    //     const certificate = fs.readFileSync(certificatePath, 'utf8'); // Read certificate file
+    app.listen(config.port, () => {
+        console.log('Server listening on port:: ' + config.port);
 
-    //     const credentials = { key: privateKey, cert: certificate }; // Create credentials object
-
-    //     httpsServer = https.createServer(credentials, app); // Create HTTPS server
-    // } else {
-    //     httpsServer = app; // Use regular HTTP server for development
-    // }
-
-    httpsServer = app; // Use regular HTTP server for development
-
-    const PORT = process.env.NODE_ENV === 'production' ? config.port : 2226; // Set different ports for production and development
-
-    httpsServer
-        .listen(PORT, () => {
-            console.log(`Server listening on port:: ${PORT} in ${process.env.NODE_ENV} mode`);
-
-            Logger.info(`
-            ################################################
-            🛡️  Server listening on port: ${PORT} 🛡️
-            ################################################
-        `);
-        })
-        .on('error', err => {
-            Logger.error(err);
-            process.exit(1);
-            return;
-        });
+        Logger.info(`
+      ################################################
+      🛡️  Server listening on port: ${config.port} 🛡️
+      ################################################
+    `);
+    }).on('error', err => {
+        Logger.error(err);
+        process.exit(1);
+        return;
+    });
 }
 
 startServer();
