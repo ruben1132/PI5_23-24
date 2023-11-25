@@ -499,7 +499,7 @@ export default class Maze extends THREE.Group {
         const door = new Door({
             door: r.door,
             halfSize: this.halfSize,
-            url: '',
+            url: '/v3d/models/door/door.fbx',
             dScale: [0.018, 0.0055, 0.025],
         });
 

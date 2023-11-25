@@ -43,7 +43,7 @@ export default function Scene(props: Props) {
                     enabled: true,
                     introductionClips: [
                         {
-                            url: '/v3d/clips/el-gringo-12613.mp3',
+                            url: '/v3d/clips/elevator.mp3',
                             position: 'initial', // Global (non-positional) audio object: ""; positional audio object: "scene x y z" (scene specific position in cartesian coordinates), "maze line column" (maze specific position in cell coordinates), "exit" (maze exit location), "initial" (player initial position), "player" (player current position), "spotlight" (spotlight current position)
                             referenceDistance: 1.0,
                             loop: false,
@@ -52,21 +52,21 @@ export default function Scene(props: Props) {
                     ],
                     idleClips: [
                         {
-                            url: '/v3d/clips/Clearing-Throat-Moderate-Speed-www.fesliyanstudios.com.mp3',
+                            url: '/v3d/clips/r2d2.mp3',
                             position: 'player',
                             referenceDistance: 1.0,
                             loop: false,
                             volume: 0.75,
                         },
                         {
-                            url: '/v3d/clips/Small-Double-Cough-1-www.fesliyanstudios.com.mp3',
+                            url: '/v3d/clips/r2d2.mp3',
                             position: 'player',
                             referenceDistance: 1.0,
                             loop: false,
                             volume: 0.75,
                         },
                         {
-                            url: '/v3d/clips/Yawn-A2-www.fesliyanstudios.com.mp3',
+                            url: '/v3d/clips/r2d2.mp3',
                             position: 'player',
                             referenceDistance: 1.0,
                             loop: false,
@@ -91,14 +91,14 @@ export default function Scene(props: Props) {
                     ],
                     deathClips: [
                         {
-                            url: '/v3d/clips/176653326.mp3',
+                            url: '/v3d/clips/hit.mp3',
                             position: 'player',
                             referenceDistance: 1.0,
                             loop: false,
                             volume: 0.75,
                         },
                         {
-                            url: '/v3d/clips/Horn+Squeeze+Clown.mp3',
+                            url: '/v3d/clips/hit.mp3',
                             position: 'player',
                             referenceDistance: 1.0,
                             loop: false,
