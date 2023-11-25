@@ -35,3 +35,9 @@ terms_to_strings([Term | Rest], [String | StringRest]) :-
 % Main predicate to convert the input list to a JSON array of strings
 convert_lista_caminho(Input, JsonOutput) :-
     terms_to_strings(Input, JsonOutput).
+
+
+%%%%%%%%%%%%%%%%%%%%%% PARAMETROS GET /findCaminho %%%%%%%%%%%%%%%%%%%%%%
+% converte de string para termo prolog
+parse_ponto_acesso(PontoAcesso, ParsedPontoAcesso) :-
+                    term_string(ParsedPontoAcesso, PontoAcesso, []).
