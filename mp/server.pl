@@ -26,8 +26,8 @@ stopServer:-
 
 find_caminho_handler(Request) :-
     cors_enable(Request, [methods([get])]),
-      % Extract parameters from the request
-    http_parameters(Request, [algoritmo(A, [default(astar)]),origem(O,[default]),destino(D,[default])]),
+    % Extract parameters from the request
+    http_parameters(Request, [algoritmo(A, []),origem(O,[]),destino(D,[])]),
   
     parse_ponto_acesso(O, ParsedOrigem),
     parse_ponto_acesso(D, ParsedDestino),
@@ -35,12 +35,13 @@ find_caminho_handler(Request) :-
 
     % phrase(parse_ponto_acesso(Origem), [O]),
     % % For testing, use fixed values
-    % Algoritmo = astar,
-    % Origem = sala(apn),
-    % Destino = sala(beng),
+    % Algoritmo = dfs,
+    % Origem = pass(a2,b2),
+    % Destino = pass(b2,c3),
     
     % Calling the predicate with the fixed values
     find_caminho_entidades(A, ParsedOrigem, ParsedDestino, ListaCaminho, ListaMovimentos, Custo),
+    % find_caminho_entidades(Algoritmo, Origem, Destino, ListaCaminho, ListaMovimentos, Custo),
 
     convert_lista_caminho(ListaCaminho, CaminhoJson),
     convert_lista_movimentos(ListaMovimentos, MovimentosJson),
