@@ -8,7 +8,7 @@
         "ts.check": "tsc --project tsconfig.json",
         "add-build": "git add dist",
         "heroku-postbuild": "npm run build",
-        "start": "nodemon",
+        "start": "nodemon src/app.ts",
         "inspect": "nodemon --inspect src/app.ts",
         "test": "mocha -r ts-node/register 'tests/**/*.test.ts'",
         "lint": "npm run lint:js ",
