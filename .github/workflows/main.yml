@@ -24,7 +24,7 @@ jobs:
           cd spa
           npm install
 
-      - name: Build Angular application
+      - name: Build Next.js application
         run: |
           cd spa
           npm run build
@@ -37,7 +37,7 @@ jobs:
           port: 10597
           username: root
           password: root.
-          source: spa/dist/
+          source: spa/dist
           target: /var/www/html
 
       - name: SSH into server and restart web server
