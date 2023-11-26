@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define the content for the .env file
-ENV_CONTENT='NEXT_PUBLIC_MGI_API_URL = "http://localhost:2225/api/"'
-ENV_CONTENT="NEXT_PUBLIC_AUTH_API_URL = "http://localhost:2225/api/""
+ENV_CONTENT='NEXT_PUBLIC_MGI_API_URL = "http://vsgate-s2.dei.isep.ipp.pt:10722/api/"'
+ENV_CONTENT="NEXT_PUBLIC_AUTH_API_URL = "http://vsgate-s2.dei.isep.ipp.pt:10722/api/""
 
 # Specify the directory path
 DIRECTORY="/home/ubuntu/SPA/repo/spa"
