@@ -1,8 +1,8 @@
-#! /bin/bash
+#! /bin/sh
 
-sh killAPI.sh
+sh killSPA.sh
 
-cd /home/ubuntu/API/
+cd /home/ubuntu/SPA/
 
 rm -rf repo
 
@@ -12,16 +12,14 @@ cd repo
 
 git sparse-checkout init --cone
 
-git sparse-checkout set mgi
+git sparse-checkout set spa
 
 git pull
 
-cd mgi
+cd spa
 
-sh /home/ubuntu/API/generate_env.sh
+sh /home/ubuntu/SPA/generate_env.sh
 
 npm install
 
-# sudo node /home/ubuntu/API/startAPIScript.js
-
-sh /home/ubuntu/API/start_api.sh
+sh /home/ubuntu/SPA/start_spa.sh

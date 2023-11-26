@@ -54,7 +54,7 @@ segue_pisos(PisoAct,PisoDest,[EdAct,EdSeg|LOutrosEd],[elev(PisoAct,PisoAct1),pas
 
 
 % d escolher o caminho que envolve menos utilizacoes de elevadores e em
-% caso de iguadade menos utilizacao de passagens, menos trocos
+% caso de iguadade menos utilizacao de passagens, menos troços
 %
 % ?- melhor_caminho_pisos(a1,d3,L).
 % L = [elev(a1, a2), pass(a2, b2), pass(b2, d3)] 
