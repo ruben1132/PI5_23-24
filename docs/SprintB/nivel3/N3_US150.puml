@@ -1,0 +1,41 @@
+@startuml
+participant SPA
+participant "GestaoInfoAPI" as API
+participant "BuildingController" as Ctrl
+participant "BuildingService" as Srv
+participant "BuildingRepo" as Repo
+participant "BuildingMapper" as Map
+participant "BuildingDTO" as DTO
+participant "Building" as Domain
+
+activate SPA
+SPA -> API: post(/api/buildings)
+activate API
+
+API -> Ctrl: post
+activate Ctrl
+
+Ctrl -> Srv: createBuilding(buildingDTO)
+activate Srv
+
+Srv -> Domain: create
+
+Srv -> Repo: save(building)
+activate Repo
+Repo --> Srv: building
+deactivate Repo
+
+Srv -> Map: toDTO(building)
+activate Map
+Map --> Srv: buildingDTO
+deactivate Map
+
+Srv --> Ctrl: buildingDTO
+
+Ctrl --> API: status code 201
+deactivate Ctrl
+
+API --> SPA: success
+deactivate API
+deactivate SPA
+@enduml

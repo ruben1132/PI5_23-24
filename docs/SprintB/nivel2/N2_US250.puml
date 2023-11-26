@@ -1,0 +1,23 @@
+@startuml
+
+actor "Gestor de campus" as Actor
+participant "SPA" as Container <<Container (C4)>>
+participant "GestaoInfoAPI" as API <<Container (C4)>>
+
+Actor -> Container: Pretende editar as informações de uma passagem
+
+Container --> Actor: Mostra informações atuais da passagem
+
+Actor --> Container: Envia dados atualizados 
+
+Container -> API: put(/api/passages)
+
+API --> Container: status code
+
+alt 200
+    Container --> Actor: Devolve a passagem editada
+else 400
+    Container --> Actor: Devolve mensagem de erro
+end
+
+@enduml

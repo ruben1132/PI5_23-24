@@ -1,0 +1,19 @@
+@startuml
+
+actor "Gestor de frota" as Actor
+participant "SPA" as Container <<Container (C4)>>
+participant "GestaoInfoAPI" as API <<Container (C4)>>
+
+Actor -> Container: inibir um robot
+Container --> Actor:  requisita que selecione um robot
+Actor --> Container: seleciona o robot
+Container -> API: patch(/api/robots/)
+
+API --> Container: status code
+alt sucesso na requisição
+    Container --> Actor: devolve o edifício robot inibido
+else falha na requisição
+    Container --> Actor: devolve mensagem de erro
+end
+
+@enduml

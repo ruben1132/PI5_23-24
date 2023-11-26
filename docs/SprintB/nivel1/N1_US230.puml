@@ -1,0 +1,16 @@
+@startuml
+
+actor "Gestor de campus" as Actor
+participant "robDroneGo:robDroneGo" as Container <<Container (C4)>>
+
+Actor -> Container: carregar mapa de piso
+Container --> Actor: requisita os dados do mapa de piso
+Actor -> Container: insere os dados do mapa de piso
+
+alt sucesso a carregar mapa de piso
+    Container --> Actor: devolve o mapa de piso carregado
+else falha na requisição
+    Container --> Actor: devolve mensagem de erro
+end
+
+@enduml
