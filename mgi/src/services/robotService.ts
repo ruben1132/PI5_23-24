@@ -105,9 +105,9 @@ export default class RobotService implements IRobotService {
         return Result.ok<IRobotDTO>(robotDTOResult);
     }
 
-    public async getRobots(): Promise<Result<Array<IRobotWithRobotTypeDTO>>> {
+    public async getRobots(typeId : string, identification : string): Promise<Result<Array<IRobotWithRobotTypeDTO>>> {
         try {
-            const robots = await this.robotRepo.getRobots();
+            const robots = await this.robotRepo.getRobots(typeId, identification);
 
             const robotDTO: IRobotWithRobotTypeDTO[] = [];
 

@@ -12,7 +12,7 @@ import { IRobotPersistence } from '../dataschema/IRobotPersistence';
 export default class RobotRepo implements IRobotRepo {
     private models: any;
 
-    constructor(@Inject('robotSchema') private robotSchema: Model<IRobotPersistence & Document>) { }
+    constructor(@Inject('robotSchema') private robotSchema: Model<IRobotPersistence & Document>) {}
 
     private createBaseQuery(): any {
         return {
@@ -42,7 +42,6 @@ export default class RobotRepo implements IRobotRepo {
 
                 return RobotMap.toDomain(robotCreated);
             } else {
-
                 robotDocument.identification = robot.identification.value;
                 robotDocument.nickname = robot.nickname.value;
                 robotDocument.robotType = robot.robotType.toString();
@@ -59,12 +58,27 @@ export default class RobotRepo implements IRobotRepo {
         }
     }
 
-    public async getRobots(): Promise<Robot[]> {
+    public async getRobots(typeId: string, identification: string): Promise<Robot[]> {
+        console.log('typeId', typeId);
+        console.log('identification', identification);
+
         try {
-            const robots = await this.robotSchema.find({});
+            const query = {} as any;
+
+            if (typeId) {
+                query.robotType = typeId;
+            }
+    
+            if (identification) {
+                query.identification = {
+                    $regex: new RegExp(identification, 'i'), // 'i' for case-insensitive
+                };
+            }
+
+            const robots = await this.robotSchema.find(query as FilterQuery<IRobotPersistence & Document>);
 
             if (robots) {
-                return robots.map((passage) => RobotMap.toDomain(passage));
+                return robots.map(passage => RobotMap.toDomain(passage));
             } else {
                 return [];
             }
@@ -82,12 +96,10 @@ export default class RobotRepo implements IRobotRepo {
             }
 
             return null;
-
         } catch (error) {
             return null;
         }
     }
-
 
     public async findByRobotId(robotId: RobotId | string): Promise<Robot> {
         try {
@@ -98,24 +110,20 @@ export default class RobotRepo implements IRobotRepo {
             }
 
             return null;
-
         } catch (error) {
             return null;
         }
     }
 
-
     public async findByDomainId(robotId: RobotId | string): Promise<Robot> {
         try {
             const robot = await this.robotSchema.findOne({ domainId: robotId });
-
 
             if (robot != null) {
                 return RobotMap.toDomain(robot);
             }
 
             return null;
-
         } catch (error) {
             return null;
         }
@@ -123,7 +131,6 @@ export default class RobotRepo implements IRobotRepo {
 
     public async deleteRobot(robotId: string): Promise<boolean> {
         try {
-
             const query = { domainId: robotId };
             const robotRecord = await this.robotSchema.findOne(query as FilterQuery<IRobotPersistence & Document>);
 

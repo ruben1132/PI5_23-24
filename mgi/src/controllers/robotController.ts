@@ -52,7 +52,13 @@ export default class RobotController implements IRobotController /* TODO: extend
 
     public async getRobots(req: Request, res: Response, next: NextFunction) {
         try {
-            const robotsOrError = await this.robotServiceInstance.getRobots() as Result<Array<IRobotWithRobotTypeDTO>>;
+
+            const { typeId, identification } = req.query as { typeId?: string; identification?: string };;
+            console.log('typessId', typeId);
+            console.log('identificationss', identification);
+            
+
+            const robotsOrError = await this.robotServiceInstance.getRobots(typeId ?? "", identification ?? "") as Result<Array<IRobotWithRobotTypeDTO>>;
 
 
             if (robotsOrError.isFailure) {
@@ -76,13 +82,12 @@ export default class RobotController implements IRobotController /* TODO: extend
             }
 
             const robotDTO = robotOrError.getValue();
-            return res.json(robotDTO).status(201);
+            return res.json(robotDTO).status(200);
         }
         catch (e) {
             return next(e);
         }
     }
-
 
     public async updateRobot(req: Request, res: Response, next: NextFunction) {
 
