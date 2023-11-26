@@ -1,5 +1,5 @@
 {
-    "floor": "f3483019-0f1b-4283-aab1-e5338ec3a7b3",
+    "floor": "1370612b-1291-4e01-aabb-f3e9d7f6ee5d",
     "maze": {
         "size": {
             "width": 22,
@@ -123,7 +123,7 @@
         "initialDirection": 5.1
     },
     "fmElevator": {
-        "elevatorId": "089c4eff-652f-4b71-965a-a95ddb182e57",
+        "elevatorId": "04e2945f-840d-423a-b710-85615c9dec38",
         "position": {
             "positionX": 21,
             "positionY": 1,
@@ -136,7 +136,7 @@
     },
     "fmRooms": [
         {
-            "roomId": "366aee22-6886-4165-b58b-d1b3730e7438",
+            "roomId": "4ac1ab17-e390-41a1-a732-9298a2e86c57",
             "startX": 0,
             "startY": 0,
             "endX": 4,
@@ -153,7 +153,7 @@
             } 
         },
         {
-            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "roomId": "bc720988-2770-4de6-9694-fe2dc85f76d0",
             "startX": 10,
             "startY": 0,
             "endX": 14,
@@ -164,7 +164,7 @@
             } 
         },
         {
-            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "roomId": "0f667b11-b738-4d64-a250-32379c453df1",
             "startX": 14,
             "startY": 0,
             "endX": 18,
@@ -175,7 +175,7 @@
             } 
         },
         {
-            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "roomId": "e5c0788c-bc8f-4676-9fb3-28ceb35f52fb",
             "startX": 18,
             "startY": 0,
             "endX": 20,
@@ -186,7 +186,7 @@
             } 
         },
         {
-            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 10,
             "startY": 8,
             "endX": 14,
@@ -197,7 +197,7 @@
             } 
         },
         {
-            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 18,
             "startY": 8,
             "endX": 22,

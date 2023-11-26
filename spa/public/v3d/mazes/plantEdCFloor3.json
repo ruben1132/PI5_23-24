@@ -106,7 +106,7 @@
         "initialDirection": 5.1
     },
     "fmElevator": {
-        "elevatorId": "089c4eff-652f-4b71-965a-a95ddb182e57",
+        "elevatorId": "04e2945f-840d-423a-b710-85615c9dec38",
         "position": {
             "positionX": 1,
             "positionY": 11,
@@ -119,7 +119,7 @@
     },
     "fmRooms": [
         {
-            "roomId": "366aee22-6886-4165-b58b-d1b3730e7438",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 0,
             "startY": 0,
             "endX": 4,
@@ -137,7 +137,7 @@
             }
         },
         {
-            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 4,
             "startY": 4,
             "endX": 6,
@@ -155,7 +155,7 @@
             }
         },
         {
-            "roomId": "366aee22-6886-4165-b58b-d1b3730e7438",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 0,
             "startY": 0,
             "endX": 4,
@@ -173,7 +173,7 @@
             }
         },
         {
-            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 4,
             "startY": 4,
             "endX": 6,
@@ -191,7 +191,7 @@
             }
         },
         {
-            "roomId": "366aee22-6886-4165-b58b-d1b3730e7438",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 0,
             "startY": 0,
             "endX": 4,
@@ -209,7 +209,7 @@
             }
         },
         {
-            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 4,
             "startY": 4,
             "endX": 6,
@@ -227,7 +227,7 @@
             }
         },
         {
-            "roomId": "366aee22-6886-4165-b58b-d1b3730e7438",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 0,
             "startY": 0,
             "endX": 4,
@@ -245,7 +245,7 @@
             }
         },
         {
-            "roomId": "5edcc425-5e60-4d50-bd5f-dc7403e51f1d",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 4,
             "startY": 4,
             "endX": 6,
