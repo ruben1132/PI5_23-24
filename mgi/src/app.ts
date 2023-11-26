@@ -19,7 +19,7 @@ async function startServer() {
     app.use(cookieParser());
 
     // Use the cors middleware
-    const allowedOrigins = [config.clientURL, 'http://localhost:3000'];
+    const allowedOrigins = [config.clientURL, 'http://localhost:2223'];
 
     app.use(
         cors({
