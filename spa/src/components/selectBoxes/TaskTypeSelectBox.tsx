@@ -1,19 +1,18 @@
 'use client';
 
-import { TaskType} from '@/models/TaskType';
+import { TaskType } from '@/models/TaskType';
 import { Form } from 'react-bootstrap';
 
 interface Props {
     data: TaskType[];
-    setValue: (val: string) => void;
+    setValue?: (val: string) => void;
     selectedValue?: string;
     isLoading: boolean;
     isError: boolean;
+    customHandleChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const TaskTypeSelectBox = (props: Props) => {
-
-    
     if (props.isError) {
         return (
             <Form.Select>
@@ -29,7 +28,7 @@ const TaskTypeSelectBox = (props: Props) => {
         );
     }
 
-    if(!props.data) {
+    if (!props.data) {
         return (
             <Form.Select>
                 <option>No data</option>
@@ -41,25 +40,18 @@ const TaskTypeSelectBox = (props: Props) => {
     const filteredSelectBox = props.data?.filter((item: TaskType) => item.id !== props?.selectedValue);
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        props.setValue(event.target.value);
+        if (props.setValue) {
+            props.setValue(event.target.value);
+            return;
+        }
     };
 
-    const getSelectedValue = (): TaskType => {
-        let val = null;
-        if (props?.selectedValue) {
-            val = props.data.find((item: TaskType) => item.id === props?.selectedValue);
-        }
-
-        if (!val) {
-            return filteredSelectBox[0];
-        }
-
-        return val;
-    };
 
     return (
-        <Form.Select defaultValue={props?.selectedValue ?? ""} onChange={handleChange}>
-            {props?.selectedValue && <option defaultChecked={true}>{getSelectedValue().name}</option>}
+        <Form.Select
+            onChange={props.customHandleChange ?? handleChange}
+        >
+            <option>select task types</option>
 
             {filteredSelectBox?.map((item: TaskType) => (
                 <option key={item.id} value={item.id}>

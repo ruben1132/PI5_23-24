@@ -1,19 +1,18 @@
 'use client';
 
-import { Floor, FloorWithBuilding} from '@/models/Floor';
+import { Floor, FloorWithBuilding } from '@/models/Floor';
 import { Form } from 'react-bootstrap';
 
 interface Props {
     data: FloorWithBuilding[] | Floor[];
-    setValue: (val: string) => void;
+    setValue?: (val: string) => void;
     selectedValue?: string;
     isLoading: boolean;
     isError: boolean;
+    customHandleChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const FloorSelectBox = (props: Props) => {
-
-    
     if (props.isError) {
         return (
             <Form.Select>
@@ -29,7 +28,7 @@ const FloorSelectBox = (props: Props) => {
         );
     }
 
-    if(!props.data) {
+    if (!props.data) {
         return (
             <Form.Select>
                 <option>No data</option>
@@ -41,13 +40,13 @@ const FloorSelectBox = (props: Props) => {
     const filteredSelectBox = props.data?.filter((item: FloorWithBuilding | Floor) => item.id !== props?.selectedValue);
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        props.setValue(event.target.value);
+        if (props.setValue) props.setValue(event.target.value);
     };
 
-    const getSelectedValue = (): FloorWithBuilding |Floor => {
+    const getSelectedValue = (): FloorWithBuilding | Floor => {
         let val = null;
         if (props?.selectedValue) {
-            val = props.data.find((item: FloorWithBuilding |Floor) => item.id === props?.selectedValue);
+            val = props.data.find((item: FloorWithBuilding | Floor) => item.id === props?.selectedValue);
         }
 
         if (!val) {
@@ -58,8 +57,8 @@ const FloorSelectBox = (props: Props) => {
     };
 
     return (
-        <Form.Select defaultValue={props?.selectedValue ?? ""} onChange={handleChange}>
-            {props?.selectedValue && <option defaultChecked={true}>{getSelectedValue().code}</option>}
+        <Form.Select onChange={props.customHandleChange ?? handleChange}>
+            <option>select floors allowed</option>
 
             {filteredSelectBox?.map((item: FloorWithBuilding | Floor) => (
                 <option key={item.id} value={item.id}>

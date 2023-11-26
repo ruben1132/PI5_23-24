@@ -113,12 +113,8 @@ export default class RobotService implements IRobotService {
 
             for (const robot of robots) {
                 const robotType = await this.robotTypeRepo.findByDomainId(robot.robotType);
-                if (robotType === null) {
-                    return Result.fail<Array<IRobotWithRobotTypeDTO>>('RobotType not found');
-                } else {
-                    const robotDTOResult = RobotMap.toDTOWithRobotType(robot, robotType) as IRobotWithRobotTypeDTO;
+                const robotDTOResult = RobotMap.toDTOWithRobotType(robot, robotType) as IRobotWithRobotTypeDTO;
                     robotDTO.push(robotDTOResult);
-                }
             }
 
             if (robots === null) {

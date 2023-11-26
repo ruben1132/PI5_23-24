@@ -58,7 +58,7 @@ const RoomSelectBox = (props: Props) => {
     };
 
     return (
-        <Form.Select defaultValue={props?.selectedValue ?? ""} onChange={handleChange}>
+        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange}>
             {props?.selectedValue && <option defaultChecked={true}>{getSelectedValue().number}</option>}
 
             {filteredSelectBox?.map((item: RoomWithFloor) => (

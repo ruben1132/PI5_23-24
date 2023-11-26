@@ -21,6 +21,7 @@ import { useFetchData, useSubmitData, useFormNumberInput, useFormStringInput, us
 // model
 import { Robot, RobotWithRobotType } from '../../models/Robot';
 import { RobotType } from '../../models/RobotType';
+import RobotTypeSelectBox from '../selectBoxes/RobotTypeSelectBox';
 
 interface Props {
     item: {
@@ -153,12 +154,6 @@ export default function RobotForm(props: Props) {
         }
     }, [selectBoxRobotTypesDataFetch.data]);
 
-    if (selectBoxRobotTypesDataFetch.isLoading) {
-        return <Form>Loading...</Form>;
-    }
-    if (selectBoxRobotTypesDataFetch.isError) {
-        return <Form>Error</Form>;
-    }
     if (
         selectBoxRobotTypesDataFetch.data === undefined ||
         selectBoxRobotTypesDataFetch.data === null ||
@@ -167,15 +162,6 @@ export default function RobotForm(props: Props) {
         return <Form>Try adding robot types first!</Form>;
     }
 
-    // filter data so it removes the element already selected
-    const filteredSelectBoxDataRobotTypes = selectBoxRobotTypesDataFetch.data.filter(
-        (item: any) => item.id !== props.item.value?.robotType?.id,
-    );
-
-    // handle for selecting a robotType
-    const handleSelectRobotType = (e: ChangeEvent<HTMLSelectElement>) => {
-        robotType.handleLoad(e.target.value);
-    };
 
     return (
         <Form>
@@ -236,21 +222,15 @@ export default function RobotForm(props: Props) {
                 <Col sm={6}>
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Robot Type</Form.Label>
+                        <RobotTypeSelectBox
+                        selectedValue={props.item.value?.robotType?.id ?? robotType.value}
+                        setValue={robotType.handleLoad}
+                        data={selectBoxRobotTypesDataFetch.data}
+                        isError={selectBoxRobotTypesDataFetch.isError}
+                        isLoading={selectBoxRobotTypesDataFetch.isLoading}
+                    />
 
-                        <Form.Select
-                            defaultValue={props.item.value?.robotType?.type ?? filteredSelectBoxDataRobotTypes[0].id}
-                            onChange={handleSelectRobotType}
-                        >
-                            {props.item.value?.robotType?.id && (
-                                <option defaultChecked={true}>{props.item.value?.robotType?.type}</option>
-                            )}
-                            {filteredSelectBoxDataRobotTypes?.map((item: RobotType) => (
-                                <option key={item.id} value={item.id}>
-                                    {/* show 2nd prop from item, 1st prop is the id */}
-                                    {item.type}
-                                </option>
-                            ))}
-                        </Form.Select>
+             
                     </Form.Group>
                 </Col>
             </Row>
