@@ -29,12 +29,14 @@ export class PassageMap extends Mapper<Passage> {
                 id: fromFloor.id.toValue(),
                 number: fromFloor.number,
                 information: fromFloor.information.value,
+                code: fromFloor.code,
                 building: fromFloor.building.toString(),
             } as IFloorDTO,
             toFloor: {
                 id: toFloor.id.toValue(),
                 number: toFloor.number,
                 information: toFloor.information.value,
+                code : toFloor.code,
                 building: toFloor.building.toString(),
             } as IFloorDTO,
         } as IPassageWithFloorDTO;

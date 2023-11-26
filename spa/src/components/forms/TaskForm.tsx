@@ -149,10 +149,12 @@ export default function TaskForm(props: Props) {
         switch (originType.value) {
             case 'elevator':
                 const elev = floorFinder(origFloor.value, 'orig');
-                formatedOrig = 'elev(' + elev + ')';
+                console.log(elev);
+                
+                formatedOrig = 'elev(' + elev.code + ')';
                 break;
             case 'passage':
-                const pass = passFinder(origin.value);
+                const pass = passFinder(origin.value);                
                 formatedOrig = 'pass(' + pass?.fromFloor.code + ',' + pass?.toFloor.code + ')';
                 break;
             case 'room':
@@ -166,7 +168,7 @@ export default function TaskForm(props: Props) {
         switch (destinyType.value) {
             case 'elevator':
                 const elev = floorFinder(destFloor.value, 'dest');
-                formatedDest = 'elev(' + elev + ')';
+                formatedDest = 'elev(' + elev.code + ')';
                 break;
             case 'passage':
                 const pass = passFinder(destiny.value);
