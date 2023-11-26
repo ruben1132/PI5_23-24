@@ -1,0 +1,46 @@
+@startuml
+participant SPA
+participant "GestaoInfoAPI" as API
+participant "FloorController" as Ctrl
+participant "FloorService" as Srv
+participant "FloorRepo" as Repo
+participant "BuildingRepo" as Repo2
+participant "FloorMapper" as Map
+participant "FloorDTO" as DTO
+participant "Floor" as Domain
+
+activate SPA
+SPA -> API: post(/api/floors)
+activate API
+
+API -> Ctrl: post
+activate Ctrl
+
+Ctrl -> Srv: createFloor(floorDTO)
+activate Srv
+
+Srv -> Repo2: findByDomainId(floor.buildingId)
+activate Repo2
+Repo2 --> Srv: building
+deactivate Repo2
+
+Srv -> Domain: create
+Srv -> Repo: save(floor)
+activate Repo
+Repo --> Srv: floor
+deactivate Repo
+
+Srv -> Map: toDTO(floor)
+activate Map
+Map --> Srv: floorDTO
+deactivate Map
+
+Srv --> Ctrl: floorDTO
+
+Ctrl --> API: status code 201
+deactivate Ctrl
+
+API --> SPA: success
+deactivate API
+deactivate SPA
+@enduml

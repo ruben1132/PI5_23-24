@@ -1,0 +1,18 @@
+@startuml
+
+actor Actor as Actor
+participant "robDroneGo:robDroneGo" as Container <<Container (C4)>>
+
+Actor -> Container: Pretende listar passagens entre dois edifícios
+
+Container --> Actor: Requisita o codigo de cada edifício
+
+Container -> Container: Requisita as passagens entre os dois edifícios
+
+alt sucesso na requisição
+    Container --> Actor: Devolve as passagens entre os edifícios
+else falha na requisição
+    Container --> Actor: Devolve mensagem de erro
+end
+
+@enduml

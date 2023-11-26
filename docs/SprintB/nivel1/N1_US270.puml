@@ -1,0 +1,22 @@
+@startuml
+
+actor Actor as Actor
+participant "robDroneGo:robDroneGo" as Container <<Container (C4)>>
+
+Actor -> Container: Criar elevador num edifício
+
+Container --> Actor: Requisita informação para o elevador
+
+Actor -> Container: Envia dados do elevador
+
+Container -> Container: Valida os pisos e o elevador
+
+Container --> Container: Cria o elevador
+
+alt sucesso na criação
+    Container --> Actor: Retorna informação do elevador
+else falha na criação
+    Container --> Actor: Retorna erro
+end
+
+@enduml

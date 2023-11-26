@@ -1,0 +1,47 @@
+@startuml
+participant SPA
+participant "GestaoInfoAPI" as API
+participant "ElevatorController" as Ctrl
+participant "ElevatorService" as Srv
+participant "ElevatorRepo" as Repo
+participant "FloorRepo" as Repo2
+participant "ElevatorMapper" as Map
+participant "ElevatorDTO" as DTO
+participant "Elevator" as Domain
+
+activate SPA
+SPA -> API: post(/api/elevators)
+activate API
+
+API -> Ctrl: post
+activate Ctrl
+
+Ctrl -> Srv: createElevator(elevatorDTO)
+activate Srv
+
+Srv -> Repo2: findByDomainId(elevator.floorsAllowed)
+activate Repo2
+Repo2 --> Srv: floors
+deactivate Repo2
+
+Srv -> Domain: create
+
+Srv -> Repo: save(elevator)
+activate Repo
+Repo --> Srv: elevator
+deactivate Repo
+
+Srv -> Map: toDTO(elevator)
+activate Map
+Map --> Srv: elevatorDTO
+deactivate Map
+
+Srv --> Ctrl: elevatorDTO
+
+Ctrl --> API: status code 201
+deactivate Ctrl
+
+API --> SPA: success
+deactivate API
+deactivate SPA
+@enduml

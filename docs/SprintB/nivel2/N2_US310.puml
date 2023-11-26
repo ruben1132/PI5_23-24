@@ -1,0 +1,23 @@
+@startuml
+
+actor Actor as Actor
+participant "SPA" as Container <<Container (C4)>>
+participant "GestaoInfoAPI" as API <<Container (C4)>>
+
+Actor -> Container: Criar sala de piso de edifício
+
+Container --> Actor: Requisita informação para a sala
+
+Actor --> Container: Envia dados da sala
+
+Container -> API: post(/api/rooms)
+
+API --> Container: status code
+
+alt 200
+    Container --> Actor: Devolve a sala criada
+else 400
+    Container --> Actor: Devolve mensagem de erro
+end
+
+@enduml

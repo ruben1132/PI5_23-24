@@ -1,0 +1,47 @@
+@startuml
+participant SPA
+participant "GestaoInfoAPI" as API
+participant "RoomController" as Ctrl
+participant "RoomService" as Srv
+participant "RoomRepo" as Repo
+participant "FloorRepo" as Repo2
+participant "RoomMapper" as Map
+participant "RoomDTO" as DTO
+participant "Room" as Domain
+
+activate SPA
+SPA -> API: post(/api/rooms)
+activate API
+
+API -> Ctrl: post
+activate Ctrl
+
+Ctrl -> Srv: createRoom(roomDTO)
+activate Srv
+
+Srv -> Repo2: findByDomainId(room.floor)
+activate Repo2
+Repo2 --> Srv: floor
+deactivate Repo2
+
+Srv -> Domain: create
+
+Srv -> Repo: save(room)
+activate Repo
+Repo --> Srv: room
+deactivate Repo
+
+Srv -> Map: toDTO(room)
+activate Map
+Map --> Srv: roomDTO
+deactivate Map
+
+Srv --> Ctrl: roomDTO
+
+Ctrl --> API: status code 201
+deactivate Ctrl
+
+API --> SPA: success
+deactivate API
+deactivate SPA
+@enduml

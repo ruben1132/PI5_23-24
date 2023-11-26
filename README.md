@@ -10,7 +10,7 @@
 ![Diagrama de Systema](./docs/system_diagram.svg)
 
 ## Diagrama de Domínio
-![Diagrama de Domínio](./docs/domain%20model.svg)
+![Diagrama de Domínio](./docs/domain_model.svg)
 
 
 # Views
