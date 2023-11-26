@@ -5,7 +5,7 @@ import { RobotId } from "../../domain/valueObj/robotId";
 export default interface IRobotRepo extends Repo<Robot> {
     save(robot: Robot): Promise<Robot>;
     findByDomainId(robotId: RobotId | string): Promise<Robot>;
-    getRobots(): Promise<Robot[]>;
+    getRobots(typeId : string, identification : string): Promise<Robot[]>;
     getRobotById(robotId: string): Promise<Robot>;
     deleteRobot(robotId: string): Promise<Boolean>;
 
