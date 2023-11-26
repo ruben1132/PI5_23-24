@@ -33,10 +33,6 @@ interface Props {
 }
 
 export default function FloorForm(props: Props) {
-    // fetchers
-    const fetchFloorMap = useFetchData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.floormapsWithFloor + props.item.value.id,
-    ); // fetch floor map
 
     const selectBoxBuildingsDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings); // fetch buildings
 
@@ -83,8 +79,6 @@ export default function FloorForm(props: Props) {
         // show alert
         notify.success(`Floor map uploaded successfully`);
 
-        // fetch floor map again
-        fetchFloorMap.revalidate();
     };
 
     // updates the floor and refreshes the table
@@ -233,14 +227,6 @@ export default function FloorForm(props: Props) {
                     </Col>
                 )}
             </Row>
-            {fetchFloorMap.data && (
-                <Col sm={12}>
-                    <Form.Group controlId="preview" className="mb-3">
-                        <Form.Label>Floor map</Form.Label>
-                        <Form.Control as={'textarea'} value={'dsadsada'} disabled={true} style={{ height: '100px' }} />
-                    </Form.Group>
-                </Col>
-            )}
 
             <br />
             <Row>
