@@ -1,4 +1,5 @@
 {
+    "floor": "03a4be49-19a2-4c34-a92c-05fd63c25898",
     "maze": {
         "size": {
             "width": 12,
@@ -125,7 +126,7 @@
     },
     "fmRooms": [
         {
-            "roomId": "6548deaf5c1f0f0111c718d8",
+            "roomId": "2e032467-525b-4ba1-add2-466a5f1f7e7b",
             "startX": 0,
             "startY": 0,
             "endX": 4,
@@ -143,7 +144,7 @@
             }
         },
         {
-            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
+            "roomId": "a9703c00-8039-4852-bb8d-d3082e5a13b0",
             "startX": 6,
             "startY": 2,
             "endX": 0,
@@ -161,7 +162,7 @@
             }
         },
         {
-            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
+            "roomId": "8776d133-1ea6-4b18-83c7-a43e9d8bb783",
             "startX": 6,
             "startY": 2,
             "endX": 0,
@@ -179,7 +180,7 @@
             }
         },
         {
-            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
+            "roomId": "9f17064c-7afa-4a1b-83a6-b567f4072865",
             "startX": 6,
             "startY": 2,
             "endX": 0,
@@ -197,7 +198,7 @@
             }
         },
         {
-            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
+            "roomId": "0d3bd85e-c15d-48c6-99b0-9971a64d0be7",
             "startX": 6,
             "startY": 2,
             "endX": 0,
@@ -215,7 +216,7 @@
             }
         },
         {
-            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
+            "roomId": "c49c7de1-5786-471d-83c7-e1612cc1f976",
             "startX": 6,
             "startY": 2,
             "endX": 0,
@@ -234,7 +235,7 @@
         }
     ],
     "fmElevator": {
-        "elevatorId": "04e2945f-840d-423a-b710-85615c9dec38",
+        "elevatorId": "51deaa55-4ee0-4122-94cb-1cecf9c690eb",
         "position": {
             "positionX": 1,
             "positionY": 1,
