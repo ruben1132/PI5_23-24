@@ -38,7 +38,7 @@ export default {
         {
            routeName: "tasks",
            displayName: "Tasks",
-           permissions: [userRole.GESTOR_FROTA, userRole.UTENTE, userRole.GESTOR_CAMPUS ],
+           permissions: [userRole.GESTOR_FROTA ],
         },
         {
             routeName: 'tasktypes',
