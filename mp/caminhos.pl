@@ -335,7 +335,7 @@ obter_coordenadas_sala(Piso, Sala, SalaX, SalaY) :-
 
 
 % print info do processar
-print_info_processar(Piso, Orig, Dest, StartX, StartY, EndX, EndY).
+print_info_processar(_, _, _, _, _, _, _).
                         % nl,
                         % nl,
                         % write('Piso: '), write(Piso), nl,

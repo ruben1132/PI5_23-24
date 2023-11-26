@@ -25,7 +25,8 @@ stopServer:-
 :- http_handler('/findCaminho', find_caminho_handler, []).
 
 find_caminho_handler(Request) :-
-    cors_enable(Request, [methods([get])]),
+    cors_enable(Request, [methods([get]),
+                          origin('http://localhost:2223')]),
     % Extract parameters from the request
     http_parameters(Request, [algoritmo(A, []),origem(O,[]),destino(D,[])]),
   
@@ -45,7 +46,7 @@ find_caminho_handler(Request) :-
 
     convert_lista_caminho(ListaCaminho, CaminhoJson),
     convert_lista_movimentos(ListaMovimentos, MovimentosJson),
-    reply_json(json{caminho: CaminhoJson, movimentos: MovimentosJson, variavel: Custo },[json_object(dict)]).
+    reply_json(json{caminho: CaminhoJson, movimentos: MovimentosJson, custo: Custo },[json_object(dict)]).
 
 
  

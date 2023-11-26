@@ -1,7 +1,7 @@
 'use client';
 
 // react
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
 // react bootstrap components
 import Form from 'react-bootstrap/Form';
@@ -18,11 +18,11 @@ import config from '../../../config';
 // custom hooks
 import {
     useFormStringInput,
-    useFormStringInputWithRegex,
     useSubmitData,
     useDeleteData,
     useFetchData,
     useFormSelectBox,
+    useFormSelectBoxInput,
 } from '@/util/customHooks';
 
 // model
@@ -32,6 +32,10 @@ import FloorSelectBox from '../selectBoxes/FloorSelectBox';
 import ElevatorSelectBox from '../selectBoxes/ElevatorSelectBox';
 import { ElevatorWithFloors } from '@/models/Elevator';
 import PassageSelectBox from '../selectBoxes/PassageSelectBox';
+import { Passage, PassageWithFloor } from '@/models/Passage';
+import { Floor } from '@/models/Floor';
+import { Room, RoomWithFloor } from '@/models/Room';
+import axios from 'axios';
 
 interface Props {
     item: {
@@ -53,14 +57,15 @@ export default function TaskForm(props: Props) {
     );
 
     // deleter
-    const taskDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks + props.item?.value.id);
+    const taskDeleter = useDeleteData(config.mpAPI.baseUrl + config.mpAPI.routes.findPath + props.item?.value.id);
 
     // inputs
     const originType = useFormStringInput('room');
     const destinyType = useFormStringInput('room');
     const origin = useFormSelectBox(props.item.value?.origin);
     const destiny = useFormSelectBox(props.item.value?.destiny);
-    const path = useFormStringInput(props.item.value?.path);
+    const [path, setPath] = useState<Path>();
+    const algorith = useFormSelectBoxInput('');
 
     const [origElevator, setOrigElevator] = useState<ElevatorWithFloors>({} as ElevatorWithFloors);
     const [destElevator, setDestElevator] = useState<ElevatorWithFloors>({} as ElevatorWithFloors);
@@ -78,7 +83,7 @@ export default function TaskForm(props: Props) {
             ...props.item.value,
         };
         item.id = props.item.value?.id;
-        item.path = path.value;
+        // item.path = path.value;
 
         // submit data
         let res = await tasksForm.submit(item);
@@ -117,6 +122,86 @@ export default function TaskForm(props: Props) {
         props.close();
     };
 
+    const handleFindPath = async () => {
+        setEnabled(false);        
+
+        let formatedOrig = '';
+        let formatedDest = '';
+
+        // finders
+        const passFinder = (id: string): PassageWithFloor | undefined => {
+            return passagesDataFecher.data.find((p: PassageWithFloor) => p.id === id);
+        };
+
+        const floorFinder = (id: string, type: string): Floor | undefined => {
+            if (type === 'orig') {
+                return origElevator.floorsAllowed.find((e: Floor) => e.id === id);
+            }
+            return destElevator.floorsAllowed.find((e: Floor) => e.id === id);
+        };
+
+        const roomFinder = (id: string): RoomWithFloor | undefined => {
+            const cd = roomsDataFecher.data.find((r: RoomWithFloor) => r.id === id);
+            return cd;
+        };
+
+        // format origin and destiny
+        switch (originType.value) {
+            case 'elevator':
+                const elev = floorFinder(origFloor.value, 'orig');
+                formatedOrig = 'elev(' + elev + ')';
+                break;
+            case 'passage':
+                const pass = passFinder(origin.value);
+                formatedOrig = 'pass(' + pass?.fromFloor.code + ',' + pass?.toFloor.code + ')';
+                break;
+            case 'room':
+                const room = roomFinder(origin.value);
+                formatedOrig = 'sala(' + room?.number + ')';
+                break;
+            default:
+                break;
+        }
+
+        switch (destinyType.value) {
+            case 'elevator':
+                const elev = floorFinder(destFloor.value, 'dest');
+                formatedDest = 'elev(' + elev + ')';
+                break;
+            case 'passage':
+                const pass = passFinder(destiny.value);
+                formatedDest = 'pass(' + pass?.fromFloor.code + ',' + pass?.toFloor.code + ')';
+                break;
+            case 'room':
+                const room = roomFinder(destiny.value);
+                formatedDest = 'sala(' + room?.number + ')';
+                break;
+            default:
+                break;
+        }
+
+        // set query
+        const query = '?algoritmo=' + algorith.value + '&origem=' + formatedOrig + '&destino=' + formatedDest;
+
+        try {
+            const response = await axios(config.mpAPI.baseUrl + config.mpAPI.routes.findPath + query, {
+                method: 'GET',
+            });
+
+            if (response.status === 200) {
+                setEnabled(true);
+                notify.success('Path found successfully!');
+                setPath(response.data);
+                return;
+            } else {
+                notify.warning('Coud not find a path');
+            }
+        } catch (err) {
+            notify.error('Error while finding a path');
+        }
+
+        setEnabled(true); // enable buttons
+    };
     // handle for selecting origin type
     const handleChangeOriginType = (e: ChangeEvent<HTMLSelectElement>) => {
         originType.handleLoad(e.target.value);
@@ -291,6 +376,39 @@ export default function TaskForm(props: Props) {
                     )}
                 </Col>
             </Row>
+            <Row>
+                <Col sm={12}>
+                    <Form.Group className="mb-6">
+                        <Form.Label htmlFor="select">Algorithm</Form.Label>
+                        <Form.Select onChange={algorith.handleChange}>
+                            <option defaultChecked={true}>Select a type</option>
+                            <option value={'astar'}>A*</option>
+                            <option value={'dfs'}>Depth-first search </option>
+                            <option value={'bfs'}>Breadth-first search </option>
+                            <option value={'bdfs'}>Better Depth-first search</option>
+                        </Form.Select>
+                    </Form.Group>
+                </Col>
+            </Row>
+                    <br />
+            <Row>
+                <Col sm={12}>
+                    {path !==undefined && (
+                        <Col sm={12}>
+                            <Form.Group controlId="preview" className="mb-3">
+                                <Form.Label>Path</Form.Label>
+                                <Form.Control
+                                    as={'textarea'}
+                                    value={JSON.stringify(path, null, 2)}
+                                    disabled={true}
+                                    style={{ height: '600px' }}
+                                />
+                            </Form.Group>
+                        </Col>
+                    )}
+                </Col>
+            </Row>
+
             <br />
             <Row>
                 <Col sm={12}>
@@ -298,18 +416,19 @@ export default function TaskForm(props: Props) {
                         {props.action === 'edit' ? (
                             <>
                                 <Button
-                                    variant="primary"
+                                    variant="success"
                                     onClick={handleSubmitData}
                                     disabled={
                                         origin.value === '' ||
                                         origin.value === undefined ||
                                         destiny.value === '' ||
                                         destiny.value === undefined ||
-                                        path.value === '' ||
+                                        path === null ||
+                                        algorith.value === '' ||
                                         !enabled
                                     }
                                 >
-                                    Update
+                                    Add
                                 </Button>
 
                                 <Button variant="danger" onClick={handleDeleteData}>
@@ -318,18 +437,19 @@ export default function TaskForm(props: Props) {
                             </>
                         ) : (
                             <Button
-                                variant="success"
-                                onClick={handleSubmitData}
+                                variant="primary"
+                                onClick={handleFindPath}
                                 disabled={
                                     origin.value === '' ||
                                     origin.value === undefined ||
                                     destiny.value === '' ||
                                     destiny.value === undefined ||
-                                    path.value === '' ||
+                                    path === null ||
+                                    algorith.value === '' ||
                                     !enabled
                                 }
                             >
-                                Add
+                                Find Path
                             </Button>
                         )}
                     </Form.Group>

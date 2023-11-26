@@ -113,6 +113,14 @@ export default {
         },
     },
 
+    mpAPI:{
+        baseUrl: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MP_API_URL : 'http://localhost:5000/',
+        routes: {
+            findPath: 'findCaminho',
+        },
+    },
+    
+
     tokenName: 'robdronego:token',
 
     nullRoutes: ['/', '/aboutus', '/termsandconditions'],
