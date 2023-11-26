@@ -16,7 +16,6 @@ import { useRouter } from 'next/navigation';
 import { notify } from '@/components/notification/Notification';
 
 export default function UserForm() {
-
     // inputs and button
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -36,7 +35,7 @@ export default function UserForm() {
         setPassword(e.target.value);
     };
 
-    const handleSubmit = async() => {
+    const handleSubmit = async () => {
         setDisableSubmit(true);
 
         // call the login function to set the user in the context
@@ -55,6 +54,7 @@ export default function UserForm() {
             <Form.Group controlId="formUserName">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
+                    id="email"
                     type="email"
                     placeholder="Enter your email"
                     value={email}
@@ -65,6 +65,7 @@ export default function UserForm() {
             <Form.Group controlId="formUserRole">
                 <Form.Label>User Role</Form.Label>
                 <Form.Control
+                    id="password"
                     type="password"
                     placeholder="*****"
                     value={password}
@@ -73,6 +74,7 @@ export default function UserForm() {
             </Form.Group>
             <br />
             <Button
+                id='login-btn'
                 variant="success"
                 onClick={handleSubmit}
                 disabled={disableSubmit || email === '' || password === ''}

@@ -39,7 +39,7 @@ function ContentTable(props: Props) {
     };
 
     const addButton = (
-        <Button variant="success" onClick={handleAddButtonClick}>
+        <Button variant="success" onClick={handleAddButtonClick} data-testid="open-modal">
             Add {props.type}
         </Button>
     );

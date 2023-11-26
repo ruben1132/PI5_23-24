@@ -85,7 +85,7 @@ function Sidebar(props: SidebarProps) {
                                         key={index}
                                         style={{ textDecoration: 'none', padding: '2px' }}
                                     >
-                                        <Nav.Item className="nav-item">
+                                        <Nav.Item className="nav-item" id={'sidebar-' + page.routeName }>
                                             <Col sm={3}>
                                                 <FontAwesomeIcon
                                                     icon={sideBarIcons[page.routeName as keyof typeof sideBarIcons]}

@@ -42,7 +42,7 @@ function NavBar(props: NavBarProps) {
     return (
         <Navbar bg="light" expand="lg" className="" bsPrefix="navbar">
             <Container fluid>
-                <Button variant="outline-secondary" onClick={props.toggle}>
+                <Button variant="outline-secondary" onClick={props.toggle} id="open-sidebar">
                     <FontAwesomeIcon icon={faAlignLeft} />
                 </Button>
                 <Navbar.Brand href="#" style={{ paddingLeft: '15px' }}>
