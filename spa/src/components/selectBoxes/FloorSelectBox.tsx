@@ -58,7 +58,14 @@ const FloorSelectBox = (props: Props) => {
 
     return (
         <Form.Select onChange={props.customHandleChange ?? handleChange}>
-            <option>select floors allowed</option>
+            {props.selectedValue ? ( 
+                
+                <option value={props.selectedValue} selected>
+                    {getSelectedValue()?.code}
+                </option>
+            ) : (
+                <option>select floors allowed</option>
+            )}
 
             {filteredSelectBox?.map((item: FloorWithBuilding | Floor) => (
                 <option key={item.id} value={item.id}>
