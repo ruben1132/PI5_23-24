@@ -38,6 +38,23 @@ export default (app: Router) => {
         (req, res, next) => ctrl.inhibitRobot(req, res, next),
     );
 
+
+    route.put(
+        '',
+        celebrate({
+            body: Joi.object({
+                id: Joi.string().required(),
+                identification: Joi.string().required(),
+                nickname: Joi.string().required(),
+                robotType: Joi.string().required(),
+                serialNumber: Joi.string().required(),
+                description: Joi.string().required(),
+                state: Joi.boolean().required(),
+            }),
+        }),
+        (req, res, next) => ctrl.updateRobot(req, res, next),
+    );
+
     route.get('', (req, res, next) => ctrl.getRobots(req, res, next));
 
     route.get('/:id', (req, res, next) => ctrl.getRobotById(req, res, next));

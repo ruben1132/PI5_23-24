@@ -12,8 +12,6 @@ interface Props {
 }
 
 const RobotTypeWithTaskTypesSelectBox = (props: Props) => {
-
-    
     if (props.isError) {
         return (
             <Form.Select>
@@ -29,7 +27,7 @@ const RobotTypeWithTaskTypesSelectBox = (props: Props) => {
         );
     }
 
-    if(!props.data) {
+    if (!props.data) {
         return (
             <Form.Select>
                 <option>No data</option>
@@ -57,9 +55,15 @@ const RobotTypeWithTaskTypesSelectBox = (props: Props) => {
         return val;
     };
 
+    const selectedValue = getSelectedValue();
+
     return (
         <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange}>
-            {props?.selectedValue && <option defaultChecked={true}>{getSelectedValue().type}</option>}
+            {props?.selectedValue && (
+                <option defaultChecked={true} value={selectedValue.id}>
+                    {selectedValue.type}
+                </option>
+            )}
 
             {filteredSelectBox?.map((item: RobotTypeWithTaskTypes) => (
                 <option key={item.id} value={item.id}>
