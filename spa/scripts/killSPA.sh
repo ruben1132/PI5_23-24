@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Hardcoded port number
-PORT_NUMBER=8080
+PORT_NUMBER=80
 
 # Get the list of processes using the specified port
 PIDS=$(lsof -t -i :$PORT_NUMBER)
