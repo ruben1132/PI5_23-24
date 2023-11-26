@@ -1,40 +1,51 @@
-name: Deploy and Execute Commands
+name: Deploy to DEI VM
 
 on:
   push:
     branches:
-      - main
+      - main 
 
 jobs:
-  deploy_and_execute:
+  deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    
-    strategy:
-      matrix:
-        node-version: [18.18.0]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: SSH Remote Commands
-      uses: appleboy/ssh-action@v0.1.2
-      with:
-        key: ${{secrets.SSH_PRIVATE_KEY}}
-        host: ${{secrets.VM_IP}}
-        port: 10655
-        username: ${{secrets.VM_USERNAME}}
-        script: |
-          pm2 delete all
-          cd /home/ubuntu/API
-          rm -rf repo
-          git clone --depth 1 --filter=blob:none --no-checkout https://ruben1132:${{secrets.PAT_TOKEN}}@github.com/ruben1132/PI5_23-24.git repo
-          cd repo
-          git sparse-checkout init --cone
-          git sparse-checkout set mgi
-          git pull
-          cd mgi
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18 
+
+      - name: Install dependencies
+        
+        run: |
+          cd SPA/src
           npm install
+
+      - name: Build Angular application
+        run: |
+          cd SPA/src
+          npm run build
+        
+
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: vsgate-ssh.dei.isep.ipp.pt
+          port: 10597
+          username: root
+          password: root.
+          source: SPA/dist/spa/
+          target: /var/www/html
+
+      - name: SSH into server and restart web server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: vsgate-ssh.dei.isep.ipp.pt
+          port: 10597
+          username: root
+          password: root.
+          script: |
+            sudo systemctl restart apache2 
