@@ -6,7 +6,7 @@ export interface IFloorMapDTO {
     fmRooms: {
         roomId: string;
     }[];
-    fmPassages: {
+    fmPassages?: {
         passageId: string;
     }[];
 }

@@ -53,10 +53,7 @@ export default class RobotController implements IRobotController /* TODO: extend
     public async getRobots(req: Request, res: Response, next: NextFunction) {
         try {
 
-            const { typeId, identification } = req.query as { typeId?: string; identification?: string };;
-            console.log('typessId', typeId);
-            console.log('identificationss', identification);
-            
+            const { typeId, identification } = req.query as { typeId?: string; identification?: string };
 
             const robotsOrError = await this.robotServiceInstance.getRobots(typeId ?? "", identification ?? "") as Result<Array<IRobotWithRobotTypeDTO>>;
 

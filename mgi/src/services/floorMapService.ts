@@ -56,7 +56,7 @@ export default class FloorMapService implements IFloorMapService {
 
             // check if passages exists
             const passagesOrError = await this.getPassages(
-                floorMapDTO.fmPassages.map(fmPassage => fmPassage.passageId),
+                floorMapDTO.fmPassages?.map(fmPassage => fmPassage.passageId),
             );
             if (passagesOrError.isFailure) {
                 return Result.fail<IFloorMapWithFileDTO>(passagesOrError.errorValue());
@@ -123,7 +123,7 @@ export default class FloorMapService implements IFloorMapService {
         if (found) {
             return Result.ok<Floor>(floor);
         } else {
-            return Result.fail<Floor>("Couldn't find building by id=" + floorId);
+            return Result.fail<Floor>("Couldn't find floor by id=" + floorId);
         }
     }
 

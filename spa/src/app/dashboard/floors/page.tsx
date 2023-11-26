@@ -1,4 +1,4 @@
-import ContentTable from '@/components/table/Table';
+import PageContent from '@/components/pageContent/PageContent';
 import config from '../../../../config';
 
 export default async function Floors() {
@@ -6,7 +6,7 @@ export default async function Floors() {
         <div>
             <p>Floors</p>
 
-            <ContentTable
+            <PageContent
                 type="floor"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.floors}
                 routeToPush={'/floors/'}

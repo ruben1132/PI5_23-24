@@ -1,4 +1,4 @@
-import ContentTable from '@/components/table/Table';
+import PageContent from '@/components/pageContent/PageContent';
 import config from '../../../../config';
 
 export default async function Buildings() {
@@ -6,7 +6,7 @@ export default async function Buildings() {
         <div>
             <p>Buildings</p>
 
-            <ContentTable
+            <PageContent
                 type="building"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings}
                 routeToPush={'/buildings/'}

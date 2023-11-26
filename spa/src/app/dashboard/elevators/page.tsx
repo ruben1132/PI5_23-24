@@ -1,4 +1,4 @@
-import ContentTable from '@/components/table/Table';
+import PageContent from '@/components/pageContent/PageContent';
 import config from '../../../../config';
 
 export default async function Elevators() {
@@ -6,7 +6,7 @@ export default async function Elevators() {
         <div>
             <p>Elevators</p>
 
-            <ContentTable
+            <PageContent
                 type="elevator"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators}
                 routeToPush={'/elevators/'}

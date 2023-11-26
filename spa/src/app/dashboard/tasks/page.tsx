@@ -1,4 +1,4 @@
-import ContentTable from '@/components/table/Table';
+import PageContent from '@/components/pageContent/PageContent';
 import config from '../../../../config';
 
 export default async function Tasks() {
@@ -6,7 +6,7 @@ export default async function Tasks() {
         <div>
             <p>Tasks</p>
 
-            <ContentTable
+            <PageContent
                 type="task"
                 routeToFetch={""}
                 routeToPush={'/tasks/'}

@@ -1,4 +1,4 @@
-import ContentTable from '@/components/table/Table';
+import PageContent from '@/components/pageContent/PageContent';
 import config from '../../../../config';
 
 export default async function Users() {
@@ -6,7 +6,7 @@ export default async function Users() {
         <div>
             <p>Users</p>
 
-            <ContentTable
+            <PageContent
                 type="user"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.users}
                 routeToPush={'/users/'}
