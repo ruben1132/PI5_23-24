@@ -54,17 +54,19 @@ export default class FloorMapService implements IFloorMapService {
                 return Result.fail<IFloorMapWithFileDTO>(elevatorOrError.errorValue());
             }
 
-            // check if passages exists
-            const passagesOrError = await this.getPassages(
-                floorMapDTO.fmPassages?.map(fmPassage => fmPassage.passageId),
-            );
-            if (passagesOrError.isFailure) {
-                return Result.fail<IFloorMapWithFileDTO>(passagesOrError.errorValue());
-            }
+            // check if passages exists (optional)
+            if (floorMapDTO.fmPassages) {
+                const passagesOrError = await this.getPassages(
+                    floorMapDTO.fmPassages?.map(fmPassage => fmPassage.passageId),
+                );
+                if (passagesOrError.isFailure) {
+                    return Result.fail<IFloorMapWithFileDTO>(passagesOrError.errorValue());
+                }
 
-            // check if it found all the passages
-            if (passagesOrError.getValue().length !== floorMapDTO.fmPassages.length) {
-                return Result.fail<IFloorMapWithFileDTO>("Couldn't find all the passages by the given ids");
+                // check if it found all the passages
+                if (passagesOrError.getValue().length !== floorMapDTO.fmPassages.length) {
+                    return Result.fail<IFloorMapWithFileDTO>("Couldn't find all the passages by the given ids");
+                }
             }
 
             // save file
