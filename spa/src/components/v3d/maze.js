@@ -500,10 +500,10 @@ export default class Maze extends THREE.Group {
             door: currentDoor.door,
             halfSize: this.halfSize,
             url: '/v3d/models/door/door.fbx',
-            dScale: [0.018, 0.0055, 0.025],
+            dScale: [0.0058, 0.0025, 0.0020],
         });
 
         this.remove(currentDoor); // remove current door
-        // this.add(door); // add new door
+        this.add(door); // add new door
     }
 }
