@@ -21,6 +21,7 @@ import { useFetchData, useSubmitData, useFormNumberInput, useFormStringInput, us
 // models
 import { Floor, FloorWithBuilding } from '@/models/Floor';
 import { Building } from '@/models/Building';
+import BuildingSelectBox from '../selectBoxes/BuildingSelextBox';
 
 interface Props {
     item: {
@@ -100,7 +101,7 @@ export default function FloorForm(props: Props) {
         item.number = floorNumber.value;
         item.building = floorBuilding.value;
         if ('code' in item) {
-            delete item.code; // delete code from item
+            delete (item as { code?: string }).code; // delete code from item
         }
 
         // submit data
@@ -153,12 +154,7 @@ export default function FloorForm(props: Props) {
         }
     }, [selectBoxBuildingsDataFetch.data]);
 
-    if (selectBoxBuildingsDataFetch.isLoading) {
-        return <Form>Loading...</Form>;
-    }
-    if (selectBoxBuildingsDataFetch.isError) {
-        return <Form>Error</Form>;
-    }
+
     if (
         selectBoxBuildingsDataFetch.data === undefined ||
         selectBoxBuildingsDataFetch.data === null ||
@@ -166,17 +162,7 @@ export default function FloorForm(props: Props) {
     ) {
         return <Form>Try adding buildings first!</Form>;
     }
-
-    // filter data so it removes the element already selected
-    const filteredSelectBoxData = selectBoxBuildingsDataFetch.data.filter(
-        (item: any) => item.id !== props.item.value?.building?.id,
-    );
-
-    // handle for selecting a building
-    const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-        floorBuilding.handleLoad(e.target.value);
-    };
-
+    
     return (
         <Form>
             {props.action === 'edit' && (
@@ -221,24 +207,14 @@ export default function FloorForm(props: Props) {
                 <Col sm={6}>
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Building</Form.Label>
+                        <BuildingSelectBox
+                        selectedValue={props.item.value?.building?.id ?? floorBuilding.value}
+                        setValue={floorBuilding.handleLoad}
+                        data={selectBoxBuildingsDataFetch.data}
+                        isError={selectBoxBuildingsDataFetch.isError}
+                        isLoading={selectBoxBuildingsDataFetch.isLoading}
+                        />
 
-                        <Form.Select
-                            // defaultValue={props.item.value?.building?.id ?? filteredSelectBoxData[0].id}
-                            onChange={handleSelect}
-                        >
-                            {props.item.value?.building?.id && (
-                                <option defaultChecked={true}>
-                                    {props.item.value?.building.code + ' - ' + props.item.value?.building.name}
-                                </option>
-                            )}
-
-                            {filteredSelectBoxData?.map((item: Building) => (
-                                <option key={item.id} value={item.id}>
-                                    {/* show 2nd prop from item, 1st prop is the id */}
-                                    {item.code + ' - ' + item.name}
-                                </option>
-                            ))}
-                        </Form.Select>
                     </Form.Group>
                 </Col>
                 {props.item.value.id && (

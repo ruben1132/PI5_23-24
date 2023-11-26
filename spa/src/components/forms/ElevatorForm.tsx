@@ -23,6 +23,7 @@ import { useFetchData, useSubmitData, useFormStringInput, useDeleteData } from '
 // model
 import { Elevator, ElevatorWithFloors } from '@/models/Elevator';
 import { Floor } from '@/models/Floor';
+import FloorSelectBox from '../selectBoxes/FloorSelectBox';
 
 interface Props {
     item: {
@@ -113,12 +114,6 @@ export default function ElevatorForm(props: Props) {
         }
     }, [props.action]);
 
-    if (selectBoxFloorsAllowedDataFetch.isLoading) {
-        return <Form>Loading...</Form>;
-    }
-    if (selectBoxFloorsAllowedDataFetch.isError) {
-        return <Form>Error</Form>;
-    }
     if (
         selectBoxFloorsAllowedDataFetch.data === undefined ||
         selectBoxFloorsAllowedDataFetch.data === null ||
@@ -178,15 +173,13 @@ export default function ElevatorForm(props: Props) {
                 <Col sm={6}>
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Floors Allowed</Form.Label>
-
-                        <Form.Select onChange={handleSelect}>
-                            <option>select floors allowed</option>
-                            {filteredSelectBoxData?.map((item: Floor) => (
-                                <option key={item.id} value={item.id}>
-                                    {item.information}
-                                </option>
-                            ))}
-                        </Form.Select>
+                        <FloorSelectBox
+                        data={filteredSelectBoxData}
+                        isError={selectBoxFloorsAllowedDataFetch.isError}
+                        isLoading={selectBoxFloorsAllowedDataFetch.isLoading}
+                        customHandleChange={handleSelect}
+                        />
+                        
                     </Form.Group>
                 </Col>
             </Row>

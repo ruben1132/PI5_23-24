@@ -1,7 +1,7 @@
 import { TaskType } from './TaskType';
 
 export interface RobotType {
-    id: number;
+    id: string;
     type: string;
     brand: string;
     model: string;
@@ -9,7 +9,7 @@ export interface RobotType {
 }
 
 export interface RobotTypeWithTaskTypes {
-    id: number;
+    id: string;
     type: string;
     brand: string;
     model: string;

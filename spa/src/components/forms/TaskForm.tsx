@@ -22,17 +22,16 @@ import {
     useSubmitData,
     useDeleteData,
     useFetchData,
+    useFormSelectBox,
 } from '@/util/customHooks';
 
 // model
 import { Task } from '@/models/Task';
-import Elevator from '../v3d/elevator';
-import { Passage } from '@/models/Passage';
-import { Room } from '@/models/Room';
 import RoomSelectBox from '../selectBoxes/RoomSelectBox';
 import FloorSelectBox from '../selectBoxes/FloorSelectBox';
 import ElevatorSelectBox from '../selectBoxes/ElevatorSelectBox';
 import { ElevatorWithFloors } from '@/models/Elevator';
+import PassageSelectBox from '../selectBoxes/PassageSelectBox';
 
 interface Props {
     item: {
@@ -43,11 +42,9 @@ interface Props {
     close: () => void;
 }
 export default function TaskForm(props: Props) {
-    const [originRoute, setOriginRoute] = useState<string>(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms);
-    const [destinyRoute, setDestinyRoute] = useState<string>(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms);
-
-    const selectBoxOrignRoomDataFetch = useFetchData(originRoute);
-    const selectBoxDestinyDataFetch = useFetchData(destinyRoute);
+    const roomsDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms);
+    const passagesDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages);
+    const elevatorsDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators);
 
     // form submitter
     const tasksForm = useSubmitData(
@@ -61,13 +58,14 @@ export default function TaskForm(props: Props) {
     // inputs
     const originType = useFormStringInput('room');
     const destinyType = useFormStringInput('room');
-    const origin = useFormStringInput(props.item.value?.origin);
-    const destiny = useFormStringInput(props.item.value?.destiny);
+    const origin = useFormSelectBox(props.item.value?.origin);
+    const destiny = useFormSelectBox(props.item.value?.destiny);
     const path = useFormStringInput(props.item.value?.path);
-    const origFloor = useFormStringInput('');
-    const destFloor = useFormStringInput('');
-    const [origElevator, setOrigElevator] = useState<ElevatorWithFloors>();
-    const [destElevator, setDestElevator] = useState<ElevatorWithFloors>();
+
+    const [origElevator, setOrigElevator] = useState<ElevatorWithFloors>({} as ElevatorWithFloors);
+    const [destElevator, setDestElevator] = useState<ElevatorWithFloors>({} as ElevatorWithFloors);
+    const origFloor = useFormSelectBox('');
+    const destFloor = useFormSelectBox('');
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
@@ -122,41 +120,47 @@ export default function TaskForm(props: Props) {
     // handle for selecting origin type
     const handleChangeOriginType = (e: ChangeEvent<HTMLSelectElement>) => {
         originType.handleLoad(e.target.value);
-        const route = getRoute(e.target.value);
-
-        setOriginRoute(route);
     };
 
     // handle for selecting destiny type
     const handleChangeDestinyType = (e: ChangeEvent<HTMLSelectElement>) => {
         destinyType.handleLoad(e.target.value);
-        const route = getRoute(e.target.value);
-
-        setDestinyRoute(route);
     };
 
-    const getRoute = (type: string): string => {
-        switch (type) {
-            case 'room':
-                return config.mgiAPI.routes.rooms;
-            case 'passage':
-                return config.mgiAPI.routes.passages;
-            case 'elevator':
-                return config.mgiAPI.routes.elevators;
-            default:
-                return '';
-        }
-    };
-    
     // filter select box for origin
     const OriginSelectBox = () => {
         switch (originType.value) {
             case 'room':
-                return <RoomSelectBox item={{}} setValue={origin.handleLoad} />;
+                return (
+                    <RoomSelectBox
+                        selectedValue={origin.value}
+                        setValue={origin.handleLoad}
+                        data={roomsDataFecher.data}
+                        isError={roomsDataFecher.isError}
+                        isLoading={roomsDataFecher.isLoading}
+                    />
+                );
             case 'passage':
-                return <></>;
+                return (
+                    <PassageSelectBox
+                        selectedValue={origin.value}
+                        setValue={origin.handleLoad}
+                        data={passagesDataFecher.data}
+                        isError={passagesDataFecher.isError}
+                        isLoading={passagesDataFecher.isLoading}
+                    />
+                );
             case 'elevator':
-                return <ElevatorSelectBox item={{}} setValue={origin.handleLoad} setObjValue={setOrigElevator} />;
+                return (
+                    <ElevatorSelectBox
+                        selectedValue={origin.value ?? elevatorsDataFecher.data[0].id}
+                        setValue={origin.handleLoad}
+                        setObj={setOrigElevator}
+                        data={elevatorsDataFecher.data}
+                        isError={elevatorsDataFecher.isError}
+                        isLoading={elevatorsDataFecher.isLoading}
+                    />
+                );
             default:
                 return <></>;
         }
@@ -166,11 +170,36 @@ export default function TaskForm(props: Props) {
     const DestinySelectBox = () => {
         switch (destinyType.value) {
             case 'room':
-                return <RoomSelectBox item={{}} setValue={destiny.handleLoad} />;
+                return (
+                    <RoomSelectBox
+                        selectedValue={destiny.value}
+                        setValue={destiny.handleLoad}
+                        data={roomsDataFecher.data}
+                        isError={roomsDataFecher.isError}
+                        isLoading={roomsDataFecher.isLoading}
+                    />
+                );
             case 'passage':
-                return <></>;
+                return (
+                    <PassageSelectBox
+                        selectedValue={destiny.value}
+                        setValue={destiny.handleLoad}
+                        data={passagesDataFecher.data}
+                        isError={passagesDataFecher.isError}
+                        isLoading={passagesDataFecher.isLoading}
+                    />
+                );
             case 'elevator':
-                return <ElevatorSelectBox item={{}} setValue={destiny.handleLoad} setObjValue={setDestElevator} />;
+                return (
+                    <ElevatorSelectBox
+                        selectedValue={destiny.value ?? elevatorsDataFecher.data[0].id}
+                        setValue={destiny.handleLoad}
+                        setObj={setDestElevator}
+                        data={elevatorsDataFecher.data}
+                        isError={elevatorsDataFecher.isError}
+                        isLoading={elevatorsDataFecher.isLoading}
+                    />
+                );
             default:
                 return <></>;
         }
@@ -237,7 +266,13 @@ export default function TaskForm(props: Props) {
                     {originType.value === 'elevator' && (
                         <Form.Group className="mb-6">
                             <Form.Label htmlFor="select">Floor</Form.Label>
-                            <FloorSelectBox item={{}} setValue={origFloor.handleLoad} defaultData={origElevator?.floorsAllowed} />
+                            <FloorSelectBox
+                                selectedValue={origFloor.value}
+                                setValue={origFloor.handleLoad}
+                                data={origElevator.floorsAllowed}
+                                isError={elevatorsDataFecher.isError}
+                                isLoading={elevatorsDataFecher.isLoading}
+                            />
                         </Form.Group>
                     )}
                 </Col>
@@ -245,7 +280,13 @@ export default function TaskForm(props: Props) {
                     {destinyType.value === 'elevator' && (
                         <Form.Group className="mb-6">
                             <Form.Label htmlFor="select">Floor</Form.Label>
-                            <FloorSelectBox item={{}} setValue={destFloor.handleLoad} defaultData={destElevator?.floorsAllowed} />
+                            <FloorSelectBox
+                                selectedValue={destFloor.value}
+                                setValue={destFloor.handleLoad}
+                                data={destElevator.floorsAllowed}
+                                isError={elevatorsDataFecher.isError}
+                                isLoading={elevatorsDataFecher.isLoading}
+                            />
                         </Form.Group>
                     )}
                 </Col>

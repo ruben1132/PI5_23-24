@@ -23,6 +23,7 @@ import { RobotType, RobotTypeWithTaskTypes } from '@/models/RobotType';
 // config
 import config from '../../../config';
 import { TaskType } from '@/models/TaskType';
+import TaskTypeSelectBox from '../selectBoxes/TaskTypeSelectBox';
 
 interface Props {
     item: {
@@ -52,7 +53,7 @@ export default function RobotTypeForm(props: Props) {
     const robotTypeName = useFormStringInputWithRegex(props.item.value?.type, /^[A-Za-z0-9]{1,25}$/);
     const robotTypeBrand = useFormStringInputWithRegex(props.item.value?.brand, /^.{1,50}$/);
     const robotTypeModel = useFormStringInputWithRegex(props.item.value?.model, /^.{1,100}$/);
-    const [tasksAllowed, setTasksAllowed] = useState<TaskType[]>([]); // TODO:
+    const [tasksAllowed, setTasksAllowed] = useState<TaskType[]>([]); 
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
@@ -117,22 +118,9 @@ export default function RobotTypeForm(props: Props) {
         }
     }, [props.action]);
 
-    if (selectBoxTaskTypesDataFetch.isLoading) {
-        return <Form>Loading...</Form>;
-    }
-    if (selectBoxTaskTypesDataFetch.isError) {
-        return <Form>Error</Form>;
-    }
-    if (
-        selectBoxTaskTypesDataFetch.data === undefined ||
-        selectBoxTaskTypesDataFetch.data === null ||
-        selectBoxTaskTypesDataFetch.data.length <= 0
-    ) {
-        return <Form>Try adding task types first!</Form>;
-    }
 
     // filter data so it removes the element(s) already selected
-    const filteredSelectBoxData = selectBoxTaskTypesDataFetch.data.filter((item: TaskType) => {
+    const filteredSelectBoxData = selectBoxTaskTypesDataFetch?.data?.filter((item: TaskType) => {
         return !tasksAllowed.some((task) => task.id === item.id);
     });
 
@@ -205,15 +193,12 @@ export default function RobotTypeForm(props: Props) {
                 <Col sm={6}>
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Task Types</Form.Label>
-
-                        <Form.Select onChange={handleSelect}>
-                            <option>select task types</option>
-                            {filteredSelectBoxData?.map((item: TaskType) => (
-                                <option key={item.id} value={item.id}>
-                                    {item.name}
-                                </option>
-                            ))}
-                        </Form.Select>
+                        <TaskTypeSelectBox
+                         data={filteredSelectBoxData}
+                         isError={selectBoxTaskTypesDataFetch.isError}
+                         isLoading={selectBoxTaskTypesDataFetch.isLoading}
+                         customHandleChange={handleSelect}
+                        />
                     </Form.Group>
                 </Col>
             </Row>

@@ -1,58 +1,66 @@
 'use client';
 
 import { Floor, FloorWithBuilding } from '@/models/Floor';
-import { useFetchData } from '@/util/customHooks';
 import { Form } from 'react-bootstrap';
-import config from '../../../config';
-import { useEffect } from 'react';
 
 interface Props {
-    item?: {
-        value?: FloorWithBuilding | null;
-    };
-    setValue: (val: string) => void;
-    buildingId?: string;
-    defaultData?: Floor[];
+    data: FloorWithBuilding[] | Floor[];
+    setValue?: (val: string) => void;
+    selectedValue?: string;
+    isLoading: boolean;
+    isError: boolean;
+    customHandleChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const FloorSelectBox = (props: Props) => {
-    const ofBuilding = props.buildingId ? 'buildingId=' + props.buildingId : '';
-    const dataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + ofBuilding);
-
-    // when floors load, load them to the select box
-    useEffect(() => {
-        // if there's no data, return
-        if (!dataFetch.data) {
-            return;
-        }
-
-        props.setValue(dataFetch.data[0].id);
-    }, [dataFetch.data]);
-
-    if (dataFetch.isLoading) {
-        return <Form>Loading...</Form>;
+    if (props.isError) {
+        return (
+            <Form.Select>
+                <option>Error</option>
+            </Form.Select>
+        );
     }
-    if (dataFetch.isError) {
-        return <Form>Error</Form>;
+    if (props.isLoading) {
+        return (
+            <Form.Select>
+                <option>Loading...</option>
+            </Form.Select>
+        );
+    }
+
+    if (!props.data) {
+        return (
+            <Form.Select>
+                <option>No data</option>
+            </Form.Select>
+        );
     }
 
     // filter data so it removes the element already selected
-    let filteredSelectBox = null;
-    if (props.defaultData) {
-        filteredSelectBox = props.defaultData.filter((item: Floor) => item.id !== props.item?.value?.id);
-    } else {
-        filteredSelectBox = dataFetch.data.filter((item: FloorWithBuilding) => item.id !== props.item?.value?.id);
-    }
+    const filteredSelectBox = props.data?.filter((item: FloorWithBuilding | Floor) => item.id !== props?.selectedValue);
 
     const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        props.setValue(event.target.value);
+        if (props.setValue) props.setValue(event.target.value);
+    };
+
+    const getSelectedValue = (): FloorWithBuilding | Floor => {
+        let val = null;
+        if (props?.selectedValue) {
+            val = props.data.find((item: FloorWithBuilding | Floor) => item.id === props?.selectedValue);
+        }
+
+        if (!val) {
+            return props.data[0];
+        }
+
+        return val;
     };
 
     return (
-        <Form.Select defaultValue={props.item?.value?.id ?? filteredSelectBox[0].id} onChange={handleChange}>
-            {props.item?.value?.id && <option defaultChecked={true}>{props.item?.value?.code}</option>}
+        <Form.Select onChange={props.customHandleChange ?? handleChange}>
+            <option>select floors allowed</option>
 
-            {filteredSelectBox?.map((item: FloorWithBuilding) => (
+            {filteredSelectBox?.map((item: FloorWithBuilding | Floor) => (
                 <option key={item.id} value={item.id}>
                     {item.code}
                 </option>

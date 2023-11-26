@@ -10,6 +10,7 @@ export interface FloorWithBuilding {
 
 export interface Floor {
     id: string;
+    code: string;
     number: number;
     information: string;
     building: string;
