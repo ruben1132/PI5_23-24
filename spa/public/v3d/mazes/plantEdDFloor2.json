@@ -143,7 +143,7 @@
             }
         },
         {
-            "roomId": "6548ded25c1f0f0111c718dc",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 6,
             "startY": 2,
             "endX": 0,
@@ -161,7 +161,7 @@
             }
         },
         {
-            "roomId": "6548ded25c1f0f0111c718dc",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 6,
             "startY": 2,
             "endX": 0,
@@ -179,7 +179,7 @@
             }
         },
         {
-            "roomId": "6548ded25c1f0f0111c718dc",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 6,
             "startY": 2,
             "endX": 0,
@@ -197,7 +197,7 @@
             }
         },
         {
-            "roomId": "6548ded25c1f0f0111c718dc",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 6,
             "startY": 2,
             "endX": 0,
@@ -215,7 +215,7 @@
             }
         },
         {
-            "roomId": "6548ded25c1f0f0111c718dc",
+            "roomId": "63b06545-8939-4dde-bb49-680a10f4682d",
             "startX": 6,
             "startY": 2,
             "endX": 0,
@@ -234,7 +234,7 @@
         }
     ],
     "fmElevator": {
-        "elevatorId": "6548df025c1f0f0111c718e1",
+        "elevatorId": "04e2945f-840d-423a-b710-85615c9dec38",
         "position": {
             "positionX": 1,
             "positionY": 1,
