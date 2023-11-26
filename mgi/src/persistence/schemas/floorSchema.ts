@@ -13,6 +13,11 @@ const FloorSchema = new mongoose.Schema(
             required: [true, 'Please enter the number of this floor'],
         },
 
+        code: {
+            type: String,
+            required: [true, 'Please enter the code of this floor'],
+        },
+
         information: {
             type: String,
         },

@@ -34,6 +34,7 @@ export class ElevatorMap extends Mapper<Elevator> {
             floorsAllowed: floors.map(floor => {
                 return {
                     id: floor.domainId.toString(),
+                    code: floor.code,
                     number: floor.number,
                     information: floor.information.value,
                     building: floor.building.toString(),

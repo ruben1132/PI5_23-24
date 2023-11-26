@@ -44,7 +44,7 @@ export default function RowItem(props: Props) {
                         </td>
                     );
                 case 'room':
-                    return <td key={props.index}>{props.item.number + ' - ' + props.item.information}</td>;
+                    return <td key={props.index}>{props.item.code}</td>;
 
                 default:
                     return <td key={props.index}>no row handler for this item dummy :p create one! :D</td>;

@@ -12,6 +12,7 @@ interface FloorProps {
     number: number; 
     information: FloorInformation; //TODO: criar um value obj para designacoes/informacoes (meter um max de chars por exemplo)
     building: BuildingId;
+    code: string;
 }
 
 export class Floor extends AggregateRoot<FloorProps> {
@@ -47,18 +48,26 @@ export class Floor extends AggregateRoot<FloorProps> {
         this.props.building = value;
     }
 
+    get code(): string {
+        return this.props.code;
+    }
+
+    set code(value: string) {
+        this.props.code = value;
+    }
+
     private constructor(props: FloorProps, id?: UniqueEntityID) {
         super(props, id);
     }
 
-    // TODO: implementar regras de negocio na criacao de uma floor
     public static create(props: FloorProps, id?: UniqueEntityID): Result<Floor> {
 
 
         const guardedProps = [
             { argument: props.number, argumentName: 'number' },
             { argument: props.information, argumentName: 'information' },
-            { argument: props.building, argumentName: 'building' }
+            { argument: props.building, argumentName: 'building' },
+            { argument: props.code, argumentName: 'code' },
         ];
         const guardResult = Guard.againstNullOrUndefinedBulk(guardedProps);
         
@@ -66,7 +75,7 @@ export class Floor extends AggregateRoot<FloorProps> {
             return Result.fail<Floor>(guardResult.message)
         }
 
-        const floor = new Floor({ number: props.number, information: props.information, building: props.building }, id);
+        const floor = new Floor({ number: props.number, information: props.information, building: props.building, code:props.code }, id);
         return Result.ok<Floor>(floor)
     }
 }

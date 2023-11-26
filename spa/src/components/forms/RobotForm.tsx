@@ -269,17 +269,19 @@ export default function RobotForm(props: Props) {
                     </Form.Group>
                 </Col>
                 <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">State</Form.Label>
-                        <Form.Control
-                            required
-                            type="text"
-                            placeholder="Robot's State..."
-                            defaultValue={props.item.value?.state.toString()}
-                            onChange={robotState.handleChange}
-                            disabled
-                        />
-                    </Form.Group>
+                    {props.action === 'edit' && (
+                        <Form.Group className="mb-6">
+                            <Form.Label htmlFor="select">State</Form.Label>
+                            <Form.Control
+                                required
+                                type="text"
+                                placeholder="Robot's State..."
+                                defaultValue={props.item.value?.state?.toString()}
+                                onChange={robotState.handleChange}
+                                disabled
+                            />
+                        </Form.Group>
+                    )}
                 </Col>
             </Row>
             <br />

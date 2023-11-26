@@ -18,6 +18,7 @@ export class FloorMap extends Mapper<Floor> {
             number: floor.number,
             information: floor.information.value,
             building: floor.building.toString(),
+            code: floor.code,
         } as IFloorDTO;
     }
 
@@ -32,6 +33,7 @@ export class FloorMap extends Mapper<Floor> {
                 name: building.name.value,
                 dimensions: building.dimensions.value,
             },
+            code: floor.code,
         } as IFloorWithBuildingDTO;
     }
 
@@ -43,6 +45,7 @@ export class FloorMap extends Mapper<Floor> {
                 number: floor.number,
                 information: information,
                 building: floor.building,
+                code: floor.code,
             },
             new UniqueEntityID(floor.domainId),
         );
@@ -58,6 +61,7 @@ export class FloorMap extends Mapper<Floor> {
             number: floor.number,
             information: floor.information.value,
             building: floor.building.toString(),
+            code: floor.code,
         };
     }
 }

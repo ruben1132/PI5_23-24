@@ -36,31 +36,31 @@ export default function TaskTypeForm(props: Props) {
     const taskTypeDescription = useFormStringInputWithRegex(props.item.value?.description, /^[\s\S]{1,250}$/);
 
     // form submitter
-    const buildingForm = useSubmitData(
+    const taskTypeForm = useSubmitData(
         config.mgiAPI.baseUrl + config.mgiAPI.routes.tasktypes,
         props.action === 'edit' ? 'PUT' : 'POST',
     );
 
     // deleter
-    const buildingDeleter = useDeleteData(
+    const taskTypeDeleter = useDeleteData(
         config.mgiAPI.baseUrl + config.mgiAPI.routes.tasktypes + props.item?.value.id,
     );
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
 
-    // updates the building and refreshes the table
+    // updates the taskType and refreshes the table
     const handleSubmitData = async () => {
         setEnabled(false);
 
-        // set building data
+        // set taskType data
         let item: TaskType = { ...props.item.value };
         item.id = props.item.value?.id;
         item.name = taskTypeName.value;
         item.description = taskTypeDescription.value;
 
         // submit data
-        let res = await buildingForm.submit(item);
+        let res = await taskTypeForm.submit(item);
 
         if (res.error) {
             setEnabled(true);
@@ -79,7 +79,7 @@ export default function TaskTypeForm(props: Props) {
         setEnabled(false);
 
         // delete data
-        let res = await buildingDeleter.del();
+        let res = await taskTypeDeleter.del();
 
         if (res.error) {
             setEnabled(true);
@@ -120,7 +120,7 @@ export default function TaskTypeForm(props: Props) {
                         <Form.Control
                             required
                             type="text"
-                            placeholder="building's code..."
+                            placeholder="task type's name..."
                             defaultValue={props.item.value?.name}
                             onChange={taskTypeName.handleChange}
                         />
@@ -135,7 +135,7 @@ export default function TaskTypeForm(props: Props) {
                         <Form.Control
                             required
                             as="textarea"
-                            placeholder="building's code..."
+                            placeholder="taskType's code..."
                             defaultValue={props.item.value?.description}
                             onChange={taskTypeDescription.handleChange}
                             style={{ height: '100px' }}

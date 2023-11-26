@@ -25,6 +25,7 @@ export class RoomMap extends Mapper<Room> {
             number: room.number.value,
             floor: {
                 id: floor.id.toString(),
+                code: floor.code,
                 number: floor.number,
                 information: floor.information.value,
                 building: floor.building.toString(),

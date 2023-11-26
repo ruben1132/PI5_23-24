@@ -113,6 +113,15 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
+                case 'task':
+                    return (
+                        <TaskForm
+                            item={{ value: props.item.value }}
+                            action={props.action}
+                            reFetchData={props.reFetchData}
+                            close={props.close}
+                        />
+                    );
                 default:
                     return <p>no form dummy :p create one! :D</p>;
             }
