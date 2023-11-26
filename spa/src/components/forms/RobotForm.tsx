@@ -50,7 +50,7 @@ export default function RobotForm(props: Props) {
     const enableDisableRobot = useSubmitData(config.mgiAPI.baseUrl + config.mgiAPI.routes.robots, 'PUT');
 
     // deleter
-    const robotDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.robots + props.item?.value.id);
+    const robotDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.robots+ "/" + props.item?.value.id);
 
     // inputs
     const robotIdentification = useFormStringInput(props.item.value?.identification);

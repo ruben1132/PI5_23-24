@@ -84,7 +84,7 @@ export default {
             buildings: 'buildings/',
             floors: 'floors/',
             passages: 'passages/',
-            robots: 'robots/',
+            robots: 'robots',
             robottypes: 'robottypes/',
             tasks: 'tasks/',
             tasktypes: 'tasktypes/',

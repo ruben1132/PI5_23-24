@@ -30,7 +30,7 @@ export default function RobotSearchForm(props: Props) {
     const robotIdentification = useFormStringInput('');
 
     const buildQueryParams = () => {
-        return `?typeId=${robotType.value}&identification=${robotIdentification.value}`;
+        return `?taskTypeId=${robotType.value}&identification=${robotIdentification.value}`;
     };
 
     const handleRobotIdentificationChange = debounce((event: React.ChangeEvent<HTMLInputElement>) => {
