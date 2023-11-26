@@ -6,6 +6,7 @@
         "dev": "next dev -p 2223",
         "build": "next build",
         "start": "next start",
+        "cypress:open": "cypress open",
         "lint": "next lint",
         "clean": "rm -rf node_modules && rm -rf package-lock.json && rm -rf build"
     },
@@ -27,14 +28,19 @@
         "three": "^0.158.0"
     },
     "devDependencies": {
+        "@cypress/webpack-preprocessor": "^6.0.0",
+        "@types/chai": "^4.3.11",
         "@types/js-cookie": "^3.0.6",
         "@types/jsonwebtoken": "^9.0.5",
+        "@types/mocha": "^10.0.6",
         "@types/node": "^20.9.0",
         "@types/react": "^18.2.37",
         "@types/react-dom": "^18.2.15",
         "@types/three": "^0.158.2",
+        "cypress": "^13.6.0",
         "eslint": "^8.53.0",
         "eslint-config-next": "14.0.2",
+        "ts-loader": "^9.5.1",
         "typescript": "^5.2.2"
     }
 }
