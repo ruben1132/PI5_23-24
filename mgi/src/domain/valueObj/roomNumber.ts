@@ -20,7 +20,7 @@ export class RoomNumber extends ValueObject<RoomNumberProps> {
     }
 
     public static create(number: string): Result<RoomNumber> {
-        const regex = /^[A-Za-z]{1,4}\d{0,3}$/;
+        const regex = /^[A-Za-z]{1,4}\d{0,3}[A-Za-z]?$/;
 
         const guardResult = Guard.againstNullOrUndefined(number, 'number');
 
