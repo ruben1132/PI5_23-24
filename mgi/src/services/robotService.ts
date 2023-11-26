@@ -17,8 +17,6 @@ import { RobotType } from '../domain/robotType';
 
 import IRobotTypeRepo from './IRepos/IRobotTypeRepo';
 
-import ITaskTypeRepo from './IRepos/ITaskTypeRepo';
-import { RobotId } from '../domain/valueObj/robotId';
 
 @Service()
 export default class RobotService implements IRobotService {
@@ -29,7 +27,6 @@ export default class RobotService implements IRobotService {
 
     public async createRobot(robotDTO: IRobotDTO): Promise<Result<IRobotDTO>> {
         try {
-            console.log('robotDTO', robotDTO);
 
             // check if robotType exists
             let robotType: RobotType;

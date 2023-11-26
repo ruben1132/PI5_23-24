@@ -127,6 +127,33 @@ export function useFormNumberInput(initialValue: number) {
     };
 }
 
+// hook for select box
+export function useFormSelectBoxInput(initialValue: string) {
+    const [value, setValue] = useState(initialValue);
+
+    // Handler for onChange of the input
+    function handleChange(e: ChangeEvent<HTMLSelectElement>) {
+        setValue(e.target.value);
+    }
+
+    // Function to load a value
+    function handleLoad(valor: string) {
+        setValue(valor);
+    }
+
+    // Function to reset the value
+    function handleReset() {
+        setValue('');
+    }
+
+    return {
+        value,
+        handleChange,
+        handleLoad,
+        handleReset,
+    };
+}
+
 // hook to update data
 export function useSubmitData(route: string, type: string) {
     async function submit(data: any): Promise<any | null> {
