@@ -58,16 +58,10 @@ export default class RobotRepo implements IRobotRepo {
         }
     }
 
-    public async getRobots(typeId: string, identification: string): Promise<Robot[]> {
-        console.log('typeId', typeId);
-        console.log('identification', identification);
+    public async getRobots(identification: string): Promise<Robot[]> {
 
         try {
             const query = {} as any;
-
-            if (typeId) {
-                query.robotType = typeId;
-            }
     
             if (identification) {
                 query.identification = {

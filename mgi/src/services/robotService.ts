@@ -16,7 +16,7 @@ import { RobotState } from '../domain/valueObj/robotState';
 import { RobotType } from '../domain/robotType';
 
 import IRobotTypeRepo from './IRepos/IRobotTypeRepo';
-
+import { TaskTypeId } from '../domain/valueObj/taskTypeId';
 
 @Service()
 export default class RobotService implements IRobotService {
@@ -27,7 +27,6 @@ export default class RobotService implements IRobotService {
 
     public async createRobot(robotDTO: IRobotDTO): Promise<Result<IRobotDTO>> {
         try {
-
             // check if robotType exists
             let robotType: RobotType;
             const robotTypeOrError = await this.getRobotType(robotDTO.robotType);
@@ -105,19 +104,25 @@ export default class RobotService implements IRobotService {
         return Result.ok<IRobotDTO>(robotDTOResult);
     }
 
-    public async getRobots(typeId : string, identification : string): Promise<Result<Array<IRobotWithRobotTypeDTO>>> {
+    public async getRobots(taskTypeId: string, identification: string): Promise<Result<Array<IRobotWithRobotTypeDTO>>> {
         try {
-            const robots = await this.robotRepo.getRobots(typeId, identification);
+            const robots = await this.robotRepo.getRobots(identification);
+
+            if (robots === null) {
+                return Result.fail<Array<IRobotWithRobotTypeDTO>>('Robots not found');
+            }
 
             const robotDTO: IRobotWithRobotTypeDTO[] = [];
 
             for (const robot of robots) {
                 const robotType = await this.robotTypeRepo.findByDomainId(robot.robotType);
-                const robotDTOResult = RobotMap.toDTOWithRobotType(robot, robotType) as IRobotWithRobotTypeDTO;
+                if (!taskTypeId || (robotType && robotType.tasksAllowed.includes(new TaskTypeId(taskTypeId)))) {
+                    const robotDTOResult = RobotMap.toDTOWithRobotType(robot, robotType) as IRobotWithRobotTypeDTO;
                     robotDTO.push(robotDTOResult);
+                }
             }
 
-            if (robots === null) {
+            if (robotDTO.length === 0) {
                 return Result.fail<Array<IRobotWithRobotTypeDTO>>('Robots not found');
             } else {
                 return Result.ok<Array<IRobotWithRobotTypeDTO>>(robotDTO);

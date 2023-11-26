@@ -1,4 +1,4 @@
-import ContentTable from '@/components/table/Table';
+import PageContent from '@/components/pageContent/PageContent';
 import config from '../../../../config';
 
 export default async function Roles() {
@@ -6,7 +6,7 @@ export default async function Roles() {
         <div>
             <p>Roles</p>
 
-            <ContentTable
+            <PageContent
                 type="role"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.roles}
                 routeToPush={'/roles/'}

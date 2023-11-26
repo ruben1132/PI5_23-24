@@ -7,6 +7,7 @@ interface Props {
 }
 
 export default function RowItem(props: Props) {
+    
     const filterForm = () => {
         // This checks if props.item is an obj
         if (props.item instanceof Object) {

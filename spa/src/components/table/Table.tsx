@@ -8,15 +8,16 @@ import MeekoLoader from '../loaders/MeekoLoader';
 import Button from 'react-bootstrap/Button';
 import RowItem from './RowItem';
 import SadRaccoon from '../noData/SadRaccoon';
+import { RenderFilteredSearch } from '../forms/search/RenderFilteredSearch';
 
 interface Props {
     type: string;
     routeToFetch: string;
     routeToPush: string;
-    children?: React.ReactNode;
 }
 
 function ContentTable(props: Props) {
+    
     const contentModal = useModal(false);
     const [itemClicked, setItemClicked] = useState<any>(null);
     const useFetchdata = useFetchData(props.routeToFetch);
@@ -69,12 +70,11 @@ function ContentTable(props: Props) {
 
     return (
         <>
-            {contentModal.show && (
-                modal
-            )}
+            {contentModal.show && modal}
 
             {addButton}
-
+            <br />
+            <br />
             <Table striped>
                 <thead>
                     <tr>

@@ -1,4 +1,4 @@
-import ContentTable from '@/components/table/Table';
+import PageContent from '@/components/pageContent/PageContent';
 import config from '../../../../config';
 
 export default async function Passages() {
@@ -6,7 +6,7 @@ export default async function Passages() {
         <div>
             <p>Passages</p>
 
-            <ContentTable
+            <PageContent
                 type="passage"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.passages}
                 routeToPush={'/passages/'}

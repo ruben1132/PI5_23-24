@@ -1,4 +1,4 @@
-import ContentTable from '@/components/table/Table';
+import PageContent from '@/components/pageContent/PageContent';
 import config from '../../../../config';
 
 export default async function Robottypes() {
@@ -6,7 +6,7 @@ export default async function Robottypes() {
         <div>
             <p>Robottypes</p>
 
-            <ContentTable
+            <PageContent
                 type="robottype"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.robottypes}
                 routeToPush={'/robottypes/'}

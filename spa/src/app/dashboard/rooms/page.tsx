@@ -1,4 +1,4 @@
-import ContentTable from '@/components/table/Table';
+import PageContent from '@/components/pageContent/PageContent';
 import config from '../../../../config';
 
 export default async function Rooms() {
@@ -6,7 +6,7 @@ export default async function Rooms() {
         <div>
             <p>Rooms</p>
 
-            <ContentTable
+            <PageContent
                 type="room"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms}
                 routeToPush={'/rooms/'}

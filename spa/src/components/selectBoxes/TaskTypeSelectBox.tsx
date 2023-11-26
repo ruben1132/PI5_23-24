@@ -51,7 +51,7 @@ const TaskTypeSelectBox = (props: Props) => {
         <Form.Select
             onChange={props.customHandleChange ?? handleChange}
         >
-            <option>select task types</option>
+            <option value={""}>select task types</option>
 
             {filteredSelectBox?.map((item: TaskType) => (
                 <option key={item.id} value={item.id}>
