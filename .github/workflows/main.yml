@@ -21,7 +21,7 @@ jobs:
       - name: Install dependencies
         
         run: |
-          cd SPA/src
+          cd spa
           npm install
 
       - name: Build Angular application
