@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # Hardcoded port number
-PORT_NUMBER=2223
+PORT_NUMBER=2226
 
 # Get the list of processes using the specified port
 PIDS=$(lsof -t -i :$PORT_NUMBER)
