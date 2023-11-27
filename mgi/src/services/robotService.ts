@@ -109,7 +109,7 @@ export default class RobotService implements IRobotService {
             const robots = await this.robotRepo.getRobots(identification);
 
             if (robots === null) {
-                return Result.fail<Array<IRobotWithRobotTypeDTO>>('Robots not found');
+                return Result.ok<Array<IRobotWithRobotTypeDTO>>([]);
             }
 
             const robotDTO: IRobotWithRobotTypeDTO[] = [];
@@ -123,7 +123,7 @@ export default class RobotService implements IRobotService {
             }
 
             if (robotDTO.length === 0) {
-                return Result.fail<Array<IRobotWithRobotTypeDTO>>('Robots not found');
+                return Result.ok<Array<IRobotWithRobotTypeDTO>>([]);
             } else {
                 return Result.ok<Array<IRobotWithRobotTypeDTO>>(robotDTO);
             }

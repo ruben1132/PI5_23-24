@@ -7,8 +7,6 @@ import IRobotService from '../services/IServices/IRobotService';
 import { IRobotDTO, IRobotWithRobotTypeDTO } from '../dto/IRobotDTO';
 
 import { Result } from '../core/logic/Result';
-import { ParamsDictionary } from 'express-serve-static-core';
-import { ParsedQs } from 'qs';
 
 @Service()
 export default class RobotController implements IRobotController /* TODO: extends ../core/infra/BaseController */ {
