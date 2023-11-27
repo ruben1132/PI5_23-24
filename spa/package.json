@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "next dev -p 2223",
         "build": "next build",
-        "start": "next start",
+        "start": "next start -p 2223",
         "cypress:open": "cypress open",
         "lint": "next lint",
         "clean": "rm -rf node_modules && rm -rf package-lock.json && rm -rf build"
