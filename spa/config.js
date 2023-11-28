@@ -99,6 +99,8 @@ export default {
             login: 'auth/login',
             logout: 'auth/logout',
             session: 'auth/session',
+            planning: 'planning/',
+            planningFindPath: 'planning/findpath',
            
         },
     },
@@ -112,14 +114,6 @@ export default {
             session: 'session/',
         },
     },
-
-    mpAPI:{
-        baseUrl: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MP_API_URL : 'http://localhost:5000/',
-        routes: {
-            findPath: 'findCaminho',
-        },
-    },
-    
 
     tokenName: 'robdronego:token',
 

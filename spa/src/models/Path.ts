@@ -1,5 +1,5 @@
 interface Path {
-    caminho: string[];
-    movimento: { x: number; y: number }[];
-    custo: number;
+    path: string[];
+    movements: { x: number; y: number }[];
+    totalCost: number;
 }

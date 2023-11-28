@@ -57,7 +57,7 @@ export default function TaskForm(props: Props) {
     );
 
     // deleter
-    const taskDeleter = useDeleteData(config.mpAPI.baseUrl + config.mpAPI.routes.findPath + props.item?.value.id);
+    const taskDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.planningFindPath + props.item?.value.id);
 
     // inputs
     const originType = useFormStringInput('room');
@@ -183,10 +183,10 @@ export default function TaskForm(props: Props) {
         }
 
         // set query
-        const query = '?algoritmo=' + algorith.value + '&origem=' + formatedOrig + '&destino=' + formatedDest;
+        const query = '?algorithm=' + algorith.value + '&origin=' + formatedOrig + '&destiny=' + formatedDest;
 
         try {
-            const response = await axios(config.mpAPI.baseUrl + config.mpAPI.routes.findPath + query, {
+            const response = await axios(config.mgiAPI.baseUrl + config.mgiAPI.routes.planningFindPath + query, {
                 method: 'GET',
             });
 
