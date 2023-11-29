@@ -31,6 +31,9 @@ export default {
     // client URL
     clientURL: getEnvVariable('CLIENT_URL', 'http://localhost:2223'),
 
+    // MP API
+    mpAPI: getEnvVariable('MP_API', 'http://localhost:5000'),
+
     // Logging configuration
     logs: {
         level: getEnvVariable('LOG_LEVEL', 'info'),
@@ -94,6 +97,10 @@ export default {
         auth: {
             name: 'AuthController',
             path: '../controllers/authController',
+        },
+        planning: {
+            name: 'PlanningController',
+            path: '../controllers/planningController',
         },
     },
 
@@ -192,6 +199,10 @@ export default {
         auth: {
             name: 'AuthService',
             path: '../services/authService',
+        },
+        planning: {
+            name: 'PlanningService',
+            path: '../services/planningService',
         },
     },
 
