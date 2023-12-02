@@ -528,14 +528,16 @@ export default class Maze extends THREE.Group {
                 case 'east':
                     return (
                         Math.abs(position.x - (this.elevator.position.x -this.scale.x)) < distanceThreshold &&
-                        Math.abs(position.z - (this.elevator.position.z )) < distanceThreshold 
+                        Math.abs(position.z - this.elevator.position.z ) < distanceThreshold 
                     );
                 case 'west':
                     return (
-                        Math.abs(position.x - this.elevator.position.x +this.scale.x) < distanceThreshold &&
-                        Math.abs(position.z - this.elevator.position.z) < distanceThreshold 
+                        Math.abs(position.x - (this.elevator.position.x )) < distanceThreshold &&
+                        Math.abs(position.z - this.elevator.position.z ) < distanceThreshold 
                     );
             }
+            console.log("----")
+
 
         }
     }
