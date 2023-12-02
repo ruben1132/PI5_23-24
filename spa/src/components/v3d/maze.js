@@ -511,11 +511,6 @@ export default class Maze extends THREE.Group {
 
     enteredElevator(position) {
         if (this.elevator !== null) {
-            console.log("x: " + position.x + " | " + this.elevator.position.x);
-            console.log("z: " + position.z + " | " + this.elevator.position.z);
-            console.log(this.elevator.direction);
-
-            console.log("----")
 
             const distanceThreshold = 0.5; 
 
