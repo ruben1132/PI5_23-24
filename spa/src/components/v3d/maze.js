@@ -181,11 +181,27 @@ export default class Maze extends THREE.Group {
             }
 
             // create the elevator
+            this.elevator = null; 
             if (description.fmElevator) {
                 const elevator = new Elevator({
                     elevator: description.fmElevator,
                     halfSize: this.halfSize,
                 });
+                
+                const elevatorPos = this.cellToCartesian([description.fmElevator.position.positionY, description.fmElevator.position.positionX]);
+                const elevatorAccess = this.cellToCartesian([description.fmElevator.access.positionY, description.fmElevator.access.positionX]);
+                this.elevator = {
+                    position: { 
+                        x: elevatorPos.x,
+                        z: elevatorPos.z                    
+                    },
+                    acess : {
+                        x: elevatorAccess.x,
+                        z: elevatorAccess.z
+                    },
+                    direction: description.fmElevator.position.direction,
+                    halfSize: elevator.halfSize,
+                };
                 this.add(elevator);
             }
             
@@ -493,6 +509,41 @@ export default class Maze extends THREE.Group {
         );
     }
 
+    enteredElevator(position) {
+        if (this.elevator !== null) {
+            console.log("x: " + position.x + " | " + this.elevator.position.x);
+            console.log("z: " + position.z + " | " + this.elevator.position.z);
+            console.log(this.elevator.direction);
+
+            console.log("----")
+
+            const distanceThreshold = 0.5; 
+
+            switch (this.elevator.direction) {
+                case 'north':
+                    return (
+                        Math.abs(position.x - this.elevator.position.x) < distanceThreshold &&
+                        Math.abs(position.z - (this.elevator.position.z -this.scale.z)) < distanceThreshold 
+                    );
+                case 'south':
+                    return (
+                        Math.abs(position.x - this.elevator.position.x) < distanceThreshold &&
+                        Math.abs(position.z - (this.elevator.position.z +this.scale.z)) < distanceThreshold  
+                    );
+                case 'east':
+                    return (
+                        Math.abs(position.x - (this.elevator.position.x -this.scale.x)) < distanceThreshold &&
+                        Math.abs(position.z - (this.elevator.position.z )) < distanceThreshold 
+                    );
+                case 'west':
+                    return (
+                        Math.abs(position.x - this.elevator.position.x +this.scale.x) < distanceThreshold &&
+                        Math.abs(position.z - this.elevator.position.z) < distanceThreshold 
+                    );
+            }
+
+        }
+    }
     changeDoor(currentDoor) {
         this.mazeChanged = true;
 

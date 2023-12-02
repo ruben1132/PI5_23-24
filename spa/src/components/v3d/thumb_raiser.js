@@ -1420,6 +1420,10 @@ export default class ThumbRaiser {
                 // Check if the player found the exit
                 if (this.maze.foundExit(this.player.position)) {
                     this.finalSequence();
+                } else if (this.maze.enteredElevator(this.player.position)) {
+                    // show elevator GUI
+                    console.log("entered elevator")
+                    
                 } else {
                     let coveredDistance = this.player.walkingSpeed * deltaT;
                     let directionIncrement = this.player.turningSpeed * deltaT;
@@ -1475,10 +1479,9 @@ export default class ThumbRaiser {
                             position,
                             this.collisionDetectionParameters.method != 'obb-aabb'
                                 ? this.player.radius
-                                : this.player.halfSize
+                                : this.player.halfSize,
                         )
                     ) {
-                        
                     } else if (this.player.keyStates.jump) {
                         this.audio.play(this.audio.jumpClips, true);
                         this.animations.fadeToAction('Jump', 0.2);
