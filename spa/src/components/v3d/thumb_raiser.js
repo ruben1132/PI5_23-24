@@ -356,7 +356,9 @@ import UserInterface from './user_interface.js';
  *  near: Float,
  *  far: Float,
  *  initialFogDensity: Float // Doesn't apply to this camera
- * }
+ * },
+ * setIsInElevator: Function - toggle elevator UI
+ * setFloor: Function - set floor number
  */
 
 export default class ThumbRaiser {
@@ -378,6 +380,8 @@ export default class ThumbRaiser {
         thirdPersonViewCameraParameters,
         topViewCameraParameters,
         miniMapCameraParameters,
+        setIsInElevator,
+        setFloor,
     ) {
         this.generalParameters = merge({}, generalData, generalParameters);
         this.audioParameters = merge({}, audioData, audioParameters);
@@ -396,6 +400,9 @@ export default class ThumbRaiser {
         this.thirdPersonViewCameraParameters = merge({}, cameraData, thirdPersonViewCameraParameters);
         this.topViewCameraParameters = merge({}, cameraData, topViewCameraParameters);
         this.miniMapCameraParameters = merge({}, cameraData, miniMapCameraParameters);
+        this.setIsInElevator = setIsInElevator;
+        this.checkIfInElevator = true;
+        this.setFloor = setFloor;
 
         // Set the game state
         this.gameRunning = false;
@@ -1421,6 +1428,21 @@ export default class ThumbRaiser {
                 if (this.maze.foundExit(this.player.position)) {
                     this.finalSequence();
                 } else {
+                    // check if player is in elevator
+                    if (this.maze.enteredElevator(this.player.position) && this.checkIfInElevator) {
+                        // stop movement
+                        this.animations.fadeToAction('Standing', 0.2);
+
+                        // show elevator GUI
+                        this.setIsInElevator(true);
+                        return;
+                    }
+
+                    // only resets the flag when the player gets out the elevator
+                    if (!this.maze.enteredElevator(this.player.position)) {
+                        this.checkIfInElevator = true; // reset flag
+                    }
+
                     let coveredDistance = this.player.walkingSpeed * deltaT;
                     let directionIncrement = this.player.turningSpeed * deltaT;
                     if (this.player.shiftKey) {
@@ -1475,10 +1497,9 @@ export default class ThumbRaiser {
                             position,
                             this.collisionDetectionParameters.method != 'obb-aabb'
                                 ? this.player.radius
-                                : this.player.halfSize
+                                : this.player.halfSize,
                         )
                     ) {
-                        
                     } else if (this.player.keyStates.jump) {
                         this.audio.play(this.audio.jumpClips, true);
                         this.animations.fadeToAction('Jump', 0.2);
@@ -1618,6 +1639,13 @@ export default class ThumbRaiser {
 
         this.scene.remove(this.maze);
         this.maze = newMaze;
+    }
+
+    cancelElevatorAction() {
+        this.animations.actionFinished();
+        this.checkIfInElevator = false;
+
+        console.log('cancelElevatorAction');
     }
 
     dispose() {
