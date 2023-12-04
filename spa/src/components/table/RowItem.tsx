@@ -46,6 +46,8 @@ export default function RowItem(props: Props) {
                     );
                 case 'room':
                     return <td key={props.index}>{props.item.code}</td>;
+                case 'user':
+                    return <td key={props.index}>{props.item.code}</td>;
 
                 default:
                     return <td key={props.index}>no row handler for this item dummy :p create one! :D</td>;

@@ -7,3 +7,11 @@ export interface User{
     password: string;
     role: Role
 }
+
+export interface UserWithRoleString{
+    id: string;
+    username: string;
+    email: string;
+    password: string;
+    role: string
+}
