@@ -8,8 +8,6 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-// config
-import config from '../../../../config';
 
 // custom hooks
 import { useFetchData, useFormNumberInput, useFormStringInput } from '@/util/customHooks';
@@ -27,7 +25,6 @@ const DEFAULT_MIN_FLOORS = 0;
 const DEFAULT_MAX_FLOORS = 9999;
 
 export default function BuildingSearchForm(props: Props) {
-    const taskTypeDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.tasktypes);
 
     // inputs
     const minFloors = useFormNumberInput(DEFAULT_MIN_FLOORS);

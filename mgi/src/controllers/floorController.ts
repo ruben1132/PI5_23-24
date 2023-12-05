@@ -34,6 +34,7 @@ export default class FloorController implements IFloorController /* TODO: extend
 
     public async getFloors(req: Request, res: Response, next: NextFunction) {
         try {
+            
             const floorsOrError = await this.floorServiceInstance.getFloors() as Result<Array<IFloorWithBuildingDTO>>;
 
             if (floorsOrError.isFailure) {
@@ -79,7 +80,7 @@ export default class FloorController implements IFloorController /* TODO: extend
 
     public async getFloorsWithPassages(req: Request, res: Response, next: NextFunction) {
         try {
-            const floorsOrError = await this.floorServiceInstance.getFloorsWithPassages() as Result<Array<IFloorDTO>>;
+            const floorsOrError = await this.floorServiceInstance.getFloorsWithPassages() as Result<Array<IFloorWithBuildingDTO>>;
 
             if (floorsOrError.isFailure) {
                 return res.status(400).send({ error: floorsOrError.errorValue() });

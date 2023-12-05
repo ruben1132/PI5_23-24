@@ -132,13 +132,14 @@ export default class FloorRepo implements IFloorRepo {
                     },
                 },
             ]);
-
+            
             if (floors) {
                 return floors.map(floor => FloorMap.toDomain(floor));
             } else {
                 return [];
             }
         } catch (error) {
+            
             return [];
         }
     }
