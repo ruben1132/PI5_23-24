@@ -3,6 +3,7 @@ const userRole = {
     GESTOR_FROTA: 'gestor frota',
     GESTOR_CAMPUS: 'gestor campus',
     UTENTE: 'utente',
+    GESTOR_TAREFAS: 'gestor tarefas',
 };
 
 export default {
@@ -36,14 +37,19 @@ export default {
             permissions: [userRole.GESTOR_FROTA],
         },
         {
-           routeName: "tasks",
-           displayName: "Tasks",
-           permissions: [userRole.GESTOR_FROTA ],
+            routeName: 'tasks',
+            displayName: 'Tasks',
+            permissions: [userRole.GESTOR_TAREFAS],
         },
         {
             routeName: 'tasktypes',
             displayName: 'Task Types',
-            permissions: [userRole.GESTOR_FROTA],
+            permissions: [userRole.GESTOR_TAREFAS],
+        },
+        {
+            routeName: 'taskplanning',
+            displayName: 'Task Planning',
+            permissions: [userRole.GESTOR_TAREFAS],
         },
         {
             routeName: 'users',
@@ -80,11 +86,11 @@ export default {
             displayName: 'Profile',
             permissions: [userRole.UTENTE, userRole.GESTOR_FROTA, userRole.GESTOR_CAMPUS, userRole.ADMIN],
         },
-        
     ],
 
     mgiAPI: {
-        baseUrl: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MGI_API_URL : 'http://localhost:2225/api/',
+        baseUrl:
+            process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MGI_API_URL : 'http://localhost:2225/api/',
         routes: {
             buildings: 'buildings/',
             floors: 'floors/',
@@ -106,12 +112,14 @@ export default {
             session: 'auth/session',
             planning: 'planning/',
             planningFindPath: 'planning/findpath',
-           
         },
     },
 
     authAPI: {
-        baseUrl: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_AUTH_API_URL : 'http://localhost:2225/api/auth/',
+        baseUrl:
+            process.env.NODE_ENV === 'production'
+                ? process.env.NEXT_PUBLIC_AUTH_API_URL
+                : 'http://localhost:2225/api/auth/',
         routes: {
             login: 'login/',
             logout: 'logout/',
@@ -126,19 +134,16 @@ export default {
 
     authRoutes: ['/login', '/signin'],
 
-    utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/tasks', '/dashboard/profile'],
+    utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/profile'],
 
     adminRoutes: ['/dashboard', '/dashboard/roles', '/dashboard/users', '/dashboard/profile'],
 
     gestorFrotaRoutes: [
         '/dashboard',
         '/dashboard/v3d',
-        '/dashboard/tasks',
         '/dashboard/robottypes',
-        '/dashboard/tasktypes',
-        '/dashboard/tasktypes',
         '/dashboard/robots',
-        '/dashboard/profile'
+        '/dashboard/profile',
     ],
 
     gestorCampusRoutes: [
@@ -149,9 +154,16 @@ export default {
         '/dashboard/passages',
         '/dashboard/rooms',
         '/dashboard/tasks',
-        '/dashboard/profile'
+        '/dashboard/profile',
     ],
-    
+
+    gestorTarefasRoutes: [
+        '/dashboard',
+        '/dashboard/tasks',
+        '/dashboard/tasktypes',
+        '/dashboard/taskplanning',
+        '/dashboard/profile',
+    ],
 
     cookieName: 'mgiAPI:authCookie',
 };

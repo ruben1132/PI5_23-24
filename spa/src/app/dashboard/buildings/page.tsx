@@ -9,7 +9,6 @@ export default async function Buildings() {
             <PageContent
                 type="building"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings}
-                routeToPush={'/buildings/'}
             />
         </div>
     );

@@ -25,7 +25,6 @@ import {
 } from '@/util/customHooks';
 
 // models
-import { Role } from '@/models/Role';
 import { Profile, ProfileWithPassword } from '@/models/Profile';
 
 export default function ProfileForm() {

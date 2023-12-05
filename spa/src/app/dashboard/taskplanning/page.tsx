@@ -1,14 +1,14 @@
 import PageContent from '@/components/pageContent/PageContent';
 import config from '../../../../config';
 
-export default async function Roles() {
+export default async function Tasks() {
     return (
         <div>
-            <p>Roles</p>
+            <p>Task Planning</p>
 
             <PageContent
-                type="role"
-                routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.roles}
+                type="taskplanning"
+                routeToFetch={""}
             />
         </div>
     );

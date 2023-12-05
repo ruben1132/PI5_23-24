@@ -46,6 +46,7 @@ const sideBarIcons = {
     robottypes: faGear,
     tasktypes: faGear,
     tasks: faListCheck,
+    taskplanning: faListCheck,
     users: faUser,
     floormaps: faMap,
     roles: faUsers,

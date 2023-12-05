@@ -9,7 +9,6 @@ export default async function Elevators() {
             <PageContent
                 type="elevator"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators}
-                routeToPush={'/elevators/'}
             />
         </div>
     );

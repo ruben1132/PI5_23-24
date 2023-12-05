@@ -9,7 +9,6 @@ export default async function Tasktypes() {
             <PageContent
                 type="tasktype"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.tasktypes}
-                routeToPush={'/tasktypes/'}
             />
         </div>
     );

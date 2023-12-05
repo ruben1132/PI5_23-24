@@ -13,7 +13,6 @@ import { RenderFilteredSearch } from '../forms/search/RenderFilteredSearch';
 interface Props {
     type: string;
     routeToFetch: string;
-    routeToPush: string;
 }
 
 function ContentTable(props: Props) {

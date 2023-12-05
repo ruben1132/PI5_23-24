@@ -9,7 +9,6 @@ export default async function Robots() {
             <PageContent
                 type="robot"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.robots}
-                routeToPush={'/robots/'}
             />
         </div>
     );

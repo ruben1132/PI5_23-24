@@ -9,7 +9,6 @@ export default async function Rooms() {
             <PageContent
                 type="room"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms}
-                routeToPush={'/rooms/'}
             />
         </div>
     );

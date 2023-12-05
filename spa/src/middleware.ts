@@ -64,6 +64,11 @@ export async function middleware(request: NextRequest) {
             return NextResponse.next(); // Continue to the next Middleware or route handler
         }
 
+        // if user role is gestor tarefas and is trying to access gestor campus routes
+        if (user.role.name === conf.userRole.GESTOR_TAREFAS && conf.gestorTarefasRoutes.includes(pathname)) {
+            return NextResponse.next(); // Continue to the next Middleware or route handler
+        }
+
         // public routes
         if (conf.nullRoutes.includes(pathname)) {
             return NextResponse.next(); // Continue to the next Middleware or route handler

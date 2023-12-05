@@ -9,7 +9,6 @@ export default async function Users() {
             <PageContent
                 type="user"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.users}
-                routeToPush={'/users/'}
             />
         </div>
     );
