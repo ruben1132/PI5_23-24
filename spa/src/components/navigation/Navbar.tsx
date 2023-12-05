@@ -20,6 +20,10 @@ import { useAuth } from '@/context/AuthContext';
 
 // nextjs
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
+// config
+import config from '../../../config';
 
 interface NavBarProps {
     toggle: () => void;
@@ -65,7 +69,13 @@ function NavBar(props: NavBarProps) {
                         }
                         id="collapsible-nav-dropdown"
                     >
-                        <NavDropdown.Item>Profile (soon)</NavDropdown.Item>
+                        <Link
+                            href={'/' + config.dashboardBaseRoute + config.routes.find(route => route.routeName === 'profile').routeName}
+                            id='navbar-profile'
+                            style={{ textDecoration: 'none', padding: '2px' }}
+                        >
+                            <NavDropdown.ItemText>Profile</NavDropdown.ItemText>
+                        </Link>
                         <NavDropdown.Divider />
                         <NavDropdown.Item onClick={logOut}>Logout</NavDropdown.Item>
                     </NavDropdown>
