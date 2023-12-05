@@ -27,13 +27,13 @@ export default (app: Router) => {
 
     route.get('', (req, res, next) => ctrl.getFloors(req, res, next));
 
+    //get floors with passages
+    route.get('/withpass/', (req, res, next) => ctrl.getFloorsWithPassages(req, res, next));
+
     //get floors by building id
     route.get('/buildingId/:id', (req, res, next) => ctrl.getFloorsByBuildingId(req, res, next));
 
     route.get('/:id', (req, res, next) => ctrl.getFloorById(req, res, next));
-
-    //get floors with passages
-    route.get('/withpass', (req, res, next) => ctrl.getFloorsWithPassages(req, res, next));
 
     route.put(
         '',

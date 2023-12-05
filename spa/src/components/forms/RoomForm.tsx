@@ -132,19 +132,6 @@ export default function RoomForm(props: Props) {
 
     return (
         <Form>
-            {props.action === 'edit' && (
-                <>
-                    <Row>
-                        <Col sm={12}>
-                            <Form.Group className="mb-6">
-                                <Form.Label htmlFor="select">Room ID</Form.Label>
-                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <br />
-                </>
-            )}
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">

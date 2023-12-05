@@ -7,7 +7,6 @@ import React, { useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { Button } from 'react-bootstrap';
 
 // config
 import config from '../../../../config';
@@ -39,7 +38,6 @@ export default function RobotSearchForm(props: Props) {
         props.setParams(queryParams);
     }, 500); // Adjust the delay as needed
 
-    // debounced useEffect
     useEffect(() => {
         const queryParams = buildQueryParams();
         props.setParams(queryParams);

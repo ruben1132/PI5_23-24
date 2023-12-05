@@ -75,6 +75,11 @@ export default {
             displayName: '3D Viewer',
             permissions: [userRole.UTENTE, userRole.GESTOR_FROTA],
         },
+        {
+            routeName: 'profile',
+            displayName: 'Profile',
+            permissions: [userRole.UTENTE, userRole.GESTOR_FROTA, userRole.GESTOR_CAMPUS, userRole.ADMIN],
+        },
         
     ],
 
@@ -121,9 +126,9 @@ export default {
 
     authRoutes: ['/login', '/signin'],
 
-    utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/tasks'],
+    utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/tasks', '/dashboard/profile'],
 
-    adminRoutes: ['/dashboard', '/dashboard/roles', '/dashboard/users'],
+    adminRoutes: ['/dashboard', '/dashboard/roles', '/dashboard/users', '/dashboard/profile'],
 
     gestorFrotaRoutes: [
         '/dashboard',
@@ -133,6 +138,7 @@ export default {
         '/dashboard/tasktypes',
         '/dashboard/tasktypes',
         '/dashboard/robots',
+        '/dashboard/profile'
     ],
 
     gestorCampusRoutes: [
@@ -143,6 +149,7 @@ export default {
         '/dashboard/passages',
         '/dashboard/rooms',
         '/dashboard/tasks',
+        '/dashboard/profile'
     ],
     
 
