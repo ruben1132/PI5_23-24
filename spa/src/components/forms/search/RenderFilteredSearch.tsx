@@ -1,5 +1,6 @@
 "use client";
 
+import BuildingSearchForm from './BuildingSearchForm';
 import RobotSearchForm from './RobotSearchForm';
 
 interface Props {
@@ -15,6 +16,8 @@ export function RenderFilteredSearch(props: Props) {
             switch (props.type.toLocaleLowerCase()) {
                 case 'robot':
                     return <RobotSearchForm setParams={props.setParams}  />;
+                case 'building':
+                    return <BuildingSearchForm setParams={props.setParams} />;
                 default:
                     return <></>;
             }
