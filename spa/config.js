@@ -128,6 +128,19 @@ export default {
         },
     },
 
+    mptAPI:{
+        baseUrl:
+            process.env.NODE_ENV === 'production'
+                ? process.env.NEXT_PUBLIC_MPT_API_URL
+                : 'http://localhost:xxxx/api/mpt/',
+        routes: {
+            planning: 'planning/',
+            planningFindPath: 'planning/findpath',
+            users: 'users/',
+            tasks: 'tasks/',
+        },
+    },
+
     tokenName: 'robdronego:token',
 
     nullRoutes: ['/', '/aboutus', '/termsandconditions'],

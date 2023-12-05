@@ -9,6 +9,7 @@ import RobotForm from './RobotForm';
 import RoomForm from './RoomForm';
 import TaskForm from './TaskForm';
 import UserForm from './UserForm';
+import TaskPlanningForm from './TaskPlanningForm';
 
 interface Props {
     item: {
@@ -105,7 +106,7 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                    case 'tasks':
+                case 'task':
                     return (
                         <TaskForm
                             item={{ value: props.item.value }}
@@ -114,11 +115,10 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                case 'task':
+                case 'taskplanning':
                     return (
-                        <TaskForm
+                        <TaskPlanningForm
                             item={{ value: props.item.value }}
-                            action={props.action}
                             reFetchData={props.reFetchData}
                             close={props.close}
                         />
