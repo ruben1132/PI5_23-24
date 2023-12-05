@@ -23,12 +23,12 @@ import { Role } from '@/models/Role';
 import { UserWithRoleString, User } from '@/models/User';
 
 interface Props {
-    item: {
+    item?: {
         value: User;
     };
     action: string;
-    reFetchData: () => void;
-    close: () => void;
+    reFetchData?: () => void;
+    close?: () => void;
 }
 
 export default function UserForm(props: Props) {
@@ -45,10 +45,10 @@ export default function UserForm(props: Props) {
     const userDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.users + props.item?.value.id);
 
     // inputs
-    const userUsername = useFormStringInput(props.item.value?.username);
-    const userEmail = useFormStringInput(props.item.value?.email);
-    const userPassword = useFormStringInput(props.item.value?.password);
-    const userRole = useFormStringInput(props.item.value?.role?.id);
+    const userUsername = useFormStringInput(props.item?.value?.username);
+    const userEmail = useFormStringInput(props.item?.value?.email);
+    const userPassword = useFormStringInput(props.item?.value?.password);
+    const userRole = useFormStringInput(props.item?.value?.role?.id);
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);

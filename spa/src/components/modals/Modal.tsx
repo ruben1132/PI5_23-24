@@ -15,7 +15,7 @@ interface Props {
     reFetchData: () => void;
 }
 
-export default function BuildingModal(props: Props) {
+export default function ModalGeneric(props: Props) {
     return (
         <Modal size="lg" onHide={props.close} show={props.show}>
             <Modal.Header closeButton>

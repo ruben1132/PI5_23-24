@@ -74,8 +74,11 @@ function Sidebar(props: SidebarProps) {
                                 page: { routeName: string; displayName: string; permissions: string[] },
                                 index: number,
                             ) => {
+                                // Check if the current route is the 'profile' route
+                                const isProfileRoute = page.routeName === 'profile';
+
                                 // Check if user.role.name is included in the permissions array
-                                const isUserAuthorized = user.role.name && page.permissions.includes(user.role.name);
+                                const isUserAuthorized = user.role.name && page.permissions.includes(user.role.name)  && !isProfileRoute;
 
                                 // Render the Link only if user is authorized
                                 return isUserAuthorized ? (

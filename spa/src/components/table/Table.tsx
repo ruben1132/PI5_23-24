@@ -66,7 +66,7 @@ function ContentTable(props: Props) {
         );
 
     // filter out the id column
-    const filteredColumns = Object.keys(useFetchdata.data[0]).filter((column: string) => column !== 'id');
+    const filteredColumns = Object.keys(useFetchdata.data[0]).filter((column: string) => column !== 'id' && column !== 'password');
 
     return (
         <>
