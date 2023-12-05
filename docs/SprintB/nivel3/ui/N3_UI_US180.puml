@@ -1,0 +1,23 @@
+@startuml
+
+actor GestorCampus as User
+
+participant SPA
+participant "GestaoInfoAPI" as API
+
+User -> SPA: requisita página dos edifícios
+SPA -> User: retorna página dos edifícios
+
+User -> SPA: insere intervalo de andares (min e max)
+
+SPA -> API: get(/api/buildings/min/:id/max/:id)
+
+note right of API 
+    Restantes passos representados no 
+    diagrama da API disponivel na pasta API
+end note
+
+API -> SPA: retorna lista de edifícios
+SPA --> User: retorna lista de edifícios
+
+@enduml

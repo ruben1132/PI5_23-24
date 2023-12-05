@@ -1,0 +1,29 @@
+@startuml
+
+actor GestorFrota as User
+
+participant SPA
+participant "GestaoInfoAPI" as API
+
+User -> SPA: requisita página dos robos
+SPA -> User: retorna página dos robos
+
+User -> SPA: seleciona opção de adicionar robos
+SPA -> User: mostra formulário de adicionar robos
+
+SPA -> API: get(/api/robotTypes)
+API --> SPA: mostra tipos de robos na select box
+
+User -> SPA: preenche formulário e submete
+
+SPA -> API: post(/api/robots)
+
+note right of API 
+    Restantes passos representados no 
+    diagrama da API disponivel na pasta API
+end note
+
+API --> SPA: successo
+SPA --> User: retorna sucesso
+
+@enduml
