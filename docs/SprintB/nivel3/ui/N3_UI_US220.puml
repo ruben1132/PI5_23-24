@@ -1,0 +1,23 @@
+@startuml
+
+actor GestorCampus as User
+
+participant SPA
+participant "GestaoInfoAPI" as API
+
+User -> SPA: requisita página dos andares
+SPA -> User: retorna página dos andares
+
+User -> SPA: seleciona check box de andares com passagem
+
+SPA -> API: get(/api/floors/withpass)
+
+note right of API 
+    Restantes passos representados no 
+    diagrama da API disponivel na pasta API
+end note
+
+API --> SPA: retorna lista de andares com passagem
+SPA --> User: retorna lista de andares com passagem
+
+@enduml

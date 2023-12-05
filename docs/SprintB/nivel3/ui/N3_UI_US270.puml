@@ -1,0 +1,34 @@
+@startuml
+
+actor GestorCampus as User
+
+participant SPA
+participant "GestaoInfoAPI" as API
+
+User -> SPA: requisita página dos elevadores
+SPA -> User: retorna página dos elevadores
+
+User -> SPA: seleciona opção de adicionar elevador
+SPA -> User: mostra formulário de adicionar elevador
+
+SPA -> API: get(/api/buildings)
+API -> SPA: mostrar edificios na select box
+
+User -> SPA: seleciona edificio
+
+SPA -> API: get(/api/floors/buildingId/:id)
+API -> SPA: mostrar andares na select box
+
+User -> SPA: preenche formulário e submete
+
+SPA -> API: post(/api/elevators)
+
+note right of API 
+    Restantes passos representados no 
+    diagrama da API disponivel na pasta API
+end note
+
+API -> SPA: sucesso
+SPA --> User: retorna sucesso
+
+@enduml

@@ -1,0 +1,46 @@
+@startuml
+
+actor GestorFrota as User
+
+participant SPA
+participant "GestaoInfoAPI" as API
+participant "PlaneamentoAPI" as MP
+
+User -> SPA: requisita página das tarefas
+SPA -> User: retorna página das tarefas
+
+User -> SPA: seleciona botão de adicionar nova tarefa 
+SPA -> User: mostra formulário de adicionar nova tarefa
+
+User -> SPA: seleciona o tipo de origem e de destino da tarefa (Sala, Passagem ou Elevador)
+
+alt "Sala"
+SPA -> API: post(/api/rooms)
+API -> SPA: mostra salas na select box
+
+else "Elevador"
+SPA -> API: post(/api/elevators)
+note right of API 
+    Este código do IF é igual tanto para a origem 
+    como para o destino
+end note
+API -> SPA: mostra elevadores na select box
+
+else "Passagem"
+SPA -> API: post(/api/passages)
+API -> SPA: mostra passagens na select box
+
+end 
+
+User -> SPA: seleciona o tipo de algoritmo a utilizar
+User -> SPA: Seleciona o botão de procurar caminho
+
+
+SPA -> API: get(planning/findpath?algorithm=alg&origin=org&destiny=dest)
+API -> MP: get(getPath?algorithm=alg&origin=org&destiny=dest)
+
+MP -> API: retorna caminho
+API -> SPA: retorna caminho
+SPA -> User: mostra caminho
+
+@enduml
