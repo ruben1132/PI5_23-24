@@ -99,20 +99,6 @@ export default function TaskTypeForm(props: Props) {
 
     return (
         <Form>
-            {props.action === 'edit' && (
-                <>
-                    <Row>
-                        <Col sm={12}>
-                            <Form.Group className="mb-6">
-                                <Form.Label htmlFor="select">Buildind ID</Form.Label>
-                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <br />
-                </>
-            )}
-
             <Row>
                 <Col sm={12}>
                     <Form.Group className="mb-6">

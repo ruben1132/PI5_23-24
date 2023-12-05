@@ -7,7 +7,6 @@ import React from 'react';
 import { Nav, Button, Col } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 
-
 // config
 import config from '../../../config';
 
@@ -85,7 +84,7 @@ function Sidebar(props: SidebarProps) {
                                         key={index}
                                         style={{ textDecoration: 'none', padding: '2px' }}
                                     >
-                                        <Nav.Item className="nav-item" id={'sidebar-' + page.routeName }>
+                                        <Nav.Item className="nav-item" id={'sidebar-' + page.routeName}>
                                             <Col sm={3}>
                                                 <FontAwesomeIcon
                                                     icon={sideBarIcons[page.routeName as keyof typeof sideBarIcons]}

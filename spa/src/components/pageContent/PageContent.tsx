@@ -1,7 +1,6 @@
 'use client';
 
 import ContentTable from '../table/Table';
-import config from '../../../config';
 import { RenderFilteredSearch } from '../forms/search/RenderFilteredSearch';
 import { useEffect, useState } from 'react';
 
