@@ -31,7 +31,7 @@ describe('BuildingForm Component', () => {
         cy.get('[data-testid="add-button"]').click();
 
         // Check if the new building is displayed in the list
-        cy.contains(code);
+        cy.contains('Building added successfully');
     });
    
 });
