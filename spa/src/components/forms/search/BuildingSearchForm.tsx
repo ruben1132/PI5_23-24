@@ -21,10 +21,11 @@ interface Props {
     setParams: (params: string) => void;
 }
 
-const DEFAULT_MIN_FLOORS = 0;
-const DEFAULT_MAX_FLOORS = 9999;
+
 
 export default function BuildingSearchForm(props: Props) {
+    const DEFAULT_MIN_FLOORS = 0;
+    const DEFAULT_MAX_FLOORS = 9999;
 
     // inputs
     const minFloors = useFormNumberInput(DEFAULT_MIN_FLOORS);
@@ -80,7 +81,8 @@ export default function BuildingSearchForm(props: Props) {
                         <Form.Control
                             id = "minFloors"
                             type="number"
-                            defaultValue={DEFAULT_MIN_FLOORS}
+                            defaultValue={minFloors.value}
+                            min={0}
                             onChange={handleMinFloorsChange}
                         />
                     </Form.Group>
@@ -92,7 +94,8 @@ export default function BuildingSearchForm(props: Props) {
                         <Form.Control
                             id = "maxFloors"
                             type="number"
-                            defaultValue={DEFAULT_MAX_FLOORS}
+                            defaultValue={maxFloors.value}
+                            min={0}
                             onChange={handleMaxFloorsChange}
                         />
                     </Form.Group>

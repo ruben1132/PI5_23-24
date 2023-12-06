@@ -20,11 +20,11 @@ import { useFetchData, useSubmitData, useFormNumberInput, useFormStringInput, us
 
 // models
 import { Role } from '@/models/Role';
-import { UserWithRoleString, User } from '@/models/User';
+import { UserWithRole, User, UserWithPassword } from '@/models/User';
 
 interface Props {
     item?: {
-        value: User;
+        value: UserWithRole;
     };
     action: string;
     reFetchData?: () => void;
@@ -45,7 +45,7 @@ export default function UserForm(props: Props) {
     const userDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.users + props.item?.value.id);
 
     // inputs
-    const userUsername = useFormStringInput(props.item?.value?.username);
+    const userName = useFormStringInput(props.item?.value?.name);
     const userEmail = useFormStringInput(props.item?.value?.email);
     const userPassword = useFormStringInput(props.item?.value?.password);
     const userRole = useFormStringInput(props.item?.value?.role?.id);
@@ -58,12 +58,12 @@ export default function UserForm(props: Props) {
         setEnabled(false);
 
         // set user data
-        let item: UserWithRoleString = {
+        let item: UserWithPassword = {
             ...props.item.value,
             role: props.item.value?.role?.id,
         };
         item.id = props.item.value?.id;
-        item.username = userUsername.value;
+        item.name = userName.value;
         item.email = userEmail.value;
         item.password = userPassword.value;
         item.role = userRole.value;
@@ -142,9 +142,9 @@ export default function UserForm(props: Props) {
                         <Form.Label htmlFor="select">Username</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="user's username..."
-                            defaultValue={props.item.value?.username}
-                            onChange={userUsername.handleChange}
+                            placeholder="user's userName..."
+                            defaultValue={props.item.value?.name}
+                            onChange={userName.handleChange}
                         />
                     </Form.Group>
                 </Col>
@@ -165,7 +165,6 @@ export default function UserForm(props: Props) {
                         <Form.Control
                             type="text"
                             placeholder="user's password..."
-                            defaultValue={props.item.value?.password}
                             onChange={userPassword.handleChange}
                         />
                     </Form.Group>
@@ -205,7 +204,7 @@ export default function UserForm(props: Props) {
                                 <Button
                                     variant="primary"
                                     onClick={handleSubmitData}
-                                    disabled={userUsername.value === '' || userEmail.value === '' || !enabled}
+                                    disabled={userName.value === '' || userEmail.value === '' || !enabled}
                                 >
                                     Update
                                 </Button>
@@ -218,7 +217,7 @@ export default function UserForm(props: Props) {
                             <Button
                                 variant="success"
                                 onClick={handleSubmitData}
-                                disabled={userUsername.value === '' || userEmail.value === '' || !enabled}
+                                disabled={userName.value === '' || userEmail.value === '' || !enabled}
                             >
                                 Add
                             </Button>

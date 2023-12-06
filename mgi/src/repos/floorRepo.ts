@@ -144,52 +144,6 @@ export default class FloorRepo implements IFloorRepo {
         }
     }
 
-    public async getBuildingsByFloorRange(min: number, max: number): Promise<Building[]> {
-        try {
-            const buildingRecords = await this.floorSchema.aggregate([
-                {
-                    $group: {
-                        _id: '$building',
-                        count: { $sum: 1 },
-                    },
-                },
-                {
-                    $match: {
-                        count: { $gte: min, $lte: max },
-                    },
-                },
-                {
-                    $lookup: {
-                        from: 'buildings', // Replace with the actual name of your 'Building' collection
-                        localField: '_id',
-                        foreignField: 'domainId', // Adjust this to the actual field that links buildings and floors
-                        as: 'buildingInfo',
-                    },
-                },
-                {
-                    $unwind: '$buildingInfo',
-                },
-                {
-                    $project: {
-                        code: '$buildingInfo.code',
-                        name: '$buildingInfo.name',
-                        dimensions: '$buildingInfo.dimensions',
-                        domainId: '$buildingInfo.domainId',
-                    },
-                },
-            ]);
-
-            if (buildingRecords) {
-                return buildingRecords.map(building => BuildingMap.toDomain(building));
-            } else {
-                console.error('Error occurred during query execution');
-                return [];
-            }
-        } catch (err) {
-            console.error(err);
-            throw err;
-        }
-    }
 
     public async getFloorByBuildingAndNumber(buildingId: string, number: number, floorId?: string): Promise<Floor> {
         try {

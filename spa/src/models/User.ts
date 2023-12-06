@@ -1,16 +1,31 @@
 import { Role } from "./Role";
 
-export interface User{
+export interface UserWithRole{
     id: string;
-    username: string;
+    name: string;   
     email: string;
+    password:string;
     role: Role
 }
 
-export interface UserWithRoleString{
+export interface User{
     id: string;
-    username: string;
+    name: string;
     email: string;
     role: string
 }
 
+export interface UserWithPassword{
+    id: string;
+    name: string;
+    email: string;
+    password:string;
+    role: string
+}
+
+export interface PostUser{
+    id: string;
+    name: string;
+    email: string;
+    role: Role
+}

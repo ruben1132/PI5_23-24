@@ -3,10 +3,10 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
 import config from '../../config';
-import {User} from "../models/User";
+import {UserWithRole} from "../models/User";
 
 interface AuthContextProps {
-    user: User | null;
+    user: UserWithRole | null;
     login: (email: string, password: string) => Promise<boolean>;
     logout: () => Promise<boolean>;
 }
@@ -18,7 +18,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<UserWithRole | null>(null);
 
     const fetchSession = async () => {
         const response = await request(config.authAPI.baseUrl + config.authAPI.routes.session, 'GET');

@@ -59,8 +59,8 @@ function NavBar(props: NavBarProps) {
                         style={{ color: 'black' }}
                         className="d-flex"
                         title={
-                            user?.username ? (
-                                user?.username + '-' + user?.role.name
+                            user?.id ? (
+                                user?.email + '-' + user?.role.name
                             ) : (
                                 <>
                                     <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />

@@ -102,7 +102,7 @@ export function useFormSelectBox(initialValue: string) {
 
 // hook for number input
 export function useFormNumberInput(initialValue: number) {
-    const [value, setValue] = useState(initialValue || 1);
+    const [value, setValue] = useState(initialValue || 0);
 
     // Handler for onChange of the input
     function handleChange(e: ChangeEvent<HTMLInputElement>) {

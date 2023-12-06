@@ -9,6 +9,7 @@ export default interface IBuildingRepo extends Repo<Building> {
     deleteBuilding(buildingId: BuildingId | string): Promise<Boolean>;
     findByDomainIds(buildingsIds: BuildingId[] | string[]): Promise<Building[]>;
     findByBuildingCode(buildingCode: string, buildingId?: string): Promise<Building>;
+    getBuildingsByFloorRange(min: number, max: number): Promise<Building[]>
     //saveCollection (buildings: Building[]): Promise<Building[]>;
     //removeByBuildingIds (buildings: BuildingId[]): Promise<any>
 }
