@@ -44,7 +44,7 @@ export default function BuildingForm(props: Props) {
 
     // deleter
     const buildingDeleter = useDeleteData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings + props.item?.value.id,
+        config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings + props.item?.value?.id,
     );
 
     // button enables - used to prevent double clicks
