@@ -17,7 +17,7 @@ describe('BuildingForm Component', () => {
 
         // Intercept the API request to mock the response
         cy.intercept('POST', '/api/buildings', {
-            statusCode: 200,
+            statusCode: 201,
             body: { success: true },
         }).as('addBuilding');
 
@@ -33,7 +33,9 @@ describe('BuildingForm Component', () => {
         cy.get('[data-testid="add-button"]').click();
 
         // Wait for the API request to complete
-        cy.wait('@addBuilding');
+        cy.wait('@addBuilding').then((xhr) => {
+            expect(xhr.response.statusCode).to.equal(201);
+        });
 
         // Check if the new building is displayed in the list
         cy.contains('Building added successfully');
