@@ -111,7 +111,7 @@ export default function PassageForm(props: Props) {
             return;
         }
 
-        if (!props.item.value?.id) {            
+        if (!props.item.value?.id) {
             fromFloor.handleLoad(fetchFloors.data[0].id);
         }
 
@@ -163,6 +163,7 @@ export default function PassageForm(props: Props) {
                             placeholder="Passage's designation..."
                             defaultValue={props.item.value?.designation}
                             onChange={passageDesignation.handleChange}
+                            data-testid="passage-designation-input"
                         />
                     </Form.Group>
                 </Col>
@@ -176,6 +177,7 @@ export default function PassageForm(props: Props) {
                         <Form.Select
                             defaultValue={props.item.value?.fromFloor?.id ?? fetchFloors.data[0].id}
                             onChange={handleSelectFromFloor}
+                            data-testid="passage-fromfloor-input"
                         >
                             {props.item.value?.fromFloor?.id && (
                                 <option defaultChecked={true}>{props.item.value?.fromFloor?.information}</option>
@@ -196,6 +198,7 @@ export default function PassageForm(props: Props) {
                         <Form.Select
                             defaultValue={props.item.value?.toFloor?.id ?? fetchFloors.data[0].id}
                             onChange={handleSelectToFloor}
+                            data-testid="passage-tofloor-input"
                         >
                             {props.item.value?.toFloor?.id && (
                                 <option defaultChecked={true}>{props.item.value?.toFloor?.information}</option>
@@ -225,11 +228,16 @@ export default function PassageForm(props: Props) {
                                         toFloor.value === '' ||
                                         !enabled
                                     }
+                                    data-testid="update-button"
                                 >
                                     Update
                                 </Button>
 
-                                <Button variant="danger" onClick={handleDeleteData}>
+                                <Button
+                                    variant="danger"
+                                    onClick={handleDeleteData}
+                                    data-testid="delete-button"
+                                >
                                     Delete
                                 </Button>
                             </>
@@ -243,6 +251,7 @@ export default function PassageForm(props: Props) {
                                     toFloor.value === '' ||
                                     !enabled
                                 }
+                                data-testid="add-button"
                             >
                                 Add
                             </Button>

@@ -62,8 +62,8 @@ export default function UserForm() {
                 />
             </Form.Group>
             <br />
-            <Form.Group controlId="formUserRole">
-                <Form.Label>User Role</Form.Label>
+            <Form.Group controlId="formPassword">
+                <Form.Label>Password</Form.Label>
                 <Form.Control
                     id="password"
                     type="password"

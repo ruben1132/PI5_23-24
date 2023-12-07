@@ -153,6 +153,7 @@ export default function ElevatorForm(props: Props) {
                             placeholder="Elevator's designation..."
                             defaultValue={props.item.value?.designation}
                             onChange={elevatorDesignation.handleChange}
+                            data-testid="elavator-designation-input"
                         />
                     </Form.Group>
                 </Col>
@@ -160,12 +161,14 @@ export default function ElevatorForm(props: Props) {
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Floors Allowed</Form.Label>
                         <FloorSelectBox
-                        data={filteredSelectBoxData}
-                        isError={selectBoxFloorsAllowedDataFetch.isError}
-                        isLoading={selectBoxFloorsAllowedDataFetch.isLoading}
-                        customHandleChange={handleSelect}
+                            data={filteredSelectBoxData}
+                            isError={selectBoxFloorsAllowedDataFetch.isError}
+                            isLoading={selectBoxFloorsAllowedDataFetch.isLoading}
+                            customHandleChange={handleSelect}
+                            data-testid="elevator-floors-input"
+
                         />
-                        
+
                     </Form.Group>
                 </Col>
             </Row>
@@ -195,11 +198,16 @@ export default function ElevatorForm(props: Props) {
                                     disabled={
                                         elevatorDesignation.value === '' || floorsAllowed.length === 0 || !enabled
                                     }
+                                    data-testid="update-button"
                                 >
                                     Update
                                 </Button>
 
-                                <Button variant="danger" onClick={handleDeleteData}>
+                                <Button
+                                    variant="danger"
+                                    onClick={handleDeleteData}
+                                    data-testid="delete-button"
+                                >
                                     Delete
                                 </Button>
                             </>
@@ -208,6 +216,7 @@ export default function ElevatorForm(props: Props) {
                                 variant="success"
                                 onClick={handleSubmitData}
                                 disabled={elevatorDesignation.value === '' || floorsAllowed.length === 0 || !enabled}
+                                data-testid="add-button"
                             >
                                 Add
                             </Button>
