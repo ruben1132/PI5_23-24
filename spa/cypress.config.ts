@@ -9,6 +9,7 @@ export default defineConfig({
       framework: 'next',
       bundler: 'webpack',
     },
+    supportFile: 'cypress/support/supportFile.ts',
   }, 
 
   

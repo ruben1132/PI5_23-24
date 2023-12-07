@@ -61,7 +61,7 @@ const BuildingSelectBox = (props: Props) => {
 
     return (
       
-        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange}>
+        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='building-sb'>
 
             {props?.selectedValue && <option defaultChecked={true}>{selectedValue.code + " - " + selectedValue.name}</option>}
 

@@ -50,6 +50,7 @@ const TaskTypeSelectBox = (props: Props) => {
     return (
         <Form.Select
             onChange={props.customHandleChange ?? handleChange}
+            id='taskType-sb'
         >
             <option value={""}>select task types</option>
 

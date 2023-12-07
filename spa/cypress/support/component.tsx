@@ -1,4 +1,6 @@
-import './commands'
-import {mount} from 'cypress/react18'
+// import 'react-toastify/dist/ReactToastify.css';
 
-Cypress.Commands.add('mount', mount)
+import './commands'
+
+
+

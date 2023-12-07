@@ -21,7 +21,7 @@ import { useFetchData, useSubmitData, useFormNumberInput, useFormStringInput, us
 // models
 import { Floor, FloorWithBuilding } from '@/models/Floor';
 import { Building } from '@/models/Building';
-import BuildingSelectBox from '../selectBoxes/BuildingSelextBox';
+import BuildingSelectBox from '../selectBoxes/BuildingSelectBox';
 
 interface Props {
     item: {

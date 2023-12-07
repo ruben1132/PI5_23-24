@@ -57,7 +57,7 @@ const FloorSelectBox = (props: Props) => {
     };
 
     return (
-        <Form.Select onChange={props.customHandleChange ?? handleChange}>
+        <Form.Select onChange={props.customHandleChange ?? handleChange} id='floor-sb'>
             {props.selectedValue ? ( 
                 
                 <option value={props.selectedValue} selected>
