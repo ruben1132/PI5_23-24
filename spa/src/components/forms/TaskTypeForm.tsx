@@ -109,6 +109,7 @@ export default function TaskTypeForm(props: Props) {
                             placeholder="task type's name..."
                             defaultValue={props.item.value?.name}
                             onChange={taskTypeName.handleChange}
+                            data-testid="tt-name-input"
                         />
                     </Form.Group>
                 </Col>
@@ -125,6 +126,7 @@ export default function TaskTypeForm(props: Props) {
                             defaultValue={props.item.value?.description}
                             onChange={taskTypeDescription.handleChange}
                             style={{ height: '100px' }}
+                            data-testid="tt-description-input"
                         />
                     </Form.Group>
                 </Col>
@@ -139,11 +141,16 @@ export default function TaskTypeForm(props: Props) {
                                     variant="primary"
                                     onClick={handleSubmitData}
                                     disabled={!taskTypeName.isValid || !taskTypeDescription.isValid || !enabled}
+                                    data-testid="update-button"
                                 >
                                     Update
                                 </Button>
 
-                                <Button variant="danger" onClick={handleDeleteData}>
+                                <Button
+                                    variant="danger"
+                                    onClick={handleDeleteData}
+                                    data-testid="delete-button"
+                                >
                                     Delete
                                 </Button>
                             </>
@@ -152,6 +159,7 @@ export default function TaskTypeForm(props: Props) {
                                 variant="success"
                                 onClick={handleSubmitData}
                                 disabled={!taskTypeName.isValid || !taskTypeDescription.isValid || !enabled}
+                                data-testid="add-button"
                             >
                                 Add
                             </Button>
