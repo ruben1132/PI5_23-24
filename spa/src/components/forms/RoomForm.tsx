@@ -141,12 +141,11 @@ export default function RoomForm(props: Props) {
                             placeholder="room's number..."
                             defaultValue={props.item.value?.number}
                             onChange={roomNumber.handleChange}
+                            data-testid="room-number-input"
+
                         />
                     </Form.Group>
                 </Col>
-            </Row>
-            <br />
-            <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Floor</Form.Label>
@@ -154,6 +153,7 @@ export default function RoomForm(props: Props) {
                         <Form.Select
                             defaultValue={props.item.value?.floor?.id ?? filteredSelectBoxData[0].id}
                             onChange={handleSelect}
+                            data-testid="room-floor-input"
                         >
                             {props.item.value?.floor?.id && (
                                 <option defaultChecked={true}>{props.item.value?.floor?.information}</option>
@@ -180,11 +180,16 @@ export default function RoomForm(props: Props) {
                                     variant="primary"
                                     onClick={handleSubmitData}
                                     disabled={roomNumber.value === '' || roomFloor.value === '' || !enabled}
+                                    data-testid="update-button"
                                 >
                                     Update
                                 </Button>
 
-                                <Button variant="danger" onClick={handleDeleteData}>
+                                <Button
+                                    variant="danger"
+                                    onClick={handleDeleteData}
+                                    data-testid="delete-button"
+                                >
                                     Delete
                                 </Button>
                             </>
@@ -193,6 +198,7 @@ export default function RoomForm(props: Props) {
                                 variant="success"
                                 onClick={handleSubmitData}
                                 disabled={roomNumber.value === '' || roomFloor.value === '' || !enabled}
+                                data-testid="add-button"
                             >
                                 Add
                             </Button>
