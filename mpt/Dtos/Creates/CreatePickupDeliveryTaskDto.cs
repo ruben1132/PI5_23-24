@@ -11,9 +11,10 @@ namespace Mpt.Dtos
         public string DeliveryPersonName { get; private set; }
         public string DeliveryPersonPhoneNumber { get; private set; }
         public string TaskDescription { get; private set; }
+        
 
-        public CreatePickupDeliveryTaskDto(string userId, string robotId, string taskType, string pickupPlace, string deliveryPlace, string pickupPersonName, string pickupPersonPhoneNumber, string deliveryPersonName, string deliveryPersonPhoneNumber, string taskDescription)
-            : base(userId, robotId, taskType)
+        public CreatePickupDeliveryTaskDto(string userId, string robotId, string taskType,List<string> path, List<RobotMovementDto> robotMovements, string pickupPlace, string deliveryPlace, string pickupPersonName, string pickupPersonPhoneNumber, string deliveryPersonName, string deliveryPersonPhoneNumber, string taskDescription)
+            : base(userId, robotId, taskType, path, robotMovements)
         {
             this.PickupPlace = pickupPlace;
             this.DeliveryPlace = deliveryPlace;

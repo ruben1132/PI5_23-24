@@ -21,7 +21,7 @@ namespace Mpt.Mappers
                     user.Phone.Value,
                     user.Nif.Value,
                     user.Active,
-                     user.RoleId.Value
+                    user.RoleId.Value
                 );
         }
 

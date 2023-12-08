@@ -42,7 +42,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
 
@@ -64,7 +64,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
 
@@ -86,7 +86,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
 
         }
@@ -121,7 +121,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
 
@@ -146,7 +146,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
     }

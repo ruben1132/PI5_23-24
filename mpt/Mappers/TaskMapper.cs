@@ -15,9 +15,11 @@ namespace Mpt.Mappers
                 task.Id.Value,
                 task.UserId.Value,
                 task.RobotId,
+                task.Path,
+                RobotMovementBulkToDto(task.RobotMovements),
                 task.IsCompleted,
-                task.IsAproved,
-                task.TaskType.Value
+                task.IsApproved,
+                task.TaskType
             );
 
         }
@@ -28,9 +30,11 @@ namespace Mpt.Mappers
                 surveillanceTask.Id.Value,
                 surveillanceTask.UserId.Value,
                 surveillanceTask.RobotId,
+                surveillanceTask.Path,
+                RobotMovementBulkToDto(surveillanceTask.RobotMovements),
                 surveillanceTask.IsCompleted,
-                surveillanceTask.IsAproved,
-                surveillanceTask.TaskType.Value,
+                surveillanceTask.IsApproved,
+                surveillanceTask.TaskType,
                 surveillanceTask.PhoneNumber.Value,
                 surveillanceTask.FloorIds
             );
@@ -42,9 +46,11 @@ namespace Mpt.Mappers
                 pickupDeliveryTask.Id.Value,
                 pickupDeliveryTask.UserId.Value,
                 pickupDeliveryTask.RobotId,
+                pickupDeliveryTask.Path,
+                RobotMovementBulkToDto(pickupDeliveryTask.RobotMovements),
                 pickupDeliveryTask.IsCompleted,
-                pickupDeliveryTask.IsAproved,
-                pickupDeliveryTask.TaskType.Value,
+                pickupDeliveryTask.IsApproved,
+                pickupDeliveryTask.TaskType,
                 pickupDeliveryTask.PickupPlace,
                 pickupDeliveryTask.DeliveryPlace,
                 pickupDeliveryTask.PickupPersonName,
@@ -61,7 +67,9 @@ namespace Mpt.Mappers
             return new SurveillanceTask(
                 new UserId(dto.UserId),
                 dto.RobotId,
-                new TaskType(dto.TaskType),
+                dto.TaskType,
+                dto.Path,
+                RobotMovementBulkToDomain(dto.RobotMovements),
                 new PhoneNumber(dto.PhoneNumber),
                 dto.FloorIds
             );
@@ -72,7 +80,9 @@ namespace Mpt.Mappers
             return new PickupDeliveryTask(
                 new UserId(dto.UserId),
                 dto.RobotId,
-                new TaskType(dto.TaskType),
+                dto.TaskType,
+                dto.Path,
+                RobotMovementBulkToDomain(dto.RobotMovements),
                 dto.PickupPlace,
                 dto.DeliveryPlace,
                 dto.PickupPersonName,
@@ -80,8 +90,36 @@ namespace Mpt.Mappers
                 dto.DeliveryPersonName,
                 new PhoneNumber(dto.DeliveryPersonPhoneNumber),
                 dto.TaskDescription,
-               new TaskConfirmationCode()
+                new TaskConfirmationCode()
             );
+        }
+
+        public static List<RobotMovement> RobotMovementBulkToDomain(List<RobotMovementDto> dto)
+        {
+
+            List<RobotMovement> robotMovements = new List<RobotMovement>();
+
+            foreach (var item in dto)
+            {
+                robotMovements.Add(new RobotMovement(item.X, item.Y));
+            }
+
+            return robotMovements;
+
+        }
+
+        public static List<RobotMovementDto> RobotMovementBulkToDto(List<RobotMovement> dto)
+        {
+
+            List<RobotMovementDto> robotMovements = new List<RobotMovementDto>();
+
+            foreach (var item in dto)
+            {
+                robotMovements.Add(new RobotMovementDto(item.X, item.Y));
+            }
+
+            return robotMovements;
+
         }
     }
 }

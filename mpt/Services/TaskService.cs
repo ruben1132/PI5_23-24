@@ -1,5 +1,4 @@
 using Mpt.Domain.Shared;
-using Mpt.Domain.Roles;
 using Mpt.Dtos;
 using Mpt.IRepositories;
 using Mpt.Mappers;
@@ -13,7 +12,7 @@ namespace Mpt.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITaskRepository _repo;
 
-        public TaskService(IUnitOfWork unitOfWork, ITaskRepository repo, IRoleRepository roleRepo)
+        public TaskService(IUnitOfWork unitOfWork, ITaskRepository repo)
         {
             this._unitOfWork = unitOfWork;
             this._repo = repo;
@@ -40,7 +39,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
 
@@ -63,7 +62,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
 
             }
 
@@ -79,7 +78,7 @@ namespace Mpt.Services
                 if (task == null)
                     return null;
 
-                if (task.IsAproved)
+                if (task.IsApproved == true)
                     task.AproveTask();
                 else
                     task.DisaproveTask();
@@ -95,7 +94,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
 
@@ -118,7 +117,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
 
@@ -136,7 +135,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
 
@@ -154,7 +153,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
     }

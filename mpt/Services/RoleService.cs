@@ -12,7 +12,7 @@ namespace Mpt.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IRoleRepository _repo;
 
-        public RoleService(IUnitOfWork unitOfWork, IRoleRepository repo, IRoleRepository roleRepo)
+        public RoleService(IUnitOfWork unitOfWork, IRoleRepository repo)
         {
             this._unitOfWork = unitOfWork;
             this._repo = repo;
@@ -36,7 +36,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
 
@@ -55,7 +55,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
 
@@ -73,7 +73,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
 
         }
@@ -96,7 +96,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
 
@@ -121,7 +121,7 @@ namespace Mpt.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
     }

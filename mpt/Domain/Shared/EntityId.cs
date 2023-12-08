@@ -25,7 +25,10 @@ namespace Mpt.Domain.Shared
                 this.ObjValue = value;
         }
 
-       
+        protected EntityId()
+        {
+        }
+
         protected abstract Object createFromString(String text);
         
         public abstract String AsString();

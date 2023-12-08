@@ -11,18 +11,21 @@ namespace Mpt.Domain.Tasks
 
 
         // Constructors
-        
-        public SurveillanceTask(UserId userId, string robotId, TaskType taskType, PhoneNumber phoneNumber, List<string> floorIds)
-            : base(userId, robotId, taskType)
+        public SurveillanceTask() : base()
+        {
+        }
+
+        public SurveillanceTask(UserId userId, string robotId, string taskType,  List<string> path, List<RobotMovement> robotMovements, PhoneNumber phoneNumber, List<string> floorIds)
+            : base(userId, robotId, taskType, path, robotMovements)
         {
             this.PhoneNumber = phoneNumber;
             this.FloorIds = floorIds;
-            
+
         }
 
         public void ChangePhoneNumber(PhoneNumber phoneNumber)
         {
-            if (!base.IsAproved)
+            if (base.IsApproved == false)
                 throw new BusinessRuleValidationException("It is not possible to change the phone number of an unapproved task.");
 
             if (base.IsCompleted)

@@ -15,6 +15,10 @@ namespace Mpt.Domain.Tasks
         {
         }
 
+        public TaskId(): base()
+        {
+        }
+
         override
         protected  Object createFromString(String text){
             return new Guid(text);
