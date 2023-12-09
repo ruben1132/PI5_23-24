@@ -24,6 +24,7 @@ import { useFetchData, useSubmitData, useFormStringInput, useDeleteData } from '
 import { Elevator, ElevatorWithFloors } from '@/models/Elevator';
 import { Floor } from '@/models/Floor';
 import FloorSelectBox from '../selectBoxes/FloorSelectBox';
+import BuildingSelectBox from '../selectBoxes/BuildingSelectBox';
 
 interface Props {
     item: {
@@ -35,23 +36,29 @@ interface Props {
 }
 
 export default function ElevatorForm(props: Props) {
-    const selectBoxFloorsAllowedDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors); // fetch floors for fromFloor
+    const selectBoxBuildindsDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings);
+    const building = useFormStringInput(props.item.value?.floorsAllowed?.[0]?.building ?? '');
+    const selectBoxFloorsAllowedDataFetch = useFetchData(
+        `${config.mgiAPI.baseUrl}${config.mgiAPI.routes.floors}${
+            building.value ? '/buildingId/' + building.value : ''
+        }`,
+    );
 
     // form submitter
     const elevatorForm = useSubmitData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators,
+        `${config.mgiAPI.baseUrl}${config.mgiAPI.routes.elevators}`,
         props.action === 'edit' ? 'PUT' : 'POST',
     );
 
     // deleter
     const elevatorDeleter = useDeleteData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators + props.item?.value.id,
+        `${config.mgiAPI.baseUrl}${config.mgiAPI.routes.elevators}${props.item?.value.id}`,
     );
 
     // inputs
     const elevatorDesignation = useFormStringInput(props.item.value?.designation);
 
-    const [floorsAllowed, setFloorsAllowed] = useState<Floor[]>([]); // TODO:
+    const [floorsAllowed, setFloorsAllowed] = useState<Floor[]>([]);
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
@@ -68,6 +75,9 @@ export default function ElevatorForm(props: Props) {
         item.id = props.item.value?.id;
         item.designation = elevatorDesignation.value;
         item.floorsAllowed = floorsAllowed.map((item) => item.id);
+
+        // update props
+        props.item.value.floorsAllowed = floorsAllowed;
 
         // submit data
         let res = await elevatorForm.submit(item);
@@ -114,6 +124,36 @@ export default function ElevatorForm(props: Props) {
         }
     }, [props.action]);
 
+    // when building changes, load the floors
+    useEffect(() => {
+        if (building.value) {
+            selectBoxFloorsAllowedDataFetch.revalidate();
+            // check if the selected building is the same as the one in the Elevator
+            if (props.item.value?.floorsAllowed?.[0]?.building !== building.value) {
+                setFloorsAllowed([]);
+                return;
+            }
+            // check if there is props.item.value.floorsAllowed
+            if (!props.item.value.floorsAllowed) {
+                setFloorsAllowed([]);
+                return;
+            }
+
+            // if it is, load the floors
+            setFloorsAllowed(props.item.value.floorsAllowed);
+        }
+    }, [building.value]);
+
+    // when gets data, set the first value as selected
+    useEffect(() => {
+        if (selectBoxBuildindsDataFetch.data) {
+            // if there's no props.item.value.id, set the first value as selected
+            if (!props.item.value.id) {
+                building.handleLoad(selectBoxBuildindsDataFetch.data[0].id);
+            }
+        }
+    }, [selectBoxBuildindsDataFetch.data]);
+
     if (
         selectBoxFloorsAllowedDataFetch.data === undefined ||
         selectBoxFloorsAllowedDataFetch.data === null ||
@@ -159,33 +199,48 @@ export default function ElevatorForm(props: Props) {
                 </Col>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Floors Allowed</Form.Label>
-                        <FloorSelectBox
-                            data={filteredSelectBoxData}
-                            isError={selectBoxFloorsAllowedDataFetch.isError}
-                            isLoading={selectBoxFloorsAllowedDataFetch.isLoading}
-                            customHandleChange={handleSelect}
-                            data-testid="elevator-floors-input"
-
+                        <Form.Label htmlFor="select">Building</Form.Label>
+                        <BuildingSelectBox
+                            data={selectBoxBuildindsDataFetch.data}
+                            setValue={building.handleLoad}
+                            selectedValue={building.value}
+                            isLoading={selectBoxBuildindsDataFetch.isLoading}
+                            isError={selectBoxBuildindsDataFetch.isError}
+                            data-testid="building-sb"
                         />
-
                     </Form.Group>
                 </Col>
             </Row>
             <br />
-            <Row>
-                <Col sm={6}></Col>
-                <Col sm={6}>
-                    <ListGroup>
-                        {floorsAllowed?.map((item) => (
-                            <ListGroup.Item key={item.id}>
-                                <CloseButton onClick={() => handleRemoveFloorAllowed(item)} />
-                                {item.information}
-                            </ListGroup.Item>
-                        ))}
-                    </ListGroup>
-                </Col>
-            </Row>
+            {building.value && (
+                <Row>
+                    <Col sm={6}>
+                        <Form.Group className="mb-6">
+                            <Form.Label htmlFor="select">Floors Allowed</Form.Label>
+                            <FloorSelectBox
+                                data={filteredSelectBoxData}
+                                isError={selectBoxFloorsAllowedDataFetch.isError}
+                                isLoading={selectBoxFloorsAllowedDataFetch.isLoading}
+                                customHandleChange={handleSelect}
+                                data-testid="elevator-floors-input"
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col sm={6}>
+                        <Form.Group className="mb-6">
+                            <Form.Label htmlFor="select">Floors Selected</Form.Label>
+                            <ListGroup>
+                                {floorsAllowed?.map((item) => (
+                                    <ListGroup.Item key={item.id}>
+                                        <CloseButton onClick={() => handleRemoveFloorAllowed(item)} />
+                                        {item.code}
+                                    </ListGroup.Item>
+                                ))}
+                            </ListGroup>
+                        </Form.Group>
+                    </Col>
+                </Row>
+            )}
             <br />
             <Row>
                 <Col sm={12}>
@@ -203,11 +258,7 @@ export default function ElevatorForm(props: Props) {
                                     Update
                                 </Button>
 
-                                <Button
-                                    variant="danger"
-                                    onClick={handleDeleteData}
-                                    data-testid="delete-button"
-                                >
+                                <Button variant="danger" onClick={handleDeleteData} data-testid="delete-button">
                                     Delete
                                 </Button>
                             </>

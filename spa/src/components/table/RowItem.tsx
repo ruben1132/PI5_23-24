@@ -22,7 +22,7 @@ export default function RowItem(props: Props) {
                             [
                             {props.item.map((type: any, index: number) => (
                                 <span key={index}>
-                                    {type.information}
+                                    {type.code}
                                     {index !== props.item.length - 1 ? ', ' : ''}
                                 </span>
                             ))}

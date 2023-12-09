@@ -101,7 +101,6 @@ export default {
             tasktypes: 'tasktypes/',
             users: 'users/',
             floormaps: 'floormaps/',
-            floormapsWithFloor: 'floormaps/floofb36dabf-ab7d-4152-8ecc-c3c180004447r/',
             roles: 'roles/',
             elevators: 'elevators/',
             rooms: 'rooms/',
