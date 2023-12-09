@@ -4,7 +4,6 @@ namespace Mpt.Dtos
     {
         public string Id { get; private set; }
         public string UserId { get; private set; }
-        public string RobotId { get; private set; }
         public bool IsCompleted { get; private set; }
         public bool? IsApproved { get; private set; }
         public string TaskType { get; private set; }
@@ -12,11 +11,10 @@ namespace Mpt.Dtos
         public List<RobotMovementDto> RobotMovements { get; private set; }
 
 
-        public TaskDto(string id, string userId, string robotId, List<string> path, List<RobotMovementDto> robotMovements, bool isCompleted, bool? isApproved, string taskType)
+        public TaskDto(string id, string userId, List<string> path, List<RobotMovementDto> robotMovements, bool isCompleted, bool? isApproved, string taskType)
         {
             this.Id = id;
             this.UserId = userId;
-            this.RobotId = robotId;
             this.IsCompleted = isCompleted;
             this.IsApproved = isApproved;
             this.TaskType = taskType;

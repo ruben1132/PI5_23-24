@@ -7,8 +7,8 @@ namespace Mpt.Dtos
         public string PhoneNumber { get; private set; }
         public List<string> FloorIds { get; set; }
 
-        public CreateSurveillanceTaskDto(string userId, string robotId, string taskType, List<string> path, List<RobotMovementDto> robotMovements, string phoneNumber, List<string> floorIds)
-            : base(userId, robotId, taskType, path, robotMovements)
+        public CreateSurveillanceTaskDto(string userId, string taskType, List<string> path, List<RobotMovementDto> robotMovements, string phoneNumber, List<string> floorIds)
+            : base(userId, taskType, path, robotMovements)
         {
             this.PhoneNumber = phoneNumber;
             this.FloorIds = floorIds;

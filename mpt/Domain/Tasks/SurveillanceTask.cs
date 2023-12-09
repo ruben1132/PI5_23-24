@@ -15,8 +15,8 @@ namespace Mpt.Domain.Tasks
         {
         }
 
-        public SurveillanceTask(UserId userId, string robotId, string taskType,  List<string> path, List<RobotMovement> robotMovements, PhoneNumber phoneNumber, List<string> floorIds)
-            : base(userId, robotId, taskType, path, robotMovements)
+        public SurveillanceTask(UserId userId, string taskType,  List<string> path, List<RobotMovement> robotMovements, PhoneNumber phoneNumber, List<string> floorIds)
+            : base(userId, taskType, path, robotMovements)
         {
             this.PhoneNumber = phoneNumber;
             this.FloorIds = floorIds;

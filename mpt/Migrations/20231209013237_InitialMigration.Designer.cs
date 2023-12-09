@@ -12,7 +12,7 @@ using Mpt.Infrastructure;
 namespace mpt.Migrations
 {
     [DbContext(typeof(MptDbContext))]
-    [Migration("20231208205639_InitialMigration")]
+    [Migration("20231209013237_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -73,10 +73,6 @@ namespace mpt.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RobotId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

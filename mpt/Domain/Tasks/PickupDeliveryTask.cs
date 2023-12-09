@@ -21,8 +21,8 @@ namespace Mpt.Domain.Tasks
         }
 
         // Constructors
-        public PickupDeliveryTask(UserId userId, string robotId, string taskType, List<string> path, List<RobotMovement> robotMovements, string pickupPlace, string deliveryPlace, string pickupPersonName, PhoneNumber pickupPersonPhoneNumber, string deliveryPersonName, PhoneNumber deliveryPersonPhoneNumber, string taskDescription, TaskConfirmationCode confirmationCode)
-            : base(userId, robotId, taskType, path, robotMovements)
+        public PickupDeliveryTask(UserId userId, string taskType, List<string> path, List<RobotMovement> robotMovements, string pickupPlace, string deliveryPlace, string pickupPersonName, PhoneNumber pickupPersonPhoneNumber, string deliveryPersonName, PhoneNumber deliveryPersonPhoneNumber, string taskDescription, TaskConfirmationCode confirmationCode)
+            : base(userId, taskType, path, robotMovements)
         {
             this.PickupPlace = pickupPlace;
             this.DeliveryPlace = deliveryPlace;

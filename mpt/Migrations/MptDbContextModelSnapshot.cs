@@ -73,10 +73,6 @@ namespace mpt.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("RobotId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("RobotMovements")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")

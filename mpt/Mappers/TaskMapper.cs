@@ -14,7 +14,6 @@ namespace Mpt.Mappers
             return new TaskDto(
                 task.Id.Value,
                 task.UserId.Value,
-                task.RobotId,
                 task.Path,
                 RobotMovementBulkToDto(task.RobotMovements),
                 task.IsCompleted,
@@ -29,7 +28,6 @@ namespace Mpt.Mappers
             return new SurveillanceTaskDto(
                 surveillanceTask.Id.Value,
                 surveillanceTask.UserId.Value,
-                surveillanceTask.RobotId,
                 surveillanceTask.Path,
                 RobotMovementBulkToDto(surveillanceTask.RobotMovements),
                 surveillanceTask.IsCompleted,
@@ -45,7 +43,6 @@ namespace Mpt.Mappers
             return new PickupDeliveryTaskDto(
                 pickupDeliveryTask.Id.Value,
                 pickupDeliveryTask.UserId.Value,
-                pickupDeliveryTask.RobotId,
                 pickupDeliveryTask.Path,
                 RobotMovementBulkToDto(pickupDeliveryTask.RobotMovements),
                 pickupDeliveryTask.IsCompleted,
@@ -66,7 +63,6 @@ namespace Mpt.Mappers
         {
             return new SurveillanceTask(
                 new UserId(dto.UserId),
-                dto.RobotId,
                 dto.TaskType,
                 dto.Path,
                 RobotMovementBulkToDomain(dto.RobotMovements),
@@ -79,7 +75,6 @@ namespace Mpt.Mappers
         {
             return new PickupDeliveryTask(
                 new UserId(dto.UserId),
-                dto.RobotId,
                 dto.TaskType,
                 dto.Path,
                 RobotMovementBulkToDomain(dto.RobotMovements),

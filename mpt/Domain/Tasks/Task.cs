@@ -10,7 +10,6 @@ namespace Mpt.Domain.Tasks
     {
         // Properties
         public UserId UserId { get; private set; }
-        public string RobotId { get; private set; }
         public bool IsCompleted { get; private set; }
         public bool? IsApproved { get; private set; }
         public string TaskType { get; private set; }
@@ -26,11 +25,10 @@ namespace Mpt.Domain.Tasks
         {
         }
 
-        public Task(UserId userId, string robotId, string taskType, List<string> path, List<RobotMovement> robotMovements)
+        public Task(UserId userId, string taskType, List<string> path, List<RobotMovement> robotMovements)
         {
             this.Id = new TaskId(Guid.NewGuid());
             this.UserId = userId;
-            this.RobotId = robotId;
             this.IsCompleted = false;
             this.TaskType = taskType;
             this.Path = path;
