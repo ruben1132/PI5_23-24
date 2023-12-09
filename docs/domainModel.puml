@@ -21,7 +21,6 @@ package "<<aggregate>> Elevator"{
 
     entity Elevator <<entity>><<root>>{
         designation
-        floorsAllowed
     }
 
 }
@@ -30,13 +29,7 @@ package "<<aggregate>> Floor"{
     entity Floor <<entity>>{
         number
         information
-    }
-}
-
-package "<<aggregate>> FloorMap"{
-    entity FloorMap <<entity>>{
-        map
-        doors
+        code
     }
 }
 
@@ -55,11 +48,11 @@ package "<<aggregate>> Passage"{
 
 package "<<aggregate>> User"{
     entity User <<entity>><<root>>{
-        firstName
-        lastName
+        name
         email
         password
-        role
+        nif
+        phoneNumber
     }
 }
 
@@ -78,7 +71,6 @@ package "<<aggregate>> RobotType"{
         type
         brand
         model
-        tasksAllowed
     }
 }
 
@@ -88,24 +80,45 @@ package "<<aggregate>> Role"{
     }
 }
 
-' package "<<aggregate>> Drone"{
-
-'     entity Drone <<entity>><<root>>{
-
-'     }
-
-' }
-
 package "<<aggregate>> Task"{
     entity Task <<entity>><<root>>{
-        designation
+        path
+        robotMovements
+        isCompleted
+        taskType
     }
 }
+
+package "<<aggregate>> SurveillanceTask" {
+    entity SurveillanceTask <<entity>><<root>> {
+        phoneNumber
+    }
+}
+
+package "<<aggregate>> PickupDeliveryTask" {
+    entity PickupDeliveryTask <<entity>><<root>> {
+        pickupPlace
+        deliveryPlace
+        pickupPersonName
+        deliveryPersonName
+        pickupPersonPhoneNumber
+        deliveryPersonPhoneNumber
+        taskDescription
+        confirmationCode
+    }
+}
+
+package "<<aggregate>> Planning"{
+    entity Planning <<entity>><<root>>{
+        cost
+    }
+}
+
 
 package "<<aggregate>> TaskType"{
     entity TaskType <<entity>><<root>>{
         name
-        designation
+        description
     }
 }
 
@@ -115,32 +128,43 @@ User "*" --- "1" Role: has >
 
 ' building
 Floor "*" --- "1" Building: is associated >
-Elevator "1" --- "1" Building: is associated >
+
+' elevator
+Elevator "1" --- "*" Floor: can operate >
 
 ' floor
 Room "*" --- "1" Floor: is on >
 
 'passage
-Passage "*" --- "1" Floor: connects >
+Passage "*" --- "1" Floor: from >
+Passage "*" --- "1" Floor: to >
 
 ' task
-Task "*" --- "1" Robot: is associated >
-Task "*" --- "1" TaskType: has a >
+Task "*" --- "1" User: is requested by >
+
+' surveillanceTask
+SurveillanceTask "*" --- "*" Floor: makes surveillance to >
+
+' pickupDeliveryTask
+PickupDeliveryTask "*" --- "1" Room: has a pickup place >
+PickupDeliveryTask "*" --- "1" Room: has a delivery place >
+
+' planning
+Planning "*" --- "*" Task: have many >
+Planning "*" --- "1" User: is planned by >
+
 
 ' robot
 Robot "*" --- "1" RobotType: has a >
+Robot "*" --- "1" TaskType: is allowed to >
 
 ' robotType
 RobotType "*" --- "*" TaskType: is allowed >
 
-' floorMap
-FloorMap "*" --- "1" Floor: is associated >
-FloorMap "*" --- "*" Passage: has associated>
-FloorMap "*" --- "*" Room: has associated >
-FloorMap "*" --- "1" Elevator: has associated >
 
-' 
-
+' inheritance
+Task <|-- SurveillanceTask
+Task <|-- PickupDeliveryTask
 
 
 @enduml
