@@ -155,15 +155,15 @@ export default function ElevatorForm(props: Props) {
     }, [selectBoxBuildindsDataFetch.data]);
 
     if (
-        selectBoxFloorsAllowedDataFetch.data === undefined ||
-        selectBoxFloorsAllowedDataFetch.data === null ||
-        selectBoxFloorsAllowedDataFetch.data.length <= 0
+        selectBoxBuildindsDataFetch.data === undefined ||
+        selectBoxBuildindsDataFetch.data === null ||
+        selectBoxBuildindsDataFetch.data.length <= 0
     ) {
-        return <Form>Try adding floors first!</Form>;
+        return <Form>Try adding buildings first!</Form>;
     }
 
     // filter data so it removes the element(s) already selected
-    const filteredSelectBoxData = selectBoxFloorsAllowedDataFetch.data.filter((item: Floor) => {
+    const filteredSelectBoxData = selectBoxFloorsAllowedDataFetch.data?.filter((item: Floor) => {
         return !floorsAllowed.some((floor) => floor.id === item.id);
     });
 
