@@ -45,7 +45,7 @@ namespace Mpt.Core.Logic
 
         public T ErrorValue() => IsSuccess ? default(T) : Value;
         public static Result<T> Ok(T value) => new Result<T>(true, value, null);
-        public static Result<T> Ok(string msg) => new Result<T>(true, default(T), msg);
+        // public static Result<T> Ok(string msg) => new Result<T>(true, default(T), msg);
 
         public static Result<T> Fail(string error) => new Result<T>(false, default(T), error);
 

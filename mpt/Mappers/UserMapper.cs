@@ -16,13 +16,12 @@ namespace Mpt.Mappers
             return new UserDto(
                     user.Id.Value,
                     user.Email.Value,
-                    user.Password.Value,
                     user.Name,
                     user.Phone.Value,
                     user.Nif.Value,
                     user.Active,
-                    user.RoleId.Value
-                    
+                    user.RoleId.Value,
+                    user.Password.Value
                 );
         }
 
@@ -31,7 +30,6 @@ namespace Mpt.Mappers
             return new UserWithRoleDto(
                     user.Id.Value,
                     user.Email.Value,
-                    user.Password.Value,
                     user.Name,
                     user.Phone.Value,
                     user.Nif.Value,
@@ -41,11 +39,13 @@ namespace Mpt.Mappers
                 );
         }
 
-        public static UserWithRoleAndTokenDto ToDto(UserWithRoleDto user, string token)
+        public static UserAuthDto ToDtoAuth(User user, RoleDto role)
         {
-            return new UserWithRoleAndTokenDto(
-                    token,
-                    user
+            return new UserAuthDto(
+                    user.Id.Value,
+                    user.Email.Value,
+                    user.Name,
+                    role
                 );
         }
 

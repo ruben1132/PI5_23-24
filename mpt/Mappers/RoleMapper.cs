@@ -12,7 +12,8 @@ namespace Mpt.Mappers
         {
             return new RoleDto(
                     role.Id.Value,
-                    role.Name
+                    role.Name,
+                    role.Active
                 );
         }
 

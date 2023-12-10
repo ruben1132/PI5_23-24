@@ -1,4 +1,6 @@
 
+using Newtonsoft.Json;
+
 namespace Mpt.Dtos
 {
     public class UserDto
@@ -6,14 +8,15 @@ namespace Mpt.Dtos
 
         public string Id { get; set; }
         public string Email { get; private set; }
-        public string Password { get; set; }
         public string Name { get; private set; }
         public string Phone { get; private set; }
         public string Nif { get; private set; }
         public bool Active { get; private set; }
         public string RoleId { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string? Password { get; set; }
 
-        public UserDto(string id, string email, string password, string name, string phone, string nif, bool active, string roleId)
+        public UserDto(string id, string email, string name, string phone, string nif, bool active, string roleId, string? password = null)
         {
             this.Id = id;
             this.Email = email;

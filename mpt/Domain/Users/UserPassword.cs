@@ -8,7 +8,7 @@ namespace Domain.Users
           public string Value { get; private set; }
 
         public UserPassword(string value){
-
+            this.Value = value;
         }
         
         public UserPassword(string value, bool isRestricted)

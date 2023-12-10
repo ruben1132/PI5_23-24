@@ -5,6 +5,7 @@ using Mpt.IRepositories;
 using Mpt.Mappers;
 using Mpt.IServices;
 using Mpt.Core.Domain;
+using Mpt.Core.Logic;
 
 namespace Mpt.Services
 {
@@ -19,7 +20,7 @@ namespace Mpt.Services
             this._repo = repo;
         }
 
-        public async Task<List<RoleDto>> GetAllAsync()
+        public async Task<Result<List<RoleDto>>> GetAllAsync()
         {
             try
             {
@@ -32,35 +33,37 @@ namespace Mpt.Services
                     rolesDto.Add(RoleMapper.ToDto(role));
                 }
 
-                return rolesDto;
+                return Result<List<RoleDto>>.Ok(rolesDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<List<RoleDto>>.Fail(ex.Message);
             }
         }
 
-        public async Task<RoleDto> GetByIdAsync(RoleId id)
+        public async Task<Result<RoleDto>> GetByIdAsync(Guid id)
         {
             try
             {
-                var role = await this._repo.GetByIdAsync(id);
+                var role = await this._repo.GetByIdAsync(new RoleId(id));
 
                 if (role == null)
-                    return null;
+                    return Result<RoleDto>.Fail("Role not found.");
 
-                return RoleMapper.ToDto(role);
+                var roleDto = RoleMapper.ToDto(role);
+
+                return Result<RoleDto>.Ok(roleDto);
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<RoleDto>.Fail(ex.Message);
             }
         }
 
-        public async Task<RoleDto> AddAsync(CreateRoleDto dto)
+        public async Task<Result<RoleDto>> AddAsync(CreateRoleDto dto)
         {
             try
             {
@@ -69,60 +72,63 @@ namespace Mpt.Services
                 await this._repo.AddAsync(role);
                 await this._unitOfWork.CommitAsync();
 
-                return RoleMapper.ToDto(role);
+                var roleDto = RoleMapper.ToDto(role);
+                return Result<RoleDto>.Ok(roleDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<RoleDto>.Fail(ex.Message);
             }
 
         }
 
-        public async Task<RoleDto> UpdateAsync(RoleDto dto)
+        public async Task<Result<RoleDto>> UpdateAsync(RoleDto dto)
         {
             try
             {
                 var role = await this._repo.GetByIdAsync(new RoleId(dto.Id));
 
                 if (role == null)
-                    return null;
+                    return Result<RoleDto>.Fail("Role not found.");
 
                 role.ChangeName(dto.Name);
 
                 await this._unitOfWork.CommitAsync();
 
-                return RoleMapper.ToDto(role);
+                var roleDto = RoleMapper.ToDto(role);
+                return Result<RoleDto>.Ok(roleDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<RoleDto>.Fail(ex.Message);
             }
         }
 
 
-        public async Task<RoleDto> DeleteAsync(RoleId id)
+        public async Task<Result<RoleDto>> DeleteAsync(Guid id)
         {
             try
             {
-                var user = await this._repo.GetByIdAsync(id);
+                var role = await this._repo.GetByIdAsync(new RoleId(id));
 
-                if (user == null)
-                    return null;
+                if (role == null)
+                    return Result<RoleDto>.Fail("Role not found.");
 
-                if (user.Active)
-                    throw new BusinessRuleValidationException("It is not possible to delete an active user.");
+                if (role.Active)
+                    return Result<RoleDto>.Fail("You cannot delete a Role that is active.");
 
-                this._repo.Remove(user);
+                this._repo.Remove(role);
                 await this._unitOfWork.CommitAsync();
 
-                return RoleMapper.ToDto(user);
+                var roleDto = RoleMapper.ToDto(role);
+                return Result<RoleDto>.Ok(roleDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<RoleDto>.Fail(ex.Message);
             }
         }
     }

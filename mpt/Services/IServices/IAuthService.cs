@@ -7,10 +7,12 @@ namespace Mpt.IServices
     public interface IAuthService
     {
 
-        Task<Result<UserWithRoleAndTokenDto>> LoginAsync(UserLoginDto login);
+        Task<Result<UserAuthDto>> LoginAsync(UserLoginDto login);
 
-        Task<Result<UserWithRoleAndTokenDto>> SignupAsync(SignupUserDto user);
+        Task<Result<UserAuthDto>> SignupAsync(SignupUserDto user);
 
-        Task<Result<UserWithRoleDto>> SessionAsync(string token);
+        Task<Result<UserAuthDto>> SessionAsync(string token);
+
+        Result<string> GenerateJwtToken(UserAuthDto user);
     }
 }

@@ -32,17 +32,22 @@ namespace Mpt.Controllers
 
                 if (user.IsFailure)
                 {
-                    return BadRequest(user.Error);
+                    return BadRequest(new { error = user.Error });
                 }
 
-                SetCookie(user.Value.Token);
+                var token = this._service.GenerateJwtToken(user.Value);
+                if (token.IsFailure)
+                {
+                    return BadRequest(new { error = token.Error });
+                }
 
+                SetCookie(token.GetValue());
                 return Ok(user.GetValue());
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest(JsonConvert.SerializeObject(ex.Message));
+                return BadRequest(new { error = ex.Message });
             }
         }
 
@@ -57,10 +62,16 @@ namespace Mpt.Controllers
 
                 if (user.IsFailure)
                 {
-                    return BadRequest(user.Error);
+                    return BadRequest(new { error = user.Error });
                 }
 
-                SetCookie(user.Value.Token);
+                var token = this._service.GenerateJwtToken(user.Value);
+                if (token.IsFailure)
+                {
+                    return BadRequest(new { error = token.Error });
+                }
+
+                SetCookie(token.GetValue());
 
                 return Ok(user.GetValue());
 
@@ -68,7 +79,7 @@ namespace Mpt.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest("Error while signning up");
+                return BadRequest(new { error = ex.Message });
             }
         }
 
@@ -83,14 +94,14 @@ namespace Mpt.Controllers
 
                 if (string.IsNullOrEmpty(token))
                 {
-                    return BadRequest("No session found");
+                    return BadRequest(new { message = "No session found" });
                 }
 
                 var user = await _service.SessionAsync(token);
 
                 if (user.IsFailure)
                 {
-                    return BadRequest(user.Error);
+                    return BadRequest(new { error = user.Error });
                 }
 
                 return Ok(user.GetValue());
@@ -98,7 +109,7 @@ namespace Mpt.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest("Error while getting session");
+                return BadRequest(new { error = ex.Message });
             }
         }
 
@@ -113,12 +124,12 @@ namespace Mpt.Controllers
                 var cName = GetCookieName();
                 Response.Cookies.Delete(cName);
 
-                return Ok("logged out successfully!");
+                return Ok(new { message = "Logout successfully" });
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest("Error while logging out");
+                return BadRequest(new { error = ex.Message });
             }
         }
 
@@ -140,7 +151,7 @@ namespace Mpt.Controllers
 
         private string GetCookieName()
         {
-            return this._config.GetValue<string>("Cookie:name") ?? "robdronego:authCookie";
+            return this._config.GetValue<string>("Cookie:name") ?? "robdronego_authCookie";
         }
 
     }

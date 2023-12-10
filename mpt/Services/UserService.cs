@@ -48,11 +48,11 @@ namespace Mpt.Services
             }
         }
 
-        public async Task<Result<UserWithRoleDto>> GetByIdAsync(UserId id)
+        public async Task<Result<UserWithRoleDto>> GetByIdAsync(Guid id)
         {
             try
             {
-                var user = await this._repo.GetByIdAsync(id);
+                var user = await this._repo.GetByIdAsync(new UserId(id));
 
                 if (user == null)
                     return Result<UserWithRoleDto>.Fail("User not found.");
@@ -78,9 +78,16 @@ namespace Mpt.Services
                 var userByEmail = await this._repo.GetByEmailAsync(u.Email);
 
                 if (userByEmail != null)
-                    throw new BusinessRuleValidationException("Email already exists.");
+                    return Result<UserWithRoleDto>.Fail("Email already exists.");
 
                 var role = await this._roleRepo.GetByIdAsync(new RoleId(u.RoleId));
+                if (role == null)
+                    return Result<UserWithRoleDto>.Fail("Role not found.");
+
+                if (role.Active == false)
+                    return Result<UserWithRoleDto>.Fail("You are trying to create a user with an inactive role.");
+
+
                 var roleDto = RoleMapper.ToDto(role);
 
                 var hashedPassword = BCrypt.Net.BCrypt.HashPassword(u.Password, BCrypt.Net.BCrypt.GenerateSalt());
@@ -110,7 +117,13 @@ namespace Mpt.Services
                 var role = await this._roleRepo.GetByIdAsync(new RoleId(u.RoleId));
 
                 if (user == null)
-                    return null;
+                    return Result<UserWithRoleDto>.Fail("User not found.");
+
+                if (role == null)
+                    return Result<UserWithRoleDto>.Fail("Role not found.");
+
+                if (role.Active == false)
+                    return Result<UserWithRoleDto>.Fail("You are trying to create a user with an inactive role.");
 
                 user.ChangeNif(new UserNif(u.Nif));
                 user.ChangeEmail(new UserEmail(u.Email));
@@ -138,11 +151,11 @@ namespace Mpt.Services
         }
 
 
-        public async Task<Result<UserDto>> DeleteAsync(UserId id)
+        public async Task<Result<UserDto>> DeleteAsync(Guid id)
         {
             try
             {
-                var user = await this._repo.GetByIdAsync(id);
+                var user = await this._repo.GetByIdAsync(new UserId(id));
 
                 if (user == null)
                     return Result<UserDto>.Fail("User not found.");
@@ -154,6 +167,8 @@ namespace Mpt.Services
                 await this._unitOfWork.CommitAsync();
 
                 var userDto = UserMapper.ToDto(user);
+                userDto.Password = null;
+                
                 return Result<UserDto>.Ok(userDto);
             }
             catch (Exception ex)
