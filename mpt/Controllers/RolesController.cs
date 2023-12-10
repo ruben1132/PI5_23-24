@@ -29,7 +29,7 @@ namespace Mpt.Controllers
 
                 if (createdRole.IsFailure)
                 {
-                    return BadRequest(createdRole.Error);
+                    return BadRequest(new { error = createdRole.Error });
                 }
 
                 return Ok(createdRole.GetValue());
@@ -37,7 +37,7 @@ namespace Mpt.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest(JsonConvert.SerializeObject(ex.Message));
+                return BadRequest(new { error = ex.Message });
             }
         }
 
@@ -51,7 +51,7 @@ namespace Mpt.Controllers
 
                 if (updatedRole.IsFailure)
                 {
-                    return BadRequest(updatedRole.Error);
+                    return BadRequest(new { error = updatedRole.Error });
                 }
 
                 return Ok(updatedRole.GetValue());
@@ -59,13 +59,13 @@ namespace Mpt.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest(JsonConvert.SerializeObject(ex.Message));
+                return BadRequest(new { error = ex.Message });
             }
         }
 
         // GET: api/Role
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RoleDto>>> GetAll(RoleDto role)
+        public async Task<ActionResult<IEnumerable<RoleDto>>> GetAll()
         {
             try
             {
@@ -73,7 +73,7 @@ namespace Mpt.Controllers
 
                 if (roles.IsFailure)
                 {
-                    return BadRequest(roles.Error);
+                    return BadRequest(new { error = roles.Error });
                 }
 
                 return Ok(roles.GetValue());
@@ -81,7 +81,7 @@ namespace Mpt.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest(JsonConvert.SerializeObject(ex.Message));
+                return BadRequest(new { error = ex.Message });
             }
         }
 
@@ -95,7 +95,7 @@ namespace Mpt.Controllers
 
                 if (role.IsFailure)
                 {
-                    return BadRequest(role.Error);
+                    return BadRequest(new { error = role.Error });
                 }
 
                 return Ok(role.GetValue());
@@ -103,7 +103,7 @@ namespace Mpt.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest(JsonConvert.SerializeObject(ex.Message));
+                return BadRequest(new { error = ex.Message });
             }
         }
 
@@ -117,15 +117,15 @@ namespace Mpt.Controllers
 
                 if (deletedRole.IsFailure)
                 {
-                    return BadRequest(deletedRole.Error);
+                    return BadRequest(new { error = deletedRole.Error });
                 }
 
-                return Ok(deletedRole.GetValue());
+                return Ok(new { message = "Role deleted successfully" });
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest(JsonConvert.SerializeObject(ex.Message));
+                return BadRequest(new { error = ex.Message });
             }
         }
     }

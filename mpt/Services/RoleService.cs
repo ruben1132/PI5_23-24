@@ -92,7 +92,14 @@ namespace Mpt.Services
                 if (role == null)
                     return Result<RoleDto>.Fail("Role not found.");
 
-                role.ChangeName(dto.Name);
+                if (dto.IsActive == true)
+                {
+                    role.Enable();
+                    role.ChangeName(dto.Name);
+                }
+                else
+                    role.Disable();
+
 
                 await this._unitOfWork.CommitAsync();
 

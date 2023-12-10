@@ -8,11 +8,8 @@ namespace Mpt.IServices
 
         Task<Result<RoleDto>> AddAsync(CreateRoleDto dto);
         Task<Result<RoleDto>> UpdateAsync(RoleDto dto);
-
         Task<Result<RoleDto>> GetByIdAsync(Guid id);
-
         Task<Result<List<RoleDto>>> GetAllAsync();
-
         Task<Result<RoleDto>> DeleteAsync(Guid id);
     }
 }
