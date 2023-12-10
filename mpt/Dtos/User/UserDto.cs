@@ -11,12 +11,14 @@ namespace Mpt.Dtos
         public string Name { get; private set; }
         public string Phone { get; private set; }
         public string Nif { get; private set; }
-        public bool Active { get; private set; }
         public string RoleId { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public bool? Active { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string? Password { get; set; }
 
-        public UserDto(string id, string email, string name, string phone, string nif, bool active, string roleId, string? password = null)
+        public UserDto(string id, string email, string name, string phone, string nif, string roleId, bool? active = true, string? password = null)
         {
             this.Id = id;
             this.Email = email;

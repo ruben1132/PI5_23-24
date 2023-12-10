@@ -125,14 +125,24 @@ namespace Mpt.Services
                 if (role.Active == false)
                     return Result<UserWithRoleDto>.Fail("You are trying to create a user with an inactive role.");
 
-                user.ChangeNif(new UserNif(u.Nif));
-                user.ChangeEmail(new UserEmail(u.Email));
-                user.ChangePassword(new UserPassword(u.Password, true));
-                user.ChangeRole(new RoleId(u.RoleId));
-                user.ChangeName(u.Name);
-
-                if (u.Active)
+                // only updates values if user is active (null value means it's a patch request from the utente)
+                if (u.Active == null || u.Active == true)
+                {
                     user.Enable();
+                    user.ChangeNif(new UserNif(u.Nif));
+                    user.ChangeEmail(new UserEmail(u.Email));
+                    user.ChangeRole(new RoleId(u.RoleId));
+                    user.ChangeName(u.Name);
+
+                    // only change password if it is not null
+                    if (u.Password != null)
+                    {
+                        var password = new UserPassword(u.Password, true);  // validates password - throws exception if invalid
+                        var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password.Value, BCrypt.Net.BCrypt.GenerateSalt());
+                        user.ChangePassword(new UserPassword(hashedPassword, false));
+                    }
+
+                }
                 else
                     user.Disable();
 
@@ -140,6 +150,7 @@ namespace Mpt.Services
                 await this._unitOfWork.CommitAsync();
 
                 var roleDto = RoleMapper.ToDto(role);
+                roleDto.IsActive = null;  // hide
                 var userDto = UserMapper.ToDto(user, roleDto);
                 return Result<UserWithRoleDto>.Ok(userDto);
             }
@@ -168,7 +179,7 @@ namespace Mpt.Services
 
                 var userDto = UserMapper.ToDto(user);
                 userDto.Password = null;
-                
+
                 return Result<UserDto>.Ok(userDto);
             }
             catch (Exception ex)

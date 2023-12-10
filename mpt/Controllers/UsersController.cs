@@ -29,7 +29,7 @@ namespace Mpt.Controllers
 
                 if (createdUser.IsFailure)
                 {
-                    return BadRequest(createdUser.Error);
+                    return BadRequest(new { error = createdUser.Error });
                 }
 
                 return Ok(createdUser.GetValue());
@@ -37,12 +37,12 @@ namespace Mpt.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest(JsonConvert.SerializeObject(ex.Message));
+                return BadRequest(new { error = ex.Message });
             }
         }
 
         // PUT: api/User/
-        [HttpPut]
+        [HttpPatch]
         public async Task<ActionResult<UserDto>> Update(UserDto user)
         {
             try
@@ -51,7 +51,7 @@ namespace Mpt.Controllers
 
                 if (updatedUser.IsFailure)
                 {
-                    return BadRequest(updatedUser.Error);
+                    return BadRequest(new { error = updatedUser.Error });
                 }
 
                 return Ok(updatedUser.GetValue());
@@ -59,13 +59,13 @@ namespace Mpt.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest(JsonConvert.SerializeObject(ex.Message));
+                return BadRequest(new { error = ex.Message });
             }
         }
 
         // GET: api/User
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetAll(UserDto user)
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
         {
             try
             {
@@ -73,7 +73,7 @@ namespace Mpt.Controllers
 
                 if (users.IsFailure)
                 {
-                    return BadRequest(users.Error);
+                    return BadRequest(new { error = users.Error });
                 }
 
                 return Ok(users.GetValue());
@@ -81,7 +81,7 @@ namespace Mpt.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest(JsonConvert.SerializeObject(ex.Message));
+                return BadRequest(new { error = ex.Message });
             }
         }
 
@@ -95,7 +95,7 @@ namespace Mpt.Controllers
 
                 if (user.IsFailure)
                 {
-                    return BadRequest(user.Error);
+                    return BadRequest(new { error = user.Error });
                 }
 
                 return Ok(user.GetValue());
@@ -103,7 +103,7 @@ namespace Mpt.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest(JsonConvert.SerializeObject(ex.Message));
+                return BadRequest(new { error = ex.Message });
             }
         }
 
@@ -117,15 +117,15 @@ namespace Mpt.Controllers
 
                 if (deletedUser.IsFailure)
                 {
-                    return BadRequest(deletedUser.Error);
+                    return BadRequest(new { error = deletedUser.Error });
                 }
 
-                return Ok(deletedUser.GetValue());
+                return Ok(new { message = "User deleted successfully" });
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return BadRequest(JsonConvert.SerializeObject(ex.Message));
+                return BadRequest(new { error = ex.Message });
             }
         }
     }

@@ -8,7 +8,7 @@ namespace Mpt.IControllers
     {
         Task<ActionResult<UserDto>> Create(CreateUserDto role);
         Task<ActionResult<UserDto>> Update(UserDto role);
-        Task<ActionResult<IEnumerable<UserDto>>> GetAll(UserDto role);
+        Task<ActionResult<IEnumerable<UserDto>>> GetAll();
         Task<ActionResult<UserDto>> GetById(Guid id);
         Task<ActionResult<string>> Delete(Guid id);
     }
