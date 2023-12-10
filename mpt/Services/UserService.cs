@@ -30,8 +30,10 @@ namespace Mpt.Services
             {
                 var users = await this._repo.GetAllAsync();
 
-                var usersDto = new List<UserWithRoleDto>();
+                if (users == null)
+                    return Result<List<UserWithRoleDto>>.Ok(new List<UserWithRoleDto>());
 
+                var usersDto = new List<UserWithRoleDto>();
                 foreach (var user in users)
                 {
                     var role = await this._roleRepo.GetByIdAsync(user.RoleId);

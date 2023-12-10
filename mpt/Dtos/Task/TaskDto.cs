@@ -20,7 +20,6 @@ namespace Mpt.Dtos
             this.TaskType = taskType;
             this.RobotMovements = robotMovements;
             this.Path = path;
-
         }
 
     }

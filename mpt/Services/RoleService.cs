@@ -25,9 +25,10 @@ namespace Mpt.Services
             try
             {
                 var roles = await this._repo.GetAllAsync();
+                if (roles == null)
+                    return Result<List<RoleDto>>.Ok(new List<RoleDto>());
 
                 var rolesDto = new List<RoleDto>();
-
                 foreach (var role in roles)
                 {
                     rolesDto.Add(RoleMapper.ToDto(role));

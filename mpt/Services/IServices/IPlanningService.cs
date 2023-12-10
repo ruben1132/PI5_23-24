@@ -1,3 +1,4 @@
+using Mpt.Core.Logic;
 using Mpt.Domain.Plannings;
 using Mpt.Dtos;
 
@@ -5,10 +6,8 @@ namespace Mpt.IServices
 {
     public interface IPlanningService{
 
-        Task<PlanningWithTasksDto> AddAsync(CreatePlanningDto dto);
-
-        Task<PlanningWithTasksDto> GetByIdAsync(PlanningId id);
-
-        Task<List<PlanningWithTasksDto>> GetAllAsync();
+        Task<Result<PlanningWithTasksDto>> AddAsync(CreatePlanningDto dto);
+        Task<Result<PlanningWithTasksDto>> GetByIdAsync(PlanningId id);
+        Task<Result<List<PlanningWithTasksDto>>> GetAllAsync();
     }
 }

@@ -6,6 +6,7 @@ using Mpt.Mappers;
 using Mpt.IServices;
 using Mpt.Domain.Tasks;
 using Mpt.Core.Domain;
+using Mpt.Core.Logic;
 
 namespace Mpt.Services
 {
@@ -23,55 +24,54 @@ namespace Mpt.Services
             this._taskRepo = taskRepo;
         }
 
-        public async Task<List<PlanningWithTasksDto>> GetAllAsync()
+        public async Task<Result<List<PlanningWithTasksDto>>> GetAllAsync()
         {
             try
             {
                 var plannings = await this._repo.GetAllAsync();
 
                 if (plannings == null)
-                    return null;
+                    return Result<List<PlanningWithTasksDto>>.Ok(new List<PlanningWithTasksDto>());
 
                 var planningsDto = new List<PlanningWithTasksDto>();
 
                 foreach (var planning in plannings)
                 {
                     var tasksDto = await this.GetTasksByIdsAsync(planning);
-                    planningsDto.Add(PlanningMapper.ToDto(planning, tasksDto));
+                    planningsDto.Add(PlanningMapper.ToDto(planning, tasksDto.GetValue()));
                 }
 
-                return planningsDto;
+                return Result<List<PlanningWithTasksDto>>.Ok(planningsDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<List<PlanningWithTasksDto>>.Fail(ex.Message);
             }
         }
 
-        public async Task<PlanningWithTasksDto> GetByIdAsync(PlanningId id)
+        public async Task<Result<PlanningWithTasksDto>> GetByIdAsync(PlanningId id)
         {
             try
             {
                 var planning = await this._repo.GetByIdAsync(id);
 
                 if (planning == null)
-                    return null;
-
+                    return Result<PlanningWithTasksDto>.Fail("Planning not found.");
 
                 var tasksDto = await this.GetTasksByIdsAsync(planning);
-
-                return PlanningMapper.ToDto(planning, tasksDto);
+                var planningDto = PlanningMapper.ToDto(planning, tasksDto.GetValue());
+                return Result<PlanningWithTasksDto>.Ok(planningDto);
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<PlanningWithTasksDto>.Fail(ex.Message);
             }
         }
 
-        public async Task<PlanningWithTasksDto> AddAsync(CreatePlanningDto dto)
+        public async Task<Result<PlanningWithTasksDto>> AddAsync(CreatePlanningDto dto)
         {
             try
             {
@@ -92,39 +92,41 @@ namespace Mpt.Services
                 await this._unitOfWork.CommitAsync();
 
                 var tasksDto = await this.GetTasksByIdsAsync(planning);
-
-                return PlanningMapper.ToDto(planning, tasksDto);
+                var planningDto = PlanningMapper.ToDto(planning, tasksDto.GetValue());
+                return Result<PlanningWithTasksDto>.Ok(planningDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<PlanningWithTasksDto>.Fail(ex.Message);
             }
 
         }
 
-        public async Task<PlanningWithTasksDto> DeleteAsync(PlanningId id)
+        public async Task<Result<PlanningWithTasksDto>> DeleteAsync(PlanningId id)
         {
             try
             {
                 var planning = await this._repo.GetByIdAsync(id);
 
                 if (planning == null)
-                    return null;
+                    return Result<PlanningWithTasksDto>.Fail("Planning not found.");
 
                 this._repo.Remove(planning);
                 await this._unitOfWork.CommitAsync();
 
-                return PlanningMapper.ToDto(planning, new List<TaskDto>());
+                var tasksDto = await this.GetTasksByIdsAsync(planning);
+                var planningDto = PlanningMapper.ToDto(planning, tasksDto.GetValue());
+                return Result<PlanningWithTasksDto>.Ok(planningDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<PlanningWithTasksDto>.Fail(ex.Message);
             }
         }
 
-        private async Task<List<TaskDto>> GetTasksByIdsAsync(Planning planning)
+        private async Task<Result<List<TaskDto>>> GetTasksByIdsAsync(Planning planning)
         {
             try
             {
@@ -133,7 +135,7 @@ namespace Mpt.Services
                 var tasksDto = new List<TaskDto>();
 
                 if (tasks == null)
-                    return tasksDto;
+                    return Result<List<TaskDto>>.Ok(tasksDto);
 
                 // to dto
                 foreach (var task in tasks)
@@ -141,12 +143,12 @@ namespace Mpt.Services
                     tasksDto.Add(TaskMapper.ToDto(task));
                 }
 
-                return tasksDto;
+                return Result<List<TaskDto>>.Ok(tasksDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<List<TaskDto>>.Fail(ex.Message);
             }
         }
     }

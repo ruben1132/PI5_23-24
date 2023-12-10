@@ -1,10 +1,10 @@
-using Mpt.Domain.Shared;
 using Mpt.Dtos;
 using Mpt.IRepositories;
 using Mpt.Mappers;
 using Mpt.Domain.Tasks;
 using Mpt.IServices;
 using Mpt.Core.Domain;
+using Mpt.Core.Logic;
 
 namespace Mpt.Services
 {
@@ -19,7 +19,7 @@ namespace Mpt.Services
             this._repo = repo;
         }
 
-        public async Task<List<TaskDto>> GetAllAsync()
+        public async Task<Result<List<TaskDto>>> GetAllAsync()
         {
             try
             {
@@ -35,49 +35,53 @@ namespace Mpt.Services
                         tasksDto.Add(TaskMapper.ToDto(task as PickupDeliveryTask));
                 }
 
-                return tasksDto;
+                return Result<List<TaskDto>>.Ok(tasksDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<List<TaskDto>>.Fail(ex.Message);
             }
         }
 
-        public async Task<TaskDto> GetByIdAsync(TaskId id)
+        public async Task<Result<TaskDto>> GetByIdAsync(TaskId id)
         {
             try
             {
                 var task = await this._repo.GetByIdAsync(id);
 
                 if (task == null)
-                    return null;
+                    return Result<TaskDto>.Fail("Task not found.");
 
                 if (task is SurveillanceTask)
-                    return TaskMapper.ToDto(task as SurveillanceTask);
+                {
+                    var taskDto = TaskMapper.ToDto(task as SurveillanceTask);
+                    return Result<TaskDto>.Ok(taskDto);
+                }
                 else if (task is PickupDeliveryTask)
-                    return TaskMapper.ToDto(task as PickupDeliveryTask);
+                {
+                    var taskDto = TaskMapper.ToDto(task as PickupDeliveryTask);
+                    return Result<TaskDto>.Ok(taskDto);
+                }
 
-                return null;
+                return Result<TaskDto>.Fail("This task is weird...");
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
-
+                return Result<TaskDto>.Fail(ex.Message);
             }
 
         }
 
-        // TODO: implement 2 separate methods update for each type of task 
-        public async Task<TaskDto> UpdateAsync(TaskDto dto)
+        public async Task<Result<TaskDto>> UpdateAsync(TaskDto dto)
         {
             try
             {
                 var task = await this._repo.GetByIdAsync(new TaskId(dto.Id));
 
                 if (task == null)
-                    return null;
+                    return Result<TaskDto>.Fail("Task not found.");
 
                 if (task.IsApproved == true)
                     task.AproveTask();
@@ -90,39 +94,41 @@ namespace Mpt.Services
 
                 await this._unitOfWork.CommitAsync();
 
-                return TaskMapper.ToDto(task);
+                var taskDto = TaskMapper.ToDto(task);
+                return Result<TaskDto>.Ok(taskDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<TaskDto>.Fail(ex.Message);
             }
         }
 
 
-        public async Task<TaskDto> DeleteAsync(TaskId id)
+        public async Task<Result<TaskDto>> DeleteAsync(TaskId id)
         {
             try
             {
                 var task = await this._repo.GetByIdAsync(id);
 
                 if (task == null)
-                    return null;
+                    return Result<TaskDto>.Fail("Task not found.")
 
                 ;
                 this._repo.Remove(task);
                 await this._unitOfWork.CommitAsync();
 
-                return TaskMapper.ToDto(task);
+                var taskDto = TaskMapper.ToDto(task);
+                return Result<TaskDto>.Ok(taskDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<TaskDto>.Fail(ex.Message);
             }
         }
 
-        public async Task<SurveillanceTaskDto> AddSurveillanceTaskAsync(CreateSurveillanceTaskDto dto)
+        public async Task<Result<SurveillanceTaskDto>> AddSurveillanceTaskAsync(CreateSurveillanceTaskDto dto)
         {
             try
             {
@@ -131,16 +137,17 @@ namespace Mpt.Services
                 await this._repo.AddAsync(surveillanceTask);
                 await this._unitOfWork.CommitAsync();
 
-                return TaskMapper.ToDto(surveillanceTask);
+                var taskDto = TaskMapper.ToDto(surveillanceTask);
+                return Result<SurveillanceTaskDto>.Ok(taskDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<SurveillanceTaskDto>.Fail(ex.Message);
             }
         }
 
-        public async Task<PickupDeliveryTaskDto> AddPickupDeliveryTaskAsync(CreatePickupDeliveryTaskDto dto)
+        public async Task<Result<PickupDeliveryTaskDto>> AddPickupDeliveryTaskAsync(CreatePickupDeliveryTaskDto dto)
         {
             try
             {
@@ -149,12 +156,14 @@ namespace Mpt.Services
                 await this._repo.AddAsync(pickupDeliveryTask);
                 await this._unitOfWork.CommitAsync();
 
-                return TaskMapper.ToDto(pickupDeliveryTask);
+                var taskDto = TaskMapper.ToDto(pickupDeliveryTask);
+                return Result<PickupDeliveryTaskDto>.Ok(taskDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<PickupDeliveryTaskDto>.Fail(ex.Message);
+
             }
         }
     }
