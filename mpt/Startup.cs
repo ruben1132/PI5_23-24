@@ -11,6 +11,7 @@ using Mpt.Services;
 using Mpt.Infrastructure.Roles;
 using Mpt.Infrastructure.Tasks;
 using Mpt.Infrastructure.Plannings;
+using Mpt.Core.Domain;
 
 namespace Mpt
 {
@@ -75,6 +76,7 @@ namespace Mpt
             services.AddTransient<ITaskRepository, TaskRepository>();
             services.AddTransient<IPlanningRepository, PlanningRepository>();
 
+            services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ITaskService, TaskService>();

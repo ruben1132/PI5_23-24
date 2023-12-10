@@ -4,6 +4,7 @@ using Mpt.IRepositories;
 using Mpt.Mappers;
 using Mpt.Domain.Tasks;
 using Mpt.IServices;
+using Mpt.Core.Domain;
 
 namespace Mpt.Services
 {

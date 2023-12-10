@@ -1,3 +1,4 @@
+using Mpt.Core.Domain;
 using Mpt.Domain.Shared;
 using Mpt.Domain.Users;
 
@@ -15,8 +16,10 @@ namespace Mpt.Domain.Tasks
         {
         }
 
-        public SurveillanceTask(UserId userId, string taskType,  List<string> path, List<RobotMovement> robotMovements, PhoneNumber phoneNumber, List<string> floorIds)
-            : base(userId, taskType, path, robotMovements)
+        public SurveillanceTask(UserId userId, string taskType, 
+            List<string> path, List<RobotMovement> robotMovements, 
+            PhoneNumber phoneNumber, List<string> floorIds, bool? isApproved = null)
+            : base(userId, taskType, path, robotMovements, isApproved)
         {
             this.PhoneNumber = phoneNumber;
             this.FloorIds = floorIds;

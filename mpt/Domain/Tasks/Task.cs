@@ -1,3 +1,4 @@
+using Mpt.Core.Domain;
 using Mpt.Domain.Plannings;
 using Mpt.Domain.Shared;
 using Mpt.Domain.Users;
@@ -25,7 +26,7 @@ namespace Mpt.Domain.Tasks
         {
         }
 
-        public Task(UserId userId, string taskType, List<string> path, List<RobotMovement> robotMovements)
+        public Task(UserId userId, string taskType, List<string> path, List<RobotMovement> robotMovements, bool? isApproved = null)
         {
             this.Id = new TaskId(Guid.NewGuid());
             this.UserId = userId;
@@ -33,8 +34,9 @@ namespace Mpt.Domain.Tasks
             this.TaskType = taskType;
             this.Path = path;
             this.RobotMovements = robotMovements;
+            this.IsApproved = isApproved;
         }
-
+        
         // Methods
         public void CompleteTask()
         {

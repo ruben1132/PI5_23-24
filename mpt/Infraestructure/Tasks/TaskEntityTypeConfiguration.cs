@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Mpt.Domain.Plannings;
 using Mpt.Domain.Tasks;
 using Mpt.Domain.Users;
 using Newtonsoft.Json;
@@ -36,7 +35,7 @@ namespace Mpt.Infrastructure.Tasks
             builder
                 .Property(t => t.IsApproved)
                 .HasDefaultValue(null)
-                .IsRequired(false); // This makes the property nullable
+                .IsRequired(false); 
 
             // TPH
             builder.HasDiscriminator<string>("TaskType")
@@ -47,7 +46,8 @@ namespace Mpt.Infrastructure.Tasks
             builder.HasOne<User>()
               .WithMany()
               .HasForeignKey(p => p.UserId)
-              .IsRequired();
+              .IsRequired()
+              .OnDelete(DeleteBehavior.Cascade);
 
             // many to many relationship
             builder

@@ -1,4 +1,5 @@
 using Domain.Users;
+using Mpt.Core.Domain;
 using Mpt.Domain.Roles;
 using Mpt.Domain.Shared;
 
@@ -15,13 +16,14 @@ namespace Mpt.Domain.Users
         public UserNif Nif { get; private set; }
         public bool Active { get; private set; }
         public RoleId RoleId { get; private set; }
+        public bool? IsApproved { get; private set; }
 
         // Constructors
         private User()
         {
         }
 
-        public User(UserEmail email, string name, PhoneNumber phone, UserNif nif, RoleId roleId, UserPassword password)
+        public User(UserEmail email, string name, PhoneNumber phone, UserNif nif, RoleId roleId, UserPassword password, bool? isApproved = null)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new BusinessRuleValidationException("Name cannot be null.");
@@ -34,6 +36,7 @@ namespace Mpt.Domain.Users
             this.Phone = phone;
             this.Nif = nif;
             this.RoleId = roleId;
+            this.IsApproved = isApproved;
         }
 
 
@@ -92,6 +95,16 @@ namespace Mpt.Domain.Users
             if (!this.Active)
                 throw new BusinessRuleValidationException("It is not possible to change the role to an inactive user.");
             this.RoleId = roleId;
+        }
+
+        public void Approve()
+        {
+            this.IsApproved = true;
+        }
+
+        public void Disapprove()
+        {
+            this.IsApproved = false;
         }
     }
 }

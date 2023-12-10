@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Mpt.Domain.Shared
+namespace Mpt.Core.Domain
 {
     public interface IRepository<TEntity, TEntityId>
     {

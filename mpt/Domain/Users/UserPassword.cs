@@ -1,3 +1,4 @@
+using Mpt.Core.Domain;
 using Mpt.Domain.Shared;
 
 namespace Domain.Users
@@ -6,8 +7,19 @@ namespace Domain.Users
     {
           public string Value { get; private set; }
 
-        public UserPassword(string value)
+        public UserPassword(string value){
+
+        }
+        
+        public UserPassword(string value, bool isRestricted)
         {
+            // allow to skip strong password check 
+            if (!isRestricted)
+            {
+                this.Value = value;
+                return;
+            }
+
             if (string.IsNullOrWhiteSpace(value))
             {
                 throw new BusinessRuleValidationException("Password cannot be empty.");
@@ -40,6 +52,7 @@ namespace Domain.Users
 
             this.Value = value;
         }
+
 
     }
 }

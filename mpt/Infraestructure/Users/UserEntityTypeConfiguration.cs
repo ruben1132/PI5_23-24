@@ -15,10 +15,18 @@ namespace Mpt.Infrastructure.Users
             builder.OwnsOne(u => u.Password);
             builder.OwnsOne(u => u.Phone);
             builder.OwnsOne(u => u.Nif);
+
+            // isApproved allow to be null
+            builder
+                .Property(u => u.IsApproved)
+                .HasDefaultValue(null)
+                .IsRequired(false); 
+
             builder.HasOne<Role>()
-               .WithMany()
-               .HasForeignKey(u => u.RoleId)
-               .IsRequired();
+                .WithMany()
+                .HasForeignKey(u => u.RoleId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

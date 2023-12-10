@@ -22,6 +22,7 @@ namespace Mpt.Mappers
                     user.Nif.Value,
                     user.Active,
                     user.RoleId.Value
+                    
                 );
         }
 
@@ -35,7 +36,16 @@ namespace Mpt.Mappers
                     user.Phone.Value,
                     user.Nif.Value,
                     user.Active,
-                    role
+                    role,
+                    user.IsApproved
+                );
+        }
+
+        public static UserWithRoleAndTokenDto ToDto(UserWithRoleDto user, string token)
+        {
+            return new UserWithRoleAndTokenDto(
+                    token,
+                    user
                 );
         }
 
@@ -47,7 +57,19 @@ namespace Mpt.Mappers
                     new PhoneNumber(dto.Phone),
                     new UserNif(dto.Nif),
                     new RoleId(dto.RoleId),
-                    new UserPassword(dto.Password)
+                    new UserPassword(dto.Password, true)
+                );
+        }
+
+        public static User ToDomain(SignupUserDto dto, RoleId roleId)
+        {
+            return new User(
+                    new UserEmail(dto.Email),
+                    dto.Name,
+                    new PhoneNumber(dto.Phone),
+                    new UserNif(dto.Nif),
+                    roleId,
+                    new UserPassword(dto.Password, true)
                 );
         }
     }

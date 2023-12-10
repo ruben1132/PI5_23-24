@@ -1,4 +1,4 @@
-namespace Mpt.Domain.Shared
+namespace Mpt.Core.Domain
 {
     public interface IValueObject
     {

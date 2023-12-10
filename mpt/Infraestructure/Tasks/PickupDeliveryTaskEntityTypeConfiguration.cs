@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Mpt.Domain.Tasks;
-using Mpt.Infrastructure.Tasks;
 
 namespace Mpt.Infrastructure.PickupDeliveryTasks
 {

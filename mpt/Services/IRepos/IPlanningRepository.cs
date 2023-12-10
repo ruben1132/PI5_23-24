@@ -1,5 +1,6 @@
 using Mpt.Domain.Shared;
 using Mpt.Domain.Plannings;
+using Mpt.Core.Domain;
 
 namespace Mpt.IRepositories
 {

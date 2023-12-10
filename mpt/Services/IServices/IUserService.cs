@@ -1,4 +1,5 @@
 
+using Mpt.Core.Logic;
 using Mpt.Domain.Users;
 using Mpt.Dtos;
 
@@ -6,13 +7,13 @@ namespace Mpt.IServices
 {
     public interface IUserService{
 
-        Task<UserWithRoleDto> AddAsync(CreateUserDto dto);
+        Task<Result<UserWithRoleDto>> AddAsync(CreateUserDto dto);
 
-        Task<UserWithRoleDto> GetByIdAsync(UserId id);
+        Task<Result<UserWithRoleDto>> GetByIdAsync(UserId id);
 
-        Task<List<UserWithRoleDto>> GetAllAsync();
+        Task<Result<List<UserWithRoleDto>>> GetAllAsync();
 
-        Task<UserWithRoleDto> UpdateAsync(UserDto dto);
-        Task<UserDto> DeleteAsync(UserId id);
+        Task<Result<UserWithRoleDto>> UpdateAsync(UserDto dto);
+        Task<Result<UserDto>> DeleteAsync(UserId id);
     }
 }

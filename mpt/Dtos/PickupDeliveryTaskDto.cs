@@ -13,8 +13,8 @@ namespace Mpt.Dtos
         public string TaskDescription { get; private set; }
         public string ConfirmationCode { get; private set; }
 
-        public PickupDeliveryTaskDto(string id, string userId, List<string> path, List<RobotMovementDto> robotMovements, bool isCompleted, bool? isApproved, string taskType, string pickupPlace, string deliveryPlace, string pickupPersonName, string pickupPersonPhoneNumber, string deliveryPersonName, string deliveryPersonPhoneNumber, string taskDescription, string confirmationCode)
-            : base(id, userId, path, robotMovements, isCompleted, isApproved, taskType)
+        public PickupDeliveryTaskDto(string id, string userId, List<string> path, List<RobotMovementDto> robotMovements, bool isCompleted, string taskType, string pickupPlace, string deliveryPlace, string pickupPersonName, string pickupPersonPhoneNumber, string deliveryPersonName, string deliveryPersonPhoneNumber, string taskDescription, string confirmationCode, bool? isApproved=null)
+            : base(id, userId, path, robotMovements, isCompleted, taskType, isApproved)
         {
             this.PickupPlace = pickupPlace;
             this.DeliveryPlace = deliveryPlace;

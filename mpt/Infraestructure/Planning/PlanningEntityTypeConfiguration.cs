@@ -16,7 +16,8 @@ namespace Mpt.Infrastructure.Plannings
             builder.HasOne<User>()
               .WithMany()
               .HasForeignKey(p => p.UserId)
-              .IsRequired();
+              .IsRequired()
+              .OnDelete(DeleteBehavior.Cascade);
 
             // many to many relationship
             builder

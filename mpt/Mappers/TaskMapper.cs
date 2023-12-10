@@ -17,8 +17,8 @@ namespace Mpt.Mappers
                 task.Path,
                 RobotMovementBulkToDto(task.RobotMovements),
                 task.IsCompleted,
-                task.IsApproved,
-                task.TaskType
+                task.TaskType,
+                task.IsApproved
             );
 
         }
@@ -31,10 +31,10 @@ namespace Mpt.Mappers
                 surveillanceTask.Path,
                 RobotMovementBulkToDto(surveillanceTask.RobotMovements),
                 surveillanceTask.IsCompleted,
-                surveillanceTask.IsApproved,
                 surveillanceTask.TaskType,
                 surveillanceTask.PhoneNumber.Value,
-                surveillanceTask.FloorIds
+                surveillanceTask.FloorIds,
+                surveillanceTask.IsApproved
             );
         }
 
@@ -46,7 +46,6 @@ namespace Mpt.Mappers
                 pickupDeliveryTask.Path,
                 RobotMovementBulkToDto(pickupDeliveryTask.RobotMovements),
                 pickupDeliveryTask.IsCompleted,
-                pickupDeliveryTask.IsApproved,
                 pickupDeliveryTask.TaskType,
                 pickupDeliveryTask.PickupPlace,
                 pickupDeliveryTask.DeliveryPlace,
@@ -55,7 +54,8 @@ namespace Mpt.Mappers
                 pickupDeliveryTask.DeliveryPersonName,
                 pickupDeliveryTask.DeliveryPersonPhoneNumber.Value,
                 pickupDeliveryTask.TaskDescription,
-                pickupDeliveryTask.ConfirmationCode.Value
+                pickupDeliveryTask.ConfirmationCode.Value,
+                pickupDeliveryTask.IsApproved
             );
         }
 

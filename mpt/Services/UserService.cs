@@ -6,6 +6,8 @@ using Mpt.IRepositories;
 using Mpt.Mappers;
 using Mpt.Domain.Users;
 using Mpt.IServices;
+using Mpt.Core.Domain;
+using Mpt.Core.Logic;
 
 namespace Mpt.Services
 {
@@ -22,7 +24,7 @@ namespace Mpt.Services
             this._roleRepo = roleRepo;
         }
 
-        public async Task<List<UserWithRoleDto>> GetAllAsync()
+        public async Task<Result<List<UserWithRoleDto>>> GetAllAsync()
         {
             try
             {
@@ -37,29 +39,29 @@ namespace Mpt.Services
                     usersDto.Add(UserMapper.ToDto(user, roleDto));
                 }
 
-                return usersDto;
+                return Result<List<UserWithRoleDto>>.Ok(usersDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<List<UserWithRoleDto>>.Fail(ex.Message);
             }
         }
 
-        public async Task<UserWithRoleDto> GetByIdAsync(UserId id)
+        public async Task<Result<UserWithRoleDto>> GetByIdAsync(UserId id)
         {
             try
             {
                 var user = await this._repo.GetByIdAsync(id);
 
                 if (user == null)
-                    return null;
+                    return Result<UserWithRoleDto>.Fail("User not found.");
 
                 var role = await this._roleRepo.GetByIdAsync(user.RoleId);
 
                 var roleDto = RoleMapper.ToDto(role);
-                return UserMapper.ToDto(user, roleDto);
-
+                var userDto = UserMapper.ToDto(user, roleDto);
+                return Result<UserWithRoleDto>.Ok(userDto);
             }
             catch (Exception ex)
             {
@@ -68,46 +70,55 @@ namespace Mpt.Services
             }
         }
 
-        public async Task<UserWithRoleDto> AddAsync(CreateUserDto dto)
+        public async Task<Result<UserWithRoleDto>> AddAsync(CreateUserDto u)
         {
             try
             {
-                // get utente role
-                var role = await this._roleRepo.GetByNameAsync("Utente");
-                var user = UserMapper.ToDomain(dto);
+                // check if email already exists
+                var userByEmail = await this._repo.GetByEmailAsync(u.Email);
+
+                if (userByEmail != null)
+                    throw new BusinessRuleValidationException("Email already exists.");
+
+                var role = await this._roleRepo.GetByIdAsync(new RoleId(u.RoleId));
+                var roleDto = RoleMapper.ToDto(role);
+
+                var hashedPassword = BCrypt.Net.BCrypt.HashPassword(u.Password, BCrypt.Net.BCrypt.GenerateSalt());
+                u.Password = hashedPassword;
+
+                var user = UserMapper.ToDomain(u);
 
                 await this._repo.AddAsync(user);
-
                 await this._unitOfWork.CommitAsync();
 
-                var roleDto = RoleMapper.ToDto(role);
-                return UserMapper.ToDto(user, roleDto);
+                var userDto = UserMapper.ToDto(user, roleDto);
+                return Result<UserWithRoleDto>.Ok(userDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<UserWithRoleDto>.Fail(ex.Message);
             }
 
         }
 
-        public async Task<UserWithRoleDto> UpdateAsync(UserDto dto)
+        public async Task<Result<UserWithRoleDto>> UpdateAsync(UserDto u)
         {
             try
             {
-                var user = await this._repo.GetByIdAsync(new UserId(dto.Id));
-                var role = await this._roleRepo.GetByIdAsync(new RoleId(dto.RoleId));
+                var user = await this._repo.GetByIdAsync(new UserId(u.Id));
+                var role = await this._roleRepo.GetByIdAsync(new RoleId(u.RoleId));
 
                 if (user == null)
                     return null;
 
-                user.ChangeNif(new UserNif(dto.Nif));
-                user.ChangeEmail(new UserEmail(dto.Email));
-                user.ChangePassword(new UserPassword(dto.Password));
-                user.ChangeRole(new RoleId(dto.RoleId));
-                user.ChangeName(dto.Name);
+                user.ChangeNif(new UserNif(u.Nif));
+                user.ChangeEmail(new UserEmail(u.Email));
+                user.ChangePassword(new UserPassword(u.Password, true));
+                user.ChangeRole(new RoleId(u.RoleId));
+                user.ChangeName(u.Name);
 
-                if (dto.Active)
+                if (u.Active)
                     user.Enable();
                 else
                     user.Disable();
@@ -116,24 +127,25 @@ namespace Mpt.Services
                 await this._unitOfWork.CommitAsync();
 
                 var roleDto = RoleMapper.ToDto(role);
-                return UserMapper.ToDto(user, roleDto);
+                var userDto = UserMapper.ToDto(user, roleDto);
+                return Result<UserWithRoleDto>.Ok(userDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<UserWithRoleDto>.Fail(ex.Message);
             }
         }
 
 
-        public async Task<UserDto> DeleteAsync(UserId id)
+        public async Task<Result<UserDto>> DeleteAsync(UserId id)
         {
             try
             {
                 var user = await this._repo.GetByIdAsync(id);
 
                 if (user == null)
-                    return null;
+                    return Result<UserDto>.Fail("User not found.");
 
                 if (user.Active)
                     throw new BusinessRuleValidationException("It is not possible to delete an active user.");
@@ -141,12 +153,13 @@ namespace Mpt.Services
                 this._repo.Remove(user);
                 await this._unitOfWork.CommitAsync();
 
-                return UserMapper.ToDto(user);
+                var userDto = UserMapper.ToDto(user);
+                return Result<UserDto>.Ok(userDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                return Result<UserDto>.Fail(ex.Message);
             }
         }
     }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Mpt.Core.Domain;
 using Mpt.Domain.Shared;
 
 namespace Mpt.Infrastructure.Shared

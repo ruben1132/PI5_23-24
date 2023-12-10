@@ -11,7 +11,7 @@ namespace Mpt.Dtos
         public List<RobotMovementDto> RobotMovements { get; private set; }
 
 
-        public TaskDto(string id, string userId, List<string> path, List<RobotMovementDto> robotMovements, bool isCompleted, bool? isApproved, string taskType)
+        public TaskDto(string id, string userId, List<string> path, List<RobotMovementDto> robotMovements, bool isCompleted, string taskType, bool? isApproved)
         {
             this.Id = id;
             this.UserId = userId;

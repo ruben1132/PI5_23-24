@@ -1,5 +1,6 @@
 
 using System.Text.RegularExpressions;
+using Mpt.Core.Domain;
 
 namespace Mpt.Domain.Shared
 {

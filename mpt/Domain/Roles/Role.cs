@@ -1,3 +1,4 @@
+using Mpt.Core.Domain;
 using Mpt.Domain.Shared;
 
 

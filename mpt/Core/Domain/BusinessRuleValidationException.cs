@@ -1,6 +1,6 @@
 using System;
 
-namespace Mpt.Domain.Shared
+namespace Mpt.Core.Domain
 {
     public class BusinessRuleValidationException : Exception
     {

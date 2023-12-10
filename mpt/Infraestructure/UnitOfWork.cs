@@ -1,5 +1,4 @@
-using System.Threading.Tasks;
-using Mpt.Domain.Shared;
+using Mpt.Core.Domain;
 
 namespace Mpt.Infrastructure
 {

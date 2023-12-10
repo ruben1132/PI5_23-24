@@ -1,3 +1,4 @@
+using Mpt.Core.Domain;
 using Mpt.Domain.Shared;
 using Mpt.Domain.Users;
 using System.Collections.Generic;
@@ -21,8 +22,13 @@ namespace Mpt.Domain.Tasks
         }
 
         // Constructors
-        public PickupDeliveryTask(UserId userId, string taskType, List<string> path, List<RobotMovement> robotMovements, string pickupPlace, string deliveryPlace, string pickupPersonName, PhoneNumber pickupPersonPhoneNumber, string deliveryPersonName, PhoneNumber deliveryPersonPhoneNumber, string taskDescription, TaskConfirmationCode confirmationCode)
-            : base(userId, taskType, path, robotMovements)
+        public PickupDeliveryTask(UserId userId, string taskType, List<string> path,
+            List<RobotMovement> robotMovements, string pickupPlace,
+            string deliveryPlace, string pickupPersonName,
+            PhoneNumber pickupPersonPhoneNumber, string deliveryPersonName,
+            PhoneNumber deliveryPersonPhoneNumber, string taskDescription,
+            TaskConfirmationCode confirmationCode, bool? isApproved = null)
+            : base(userId, taskType, path, robotMovements, isApproved)
         {
             this.PickupPlace = pickupPlace;
             this.DeliveryPlace = deliveryPlace;
