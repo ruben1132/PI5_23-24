@@ -51,7 +51,7 @@ export default function UserForm() {
 
     return (
         <Form>
-            <Form.Group controlId="formUserName">
+            <Form.Group>
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                     id="email"
@@ -62,7 +62,7 @@ export default function UserForm() {
                 />
             </Form.Group>
             <br />
-            <Form.Group controlId="formPassword">
+            <Form.Group>
                 <Form.Label>Password</Form.Label>
                 <Form.Control
                     id="password"
@@ -74,7 +74,7 @@ export default function UserForm() {
             </Form.Group>
             <br />
             <Button
-                id='login-btn'
+                id="login-btn"
                 variant="success"
                 onClick={handleSubmit}
                 disabled={disableSubmit || email === '' || password === ''}

@@ -132,6 +132,12 @@ namespace Mpt.Services
                 {
                     user.Enable();
                     user.ChangeNif(new UserNif(u.Nif));
+                    
+                    // check if email already exists
+                    var userByEmail = await this._repo.GetByEmailAsync(u.Email);
+                    if (userByEmail != null && userByEmail.Id != user.Id)
+                        return Result<UserWithRoleDto>.Fail("Email already exists.");
+
                     user.ChangeEmail(new UserEmail(u.Email));
                     user.ChangeRole(new RoleId(u.RoleId));
                     user.ChangeName(u.Name);

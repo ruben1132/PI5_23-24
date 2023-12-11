@@ -41,7 +41,7 @@ export default function RoleForm(props: Props) {
     );
 
     // deleter
-    const buildingDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.roles + props.item?.value.id);
+    const buildingDeleter = useDeleteData(config.mptAPI.baseUrl + config.mptAPI.routes.roles + props.item?.value.id);
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);

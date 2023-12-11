@@ -68,13 +68,11 @@ The database is hosted on a VM within my DEI Cloud.
 
 # Run
 
-Run with HTTP and HTTPS
-```dotnet run --launch-profile https```
-
-Run with HTTP only
+Run with HTTP only - run this one
 ```dotnet run``` 
 
-**use https requests! auth cookie is only being set if working with https requests!**
+Run with HTTP and HTTPS
+```dotnet run --launch-profile https```
 
 After the application is running, on the console it will say the url and the ports that the API is running.
 The endpoints will be added to our Postman as well.

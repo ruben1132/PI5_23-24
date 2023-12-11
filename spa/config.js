@@ -101,7 +101,6 @@ export default {
             tasktypes: 'tasktypes/',
             users: 'users/',
             floormaps: 'floormaps/',
-            roles: 'roles/',
             elevators: 'elevators/',
             rooms: 'rooms/',
             users: 'users/',
@@ -118,11 +117,11 @@ export default {
         baseUrl:
             process.env.NODE_ENV === 'production'
                 ? process.env.NEXT_PUBLIC_AUTH_API_URL
-                : 'http://localhost:2225/api/auth/',
+                : 'http://localhost:5095/api/auth/',
         routes: {
             login: 'login/',
             logout: 'logout/',
-            signin: 'signin/',
+            signup: 'signup/',
             session: 'session/',
         },
     },
@@ -131,12 +130,13 @@ export default {
         baseUrl:
             process.env.NODE_ENV === 'production'
                 ? process.env.NEXT_PUBLIC_MPT_API_URL
-                : 'http://localhost:xxxx/api/mpt/',
+                : 'http://localhost:5095/api/',
         routes: {
             planning: 'planning/',
             planningFindPath: 'planning/findpath',
             users: 'users/',
             tasks: 'tasks/',
+            roles: 'roles/',
         },
     },
 
@@ -177,5 +177,5 @@ export default {
         '/dashboard/profile',
     ],
 
-    cookieName: 'mgiAPI:authCookie',
+    cookieName: 'robdronego_authCookie',
 };

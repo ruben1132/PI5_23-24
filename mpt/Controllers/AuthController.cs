@@ -14,11 +14,13 @@ namespace Mpt.Controllers
     {
         private readonly IConfiguration _config;
         private readonly IAuthService _service;
+        private readonly IWebHostEnvironment _env;
 
-        public AuthController(IConfiguration config, IAuthService service)
+        public AuthController(IConfiguration config, IAuthService service, IWebHostEnvironment env)
         {
             this._config = config;
             this._service = service;
+            this._env = env;
         }
 
         // POST: api/Auth/login
@@ -145,6 +147,13 @@ namespace Mpt.Controllers
                 Secure = true,
                 Path = "/",
             };
+
+            if (this._env.IsDevelopment())
+            {
+                cookieOptions.Secure = false;
+                cookieOptions.SameSite = SameSiteMode.Lax;
+                cookieOptions.Domain = "localhost";
+            }
 
             Response.Cookies.Append(cName, token, cookieOptions);
         }
