@@ -91,10 +91,10 @@ namespace Mpt
 
             app.UseHttpsRedirection();
 
-            
+
 
             app.UseRouting();
-app.UseMiddleware<MyMiddleware>();
+            app.UseMiddleware<MyMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();

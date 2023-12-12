@@ -40,9 +40,9 @@ export default function UserForm() {
 
         // call the login function to set the user in the context
         const log = await login(email, password);
-        if (!log) {
+        if (log) {
             setDisableSubmit(false);
-            notify.error('Invalid credentials');
+            notify.warning(log);
             return;
         }
         // redirect to the dashboard page

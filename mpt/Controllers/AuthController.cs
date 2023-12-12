@@ -67,13 +67,13 @@ namespace Mpt.Controllers
                     return BadRequest(new { error = user.Error });
                 }
 
-                var token = this._service.GenerateJwtToken(user.Value);
-                if (token.IsFailure)
-                {
-                    return BadRequest(new { error = token.Error });
-                }
+                // var token = this._service.GenerateJwtToken(user.Value);
+                // if (token.IsFailure)
+                // {
+                //     return BadRequest(new { error = token.Error });
+                // }
 
-                SetCookie(token.GetValue());
+                // SetCookie(token.GetValue());
 
                 return Ok(user.GetValue());
 

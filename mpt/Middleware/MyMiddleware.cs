@@ -26,13 +26,13 @@ namespace Mpt.Middleware
             if (!string.IsNullOrEmpty(token))
             {
                 context.Request.Headers.Append("Authorization", "Bearer " + token);
-                AttachUserToContext(context, token);
+                await AttachUserToContext(context, token);
             }
 
             await _next(context);
         }
 
-        private async void AttachUserToContext(HttpContext context, string token)
+        private async Task AttachUserToContext(HttpContext context, string token)
         {
             using (var scope = _scopeFactory.CreateScope())
             {
@@ -57,9 +57,15 @@ namespace Mpt.Middleware
 
                     var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
 
+                    
+                    var user = await userService.GetByIdAsync(userId);
+
+                    // validate user
+                    if ( user.IsFailure || user.Value == null || !user.Value.Active)
+                        return;
+                    
                     // Attach user to context on successful jwt validation
-                    context.Items["user"] = await userService.GetByIdAsync(userId);
-                    Console.WriteLine($"User {userId} attached to context");
+                    context.Items["user"] = user.GetValue();
                 }
                 catch (Exception ex)
                 {

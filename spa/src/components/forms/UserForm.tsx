@@ -101,11 +101,8 @@ export default function UserForm(props: Props) {
 
         item.roleId = userRole.value;
 
-        console.log(item);
-
         // submit data
         let res = await userForm.submit(item);
-        console.log(res);
 
         if (res.error) {
             setEnabled(true);

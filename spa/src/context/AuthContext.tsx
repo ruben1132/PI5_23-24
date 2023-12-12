@@ -3,11 +3,15 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
 import config from '../../config';
-import {UserWithRole} from "../models/User";
+import { UserWithRole } from '../models/User';
 
+interface LoginResponse {
+    content: string | UserWithRole;
+    value: boolean;
+}
 interface AuthContextProps {
     user: UserWithRole | null;
-    login: (email: string, password: string) => Promise<boolean>;
+    login: (email: string, password: string) => Promise<string>;
     logout: () => Promise<boolean>;
 }
 
@@ -24,22 +28,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const response = await request(config.authAPI.baseUrl + config.authAPI.routes.session, 'GET');
 
         if (response) {
-            setUser(response);
+            setUser(response.content as UserWithRole);
         }
     };
 
-    const login = async (email: string, password: string) => {
+    const login = async (email: string, password: string): Promise<string> => {
         const response = await request(config.authAPI.baseUrl + config.authAPI.routes.login, 'POST', {
             email,
             password,
         });
 
-        if (!response) {
-            return false;
+        if (!response.value) {
+            return response.content.toString();
         }
 
-        setUser(response);
-        return true
+        setUser(response.content as UserWithRole);
+        return null;
     };
 
     const logout = async () => {
@@ -64,7 +68,7 @@ export const useAuth = (): AuthContextProps => {
 
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-const request = async (url: string, method: string, data?: any): Promise<any> => {
+const request = async (url: string, method: string, data?: any): Promise<LoginResponse> => {
     try {
         const config: AxiosRequestConfig = {
             method,
@@ -75,8 +79,16 @@ const request = async (url: string, method: string, data?: any): Promise<any> =>
 
         const response: AxiosResponse = await axios(config);
 
-        return response.data;
+        return {
+            content: response.data,
+            value: true,
+        };
     } catch (error: any) {
-        return null;
+        console.log(error.response.data.error);
+
+        return {
+            content: error.response.data.error,
+            value: false,
+        };
     }
 };

@@ -57,7 +57,8 @@ namespace Mpt.Mappers
                     new PhoneNumber(dto.Phone),
                     new UserNif(dto.Nif),
                     new RoleId(dto.RoleId),
-                    new UserPassword(dto.Password, true)
+                    new UserPassword(dto.Password, true),
+                    true
                 );
         }
 

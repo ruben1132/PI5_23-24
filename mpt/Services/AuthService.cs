@@ -45,6 +45,14 @@ namespace Mpt.Services
                     return Result<UserAuthDto>.Fail("Invalid credentials");
                 }
 
+                // check user
+                var checkUser = CheckUser(user);
+
+                if (checkUser.IsFailure)
+                {
+                    return Result<UserAuthDto>.Fail(checkUser.Error);
+                }
+
                 var role = await _roleRepo.GetByIdAsync(user.RoleId);   // get user role
                 var roleDto = RoleMapper.ToDto(role);                   // map role to dto
                 var userDto = UserMapper.ToDtoAuth(user, roleDto);          // map user to dto
@@ -129,9 +137,17 @@ namespace Mpt.Services
                 // get user by id
                 var user = await _repo.GetByIdAsync(new UserId(userId.ToString()));
 
+                // check user
                 if (user == null)
                 {
                     return Result<UserAuthDto>.Fail("User not found");
+                }
+
+                var checkUser = CheckUser(user);
+
+                if (checkUser.IsFailure)
+                {
+                    return Result<UserAuthDto>.Fail(checkUser.Error);
                 }
 
                 // get user role
@@ -181,6 +197,29 @@ namespace Mpt.Services
                 Console.WriteLine(ex.Message);
                 return Result<string>.Fail("Error generating token");
             }
+        }
+
+        private Result<string> CheckUser(User user)
+        {
+
+
+            if (user.IsApproved == null)
+            {
+                return Result<string>.Fail("Your account needs to be approved by the system first!");
+            }
+
+            if (user.IsApproved == false)
+            {
+                return Result<string>.Fail("Your account was rejected by the system!");
+            }
+
+            if (user.Active == false)
+            {
+                return Result<string>.Fail("Your account is not active!");
+            }
+
+            // If none of the conditions are met, return a successful result
+            return Result<string>.Ok("User is active");
         }
 
     }
