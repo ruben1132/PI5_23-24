@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Mpt.Controllers
 {
+    [Authorize(Roles = "admin")]
     [Route("api/[controller]")]
     [ApiController]
     public class RolesController : ControllerBase, IRolesController
@@ -19,7 +20,6 @@ namespace Mpt.Controllers
 
 
         // POST: api/Role
-        [Authorize(Roles = "gestor frota")]
         [HttpPost]
         public async Task<ActionResult<RoleDto>> Create(CreateRoleDto role)
         {
@@ -42,7 +42,6 @@ namespace Mpt.Controllers
         }
 
         // PUT: api/Role/
-        [Authorize(Roles = "gestor frota")]
         [HttpPut]
         public async Task<ActionResult<RoleDto>> Update(RoleDto role)
         {
@@ -65,7 +64,6 @@ namespace Mpt.Controllers
         }
 
         // GET: api/Role
-        [Authorize(Roles = "gestor frota")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RoleDto>>> GetAll()
         {
@@ -88,7 +86,6 @@ namespace Mpt.Controllers
         }
 
         // GET: api/Role/5
-        [Authorize(Roles = "gestor frota")]
         [HttpGet("{id}")]
         public async Task<ActionResult<RoleDto>> GetById(Guid id)
         {
@@ -111,7 +108,6 @@ namespace Mpt.Controllers
         }
 
         // DELETE: api/Role/5
-        [Authorize(Roles = "gestor frota")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<string>> Delete(Guid id)
         {
