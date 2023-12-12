@@ -171,11 +171,6 @@ export default function SysUserForm(props: Props) {
         (item: any) => item.id !== props.item.value?.role?.id,
     );
 
-    // handle for selecting a role
-    const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-        userRole.handleLoad(e.target.value);
-    };
-
     return (
         <Form>
             <Row>
