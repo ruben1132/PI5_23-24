@@ -44,11 +44,11 @@ namespace Mpt.Services
             }
         }
 
-        public async Task<Result<TaskDto>> GetByIdAsync(TaskId id)
+        public async Task<Result<TaskDto>> GetByIdAsync(Guid id)
         {
             try
             {
-                var task = await this._repo.GetByIdAsync(id);
+                var task = await this._repo.GetByIdAsync(new TaskId(id));
 
                 if (task == null)
                     return Result<TaskDto>.Fail("Task not found.");
@@ -105,11 +105,11 @@ namespace Mpt.Services
         }
 
 
-        public async Task<Result<TaskDto>> DeleteAsync(TaskId id)
+        public async Task<Result<TaskDto>> DeleteAsync(Guid id)
         {
             try
             {
-                var task = await this._repo.GetByIdAsync(id);
+                var task = await this._repo.GetByIdAsync(new TaskId(id));
 
                 if (task == null)
                     return Result<TaskDto>.Fail("Task not found.")
