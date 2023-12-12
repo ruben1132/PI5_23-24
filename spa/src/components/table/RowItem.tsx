@@ -10,7 +10,7 @@ export default function RowItem(props: Props) {
     const filterForm = () => {
         // This checks if props.item is an obj
         if (props.item instanceof Object) {
-            switch (props.type.toLocaleLowerCase()) {
+            switch (props.type) {
                 case 'passage':
                     return <td key={props.index}>{props.item.information}</td>;
                 case 'robot':
@@ -54,9 +54,16 @@ export default function RowItem(props: Props) {
             }
         }
 
-        if (typeof props.item === 'boolean') {
-            return <td key={props.index}>{props.item ? 'Active' : 'Inactive'}</td>;
+        // only for users and sysusers
+        if(props.item === null && (props.type === 'user' || props.type === 'sysuser')){
+            return <td key={props.index}>Requesting approval</td>;
         }
+        
+        if (typeof props.item === 'boolean') {
+            return <td key={props.index}>{props.item ? 'true' : 'false'}</td>;
+        }
+
+      
 
         return <td key={props.index}>{props.item}</td>;
     };

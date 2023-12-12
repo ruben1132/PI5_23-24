@@ -8,7 +8,7 @@ export default async function Users() {
 
             <PageContent
                 type="sysuser"
-                routeToFetch={config.mptAPI.baseUrl + config.mptAPI.routes.users}
+                routeToFetch={config.mptAPI.baseUrl + config.mptAPI.routes.sysusers}
             />
         </div>
     );

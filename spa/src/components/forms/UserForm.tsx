@@ -31,7 +31,7 @@ import {
 } from '@/util/customHooks';
 
 // models
-import { UserWithRole, User } from '@/models/User';
+import { UserWithRole } from '@/models/User';
 
 interface Props {
     item?: {

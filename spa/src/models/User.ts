@@ -7,9 +7,9 @@ export interface UserWithRole {
     password?: string;
     nif: string;
     phone: string;
+    role: Role;
     active: boolean;
     isApproved: boolean;
-    role: Role;
 }
 
 export interface User {
@@ -19,9 +19,9 @@ export interface User {
     password?: string;
     nif: string;
     phone: string;
+    roleId: string;
     active: boolean;
     isApproved?: boolean;
-    roleId: string;
 }
 
 export interface PostUser {
@@ -30,6 +30,6 @@ export interface PostUser {
     nif: string;
     phone: string;
     active: boolean;
-    password: string;
-    role: Role;
+    password?: string;
+    roleId: string;
 }

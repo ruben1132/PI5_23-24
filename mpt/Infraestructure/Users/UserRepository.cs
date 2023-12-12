@@ -5,18 +5,38 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Mpt.Infrastructure.Users
 {
-    public class UserRepository : BaseRepository<User, UserId>,IUserRepository
+    public class UserRepository : BaseRepository<User, UserId>, IUserRepository
     {
         private readonly MptDbContext _context;
+        private readonly IConfiguration _config;
 
-        public UserRepository(MptDbContext context):base(context.Users)
+        public UserRepository(IConfiguration config, MptDbContext context) : base(context.Users)
         {
             this._context = context;
+            this._config = config;
         }
 
-        public Task<User> GetByEmailAsync(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
-            return this._context.Users.FirstOrDefaultAsync(u => u.Email.Value == email);
+            return await this._context.Users.FirstOrDefaultAsync(u => u.Email.Value == email);
+        }
+
+        public async Task<List<User>> GetAllFilteredAsync(bool isSysUser, bool? isApproved = null, bool? all = false)
+        {
+
+            // get default role
+            var defaultRole = _config.GetValue<string>("DefaultRole") ?? "utente";
+            
+            var query = _context.Users.AsQueryable();
+            query = isSysUser
+                ? query.Where(u => _context.Roles.Any(r => r.Id == u.RoleId && r.Name != defaultRole))
+                : query.Where(u => _context.Roles.Any(r => r.Id == u.RoleId && r.Name == defaultRole));
+
+            // if all is true, then return all users
+            if (all == false)
+                query = query.Where(u => u.IsApproved == isApproved);
+          
+            return await query.ToListAsync();
         }
     }
 }

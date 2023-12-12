@@ -19,13 +19,12 @@ namespace Mpt.Controllers
         }
 
         // GET: api/User
-
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAll([FromQuery] bool? isSysUser, [FromQuery] bool? isApproved, [FromQuery] bool? all)
         {
             try
             {
-                var users = await _service.GetAllAsync();
+                var users = await _service.GetAllAsync(isSysUser, isApproved, all);
 
                 if (users.IsFailure)
                 {
