@@ -66,7 +66,7 @@ namespace Mpt
                     };
                 });
 
-            services.AddAuthorization();
+            // services.AddAuthorization();
 
             ConfigureMyServices(services);
 
@@ -91,10 +91,10 @@ namespace Mpt
 
             app.UseHttpsRedirection();
 
-            app.UseMiddleware<MyMiddleware>();
+            
 
             app.UseRouting();
-
+app.UseMiddleware<MyMiddleware>();
 
             app.UseAuthentication();
             app.UseAuthorization();
