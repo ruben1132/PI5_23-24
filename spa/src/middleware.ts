@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(url);
         }
 
-        // Manually set the cookie in the request headers
+        // set the cookie in the request headers
         const headers = new Headers({
             Authorization: `Bearer ${currentUser}`,
             Cookie: `${conf.cookieName}=${currentUser}; HttpOnly; Secure; SameSite=None; Path=/`,

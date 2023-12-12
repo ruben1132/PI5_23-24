@@ -86,6 +86,7 @@ namespace Mpt.Controllers
         }
 
         // GET: api/Auth/session
+        [AllowAnonymous]
         [HttpGet("session")]
         public async Task<ActionResult<UserWithRoleDto>> Session()
         {

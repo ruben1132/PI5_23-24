@@ -3,7 +3,6 @@ using Mpt.IServices;
 using Mpt.Dtos;
 using Mpt.IControllers;
 using Microsoft.AspNetCore.Authorization;
-using Newtonsoft.Json;
 
 namespace Mpt.Controllers
 {
@@ -20,6 +19,7 @@ namespace Mpt.Controllers
 
 
         // POST: api/User
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<ActionResult<UserDto>> Create(CreateUserDto user)
         {
@@ -42,6 +42,7 @@ namespace Mpt.Controllers
         }
 
         // PUT: api/User/
+        [Authorize(Roles = "admin")]
         [HttpPatch]
         public async Task<ActionResult<UserDto>> Update(UserDto user)
         {
@@ -64,6 +65,7 @@ namespace Mpt.Controllers
         }
 
         // GET: api/User
+        [Authorize(Roles = "admin")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
         {
@@ -86,6 +88,7 @@ namespace Mpt.Controllers
         }
 
         // GET: api/User/5
+        [Authorize(Roles = "admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetById(Guid id)
         {
@@ -108,6 +111,7 @@ namespace Mpt.Controllers
         }
 
         // DELETE: api/User/5
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<string>> Delete(Guid id)
         {

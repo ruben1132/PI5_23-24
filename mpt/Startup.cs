@@ -12,6 +12,11 @@ using Mpt.Infrastructure.Roles;
 using Mpt.Infrastructure.Tasks;
 using Mpt.Infrastructure.Plannings;
 using Mpt.Core.Domain;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Mpt.Middleware;
+using Microsoft.AspNetCore.Builder;
 
 namespace Mpt
 {
@@ -46,6 +51,23 @@ namespace Mpt
             services.AddDbContext<MptDbContext>(opt => opt.UseSqlServer(connectionString)
                   .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>());
 
+            // auth
+            var secret = Configuration.GetValue<string>("AuthToken:secret");
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
+            services.AddAuthorization();
+
             ConfigureMyServices(services);
 
 
@@ -69,8 +91,12 @@ namespace Mpt
 
             app.UseHttpsRedirection();
 
+            app.UseMiddleware<MyMiddleware>();
+
             app.UseRouting();
 
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
