@@ -123,7 +123,7 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                case 'user':
+                case 'sysuser':
                     return (
                         <UserForm
                             item={{ value: props.item.value }}

@@ -48,6 +48,7 @@ const sideBarIcons = {
     tasks: faListCheck,
     taskplanning: faListCheck,
     users: faUser,
+    sysusers: faUser,
     floormaps: faMap,
     roles: faUsers,
     elevators: faElevator,

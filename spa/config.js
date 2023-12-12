@@ -52,8 +52,18 @@ export default {
             permissions: [userRole.GESTOR_TAREFAS],
         },
         {
+            routeName: 'roles',
+            displayName: 'Roles',
+            permissions: [userRole.ADMIN],
+        },
+        {
             routeName: 'users',
             displayName: 'Users',
+            permissions: [userRole.ADMIN],
+        },
+        {
+            routeName: 'sysusers',
+            displayName: 'System Users',
             permissions: [userRole.ADMIN],
         },
         // {
@@ -61,11 +71,6 @@ export default {
         //   displayName: "Floor Maps" ,
         //   permissions: [userRole.GESTOR_CAMPUS],
         // },
-        {
-            routeName: 'roles',
-            displayName: 'Roles',
-            permissions: [userRole.ADMIN],
-        },
         {
             routeName: 'elevators',
             displayName: 'Elevators',
@@ -126,11 +131,9 @@ export default {
         },
     },
 
-    mptAPI:{
+    mptAPI: {
         baseUrl:
-            process.env.NODE_ENV === 'production'
-                ? process.env.NEXT_PUBLIC_MPT_API_URL
-                : 'http://localhost:5095/api/',
+            process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MPT_API_URL : 'http://localhost:5095/api/',
         routes: {
             planning: 'planning/',
             planningFindPath: 'planning/findpath',
@@ -148,7 +151,7 @@ export default {
 
     utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/profile'],
 
-    adminRoutes: ['/dashboard', '/dashboard/roles', '/dashboard/users', '/dashboard/profile'],
+    adminRoutes: ['/dashboard', '/dashboard/roles', '/dashboard/users', '/dashboard/sysusers', '/dashboard/profile'],
 
     gestorFrotaRoutes: [
         '/dashboard',

@@ -7,7 +7,6 @@ interface Props {
 }
 
 export default function RowItem(props: Props) {
-    
     const filterForm = () => {
         // This checks if props.item is an obj
         if (props.item instanceof Object) {
@@ -48,14 +47,15 @@ export default function RowItem(props: Props) {
                     return <td key={props.index}>{props.item.code}</td>;
                 case 'user':
                     return <td key={props.index}>{props.item.name}</td>;
-
+                case 'sysuser':
+                    return <td key={props.index}>{props.item.name}</td>;
                 default:
                     return <td key={props.index}>no row handler for this item dummy :p create one! :D</td>;
             }
         }
 
         if (typeof props.item === 'boolean') {
-            return <td key={props.index}>{props.item ? 'Enabled' : 'Disabled'}</td>;
+            return <td key={props.index}>{props.item ? 'Active' : 'Inactive'}</td>;
         }
 
         return <td key={props.index}>{props.item}</td>;

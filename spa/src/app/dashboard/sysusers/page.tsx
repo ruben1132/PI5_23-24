@@ -4,10 +4,10 @@ import config from '../../../../config';
 export default async function Users() {
     return (
         <div>
-            <p>Users</p>
+            <p>System Users</p>
 
             <PageContent
-                type="user"
+                type="sysuser"
                 routeToFetch={config.mptAPI.baseUrl + config.mptAPI.routes.users}
             />
         </div>

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import conf from '../config';
-import { User } from '@/models/User';
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;

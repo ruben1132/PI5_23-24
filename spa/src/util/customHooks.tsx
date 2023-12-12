@@ -161,14 +161,15 @@ export function useSubmitData(route: string, type: string) {
             const response = await axios(route, {
                 method: type,
                 data: data,
+                withCredentials: true,
             });
 
             if (response.status === 201 || response.status === 200) {
                 const responseData = await response.data;
                 return { data: responseData, error: null };
             }
-        } catch (res: any) {
-            const errorMessage = res.response.data.error || res.response.data.errors.message || 'An error occurred';
+        } catch (res: any) {            
+            const errorMessage = res.response.data?.error || res.response.data?.errors?.message || 'An error occurred';
             return { data: null, error: errorMessage };
         }
     }
@@ -184,6 +185,7 @@ export function useDeleteData(route: string) {
         try {
             const response = await axios(route, {
                 method: 'DELETE',
+                withCredentials: true,
             });
 
             if (response.status === 201 || response.status === 200) {
