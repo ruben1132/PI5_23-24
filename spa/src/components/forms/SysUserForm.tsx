@@ -44,7 +44,7 @@ interface Props {
     close?: () => void;
 }
 
-export default function UserForm(props: Props) {
+export default function SysUserForm(props: Props) {
     // fetchers
     const selectBoxRolesDataFetch = useFetchData(config.mptAPI.baseUrl + config.mptAPI.routes.roles); // fetch roles
 
@@ -192,7 +192,19 @@ export default function UserForm(props: Props) {
                 </Col>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Email</Form.Label>
+                        <Form.Label htmlFor="select">
+                            Email{' '}
+                            <OverlayTrigger
+                                placement="right"
+                                overlay={
+                                    <Tooltip id="tooltip-password">
+                                        Email must be from the domain {config.emailDomain}.
+                                    </Tooltip>
+                                }
+                            >
+                                <FontAwesomeIcon icon={faCircleInfo} size="xs" />
+                            </OverlayTrigger>
+                        </Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="user's email..."
@@ -206,7 +218,8 @@ export default function UserForm(props: Props) {
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Phone Number{' '}
+                        <Form.Label htmlFor="select">
+                            Phone Number{' '}
                             <OverlayTrigger
                                 placement="right"
                                 overlay={
@@ -216,7 +229,8 @@ export default function UserForm(props: Props) {
                                 }
                             >
                                 <FontAwesomeIcon icon={faCircleInfo} size="xs" />
-                            </OverlayTrigger></Form.Label>
+                            </OverlayTrigger>
+                        </Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="user's phone number"
@@ -227,7 +241,15 @@ export default function UserForm(props: Props) {
                 </Col>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">NIF</Form.Label>
+                        <Form.Label htmlFor="select">
+                            NIF{' '}
+                            <OverlayTrigger
+                                placement="right"
+                                overlay={<Tooltip id="tooltip-password">NIF must have 9 digits.</Tooltip>}
+                            >
+                                <FontAwesomeIcon icon={faCircleInfo} size="xs" />
+                            </OverlayTrigger>
+                        </Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="user's NIF"
@@ -321,7 +343,7 @@ export default function UserForm(props: Props) {
                                     !userPhone.isValid ||
                                     // !userNif.isValid ||
                                     // !userPassword.isValid ||
-                                    
+
                                     !enabled
                                 }
                             >

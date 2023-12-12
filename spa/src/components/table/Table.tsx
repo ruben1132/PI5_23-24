@@ -38,7 +38,7 @@ function ContentTable(props: Props) {
 
     const addButton =
         // dont render for page users
-        props.type === 'users' ? null : (
+        props.type === 'user' ? null : (
             <Button variant="success" onClick={handleAddButtonClick} data-testid="open-modal">
                 Add {props.type}
             </Button>
