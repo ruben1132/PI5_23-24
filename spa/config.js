@@ -181,4 +181,6 @@ export default {
     ],
 
     cookieName: 'robdronego_authCookie',
+
+    emailDomain: "isep.ipp.pt"
 };

@@ -25,7 +25,6 @@ import config from '../../../config';
 import {
     useFetchData,
     useSubmitData,
-    useFormNumberInput,
     useFormStringInput,
     useDeleteData,
     useFormStringInputWithRegex,
@@ -60,12 +59,13 @@ export default function UserForm(props: Props) {
 
     // inputs
     const userName = useFormStringInput(props.item?.value?.name);
-    const userEmail = useFormStringInputWithRegex(props.item?.value?.email, /^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+    const emailRegex = new RegExp(`^[a-zA-Z0-9._%+-]+@${config.emailDomain}$`);
+    const userEmail = useFormStringInputWithRegex(props.item?.value?.email, emailRegex);
     const userPassword = useFormStringInputWithRegex(
         '',
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]).{10,}$/,
     );
-    const userPhone = useFormStringInputWithRegex(props.item?.value?.phone, /^9\d{8}$"/);
+    const userPhone = useFormStringInputWithRegex(props.item?.value?.phone, /^9\d{8}$/);
     const userNif = useFormStringInputWithRegex(props.item?.value?.nif, /^\d{9}$/);
     const userActive = useFormStringInput(props.item?.value?.active ? 'true' : 'false');
 
@@ -209,7 +209,17 @@ export default function UserForm(props: Props) {
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Phone Number</Form.Label>
+                        <Form.Label htmlFor="select">Phone Number{' '}
+                            <OverlayTrigger
+                                placement="right"
+                                overlay={
+                                    <Tooltip id="tooltip-password">
+                                        Phone number must start with the digit 9 and must have 9 digits.
+                                    </Tooltip>
+                                }
+                            >
+                                <FontAwesomeIcon icon={faCircleInfo} size="xs" />
+                            </OverlayTrigger></Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="user's phone number"
@@ -311,8 +321,9 @@ export default function UserForm(props: Props) {
                                 disabled={
                                     userName.value === '' ||
                                     // !userEmail.isValid ||
-                                    // !userPhone.isValid ||
+                                    !userPhone.isValid ||
                                     // !userNif.isValid ||
+                                    // !userPassword.isValid ||
                                     
                                     !enabled
                                 }
