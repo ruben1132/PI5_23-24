@@ -4,8 +4,9 @@
 :-dynamic prob_cruzamento/1.
 :-dynamic prob_mutacao/1.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% algoritmos %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% tarefa(Id,TempoProcessamento,TempConc,PesoPenalizacao).
+% tarefa(Id,TempoProcessamento,TempConclusao,PesoPenalizacao).
 tarefa(t1,2,5,1).
 tarefa(t2,4,7,6).
 tarefa(t3,1,11,2).
@@ -245,6 +246,37 @@ mutacao23(G1,1,[G2|Ind],G2,[G1|Ind]):-!.
 mutacao23(G1,P,[G|Ind],G2,[G|NInd]):-
 	P1 is P-1,
 	mutacao23(G1,P1,Ind,G2,NInd).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTERFACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define a predicate to process the tasks
+process_tasks([], _, Result) :-
+    % Handle the case when there are no tasks
+    Result = json{message: "No tasks provided"}.
+
+process_tasks(Tasks, Algorithm, Result) :-
+    % Process each task in the array (you can implement your logic here)
+    process_each_task(Tasks, Algorithm, Result).
+
+process_each_task([], _, []).
+
+process_each_task([Task|Rest], Algorithm, [TaskResult|RestResult]) :-
+    % Process individual task (you can implement your logic here)
+    process_task(Task, Algorithm, TaskResult),
+    
+    % Recursive call for the remaining tasks
+    process_each_task(Rest, Algorithm, RestResult).
+
+% Define a predicate to process an individual task
+process_task(Task, Algorithm, TaskResult) :-
+    % Implement your logic to process each task here
+    % For example, you can access Task.taskId, Task.origin, Task.destiny, etc.
+    % and apply your planning algorithm
+    
+    % Dummy example: Just echoing the task for now
+    TaskResult = Task.
+
+
 
 
 
