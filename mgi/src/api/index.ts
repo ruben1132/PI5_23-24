@@ -11,6 +11,7 @@ import robotType from './routes/robotTypeRoute';
 import roomRoute from './routes/roomRoute';
 import floorMapRoute from './routes/floorMapRoute';
 import robotRoute from './routes/robotRoute';
+import planningRoute from './routes/planningRoute';
 
 export default () => {
 	const app = Router();
@@ -27,6 +28,7 @@ export default () => {
     robotType(app);
 	roomRoute(app);
     robotRoute(app);
+	planningRoute(app);
 
 	return app
 }

@@ -53,7 +53,7 @@ export default function RobotTypeForm(props: Props) {
     const robotTypeName = useFormStringInputWithRegex(props.item.value?.type, /^[A-Za-z0-9]{1,25}$/);
     const robotTypeBrand = useFormStringInputWithRegex(props.item.value?.brand, /^.{1,50}$/);
     const robotTypeModel = useFormStringInputWithRegex(props.item.value?.model, /^.{1,100}$/);
-    const [tasksAllowed, setTasksAllowed] = useState<TaskType[]>([]); 
+    const [tasksAllowed, setTasksAllowed] = useState<TaskType[]>([]);
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
@@ -140,19 +140,6 @@ export default function RobotTypeForm(props: Props) {
 
     return (
         <Form>
-            {props.action === 'edit' && (
-                <>
-                    <Row>
-                        <Col sm={12}>
-                            <Form.Group className="mb-6">
-                                <Form.Label htmlFor="select">Robot Type ID</Form.Label>
-                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <br />
-                </>
-            )}
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
@@ -162,6 +149,7 @@ export default function RobotTypeForm(props: Props) {
                             placeholder="robot type's name..."
                             defaultValue={props.item.value?.type}
                             onChange={robotTypeName.handleChange}
+                            data-testid="rt-name-input"
                         />
                     </Form.Group>
                 </Col>
@@ -173,6 +161,7 @@ export default function RobotTypeForm(props: Props) {
                             placeholder="robot type's brand..."
                             defaultValue={props.item.value?.brand}
                             onChange={robotTypeBrand.handleChange}
+                            data-testid="rt-brand-input"
                         />
                     </Form.Group>
                 </Col>
@@ -187,6 +176,7 @@ export default function RobotTypeForm(props: Props) {
                             placeholder="robot type's model..."
                             defaultValue={props.item.value?.model}
                             onChange={robotTypeModel.handleChange}
+                            data-testid="rt-model-input"
                         />
                     </Form.Group>
                 </Col>
@@ -194,10 +184,10 @@ export default function RobotTypeForm(props: Props) {
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Task Types</Form.Label>
                         <TaskTypeSelectBox
-                         data={filteredSelectBoxData}
-                         isError={selectBoxTaskTypesDataFetch.isError}
-                         isLoading={selectBoxTaskTypesDataFetch.isLoading}
-                         customHandleChange={handleSelect}
+                            data={filteredSelectBoxData}
+                            isError={selectBoxTaskTypesDataFetch.isError}
+                            isLoading={selectBoxTaskTypesDataFetch.isLoading}
+                            customHandleChange={handleSelect}
                         />
                     </Form.Group>
                 </Col>
@@ -225,17 +215,22 @@ export default function RobotTypeForm(props: Props) {
                                     variant="primary"
                                     onClick={handleSubmitData}
                                     disabled={
-                                        !robotTypeName.isValid ||
-                                        !robotTypeBrand.isValid ||
-                                        !robotTypeModel.isValid ||
+                                        robotTypeName.value === '' ||
+                                        robotTypeBrand.value === '' ||
+                                        robotTypeModel.value === '' ||
                                         tasksAllowed.length === 0 ||
                                         !enabled
                                     }
+                                    data-testid="update-button"
                                 >
                                     Update
                                 </Button>
 
-                                <Button variant="danger" onClick={handleDeleteData}>
+                                <Button
+                                    variant="danger"
+                                    onClick={handleDeleteData}
+                                    data-testid="delete-button"
+                                >
                                     Delete
                                 </Button>
                             </>
@@ -244,12 +239,13 @@ export default function RobotTypeForm(props: Props) {
                                 variant="success"
                                 onClick={handleSubmitData}
                                 disabled={
-                                    !robotTypeName.isValid ||
-                                    !robotTypeBrand.isValid ||
-                                    !robotTypeModel.isValid ||
+                                    robotTypeName.value === '' ||
+                                    robotTypeBrand.value === '' ||
+                                    robotTypeModel.value === '' ||
                                     tasksAllowed.length === 0 ||
                                     !enabled
                                 }
+                                data-testid="add-button"
                             >
                                 Add
                             </Button>

@@ -44,7 +44,7 @@ export default function BuildingForm(props: Props) {
 
     // deleter
     const buildingDeleter = useDeleteData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings + props.item?.value.id,
+        config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings + props.item?.value?.id,
     );
 
     // button enables - used to prevent double clicks
@@ -101,26 +101,6 @@ export default function BuildingForm(props: Props) {
 
     return (
         <Form>
-        {props.action === 'edit' && (
-            <>
-                <Row>
-                    <Col sm={12}>
-                        <Form.Group className="mb-6">
-                            <Form.Label htmlFor="select">Building ID</Form.Label>
-                            <Form.Control
-                                id="building-id"
-                                type="text"
-                                defaultValue={props.item.value?.id}
-                                disabled
-                                data-testid="building-id-input"
-                            />
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <br />
-            </>
-        )}
-
         <Row>
             <Col sm={6}>
                 <Form.Group className="mb-6">

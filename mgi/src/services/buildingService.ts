@@ -15,7 +15,6 @@ import { BuildingDimensions } from '../domain/valueObj/buildingDimensions';
 export default class BuildingService implements IBuildingService {
     constructor(
         @Inject(config.repos.building.name) private buildingRepo: IBuildingRepo,
-        @Inject(config.repos.floor.name) private floorRepo: IFloorRepo,
     ) {}
 
     public async getBuildings(): Promise<Result<Array<IBuildingDTO>>> {
@@ -123,7 +122,7 @@ export default class BuildingService implements IBuildingService {
 
     public async getBuildingsByFloorRange(min: number, max: number): Promise<Result<IBuildingDTO[]>> {
         try {
-            const buildings = await this.floorRepo.getBuildingsByFloorRange(min, max);
+            const buildings = await this.buildingRepo.getBuildingsByFloorRange(min, max);
             // const floors = await this.floorRe
             const buildingDTOs = buildings.map(building => BuildingMap.toDTO(building));
             return Result.ok<IBuildingDTO[]>(buildingDTOs);

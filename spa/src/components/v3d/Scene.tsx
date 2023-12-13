@@ -12,9 +12,9 @@ import config from '../../../config';
 import '../../styles/v3d.css';
 
 // models
-import { Floor } from '@/models/Floor.jsx';
+import { Floor, FloorWithBuilding } from '@/models/Floor.jsx';
 import { Building } from '@/models/Building.js';
-import { Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
 // threejs and project itself
 import * as THREE from 'three';
@@ -23,15 +23,26 @@ import ThumbRaiser from './thumb_raiser.js';
 
 // notification component
 import { notify } from '@/components/notification/Notification';
+import { PassageWithFloor } from '@/models/Passage';
 
 interface Props {
     buildings: Building[];
 }
 
+interface objPass {
+    passageId: string;
+    floor: string;
+}
+
 export default function Scene(props: Props) {
     let animationFrameId: number;
     const [thumbRaiser, setThumbRaiser] = useState<ThumbRaiser>();
+    const [building, setBuilding] = useState<Building>();
     const [floors, setFloors] = useState<Floor[]>([]);
+    const [isInElevator, setIsInElevator] = useState<boolean>(false); // this is for when the robot enters the elevator
+    const [floor, setFloor] = useState<string>(''); // this is for when the robot changes floor through a passage
+    const [passage, setPassage] = useState<objPass>(null);
+    const [navigator, setNavigator] = useState<boolean>(true); // buildings and floors selects
 
     useEffect(() => {
         let thumbRaiserr: ThumbRaiser;
@@ -237,7 +248,7 @@ export default function Scene(props: Props) {
                     selected: 2,
                 }, // Cube texture parameters
                 {
-                    url: '/v3d/mazes/defaultPlant.json',
+                    url: '/v3d/mazes/plantEdAFloor2.json',
                     designCredits: '',
                     texturesCredits: '',
                     helpersColor: new THREE.Color(0xff0077),
@@ -335,6 +346,9 @@ export default function Scene(props: Props) {
                     zoomMin: 0.64,
                     zoomMax: 5.12,
                 }, // Mini-map view camera parameters
+                setIsInElevator,
+                setFloor,
+                setPassage,
             );
 
             setThumbRaiser(thumbRaiserr);
@@ -364,22 +378,106 @@ export default function Scene(props: Props) {
     }, []);
 
     const handleSelectBuilding = async (event: ChangeEvent<HTMLSelectElement>) => {
-        try {
-            const response = await axios.get(
-                config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + 'buildingId/' + event.target.value,
-            );
-            if (response.status !== 200) {
-                notify.error('Error fetching floors');
-                return;
-            }
-
-            setFloors(response.data);
-        } catch (e) { }
+        setBuilding(props.buildings.find((building) => building.id === event.target.value));
     };
 
     const handleSelectFloor = (event: ChangeEvent<HTMLSelectElement>): void => {
-        thumbRaiser?.changeMaze(event.target.value + '.json');
+        setFloor(event.target.value);
     };
+
+    const handleSelectFloorOnElevator = (event: ChangeEvent<HTMLSelectElement>): void => {
+        setFloor(event.target.value);
+        setIsInElevator(false);
+    };
+
+    const handleCancelElevator = (): void => {
+        thumbRaiser?.cancelElevatorAction();
+        setIsInElevator(false);
+    };
+
+    useEffect(() => {
+        if (passage !== null) {
+
+            const fetchFloor = async () => {
+
+                const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages + passage.passageId);
+                if (response.status !== 200) {
+                    notify.error('Error fetching passage');
+                    return;
+                }
+
+                const passageData = response.data as PassageWithFloor;
+                console.log(JSON.stringify(passageData));
+                let floor = "";
+                if (passageData.fromFloor.id == passage.floor) {
+                    floor = passageData.toFloor.id;
+                }
+                else {
+                    floor = passageData.fromFloor.id;
+                }
+
+                setFloor(floor);
+            };
+
+            fetchFloor();
+
+        }
+    }, [passage]);
+
+
+    // when the robot changes floor through a passage or a elevator | or when user selects a floor
+    useEffect(() => {
+        if (floor !== '') {
+            thumbRaiser?.changeMaze(floor + '.json');
+
+            console.log('floor changed: ' + floor);
+        }
+
+        setIsInElevator(false);
+
+        // get current building - when the robot changes to a dif building, we need to load its floors
+        const fetchFloor = async () => {
+            try {
+                const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + floor);
+                if (response.status !== 200) {
+                    notify.error('Error fetching floors');
+                    return;
+                }
+
+                const floorData = response.data as FloorWithBuilding;
+                setBuilding(floorData.building);
+            } catch (e) {
+                console.error(e);
+            }
+        };
+
+        fetchFloor();
+    }, [floor]);
+
+    // when the robot changes building | or when user selects a building
+    useEffect(() => {
+        if (building === undefined) {
+            return;
+        }
+
+        const fetchFloors = async () => {
+            try {
+                const response = await axios.get(
+                    config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + 'buildingId/' + building.id,
+                );
+                if (response.status !== 200) {
+                    notify.error('Error fetching floors');
+                    return;
+                }
+
+                setFloors(response.data);
+            } catch (e) {
+                console.error(e);
+            }
+        };
+
+        fetchFloors();
+    }, [building]);
 
     return (
         <>
@@ -433,29 +531,66 @@ export default function Scene(props: Props) {
                             </tbody>
                         </table>
                     </div>
-                    <div id="selects-panel">
+                    {navigator && (
+                        <div id="selects-panel">
+                            <table className="v3dtable views">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Buildings:
+                                            <Form.Select onChange={handleSelectBuilding}>
+                                                <option defaultChecked={true}>Select building</option>
+                                                {props.buildings.map((building) => (
+                                                    <option value={building.id} key={building.id}>
+                                                        {building.name}
+                                                    </option>
+                                                ))}
+                                            </Form.Select>
+                                        </td>
+                                        <td>
+                                            {floors.length > 0 && (
+                                                <>
+                                                    <span> Floors:</span>
+                                                    <Form.Select onChange={handleSelectFloor}>
+                                                        <option defaultChecked={true}>Select floor</option>
+                                                        {floors.map((floor) => (
+                                                            <option value={floor.id} key={floor.id}>
+                                                                {floor.information}
+                                                            </option>
+                                                        ))}
+                                                    </Form.Select>
+                                                </>
+                                            )}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
+
+                    <div id="elevator-panel">
                         <table className="v3dtable views">
                             <tbody>
                                 <tr>
                                     <td>
-                                        Buildings:
-                                        <Form.Select onChange={handleSelectBuilding}>
-                                            <option defaultChecked={true}>Select building</option>
-                                            {props.buildings.map((building) => (
-                                                <option value={building.id} key={building.id}>{building.name}</option>
-                                            ))}
-                                        </Form.Select>
-                                    </td>
-                                    <td>
-                                        {floors.length > 0 && (
+                                        {isInElevator && (
                                             <>
                                                 <span> Floors:</span>
-                                                <Form.Select onChange={handleSelectFloor}>
+                                                <Form.Select onChange={handleSelectFloorOnElevator}>
                                                     <option defaultChecked={true}>Select floor</option>
                                                     {floors.map((floor) => (
-                                                        <option value={floor.id} key={floor.id}>{floor.information}</option>
+                                                        <option value={floor.id} key={floor.id}>
+                                                            {floor.information}
+                                                        </option>
                                                     ))}
                                                 </Form.Select>
+                                                <Button
+                                                    type="button"
+                                                    variant="secondary"
+                                                    onClick={handleCancelElevator}
+                                                >
+                                                    Cancel
+                                                </Button>
                                             </>
                                         )}
                                     </td>
@@ -678,6 +813,20 @@ export default function Scene(props: Props) {
                             <tbody>
                                 <tr>
                                     <td>
+                                        Navigate buildings & floors:
+                                        <input
+                                            className="v3dinput"
+                                            type="checkbox"
+                                            id="buildings-floors"
+                                            onChange={(e) => {
+                                                setNavigator(e.target.checked);
+                                            }}
+                                            defaultChecked={true}
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         Realistic view mode:
                                         <input className="v3dinput" type="checkbox" id="realistic" />
                                     </td>
@@ -736,7 +885,9 @@ export default function Scene(props: Props) {
                 </div>
             </div>
 
-            <div id="scene" style={{ paddingTop: 100 }}> </div>
+            <div id="scene" style={{ paddingTop: 100 }}>
+                {' '}
+            </div>
         </>
     );
 }

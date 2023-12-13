@@ -58,7 +58,7 @@ const RobotTypeWithTaskTypesSelectBox = (props: Props) => {
     const selectedValue = getSelectedValue();
 
     return (
-        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange}>
+        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='robotType-sb'>
             {props?.selectedValue && (
                 <option defaultChecked={true} value={selectedValue.id}>
                     {selectedValue.type}

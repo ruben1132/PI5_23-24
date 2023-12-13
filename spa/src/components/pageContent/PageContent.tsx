@@ -1,14 +1,12 @@
 'use client';
 
 import ContentTable from '../table/Table';
-import config from '../../../config';
 import { RenderFilteredSearch } from '../forms/search/RenderFilteredSearch';
 import { useEffect, useState } from 'react';
 
 interface Props {
     type: string;
     routeToFetch: string;
-    routeToPush: string;
     children?: React.ReactNode;
 }
 
@@ -26,7 +24,7 @@ const PageContent = (props: Props) => {
             <RenderFilteredSearch type={props.type} setParams={setQueryParms} />
             <br />
             
-            <ContentTable type={props.type} routeToFetch={route} routeToPush={props.routeToPush} />
+            <ContentTable type={props.type} routeToFetch={route}  />
         </div>
     );
 };

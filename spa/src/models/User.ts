@@ -1,9 +1,35 @@
-import { Role } from "./Role";
+import { Role } from './Role';
 
-export interface User{
+export interface UserWithRole {
     id: string;
-    username: string;
+    name: string;
     email: string;
-    password: string;
-    role: Role
+    password?: string;
+    nif: string;
+    phone: string;
+    role: Role;
+    active: boolean;
+    isApproved: boolean;
+}
+
+export interface User {
+    id?: string;
+    name: string;
+    email: string;
+    password?: string;
+    nif: string;
+    phone: string;
+    roleId: string;
+    active: boolean;
+    isApproved?: boolean;
+}
+
+export interface PostUser {
+    name: string;
+    email: string;
+    nif: string;
+    phone: string;
+    active: boolean;
+    password?: string;
+    roleId: string;
 }

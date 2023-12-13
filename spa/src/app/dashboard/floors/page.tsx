@@ -9,7 +9,6 @@ export default async function Floors() {
             <PageContent
                 type="floor"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.floors}
-                routeToPush={'/floors/'}
             />
         </div>
     );

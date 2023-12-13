@@ -123,21 +123,8 @@ export default class FloorService implements IFloorService {
             if (floors === null) {
                 return Result.fail<Array<IFloorWithBuildingDTO>>('Floors not found');
             } else {
-                // Collect building IDs from the floors
-                const buildingIds = floors.map(floor => floor.building.toString());
-
-                // Use buildingRepo to fetch all buildings
-                const buildings = await this.buildingRepo.findByDomainIds(buildingIds);
-
-                // Create a mapping of buildingId to building data
-                const buildingMap = new Map<string, Building>();
-                buildings.forEach(building => buildingMap.set(building.id.toString(), building));
-
-                // Map floors to DTOs with building information
-                const floorsDTOResult = floors.map(floor => {
-                    const building = buildingMap.get(floor.building.toString());
-                    return FloorMap.toDTOWtiBuilding(floor, building) as IFloorWithBuildingDTO;
-                });
+                // get floors with buildings
+                const floorsDTOResult = await this.getFloorsWithBuildings(floors);
 
                 return Result.ok<Array<IFloorWithBuildingDTO>>(floorsDTOResult);
             }
@@ -177,27 +164,18 @@ export default class FloorService implements IFloorService {
         }
     }
 
-    // check if building exists
-    private async getBuilding(buildingId: string): Promise<Result<Building>> {
-        const building = await this.buildingRepo.findByDomainId(buildingId);
-        const found = !!building;
-
-        if (found) {
-            return Result.ok<Building>(building);
-        } else {
-            return Result.fail<Building>("Couldn't find building by id=" + buildingId);
-        }
-    }
-
-    public async getFloorsWithPassages(): Promise<Result<Array<IFloorDTO>>> {
+    public async getFloorsWithPassages(): Promise<Result<Array<IFloorWithBuildingDTO>>> {
         try {
+            
             const floors = await this.floorRepo.getFloorsWithPassages();
 
             if (floors === null) {
-                return Result.fail<Array<IFloorDTO>>('Floors not found');
+                return Result.fail<Array<IFloorWithBuildingDTO>>('Floors not found');
             } else {
-                const floorsDTOResult = floors.map(floor => FloorMap.toDTO(floor) as IFloorDTO);
-                return Result.ok<Array<IFloorDTO>>(floorsDTOResult);
+                // get floors with buildings
+                const floorsDTOResult = await this.getFloorsWithBuildings(floors);
+
+                return Result.ok<Array<IFloorWithBuildingDTO>>(floorsDTOResult);
             }
         } catch (e) {
             throw e;
@@ -216,6 +194,36 @@ export default class FloorService implements IFloorService {
             }
         } catch (e) {
             throw e;
+        }
+    }
+
+    private async getFloorsWithBuildings(floors: Floor[]): Promise<IFloorWithBuildingDTO[]> {
+        const buildingIds = floors.map(floor => floor.building.toString());
+
+        // Use buildingRepo to fetch all buildings
+        const buildings = await this.buildingRepo.findByDomainIds(buildingIds);
+
+        // Create a mapping of buildingId to building data
+        const buildingMap = new Map<string, Building>();
+        buildings.forEach(building => buildingMap.set(building.id.toString(), building));
+
+        // Map floors to DTOs with building information
+        const floorsDTOResult = floors.map(floor => {
+            const building = buildingMap.get(floor.building.toString());
+            return FloorMap.toDTOWtiBuilding(floor, building) as IFloorWithBuildingDTO;
+        });
+        return floorsDTOResult;
+    }
+
+    // check if building exists
+    private async getBuilding(buildingId: string): Promise<Result<Building>> {
+        const building = await this.buildingRepo.findByDomainId(buildingId);
+        const found = !!building;
+
+        if (found) {
+            return Result.ok<Building>(building);
+        } else {
+            return Result.fail<Building>("Couldn't find building by id=" + buildingId);
         }
     }
 }

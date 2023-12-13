@@ -6,6 +6,7 @@ import Ground from './ground.js';
 import Wall from './wall.js';
 import Elevator from './elevator.js';
 import Door from './door.js';
+import Passage from './passage.js';
 
 /*
  * parameters = {
@@ -37,6 +38,7 @@ export default class Maze extends THREE.Group {
             ];
 
             // Store the maze's size, map and exit location
+            this.floorId = description.floor;
             this.size = description.maze.size;
             this.halfSize = { width: this.size.width / 2.0, depth: this.size.depth / 2.0 };
             this.map = description.maze.map;
@@ -181,14 +183,36 @@ export default class Maze extends THREE.Group {
             }
 
             // create the elevator
+            this.elevator = null;
             if (description.fmElevator) {
                 const elevator = new Elevator({
                     elevator: description.fmElevator,
                     halfSize: this.halfSize,
                 });
+
+                const elevatorPos = this.cellToCartesian([
+                    description.fmElevator.position.positionY,
+                    description.fmElevator.position.positionX,
+                ]);
+                const elevatorAccess = this.cellToCartesian([
+                    description.fmElevator.access.positionY,
+                    description.fmElevator.access.positionX,
+                ]);
+                this.elevator = {
+                    position: {
+                        x: elevatorPos.x,
+                        z: elevatorPos.z,
+                    },
+                    acess: {
+                        x: elevatorAccess.x,
+                        z: elevatorAccess.z,
+                    },
+                    direction: description.fmElevator.position.direction,
+                    halfSize: elevator.halfSize,
+                };
                 this.add(elevator);
             }
-            
+
             // create doors
             this.doors = []; // create array of doors to use for collisions detection
             description.fmRooms?.forEach((r) => {
@@ -204,6 +228,25 @@ export default class Maze extends THREE.Group {
                 }
                 this.add(door);
             });
+
+            // create the passage
+            this.passages = [];
+            description.fmPassages?.forEach((p) => {
+                // console.log('Passage ' + p.position.positionX + ' ' + p.position.positionY);
+                const passage = new Passage({
+                    passage: p,
+                    halfSize: this.halfSize,
+                    url: '/v3d/models/passage/passage.fbx',
+                    dScale: [0.0015, 0.0015, 0.0005],
+                });
+
+                this.passages.push(passage);
+                
+                this.add(passage);
+            });
+
+            console.log('Passages ' + this.passages.length);
+            console.log('Passages ' + JSON.stringify(this.passages));
 
             let mergedGeometry, mesh;
             for (let i = 0; i < 2; i++) {
@@ -290,10 +333,10 @@ export default class Maze extends THREE.Group {
         const indices = this.cartesianToCell(position);
 
         if (
-            this.doorColli(indices, [0, 0], 0, position, { x: 0.0, z: -0.900 }, halfSize, 'north door') || // Collision with north door)
-            this.doorColli(indices, [0, 0], 1, position, { x: -0.900, z: 0.0 }, halfSize, 'west door')  || // Collision with west door
-            this.doorColli(indices, [1, 0], 0, position, { x: 0.0, z: -0.900 }, halfSize, 'south door') || // Collision with south wall
-            this.doorColli(indices, [0, 1], 1, position, { x: -0.900, z: 0.0 }, halfSize, 'east door')  // Collision with east wall
+            this.doorColli(indices, [0, 0], 0, position, { x: 0.0, z: -0.9 }, halfSize, 'north door') || // Collision with north door)
+            this.doorColli(indices, [0, 0], 1, position, { x: -0.9, z: 0.0 }, halfSize, 'west door') || // Collision with west door
+            this.doorColli(indices, [1, 0], 0, position, { x: 0.0, z: -0.9 }, halfSize, 'south door') || // Collision with south wall
+            this.doorColli(indices, [0, 1], 1, position, { x: -0.9, z: 0.0 }, halfSize, 'east door') // Collision with east wall
         ) {
             return true;
         }
@@ -493,6 +536,36 @@ export default class Maze extends THREE.Group {
         );
     }
 
+    enteredElevator(position) {
+        if (this.elevator !== null) {
+            const distanceThreshold = 0.5;
+
+            switch (this.elevator.direction) {
+                case 'north':
+                    return (
+                        Math.abs(position.x - this.elevator.position.x) < distanceThreshold &&
+                        Math.abs(position.z - (this.elevator.position.z - this.scale.z)) < distanceThreshold
+                    );
+                case 'south':
+                    return (
+                        Math.abs(position.x - this.elevator.position.x) < distanceThreshold &&
+                        Math.abs(position.z - (this.elevator.position.z + this.scale.z)) < distanceThreshold
+                    );
+                case 'east':
+                    return (
+                        Math.abs(position.x - (this.elevator.position.x - this.scale.x)) < distanceThreshold &&
+                        Math.abs(position.z - this.elevator.position.z) < distanceThreshold
+                    );
+                case 'west':
+                    return (
+                        Math.abs(position.x - this.elevator.position.x) < distanceThreshold &&
+                        Math.abs(position.z - this.elevator.position.z) < distanceThreshold
+                    );
+            }
+            console.log('----');
+        }
+    }
+
     changeDoor(currentDoor) {
         this.mazeChanged = true;
 
@@ -500,10 +573,90 @@ export default class Maze extends THREE.Group {
             door: currentDoor.door,
             halfSize: this.halfSize,
             url: '/v3d/models/door/door.fbx',
-            dScale: [0.0058, 0.0025, 0.0020],
+            dScale: [0.0058, 0.0025, 0.002],
         });
 
         this.remove(currentDoor); // remove current door
         this.add(door); // add new door
+    }
+
+    passageCollision(position, halfSize) {
+        const indices = this.cartesianToCell(position);
+
+        const northCollision = this.passageColli(
+            indices,
+            [0, 0],
+            0,
+            position,
+            { x: 0.0, z: -0.9 },
+            halfSize,
+            'north passage',
+        );
+        const westCollision = this.passageColli(
+            indices,
+            [0, 0],
+            1,
+            position,
+            { x: -0.9, z: 0.0 },
+            halfSize,
+            'west passage',
+        );
+        const southCollision = this.passageColli(
+            indices,
+            [1, 0],
+            0,
+            position,
+            { x: 0.0, z: -0.9 },
+            halfSize,
+            'south passage',
+        );
+        const eastCollision = this.passageColli(
+            indices,
+            [0, 1],
+            1,
+            position,
+            { x: -0.9, z: 0.0 },
+            halfSize,
+            'east passage',
+        );
+
+        if (northCollision != null) {
+            return northCollision; // Return the value of the collision
+        } else if (westCollision != null) {
+            return westCollision;
+        } else if (southCollision != null) {
+            return southCollision;
+        } else if (eastCollision != null) {
+            return eastCollision;
+        }
+
+        return null; // No collision occurred
+    }
+
+    passageColli(indices, offsets, orientation, position, delta, radius, name) {
+        const row = indices[0] + offsets[0];
+        const column = indices[1] + offsets[1];
+
+        for (let i = 0; i < this.passages.length; i++) {
+            const passageId = this.passages[i].passage.passageId;
+            if (
+                this.passages[i].passage.position.positionX === column &&
+                this.passages[i].passage.position.positionY === row
+            ) {
+                console.log('Collision passage ' + passageId);
+                if (
+                    Math.abs(position.x - (this.cellToCartesian([row, column]).x + delta.x * this.scale.x)) < radius ||
+                    Math.abs(position.z - (this.cellToCartesian([row, column]).z + delta.z * this.scale.z)) < radius
+                ) {
+                    let data = {
+                        passageId: passageId,
+                        floor: this.floorId,
+                    };
+                    // console.log(JSON.stringify(data));
+                    return data;
+                }
+            }
+        }
+        return null;
     }
 }

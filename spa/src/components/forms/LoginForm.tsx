@@ -40,9 +40,9 @@ export default function UserForm() {
 
         // call the login function to set the user in the context
         const log = await login(email, password);
-        if (!log) {
+        if (log) {
             setDisableSubmit(false);
-            notify.error('Invalid credentials');
+            notify.warning(log);
             return;
         }
         // redirect to the dashboard page
@@ -51,7 +51,7 @@ export default function UserForm() {
 
     return (
         <Form>
-            <Form.Group controlId="formUserName">
+            <Form.Group>
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                     id="email"
@@ -62,8 +62,8 @@ export default function UserForm() {
                 />
             </Form.Group>
             <br />
-            <Form.Group controlId="formUserRole">
-                <Form.Label>User Role</Form.Label>
+            <Form.Group>
+                <Form.Label>Password</Form.Label>
                 <Form.Control
                     id="password"
                     type="password"
@@ -74,7 +74,7 @@ export default function UserForm() {
             </Form.Group>
             <br />
             <Button
-                id='login-btn'
+                id="login-btn"
                 variant="success"
                 onClick={handleSubmit}
                 disabled={disableSubmit || email === '' || password === ''}

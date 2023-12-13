@@ -1,3 +1,5 @@
+import {mount} from 'cypress/react18'
+
 /// <reference types="cypress" />
 // ***********************************************
 // This example commands.ts shows you how to
@@ -35,3 +37,5 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add('mount', mount)

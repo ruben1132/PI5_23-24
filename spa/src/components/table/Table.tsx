@@ -13,11 +13,9 @@ import { RenderFilteredSearch } from '../forms/search/RenderFilteredSearch';
 interface Props {
     type: string;
     routeToFetch: string;
-    routeToPush: string;
 }
 
 function ContentTable(props: Props) {
-    
     const contentModal = useModal(false);
     const [itemClicked, setItemClicked] = useState<any>(null);
     const useFetchdata = useFetchData(props.routeToFetch);
@@ -38,11 +36,13 @@ function ContentTable(props: Props) {
         contentModal.handleOpen();
     };
 
-    const addButton = (
-        <Button variant="success" onClick={handleAddButtonClick} data-testid="open-modal">
-            Add {props.type}
-        </Button>
-    );
+    const addButton =
+        // dont render for page users
+        props.type === 'user' ? null : (
+            <Button variant="success" onClick={handleAddButtonClick} data-testid="open-modal">
+                Add {props.type}
+            </Button>
+        );
 
     const modal = (
         <Modal
@@ -66,7 +66,9 @@ function ContentTable(props: Props) {
         );
 
     // filter out the id column
-    const filteredColumns = Object.keys(useFetchdata.data[0]).filter((column: string) => column !== 'id');
+    const filteredColumns = Object.keys(useFetchdata.data[0]).filter(
+        (column: string) => column !== 'id' && column !== 'password',
+    );
 
     return (
         <>

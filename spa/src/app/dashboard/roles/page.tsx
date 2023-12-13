@@ -8,8 +8,7 @@ export default async function Roles() {
 
             <PageContent
                 type="role"
-                routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.roles}
-                routeToPush={'/roles/'}
+                routeToFetch={config.mptAPI.baseUrl + config.mptAPI.routes.roles}
             />
         </div>
     );

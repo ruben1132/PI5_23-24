@@ -8,6 +8,9 @@ import ElevatorForm from './ElevatorForm';
 import RobotForm from './RobotForm';
 import RoomForm from './RoomForm';
 import TaskForm from './TaskForm';
+import SysUserForm from './SysUserForm';
+import TaskPlanningForm from './TaskPlanningForm';
+import UserForm from './UserForm';
 
 interface Props {
     item: {
@@ -104,7 +107,7 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                    case 'tasks':
+                case 'task':
                     return (
                         <TaskForm
                             item={{ value: props.item.value }}
@@ -113,9 +116,26 @@ export function RenderFilteredForm(props: Props) {
                             close={props.close}
                         />
                     );
-                case 'task':
+                case 'taskplanning':
                     return (
-                        <TaskForm
+                        <TaskPlanningForm
+                            item={{ value: props.item.value }}
+                            reFetchData={props.reFetchData}
+                            close={props.close}
+                        />
+                    );
+                case 'sysuser':
+                    return (
+                        <SysUserForm
+                            item={{ value: props.item.value }}
+                            action={props.action}
+                            reFetchData={props.reFetchData}
+                            close={props.close}
+                        />
+                    );
+                case 'user':
+                    return (
+                        <UserForm
                             item={{ value: props.item.value }}
                             action={props.action}
                             reFetchData={props.reFetchData}

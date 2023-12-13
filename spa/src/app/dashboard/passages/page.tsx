@@ -9,7 +9,6 @@ export default async function Passages() {
             <PageContent
                 type="passage"
                 routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.passages}
-                routeToPush={'/passages/'}
             />
         </div>
     );

@@ -1,7 +1,7 @@
 'use client';
 
 // react
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // react bootstrap components
 import Form from 'react-bootstrap/Form';
@@ -20,6 +20,7 @@ import { useFormStringInput, useFormStringInputWithRegex, useSubmitData, useDele
 
 // model
 import { Role } from '@/models/Role';
+import StatusSelectBox from '../selectBoxes/StatusSelectBox';
 
 interface Props {
     item: {
@@ -32,16 +33,17 @@ interface Props {
 
 export default function RoleForm(props: Props) {
     // inputs
-    const taskTypeName = useFormStringInputWithRegex(props.item.value?.name, /^[A-Za-z0-9 ]{1,30}$/);
+    const roleName = useFormStringInputWithRegex(props.item.value?.name, /^[A-Za-z0-9 ]{1,30}$/);
+    const roleActive = useFormStringInput(props.item?.value?.isActive ? 'true' : 'false');
 
     // form submitter
     const buildingForm = useSubmitData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.roles,
+        config.mptAPI.baseUrl + config.mptAPI.routes.roles,
         props.action === 'edit' ? 'PUT' : 'POST',
     );
 
     // deleter
-    const buildingDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.roles + props.item?.value.id);
+    const buildingDeleter = useDeleteData(config.mptAPI.baseUrl + config.mptAPI.routes.roles + props.item?.value.id);
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
@@ -53,7 +55,8 @@ export default function RoleForm(props: Props) {
         // set building data
         let item: Role = { ...props.item.value };
         item.id = props.item.value?.id;
-        item.name = taskTypeName.value;
+        item.name = roleName.value;
+        item.isActive = roleActive.value === 'true' ? true : false;
 
         // submit data
         let res = await buildingForm.submit(item);
@@ -68,7 +71,7 @@ export default function RoleForm(props: Props) {
         setEnabled(true); // enable buttons
 
         // show alert
-        notify.success(`Task Type ${props.action == 'edit' ? 'edited' : 'added'} successfully`);
+        notify.success(`Role ${props.action == 'edit' ? 'edited' : 'added'} successfully`);
     };
 
     const handleDeleteData = async () => {
@@ -87,30 +90,23 @@ export default function RoleForm(props: Props) {
         setEnabled(true); // enable buttons
 
         // show alert
-        notify.success(`Task Type deleted successfully`);
+        notify.success(`Role deleted successfully`);
 
         // close modal
         props.close();
     };
 
+        // set user as acive by default
+        useEffect(() => {
+            if (props.action !== 'edit') {
+                roleActive.handleLoad('true');
+            }
+        }, []);
+
     return (
         <Form>
-            {props.action === 'edit' && (
-                <>
-                    <Row>
-                        <Col sm={12}>
-                            <Form.Group className="mb-6">
-                                <Form.Label htmlFor="select">Buildind ID</Form.Label>
-                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <br />
-                </>
-            )}
-
             <Row>
-                <Col sm={12}>
+                <Col sm={6}>
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Name</Form.Label>
                         <Form.Control
@@ -118,7 +114,20 @@ export default function RoleForm(props: Props) {
                             type="text"
                             placeholder="building's code..."
                             defaultValue={props.item.value?.name}
-                            onChange={taskTypeName.handleChange}
+                            onChange={roleName.handleChange}
+                        />
+                    </Form.Group>
+                </Col>
+                <Col sm={6}>
+                    <Form.Group className="mb-6">
+                        <Form.Label htmlFor="select">Status</Form.Label>
+                        <StatusSelectBox
+                            data={[
+                                { status: 'Active', value: 'true' },
+                                { status: 'Inactive', value: 'false' },
+                            ]}
+                            selectedValue={roleActive.value === 'true' ? 'true' : 'false'}
+                            setValue={roleActive.handleLoad}
                         />
                     </Form.Group>
                 </Col>
@@ -132,7 +141,7 @@ export default function RoleForm(props: Props) {
                                 <Button
                                     variant="primary"
                                     onClick={handleSubmitData}
-                                    disabled={!taskTypeName.isValid || !enabled}
+                                    disabled={!roleName.isValid || !enabled}
                                 >
                                     Update
                                 </Button>
@@ -145,7 +154,7 @@ export default function RoleForm(props: Props) {
                             <Button
                                 variant="success"
                                 onClick={handleSubmitData}
-                                disabled={!taskTypeName.isValid || !enabled}
+                                disabled={!roleName.isValid || !enabled}
                             >
                                 Add
                             </Button>

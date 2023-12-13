@@ -1,0 +1,29 @@
+@startuml
+
+actor GestorCampus as User
+
+participant SPA
+participant "GestaoInfoAPI" as API
+
+User -> SPA: requisita página das salas
+SPA -> User: retorna página das salas
+
+User -> SPA: seleciona opção de adicionar sala
+SPA -> User: mostra formulário de adicionar sala
+
+SPA -> API: get(/api/floors)
+API --> SPA: mostra andares na select box
+
+User -> SPA: preenche formulário e submete
+
+SPA -> API: post(/api/rooms)
+
+note right of API 
+    Restantes passos representados no 
+    diagrama da API disponivel na pasta API
+end note
+
+API --> SPA: successo
+SPA --> User: retorna sucesso
+
+@enduml

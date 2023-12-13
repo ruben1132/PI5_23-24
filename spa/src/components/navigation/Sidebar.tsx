@@ -7,7 +7,6 @@ import React from 'react';
 import { Nav, Button, Col } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 
-
 // config
 import config from '../../../config';
 
@@ -47,7 +46,9 @@ const sideBarIcons = {
     robottypes: faGear,
     tasktypes: faGear,
     tasks: faListCheck,
+    taskplanning: faListCheck,
     users: faUser,
+    sysusers: faUser,
     floormaps: faMap,
     roles: faUsers,
     elevators: faElevator,
@@ -75,8 +76,11 @@ function Sidebar(props: SidebarProps) {
                                 page: { routeName: string; displayName: string; permissions: string[] },
                                 index: number,
                             ) => {
+                                // Check if the current route is the 'profile' route
+                                const isProfileRoute = page.routeName === 'profile';
+
                                 // Check if user.role.name is included in the permissions array
-                                const isUserAuthorized = user.role.name && page.permissions.includes(user.role.name);
+                                const isUserAuthorized = user.role.name && page.permissions.includes(user.role.name)  && !isProfileRoute;
 
                                 // Render the Link only if user is authorized
                                 return isUserAuthorized ? (
@@ -85,7 +89,7 @@ function Sidebar(props: SidebarProps) {
                                         key={index}
                                         style={{ textDecoration: 'none', padding: '2px' }}
                                     >
-                                        <Nav.Item className="nav-item" id={'sidebar-' + page.routeName }>
+                                        <Nav.Item className="nav-item" id={'sidebar-' + page.routeName}>
                                             <Col sm={3}>
                                                 <FontAwesomeIcon
                                                     icon={sideBarIcons[page.routeName as keyof typeof sideBarIcons]}

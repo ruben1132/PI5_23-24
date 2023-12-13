@@ -21,7 +21,7 @@ import { useFetchData, useSubmitData, useFormNumberInput, useFormStringInput, us
 // models
 import { Floor, FloorWithBuilding } from '@/models/Floor';
 import { Building } from '@/models/Building';
-import BuildingSelectBox from '../selectBoxes/BuildingSelextBox';
+import BuildingSelectBox from '../selectBoxes/BuildingSelectBox';
 
 interface Props {
     item: {
@@ -143,7 +143,7 @@ export default function FloorForm(props: Props) {
             return;
         }
 
-        if(!props.item.value?.building?.id){
+        if (!props.item.value?.building?.id) {
             floorBuilding.handleLoad(selectBoxBuildingsDataFetch.data[0].id);
         }
     }, [selectBoxBuildingsDataFetch.data]);
@@ -156,22 +156,9 @@ export default function FloorForm(props: Props) {
     ) {
         return <Form>Try adding buildings first!</Form>;
     }
-    
+
     return (
-        <Form>
-            {props.action === 'edit' && (
-                <>
-                    <Row>
-                        <Col sm={12}>
-                            <Form.Group className="mb-6">
-                                <Form.Label htmlFor="select">Floor ID</Form.Label>
-                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <br />
-                </>
-            )}
+        <Form>NameName
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
@@ -181,6 +168,7 @@ export default function FloorForm(props: Props) {
                             placeholder="floor's information..."
                             defaultValue={props.item.value?.information}
                             onChange={floorInformation.handleChange}
+                            data-testid="floor-information-input"
                         />
                     </Form.Group>
                 </Col>
@@ -192,6 +180,7 @@ export default function FloorForm(props: Props) {
                             placeholder="floor's number..."
                             defaultValue={props.item.value?.number}
                             onChange={floorNumber.handleChange}
+                            data-testid="floor-number-input"
                         />
                     </Form.Group>
                 </Col>
@@ -202,13 +191,12 @@ export default function FloorForm(props: Props) {
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Building</Form.Label>
                         <BuildingSelectBox
-                        selectedValue={props.item.value?.building?.id ?? floorBuilding.value}
-                        setValue={floorBuilding.handleLoad}
-                        data={selectBoxBuildingsDataFetch.data}
-                        isError={selectBoxBuildingsDataFetch.isError}
-                        isLoading={selectBoxBuildingsDataFetch.isLoading}
+                            selectedValue={props.item.value?.building?.id ?? floorBuilding.value}
+                            setValue={floorBuilding.handleLoad}
+                            data={selectBoxBuildingsDataFetch.data}
+                            isError={selectBoxBuildingsDataFetch.isError}
+                            isLoading={selectBoxBuildingsDataFetch.isLoading}
                         />
-
                     </Form.Group>
                 </Col>
                 {props.item.value.id && (
@@ -222,6 +210,7 @@ export default function FloorForm(props: Props) {
                                     handleUpload((e.target as HTMLInputElement).files?.[0]);
                                     e.target.value = '';
                                 }}
+                                data-testid="floor-floormap-input"
                             />
                         </Form.Group>
                     </Col>
@@ -243,11 +232,16 @@ export default function FloorForm(props: Props) {
                                         !floorNumber.value ||
                                         !enabled
                                     }
+                                    data-testid="update-button"
                                 >
                                     Update
                                 </Button>
 
-                                <Button variant="danger" onClick={handleDeleteData}>
+                                <Button
+                                    variant="danger"
+                                    onClick={handleDeleteData}
+                                    data-testid="delete-button"
+                                >
                                     Delete
                                 </Button>
                             </>
@@ -261,6 +255,7 @@ export default function FloorForm(props: Props) {
                                     !floorNumber.value ||
                                     !enabled
                                 }
+                                data-testid="add-button"
                             >
                                 Add
                             </Button>

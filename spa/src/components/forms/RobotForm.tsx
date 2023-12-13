@@ -50,7 +50,7 @@ export default function RobotForm(props: Props) {
     const enableDisableRobot = useSubmitData(config.mgiAPI.baseUrl + config.mgiAPI.routes.robots, 'PUT');
 
     // deleter
-    const robotDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.robots+ "/" + props.item?.value.id);
+    const robotDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.robots + "/" + props.item?.value.id);
 
     // inputs
     const robotIdentification = useFormStringInput(props.item.value?.identification);
@@ -144,20 +144,6 @@ export default function RobotForm(props: Props) {
 
     return (
         <Form>
-            {props.action === 'edit' && (
-                <>
-                    <Row>
-                        <Col sm={12}>
-                            <Form.Group className="mb-6">
-                                <Form.Label htmlFor="select">Robot ID</Form.Label>
-                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <br />
-                </>
-            )}
-
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
@@ -168,6 +154,7 @@ export default function RobotForm(props: Props) {
                             placeholder="Robot's designation..."
                             defaultValue={props.item.value?.identification}
                             onChange={robotIdentification.handleChange}
+                            data-testid="robot-designation-input"
                         />
                     </Form.Group>
                 </Col>
@@ -177,9 +164,10 @@ export default function RobotForm(props: Props) {
                         <Form.Control
                             required
                             type="text"
-                            placeholder="Robot's designation..."
+                            placeholder="Robot's nickname..."
                             defaultValue={props.item.value?.nickname}
                             onChange={robotNickname.handleChange}
+                            data-testid="robot-nickname-input"
                         />
                     </Form.Group>
                 </Col>
@@ -192,9 +180,10 @@ export default function RobotForm(props: Props) {
                         <Form.Control
                             required
                             type="text"
-                            placeholder="Robot's designation..."
+                            placeholder="Robot's serial number..."
                             defaultValue={props.item.value?.serialNumber}
                             onChange={robotSerialNumber.handleChange}
+                            data-testid="robot-sn-input"
                         />
                     </Form.Group>
                 </Col>
@@ -219,9 +208,10 @@ export default function RobotForm(props: Props) {
                         <Form.Control
                             required
                             type="text"
-                            placeholder="Robot's designation..."
+                            placeholder="Robot's description..."
                             defaultValue={props.item.value?.description}
                             onChange={robotDescription.handleChange}
+                            data-testid="robot-description-input"
                         />
                     </Form.Group>
                 </Col>
@@ -231,7 +221,7 @@ export default function RobotForm(props: Props) {
                             <Form.Label htmlFor="select">State</Form.Label>
                             <Form.Select
                                 defaultValue={props.item.value?.state?.toString()}
-                                onChange={ 
+                                onChange={
                                     (event: ChangeEvent<HTMLSelectElement>) => {
                                         setRobotState(event.target.value === 'true');
                                     }
@@ -261,10 +251,15 @@ export default function RobotForm(props: Props) {
                                         robotDescription.value === '' ||
                                         !enabled
                                     }
+                                    data-testid="update-button"
                                 >
                                     Update
                                 </Button>
-                                <Button variant="danger" onClick={handleDeleteData}>
+                                <Button
+                                    variant="danger"
+                                    onClick={handleDeleteData}
+                                    data-testid="delete-button"
+                                >
                                     Delete
                                 </Button>
                             </>
@@ -280,6 +275,7 @@ export default function RobotForm(props: Props) {
                                     robotDescription.value === '' ||
                                     !enabled
                                 }
+                                data-testid="add-button"
                             >
                                 Add
                             </Button>

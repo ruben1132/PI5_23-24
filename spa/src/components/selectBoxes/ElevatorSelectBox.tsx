@@ -77,7 +77,7 @@ const ElevatorSelectBox = (props: Props) => {
     , []);
     
     return (
-        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange}>
+        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='elevator-sb'>
             {props?.selectedValue && <option defaultChecked={true} value={props.selectedValue}>{getSelectedValue().designation}</option>}
 
             {filteredSelectBox?.map((item: ElevatorWithFloors) => (

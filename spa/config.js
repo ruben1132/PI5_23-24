@@ -3,6 +3,7 @@ const userRole = {
     GESTOR_FROTA: 'gestor frota',
     GESTOR_CAMPUS: 'gestor campus',
     UTENTE: 'utente',
+    GESTOR_TAREFAS: 'gestor tarefas',
 };
 
 export default {
@@ -36,18 +37,33 @@ export default {
             permissions: [userRole.GESTOR_FROTA],
         },
         {
-           routeName: "tasks",
-           displayName: "Tasks",
-           permissions: [userRole.GESTOR_FROTA ],
+            routeName: 'tasks',
+            displayName: 'Tasks',
+            permissions: [userRole.GESTOR_TAREFAS],
         },
         {
             routeName: 'tasktypes',
             displayName: 'Task Types',
-            permissions: [userRole.GESTOR_FROTA],
+            permissions: [userRole.GESTOR_TAREFAS],
+        },
+        {
+            routeName: 'taskplanning',
+            displayName: 'Task Planning',
+            permissions: [userRole.GESTOR_TAREFAS],
+        },
+        {
+            routeName: 'roles',
+            displayName: 'Roles',
+            permissions: [userRole.ADMIN],
         },
         {
             routeName: 'users',
             displayName: 'Users',
+            permissions: [userRole.ADMIN],
+        },
+        {
+            routeName: 'sysusers',
+            displayName: 'System Users',
             permissions: [userRole.ADMIN],
         },
         // {
@@ -55,11 +71,6 @@ export default {
         //   displayName: "Floor Maps" ,
         //   permissions: [userRole.GESTOR_CAMPUS],
         // },
-        {
-            routeName: 'roles',
-            displayName: 'Roles',
-            permissions: [userRole.ADMIN],
-        },
         {
             routeName: 'elevators',
             displayName: 'Elevators',
@@ -75,11 +86,16 @@ export default {
             displayName: '3D Viewer',
             permissions: [userRole.UTENTE, userRole.GESTOR_FROTA],
         },
-        
+        {
+            routeName: 'profile',
+            displayName: 'Profile',
+            permissions: [userRole.UTENTE, userRole.GESTOR_FROTA, userRole.GESTOR_CAMPUS, userRole.ADMIN],
+        },
     ],
 
     mgiAPI: {
-        baseUrl: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MGI_API_URL : 'http://localhost:2225/api/',
+        baseUrl:
+            process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MGI_API_URL : 'http://localhost:2225/api/',
         routes: {
             buildings: 'buildings/',
             floors: 'floors/',
@@ -90,8 +106,6 @@ export default {
             tasktypes: 'tasktypes/',
             users: 'users/',
             floormaps: 'floormaps/',
-            floormapsWithFloor: 'floormaps/floofb36dabf-ab7d-4152-8ecc-c3c180004447r/',
-            roles: 'roles/',
             elevators: 'elevators/',
             rooms: 'rooms/',
             users: 'users/',
@@ -99,27 +113,38 @@ export default {
             login: 'auth/login',
             logout: 'auth/logout',
             session: 'auth/session',
-           
+            planning: 'planning/',
+            planningFindPath: 'planning/findpath',
         },
     },
 
     authAPI: {
-        baseUrl: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_AUTH_API_URL : 'http://localhost:2225/api/auth/',
+        baseUrl:
+            process.env.NODE_ENV === 'production'
+                ? process.env.NEXT_PUBLIC_AUTH_API_URL
+                : 'http://localhost:5095/api/auth/',
         routes: {
             login: 'login/',
             logout: 'logout/',
-            signin: 'signin/',
+            signup: 'signup/',
             session: 'session/',
         },
     },
 
-    mpAPI:{
-        baseUrl: process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MP_API_URL : 'http://localhost:5000/',
+    mptAPI: {
+        baseUrl:
+            process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MPT_API_URL : 'http://localhost:5095/api/',
         routes: {
-            findPath: 'findCaminho',
+            planning: 'planning/',
+            planningFindPath: 'planning/findpath',
+            usersmain: 'users/',
+            users: 'users?isSysUser=false',
+            sysusers: 'users?isSysUser=true',
+            tasks: 'tasks/',
+            roles: 'roles/',
+            sysroles: 'roles?isSysRole=true',
         },
     },
-    
 
     tokenName: 'robdronego:token',
 
@@ -127,18 +152,16 @@ export default {
 
     authRoutes: ['/login', '/signin'],
 
-    utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/tasks'],
+    utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/profile'],
 
-    adminRoutes: ['/dashboard', '/dashboard/roles', '/dashboard/users'],
+    adminRoutes: ['/dashboard', '/dashboard/roles', '/dashboard/users', '/dashboard/sysusers', '/dashboard/profile'],
 
     gestorFrotaRoutes: [
         '/dashboard',
         '/dashboard/v3d',
-        '/dashboard/tasks',
         '/dashboard/robottypes',
-        '/dashboard/tasktypes',
-        '/dashboard/tasktypes',
         '/dashboard/robots',
+        '/dashboard/profile',
     ],
 
     gestorCampusRoutes: [
@@ -149,8 +172,18 @@ export default {
         '/dashboard/passages',
         '/dashboard/rooms',
         '/dashboard/tasks',
+        '/dashboard/profile',
     ],
-    
 
-    cookieName: 'mgiAPI:authCookie',
+    gestorTarefasRoutes: [
+        '/dashboard',
+        '/dashboard/tasks',
+        '/dashboard/tasktypes',
+        '/dashboard/taskplanning',
+        '/dashboard/profile',
+    ],
+
+    cookieName: 'robdronego_authCookie',
+
+    emailDomain: "isep.ipp.pt"
 };

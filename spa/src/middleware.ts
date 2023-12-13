@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import conf from '../config';
-import { User } from '@/models/User';
 
 export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -17,7 +16,7 @@ export async function middleware(request: NextRequest) {
             return NextResponse.redirect(url);
         }
 
-        // Manually set the cookie in the request headers
+        // set the cookie in the request headers
         const headers = new Headers({
             Authorization: `Bearer ${currentUser}`,
             Cookie: `${conf.cookieName}=${currentUser}; HttpOnly; Secure; SameSite=None; Path=/`,
@@ -61,6 +60,11 @@ export async function middleware(request: NextRequest) {
 
         // if user role is gestor campus and is trying to access gestor campus routes
         if (user.role.name === conf.userRole.GESTOR_CAMPUS && conf.gestorCampusRoutes.includes(pathname)) {
+            return NextResponse.next(); // Continue to the next Middleware or route handler
+        }
+
+        // if user role is gestor tarefas and is trying to access gestor campus routes
+        if (user.role.name === conf.userRole.GESTOR_TAREFAS && conf.gestorTarefasRoutes.includes(pathname)) {
             return NextResponse.next(); // Continue to the next Middleware or route handler
         }
 

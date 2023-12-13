@@ -9,7 +9,6 @@ export default async function Tasks() {
             <PageContent
                 type="task"
                 routeToFetch={""}
-                routeToPush={'/tasks/'}
             />
         </div>
     );

@@ -96,6 +96,46 @@ export default class BuildingRepo implements IBuildingRepo {
         } else return null;
     }
 
+    public async getBuildingsByFloorRange(min: number, max: number): Promise<Building[]> {
+        try {
+            const buildingRecords = await this.buildingSchema.aggregate([
+                {
+                    $lookup: {
+                        from: 'floors', // Replace with the actual name of your 'Floor' collection
+                        localField: 'domainId', // Adjust this to the actual field that links buildings and floors
+                        foreignField: 'building',
+                        as: 'floors',
+                    },
+                },
+                {
+                    $project: {
+                        _id: 1,
+                        code: 1,
+                        name: 1,
+                        dimensions: 1,
+                        domainId: 1,
+                        floorCount: { $size: '$floors' }, // Count the number of floors
+                    },
+                },
+                {
+                    $match: {
+                        floorCount: { $gte: min, $lte: max },
+                    },
+                },
+            ]);
+    
+            if (buildingRecords) {
+                return buildingRecords.map(building => BuildingMap.toDomain(building));
+            } else {
+                console.error('Error occurred during query execution');
+                return [];
+            }
+        } catch (err) {
+            console.error(err);
+            throw err;
+        }
+    }
+
     public async deleteBuilding(buildingId: BuildingId | string): Promise<boolean> {
         try {
             const query = { domainId: buildingId };
