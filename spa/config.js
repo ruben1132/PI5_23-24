@@ -52,8 +52,18 @@ export default {
             permissions: [userRole.GESTOR_TAREFAS],
         },
         {
+            routeName: 'roles',
+            displayName: 'Roles',
+            permissions: [userRole.ADMIN],
+        },
+        {
             routeName: 'users',
             displayName: 'Users',
+            permissions: [userRole.ADMIN],
+        },
+        {
+            routeName: 'sysusers',
+            displayName: 'System Users',
             permissions: [userRole.ADMIN],
         },
         // {
@@ -61,11 +71,6 @@ export default {
         //   displayName: "Floor Maps" ,
         //   permissions: [userRole.GESTOR_CAMPUS],
         // },
-        {
-            routeName: 'roles',
-            displayName: 'Roles',
-            permissions: [userRole.ADMIN],
-        },
         {
             routeName: 'elevators',
             displayName: 'Elevators',
@@ -101,8 +106,6 @@ export default {
             tasktypes: 'tasktypes/',
             users: 'users/',
             floormaps: 'floormaps/',
-            floormapsWithFloor: 'floormaps/floofb36dabf-ab7d-4152-8ecc-c3c180004447r/',
-            roles: 'roles/',
             elevators: 'elevators/',
             rooms: 'rooms/',
             users: 'users/',
@@ -119,25 +122,27 @@ export default {
         baseUrl:
             process.env.NODE_ENV === 'production'
                 ? process.env.NEXT_PUBLIC_AUTH_API_URL
-                : 'http://localhost:2225/api/auth/',
+                : 'http://localhost:5095/api/auth/',
         routes: {
             login: 'login/',
             logout: 'logout/',
-            signin: 'signin/',
+            signup: 'signup/',
             session: 'session/',
         },
     },
 
-    mptAPI:{
+    mptAPI: {
         baseUrl:
-            process.env.NODE_ENV === 'production'
-                ? process.env.NEXT_PUBLIC_MPT_API_URL
-                : 'http://localhost:xxxx/api/mpt/',
+            process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MPT_API_URL : 'http://localhost:5095/api/',
         routes: {
             planning: 'planning/',
             planningFindPath: 'planning/findpath',
-            users: 'users/',
+            usersmain: 'users/',
+            users: 'users?isSysUser=false',
+            sysusers: 'users?isSysUser=true',
             tasks: 'tasks/',
+            roles: 'roles/',
+            sysroles: 'roles?isSysRole=true',
         },
     },
 
@@ -149,7 +154,7 @@ export default {
 
     utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/profile'],
 
-    adminRoutes: ['/dashboard', '/dashboard/roles', '/dashboard/users', '/dashboard/profile'],
+    adminRoutes: ['/dashboard', '/dashboard/roles', '/dashboard/users', '/dashboard/sysusers', '/dashboard/profile'],
 
     gestorFrotaRoutes: [
         '/dashboard',
@@ -178,5 +183,7 @@ export default {
         '/dashboard/profile',
     ],
 
-    cookieName: 'mgiAPI:authCookie',
+    cookieName: 'robdronego_authCookie',
+
+    emailDomain: "isep.ipp.pt"
 };

@@ -1,4 +1,5 @@
 using System;
+using Mpt.Core.Domain;
 using Mpt.Domain.Shared;
 using Newtonsoft.Json;
 
@@ -12,6 +13,10 @@ namespace Mpt.Domain.Tasks
         }
 
         public TaskId(String value) : base(value)
+        {
+        }
+
+        public TaskId(): base()
         {
         }
 

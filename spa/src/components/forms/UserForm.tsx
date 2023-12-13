@@ -8,6 +8,12 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { Button } from 'react-bootstrap';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
+
+// icons
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 // notification component
 import { notify } from '@/components/notification/Notification';
@@ -16,11 +22,16 @@ import { notify } from '@/components/notification/Notification';
 import config from '../../../config';
 
 // custom hooks
-import { useFetchData, useSubmitData, useFormNumberInput, useFormStringInput, useDeleteData } from '@/util/customHooks';
+import {
+    useFetchData,
+    useSubmitData,
+    useFormStringInput,
+    useDeleteData,
+    useFormStringInputWithRegex,
+} from '@/util/customHooks';
 
 // models
-import { Role } from '@/models/Role';
-import { UserWithRole, User, UserWithPassword } from '@/models/User';
+import { UserWithRole } from '@/models/User';
 
 interface Props {
     item?: {
@@ -32,45 +43,25 @@ interface Props {
 }
 
 export default function UserForm(props: Props) {
-    // fetchers
-    const selectBoxRolesDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.roles); // fetch roles
 
     // form submitter
     const userForm = useSubmitData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.roles,
-        props.action === 'edit' ? 'PUT' : 'POST',
+        config.mptAPI.baseUrl + config.mptAPI.routes.usersmain + props.item?.value?.id,
+        'PATCH' ,
     );
-
-    // deleter
-    const userDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.users + props.item?.value.id);
-
-    // inputs
-    const userName = useFormStringInput(props.item?.value?.name);
-    const userEmail = useFormStringInput(props.item?.value?.email);
-    const userPassword = useFormStringInput(props.item?.value?.password);
-    const userRole = useFormStringInput(props.item?.value?.role?.id);
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
 
     // updates the user and refreshes the table
-    const handleSubmitData = async () => {
+    const handleSubmitData = async (isApproved : boolean) => {
         setEnabled(false);
 
-        // set user data
-        let item: UserWithPassword = {
-            ...props.item.value,
-            role: props.item.value?.role?.id,
-        };
-        item.id = props.item.value?.id;
-        item.name = userName.value;
-        item.email = userEmail.value;
-        item.password = userPassword.value;
-        item.role = userRole.value;
+        // TODO: implementar a parte de aprovar/rejeitar - implmentar endpoint PATCH /users/:id onde receba um DTO apenas com o campo isApproved
+        let item = null
 
         // submit data
         let res = await userForm.submit(item);
-        console.log(res);
 
         if (res.error) {
             setEnabled(true);
@@ -85,87 +76,28 @@ export default function UserForm(props: Props) {
         notify.success(`User ${props.action == 'edit' ? 'edited' : 'added'} successfully`);
     };
 
-    const handleDeleteData = async () => {
-        setEnabled(false);
-
-        // delete data
-        let res = await userDeleter.del();
-
-        if (res.error) {
-            setEnabled(true);
-            notify.error(res.error);
-            return;
-        }
-
-        props.reFetchData(); // refresh data
-        setEnabled(true); // enable buttons
-
-        // show alert
-        notify.success(`User deleted successfully`);
-
-        // close modal
-        props.close();
-    };
-
-    // when users load, load them to the select box
-    useEffect(() => {
-        // if there's no data, return
-        if (!selectBoxRolesDataFetch.data) {
-            return;
-        }
-
-        userRole.handleLoad(selectBoxRolesDataFetch.data[0].id);
-    }, [selectBoxRolesDataFetch.data]);
-
-    if (selectBoxRolesDataFetch.isLoading) {
-        return <Form>Loading...</Form>;
-    }
-    if (selectBoxRolesDataFetch.isError) {
-        return <Form>Error</Form>;
-    }
-
-    // filter data so it removes the element already selected
-    const filteredSelectBoxData = selectBoxRolesDataFetch.data.filter(
-        (item: any) => item.id !== props.item.value?.role?.id,
-    );
-
-    // handle for selecting a role
-    const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-        userRole.handleLoad(e.target.value);
-    };
-
     return (
         <Form>
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Username</Form.Label>
+                        <Form.Label htmlFor="userName">Name</Form.Label>
                         <Form.Control
                             type="text"
-                            placeholder="user's userName..."
-                            defaultValue={props.item.value?.name}
-                            onChange={userName.handleChange}
+                            placeholder="user's name..."
+                            defaultValue={props.item?.value?.name}
+                            disabled={true}
                         />
                     </Form.Group>
                 </Col>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Email</Form.Label>
+                        <Form.Label htmlFor="userEmail">Email</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="user's email..."
-                            defaultValue={props.item.value?.email}
-                            onChange={userEmail.handleChange}
-                        />
-                    </Form.Group>
-                </Col>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Password</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="user's password..."
-                            onChange={userPassword.handleChange}
+                            defaultValue={props.item?.value?.email}
+                            disabled={true}
                         />
                     </Form.Group>
                 </Col>
@@ -174,57 +106,45 @@ export default function UserForm(props: Props) {
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Role</Form.Label>
-
-                        <Form.Select
-                            defaultValue={props.item.value?.role?.id ?? filteredSelectBoxData[0].id}
-                            onChange={handleSelect}
-                        >
-                            {props.item.value?.role?.id && (
-                                <option defaultChecked={true}>{props.item.value?.role?.name}</option>
-                            )}
-
-                            {filteredSelectBoxData?.map((item: Role) => (
-                                <option key={item.id} value={item.id}>
-                                    {/* show 2nd prop from item, 1st prop is the id */}
-                                    {item.name}
-                                </option>
-                            ))}
-                        </Form.Select>
+                        <Form.Label htmlFor="userEmail">Phone Number</Form.Label>
+                        <Form.Control type="text" defaultValue={props.item?.value?.phone} disabled={true} />
+                    </Form.Group>
+                </Col>
+                <Col sm={6}>
+                    <Form.Group className="mb-6">
+                        <Form.Group className="mb-6">
+                            <Form.Label htmlFor="userEmail">NIF</Form.Label>
+                            <Form.Control type="text" defaultValue={props.item?.value?.nif} disabled={true} />
+                        </Form.Group>
                     </Form.Group>
                 </Col>
             </Row>
-
             <br />
             <Row>
                 <Col sm={12}>
                     <Form.Group className="mb-12">
-                        {props.action === 'edit' ? (
-                            <>
-                                <Button
-                                    variant="primary"
-                                    onClick={handleSubmitData}
-                                    disabled={userName.value === '' || userEmail.value === '' || !enabled}
-                                >
-                                    Update
-                                </Button>
-
-                                <Button variant="danger" onClick={handleDeleteData}>
-                                    Delete
-                                </Button>
-                            </>
-                        ) : (
-                            <Button
-                                variant="success"
-                                onClick={handleSubmitData}
-                                disabled={userName.value === '' || userEmail.value === '' || !enabled}
-                            >
-                                Add
-                            </Button>
-                        )}
+                        <Button
+                            id="approve-btn"
+                            variant="success"
+                            onClick={()=>{handleSubmitData(true)}}
+                            disabled={!enabled}
+                            data-testid="approve-button"
+                        >
+                            Approve
+                        </Button>{' '}
+                        <Button
+                            id="approve-btn"
+                            variant="danger"
+                            onClick={()=>{handleSubmitData(false)}}
+                            disabled={!enabled}
+                            data-testid="approve-button"
+                        >
+                            Reject
+                        </Button>
                     </Form.Group>
                 </Col>
             </Row>
+            {/* ... (other rows) */}
         </Form>
     );
 }

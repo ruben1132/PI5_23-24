@@ -1,5 +1,6 @@
 using System;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Mpt.Core.Domain;
 using Mpt.Domain.Shared;
 
 namespace Mpt.Infrastructure.Shared

@@ -3,6 +3,7 @@
 import BuildingSearchForm from './BuildingSearchForm';
 import FloorSearchForm from './FloorSearchForm';
 import RobotSearchForm from './RobotSearchForm';
+import UserSearchForm from './UserSearchForm';
 
 interface Props {
     type: string;
@@ -19,6 +20,8 @@ export function RenderFilteredSearch(props: Props) {
                     return <BuildingSearchForm setParams={props.setParams} />;
                 case 'floor':
                     return <FloorSearchForm setParams={props.setParams} />;
+                case 'user':
+                    return <UserSearchForm setParams={props.setParams} />;
                 default:
                     return <></>;
             }

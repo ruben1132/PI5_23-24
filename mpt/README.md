@@ -68,7 +68,7 @@ The database is hosted on a VM within my DEI Cloud.
 
 # Run
 
-Run with HTTP only
+Run with HTTP only - run this one
 ```dotnet run``` 
 
 Run with HTTP and HTTPS

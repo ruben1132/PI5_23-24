@@ -8,7 +8,7 @@ export default async function Users() {
 
             <PageContent
                 type="user"
-                routeToFetch={config.mgiAPI.baseUrl + config.mgiAPI.routes.users}
+                routeToFetch={config.mptAPI.baseUrl + config.mptAPI.routes.users}
             />
         </div>
     );
