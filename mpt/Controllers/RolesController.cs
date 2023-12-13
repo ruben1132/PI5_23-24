@@ -65,11 +65,11 @@ namespace Mpt.Controllers
 
         // GET: api/Role
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RoleDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<RoleDto>>> GetAll([FromQuery] bool? isSysRole)
         {
             try
             {
-                var roles = await _service.GetAllAsync();
+                var roles = await _service.GetAllAsync(isSysRole);
 
                 if (roles.IsFailure)
                 {

@@ -20,11 +20,11 @@ namespace Mpt.Services
             this._repo = repo;
         }
 
-        public async Task<Result<List<RoleDto>>> GetAllAsync()
+        public async Task<Result<List<RoleDto>>> GetAllAsync(bool? isSysRole)
         {
             try
             {
-                var roles = await this._repo.GetAllAsync();
+                var roles = await this._repo.GetAllFilteredAsync(isSysRole);
                 if (roles == null)
                     return Result<List<RoleDto>>.Ok(new List<RoleDto>());
 

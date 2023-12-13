@@ -46,7 +46,7 @@ interface Props {
 
 export default function SysUserForm(props: Props) {
     // fetchers
-    const selectBoxRolesDataFetch = useFetchData(config.mptAPI.baseUrl + config.mptAPI.routes.roles); // fetch roles
+    const selectBoxRolesDataFetch = useFetchData(config.mptAPI.baseUrl + config.mptAPI.routes.sysroles); // fetch roles
 
     // form submitter
     const userForm = useSubmitData(

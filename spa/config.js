@@ -142,6 +142,7 @@ export default {
             sysusers: 'users?isSysUser=true',
             tasks: 'tasks/',
             roles: 'roles/',
+            sysroles: 'roles?isSysRole=true',
         },
     },
 
