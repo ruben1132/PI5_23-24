@@ -10,6 +10,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Mpt.Services
 {
@@ -169,6 +170,7 @@ namespace Mpt.Services
                 return Result<UserAuthDto>.Fail(ex.Message);
             }
         }
+
 
         public Result<string> GenerateJwtToken(UserAuthDto user)
         {

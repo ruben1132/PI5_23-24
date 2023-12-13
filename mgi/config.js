@@ -23,7 +23,7 @@ export default {
     ),
 
     // cookie name
-    cookieName: 'mgiAPI:authCookie',
+    cookieName: 'robdronego_authCookie',
 
     // Your secret sauce
     jwtSecret: getEnvVariable('JWT_SECRET', 'secret'),
@@ -33,6 +33,9 @@ export default {
 
     // MP API
     mpAPI: getEnvVariable('MP_API', 'http://localhost:5000'),
+
+    // MPT API
+    mptAPI: getEnvVariable('MPT_API', 'http://localhost:5095'),
 
     // Logging configuration
     logs: {

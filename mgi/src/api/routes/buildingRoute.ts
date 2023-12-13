@@ -6,10 +6,24 @@ import IBuildingController from '../../controllers/IControllers/IBuildingControl
 
 import config from '../../../config';
 
+// auth
+import isAuth from '../middlewares/isAuth';
+import authorizeRole from '../middlewares/authorizeRole';
+import attachCurrentUser from '../middlewares/attachCurrentUser';
+
 const route = Router();
 
 export default (app: Router) => {
     app.use('/buildings', route);
+
+    // apply isAuth to secure routes that require authentication
+    route.use(isAuth);
+
+    // apply attachCurrentUser to attach user information to the request
+    route.use(attachCurrentUser);
+
+    // apply authorizeRole to allow only 'gestor campus' role
+    route.use(authorizeRole(['gestor campus']));
 
     const ctrl = Container.get(config.controllers.building.name) as IBuildingController;
 
@@ -45,7 +59,6 @@ export default (app: Router) => {
         }),
         (req, res, next) => ctrl.getBuildingById(req, res, next),
     );
-
 
     route.get('', (req, res, next) => ctrl.getBuildings(req, res, next));
 
