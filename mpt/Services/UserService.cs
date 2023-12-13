@@ -92,6 +92,9 @@ namespace Mpt.Services
                 if (userByEmail != null)
                     return Result<UserWithRoleDto>.Fail("Email already exists.");
 
+                // validate email
+                var email = new UserEmail(u.Email, _emailDomain);
+                
                 var role = await this._roleRepo.GetByIdAsync(new RoleId(u.RoleId));
                 if (role == null)
                     return Result<UserWithRoleDto>.Fail("Role not found.");

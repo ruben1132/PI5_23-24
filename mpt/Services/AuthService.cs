@@ -19,13 +19,18 @@ namespace Mpt.Services
         private readonly IUserRepository _repo;
         private readonly IRoleRepository _roleRepo;
         private readonly IConfiguration _config;
+        private readonly string _emailDomain;
 
         public AuthService(IConfiguration config, IUnitOfWork unitOfWork, IUserRepository repo, IRoleRepository roleRepo)
         {
+            this._config = config;
+            var emailDomain = _config.GetValue<string>("EmailDomain") ?? "isep.ipp.pt";
+            this._emailDomain = emailDomain;
+
+
             this._unitOfWork = unitOfWork;
             this._repo = repo;
             this._roleRepo = roleRepo;
-            this._config = config;
         }
 
         public async Task<Result<UserAuthDto>> LoginAsync(UserLoginDto login)
@@ -76,6 +81,8 @@ namespace Mpt.Services
                 {
                     return Result<UserAuthDto>.Fail("Email already exists");
                 }
+                // validate email
+                var email = new UserEmail(user.Email, _emailDomain);
 
                 // get default role
                 var defaultRole = _config.GetValue<string>("DefaultRole");
