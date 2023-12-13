@@ -382,6 +382,7 @@ export default class ThumbRaiser {
         miniMapCameraParameters,
         setIsInElevator,
         setFloor,
+        setPassage,
     ) {
         this.generalParameters = merge({}, generalData, generalParameters);
         this.audioParameters = merge({}, audioData, audioParameters);
@@ -403,6 +404,7 @@ export default class ThumbRaiser {
         this.setIsInElevator = setIsInElevator;
         this.checkIfInElevator = true;
         this.setFloor = setFloor;
+        this.setPassage = setPassage;
 
         // Set the game state
         this.gameRunning = false;
@@ -1480,6 +1482,13 @@ export default class ThumbRaiser {
                             ),
                         );
                     }
+
+                    const collisionResult = this.maze.passageCollision(
+                        position,
+                        this.collisionDetectionParameters.method != 'obb-aabb'
+                            ? this.player.radius
+                            : this.player.halfSize,
+                    );
                     if (
                         this.maze.collision(
                             this.collisionDetectionParameters.method,
@@ -1500,6 +1509,10 @@ export default class ThumbRaiser {
                                 : this.player.halfSize,
                         )
                     ) {
+                    } else if (collisionResult != null) {
+                        console.log('collisionResult' + JSON.stringify(collisionResult));
+                        this.setPassage(collisionResult);
+                        return;
                     } else if (this.player.keyStates.jump) {
                         this.audio.play(this.audio.jumpClips, true);
                         this.animations.fadeToAction('Jump', 0.2);

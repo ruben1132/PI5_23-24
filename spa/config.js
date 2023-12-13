@@ -84,7 +84,7 @@ export default {
         {
             routeName: 'v3d',
             displayName: '3D Viewer',
-            permissions: [userRole.UTENTE, userRole.GESTOR_FROTA],
+            permissions: [userRole.GESTOR_FROTA, userRole.GESTOR_CAMPUS, userRole.GESTOR_TAREFAS],
         },
         {
             routeName: 'profile',
@@ -166,6 +166,7 @@ export default {
 
     gestorCampusRoutes: [
         '/dashboard',
+        '/dashboard/v3d',
         '/dashboard/buildings',
         '/dashboard/elevators',
         '/dashboard/floors',
@@ -177,6 +178,7 @@ export default {
 
     gestorTarefasRoutes: [
         '/dashboard',
+        '/dashboard/v3d',
         '/dashboard/tasks',
         '/dashboard/tasktypes',
         '/dashboard/taskplanning',

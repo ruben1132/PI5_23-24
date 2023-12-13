@@ -23,9 +23,15 @@ import ThumbRaiser from './thumb_raiser.js';
 
 // notification component
 import { notify } from '@/components/notification/Notification';
+import { PassageWithFloor } from '@/models/Passage';
 
 interface Props {
     buildings: Building[];
+}
+
+interface objPass {
+    passageId: string;
+    floor: string;
 }
 
 export default function Scene(props: Props) {
@@ -35,6 +41,7 @@ export default function Scene(props: Props) {
     const [floors, setFloors] = useState<Floor[]>([]);
     const [isInElevator, setIsInElevator] = useState<boolean>(false); // this is for when the robot enters the elevator
     const [floor, setFloor] = useState<string>(''); // this is for when the robot changes floor through a passage
+    const [passage, setPassage] = useState<objPass>(null);
     const [navigator, setNavigator] = useState<boolean>(true); // buildings and floors selects
 
     useEffect(() => {
@@ -241,7 +248,7 @@ export default function Scene(props: Props) {
                     selected: 2,
                 }, // Cube texture parameters
                 {
-                    url: '/v3d/mazes/defaultPlant.json',
+                    url: '/v3d/mazes/plantEdAFloor2.json',
                     designCredits: '',
                     texturesCredits: '',
                     helpersColor: new THREE.Color(0xff0077),
@@ -341,6 +348,7 @@ export default function Scene(props: Props) {
                 }, // Mini-map view camera parameters
                 setIsInElevator,
                 setFloor,
+                setPassage,
             );
 
             setThumbRaiser(thumbRaiserr);
@@ -387,10 +395,42 @@ export default function Scene(props: Props) {
         setIsInElevator(false);
     };
 
+    useEffect(() => {
+        if (passage !== null) {
+
+            const fetchFloor = async () => {
+
+                const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages + passage.passageId);
+                if (response.status !== 200) {
+                    notify.error('Error fetching passage');
+                    return;
+                }
+
+                const passageData = response.data as PassageWithFloor;
+                console.log(JSON.stringify(passageData));
+                let floor = "";
+                if (passageData.fromFloor.id == passage.floor) {
+                    floor = passageData.toFloor.id;
+                }
+                else {
+                    floor = passageData.fromFloor.id;
+                }
+
+                setFloor(floor);
+            };
+
+            fetchFloor();
+
+        }
+    }, [passage]);
+
+
     // when the robot changes floor through a passage or a elevator | or when user selects a floor
     useEffect(() => {
         if (floor !== '') {
             thumbRaiser?.changeMaze(floor + '.json');
+
+            console.log('floor changed: ' + floor);
         }
 
         setIsInElevator(false);
