@@ -46,7 +46,7 @@ export default function UserForm(props: Props) {
 
     // form submitter
     const userForm = useSubmitData(
-        config.mptAPI.baseUrl + config.mptAPI.routes.users + props.item?.value?.id,
+        config.mptAPI.baseUrl + config.mptAPI.routes.usersmain + props.item?.value?.id,
         'PATCH' ,
     );
 

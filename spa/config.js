@@ -137,6 +137,7 @@ export default {
         routes: {
             planning: 'planning/',
             planningFindPath: 'planning/findpath',
+            usersmain: 'users/',
             users: 'users?isSysUser=false',
             sysusers: 'users?isSysUser=true',
             tasks: 'tasks/',

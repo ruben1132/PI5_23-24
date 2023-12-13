@@ -13,12 +13,18 @@ namespace Mpt.Services
 {
     public class UserService : IUserService
     {
+        private readonly IConfiguration _config;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserRepository _repo;
         private readonly IRoleRepository _roleRepo;
+        private readonly string _emailDomain;
 
-        public UserService(IUnitOfWork unitOfWork, IUserRepository repo, IRoleRepository roleRepo)
+        public UserService(IConfiguration config, IUnitOfWork unitOfWork, IUserRepository repo, IRoleRepository roleRepo)
         {
+            this._config = config;
+            var emailDomain = _config.GetValue<string>("EmailDomain") ?? "isep.ipp.pt";
+            this._emailDomain = emailDomain;
+
             this._unitOfWork = unitOfWork;
             this._repo = repo;
             this._roleRepo = roleRepo;
@@ -136,13 +142,14 @@ namespace Mpt.Services
                 {
                     user.Enable();
                     user.ChangeNif(new UserNif(u.Nif));
-                    
+
                     // check if email already exists
                     var userByEmail = await this._repo.GetByEmailAsync(u.Email);
                     if (userByEmail != null && userByEmail.Id != user.Id)
                         return Result<UserWithRoleDto>.Fail("Email already exists.");
 
-                    user.ChangeEmail(new UserEmail(u.Email));
+
+                    user.ChangeEmail(new UserEmail(u.Email, _emailDomain));
                     user.ChangeRole(new RoleId(u.RoleId));
                     user.ChangeName(u.Name);
 

@@ -50,12 +50,12 @@ export default function SysUserForm(props: Props) {
 
     // form submitter
     const userForm = useSubmitData(
-        config.mptAPI.baseUrl + config.mptAPI.routes.users,
+        config.mptAPI.baseUrl + config.mptAPI.routes.usersmain,
         props.action === 'edit' ? 'PATCH' : 'POST',
     );
 
     // deleter
-    const userDeleter = useDeleteData(config.mptAPI.baseUrl + config.mptAPI.routes.users + props.item?.value.id);
+    const userDeleter = useDeleteData(config.mptAPI.baseUrl + config.mptAPI.routes.usersmain + props.item?.value.id);
 
     // inputs
     const userName = useFormStringInput(props.item?.value?.name);
