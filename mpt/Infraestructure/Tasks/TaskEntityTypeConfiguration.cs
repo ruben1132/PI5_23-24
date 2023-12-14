@@ -24,6 +24,7 @@ namespace Mpt.Infrastructure.Tasks
                             (c1, c2) => c1.Equals(c2),
                             c => c.GetHashCode()));
 
+
             // path
             builder
             .Property(t => t.Path)
@@ -57,21 +58,21 @@ namespace Mpt.Infrastructure.Tasks
                 .OnDelete(DeleteBehavior.Restrict);
         }
 
-        private static string ConvertMovementsToString(List<RobotMovement> movements)
+        private static string ConvertMovementsToString(List<List<RobotMovement>> movements)
         {
             // Convert the list of RobotMovement objects to a JSON string
             return JsonConvert.SerializeObject(movements);
         }
 
-        private static List<RobotMovement> ConvertStringToMovements(string value)
+        private static List<List<RobotMovement>> ConvertStringToMovements(string value)
         {
             if (value == null)
             {
-                return new List<RobotMovement>();
+                return new List<List<RobotMovement>>();
             }
 
             // Convert the JSON string back to a list of RobotMovement objects
-            return JsonConvert.DeserializeObject<List<RobotMovement>>(value);
+            return JsonConvert.DeserializeObject<List<List<RobotMovement>>>(value);
         }
 
 

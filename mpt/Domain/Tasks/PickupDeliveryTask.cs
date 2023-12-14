@@ -8,8 +8,6 @@ namespace Mpt.Domain.Tasks
     public class PickupDeliveryTask : Task
     {
 
-        public string PickupPlace { get; private set; }
-        public string DeliveryPlace { get; private set; }
         public string PickupPersonName { get; private set; }
         public PhoneNumber PickupPersonPhoneNumber { get; private set; }
         public string DeliveryPersonName { get; private set; }
@@ -23,15 +21,14 @@ namespace Mpt.Domain.Tasks
 
         // Constructors
         public PickupDeliveryTask(UserId userId, string taskType, List<string> path,
-            List<RobotMovement> robotMovements, string pickupPlace,
-            string deliveryPlace, string pickupPersonName,
+            List<List<RobotMovement>> robotMovements, string originType, 
+            string origin, string destinyType, string destiny, string pickupPersonName,
             PhoneNumber pickupPersonPhoneNumber, string deliveryPersonName,
             PhoneNumber deliveryPersonPhoneNumber, string taskDescription,
             TaskConfirmationCode confirmationCode, bool? isApproved = null)
-            : base(userId, taskType, path, robotMovements, isApproved)
+
+            : base(userId, taskType, path, robotMovements, originType, origin, destinyType, destiny, isApproved)
         {
-            this.PickupPlace = pickupPlace;
-            this.DeliveryPlace = deliveryPlace;
             this.PickupPersonName = pickupPersonName;
             this.PickupPersonPhoneNumber = pickupPersonPhoneNumber;
             this.DeliveryPersonName = deliveryPersonName;

@@ -8,7 +8,6 @@ namespace Mpt.Domain.Tasks
     {
 
         public PhoneNumber PhoneNumber { get; private set; }
-        public List<string> FloorIds { get; private set; }
 
 
         // Constructors
@@ -16,13 +15,14 @@ namespace Mpt.Domain.Tasks
         {
         }
 
-        public SurveillanceTask(UserId userId, string taskType, 
-            List<string> path, List<RobotMovement> robotMovements, 
-            PhoneNumber phoneNumber, List<string> floorIds, bool? isApproved = null)
-            : base(userId, taskType, path, robotMovements, isApproved)
+        public SurveillanceTask(UserId userId, string taskType,
+            List<string> path, List<List<RobotMovement>> robotMovements,
+            string originType, string origin, string destinyType, string destiny,
+            PhoneNumber phoneNumber, bool? isApproved = null)
+
+            : base(userId, taskType, path, robotMovements, originType, origin, destinyType, destiny, isApproved)
         {
             this.PhoneNumber = phoneNumber;
-            this.FloorIds = floorIds;
 
         }
 

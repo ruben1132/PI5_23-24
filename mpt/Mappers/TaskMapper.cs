@@ -16,6 +16,10 @@ namespace Mpt.Mappers
                 task.UserId.Value,
                 task.Path,
                 RobotMovementBulkToDto(task.RobotMovements),
+                task.OriginType,
+                task.Origin,
+                task.DestinyType,
+                task.Destiny,
                 task.IsCompleted,
                 task.TaskType,
                 task.IsApproved
@@ -30,10 +34,13 @@ namespace Mpt.Mappers
                 surveillanceTask.UserId.Value,
                 surveillanceTask.Path,
                 RobotMovementBulkToDto(surveillanceTask.RobotMovements),
+                surveillanceTask.OriginType,
+                surveillanceTask.Origin,
+                surveillanceTask.DestinyType,
+                surveillanceTask.Destiny,
                 surveillanceTask.IsCompleted,
                 surveillanceTask.TaskType,
                 surveillanceTask.PhoneNumber.Value,
-                surveillanceTask.FloorIds,
                 surveillanceTask.IsApproved
             );
         }
@@ -45,10 +52,12 @@ namespace Mpt.Mappers
                 pickupDeliveryTask.UserId.Value,
                 pickupDeliveryTask.Path,
                 RobotMovementBulkToDto(pickupDeliveryTask.RobotMovements),
+                pickupDeliveryTask.OriginType,
+                pickupDeliveryTask.Origin,
+                pickupDeliveryTask.DestinyType,
+                pickupDeliveryTask.Destiny,
                 pickupDeliveryTask.IsCompleted,
                 pickupDeliveryTask.TaskType,
-                pickupDeliveryTask.PickupPlace,
-                pickupDeliveryTask.DeliveryPlace,
                 pickupDeliveryTask.PickupPersonName,
                 pickupDeliveryTask.PickupPersonPhoneNumber.Value,
                 pickupDeliveryTask.DeliveryPersonName,
@@ -66,8 +75,11 @@ namespace Mpt.Mappers
                 dto.TaskType,
                 dto.Path,
                 RobotMovementBulkToDomain(dto.RobotMovements),
-                new PhoneNumber(dto.PhoneNumber),
-                dto.FloorIds
+                dto.OriginType,
+                dto.Origin,
+                dto.DestinyType,
+                dto.Destiny,
+                new PhoneNumber(dto.PhoneNumber)
             );
         }
 
@@ -78,8 +90,10 @@ namespace Mpt.Mappers
                 dto.TaskType,
                 dto.Path,
                 RobotMovementBulkToDomain(dto.RobotMovements),
-                dto.PickupPlace,
-                dto.DeliveryPlace,
+                dto.OriginType,
+                dto.Origin,
+                dto.DestinyType,
+                dto.Destiny,
                 dto.PickupPersonName,
                 new PhoneNumber(dto.PickupPersonPhoneNumber),
                 dto.DeliveryPersonName,
@@ -89,32 +103,43 @@ namespace Mpt.Mappers
             );
         }
 
-        public static List<RobotMovement> RobotMovementBulkToDomain(List<RobotMovementDto> dto)
+        public static List<List<RobotMovement>> RobotMovementBulkToDomain(List<List<RobotMovementDto>> dto)
         {
-
-            List<RobotMovement> robotMovements = new List<RobotMovement>();
+            List<List<RobotMovement>> robotMovements = new List<List<RobotMovement>>();
 
             foreach (var item in dto)
             {
-                robotMovements.Add(new RobotMovement(item.X, item.Y));
+                List<RobotMovement> m = new List<RobotMovement>();
+
+                foreach (var item2 in item)
+                {
+                    m.Add(new RobotMovement(item2.X, item2.Y));
+                }
+
+                robotMovements.Add(m);
             }
 
             return robotMovements;
-
         }
 
-        public static List<RobotMovementDto> RobotMovementBulkToDto(List<RobotMovement> dto)
+        public static List<List<RobotMovementDto>> RobotMovementBulkToDto(List<List<RobotMovement>> dto)
         {
 
-            List<RobotMovementDto> robotMovements = new List<RobotMovementDto>();
+            List<List<RobotMovementDto>> robotMovements = new List<List<RobotMovementDto>>();
 
             foreach (var item in dto)
             {
-                robotMovements.Add(new RobotMovementDto(item.X, item.Y));
+                List<RobotMovementDto> m = new List<RobotMovementDto>();
+
+                foreach (var item2 in item)
+                {
+                    m.Add(new RobotMovementDto(item2.X, item2.Y));
+                }
+
+                robotMovements.Add(m);
             }
 
             return robotMovements;
-
         }
     }
 }

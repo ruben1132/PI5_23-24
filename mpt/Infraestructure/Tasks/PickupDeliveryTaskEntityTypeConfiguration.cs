@@ -9,8 +9,7 @@ namespace Mpt.Infrastructure.PickupDeliveryTasks
         public void Configure(EntityTypeBuilder<PickupDeliveryTask> builder)
         {
 
-            builder.Property(b => b.PickupPlace);
-            builder.Property(b => b.DeliveryPlace);
+
             builder.Property(b => b.PickupPersonName);
             builder.Property(b => b.DeliveryPersonName);
             builder.Property(b => b.TaskDescription);

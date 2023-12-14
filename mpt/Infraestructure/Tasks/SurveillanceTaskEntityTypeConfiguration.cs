@@ -10,7 +10,6 @@ namespace Mpt.Infrastructure.SurveillanceTasks
         {
 
             builder.OwnsOne(b => b.PhoneNumber);
-            builder.Property(b => b.FloorIds);
 
         }
     }
