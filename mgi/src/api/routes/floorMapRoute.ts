@@ -6,6 +6,11 @@ import IFloorMapController from '../../controllers/IControllers/IFloorMapControl
 
 import config from '../../../config';
 
+// auth
+import isAuth from '../middlewares/isAuth';
+import authorizeRole from '../middlewares/authorizeRole';
+import attachCurrentUser from '../middlewares/attachCurrentUser';
+
 import multer from 'multer';
 
 const storage = multer.memoryStorage();
@@ -16,25 +21,30 @@ const route = Router();
 export default (app: Router) => {
     app.use('/floorMaps', route);
 
+    // apply isAuth to secure routes that require authentication
+    route.use(isAuth);
+
+    // apply attachCurrentUser to attach user information to the request
+    route.use(attachCurrentUser);
+
+    // apply authorizeRole to allow only the configured roles
+    // route.use(authorizeRole(config.routes.floorMap.permissions));
+
     const ctrl = Container.get(config.controllers.floorMap.name) as IFloorMapController;
 
     route.patch(
         '',
-        upload.single('jsonFile'),                 
+        authorizeRole(config.routesPermissions.floorMap.patch),
+        upload.single('jsonFile'),
         (req, res, next) => ctrl.createFloorMap(req, res, next),
     );
 
-    route.get('', (req, res, next) => ctrl.getFloorMaps(req, res, next));
+    route.get('', authorizeRole(config.routesPermissions.floorMap.patch), (req, res, next) =>
+        ctrl.getFloorMaps(req, res, next),
+    );
 
     //ger floorMaps by building id
-    route.get('/floor/:id', (req, res, next) => ctrl.getFloorMapByFloorId(req, res, next));
-
-    //   route.put('',
-    //     celebrate({
-    //       body: Joi.object({
-    //         id: Joi.string().required(),
-    //         designation: Joi.string().required()
-    //       }),
-    //     }),
-    //     (req, res, next) => ctrl.updateFloorMap(req, res, next) );
+    route.get('/floor/:id',authorizeRole(config.routesPermissions.floorMap.getByFloorId), (req, res, next) =>
+        ctrl.getFloorMapByFloorId(req, res, next),
+    );
 };

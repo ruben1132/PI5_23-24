@@ -4,17 +4,32 @@ import { celebrate, Joi } from 'celebrate';
 import { Container } from 'typedi';
 import IElevatorController from '../../controllers/IControllers/IElevatorController';
 
-import config from '../../../config';
+import config, { roles } from '../../../config';
+
+// auth
+import isAuth from '../middlewares/isAuth';
+import authorizeRole from '../middlewares/authorizeRole';
+import attachCurrentUser from '../middlewares/attachCurrentUser';
 
 const route = Router();
 
 export default (app: Router) => {
     app.use('/elevators', route);
 
+    // apply isAuth to secure routes that require authentication
+    route.use(isAuth);
+
+    // apply attachCurrentUser to attach user information to the request
+    route.use(attachCurrentUser);
+
+    // apply authorizeRole to allow only the configured roles
+    // route.use(authorizeRole(config.routes.elevator.permissions));
+
     const ctrl = Container.get(config.controllers.elevator.name) as IElevatorController;
 
     route.post(
         '',
+        authorizeRole(config.routesPermissions.elevator.post),
         celebrate({
             body: Joi.object({
                 designation: Joi.string().required(),
@@ -24,10 +39,13 @@ export default (app: Router) => {
         (req, res, next) => ctrl.createElevator(req, res, next),
     );
 
-    route.get('', (req, res, next) => ctrl.getElevators(req, res, next));
+    route.get('', authorizeRole(config.routesPermissions.elevator.get), (req, res, next) =>
+        ctrl.getElevators(req, res, next),
+    );
 
     route.get(
         '/:id',
+        authorizeRole(config.routesPermissions.elevator.getById),
         celebrate({
             params: Joi.object({
                 id: Joi.string().required(),
@@ -36,19 +54,9 @@ export default (app: Router) => {
         (req, res, next) => ctrl.getElevatorById(req, res, next),
     );
 
-    /*route.put('',
-    celebrate({
-      body: Joi.object({
-        id: Joi.string().required(),
-        code: Joi.string().required(),
-        name: Joi.string().allow('', null),
-        dimensions: Joi.string().required()
-      }),
-    }),
-    (req, res, next) => ctrl.updateBuilding(req, res, next));*/
-
     route.delete(
         '/:id',
+        authorizeRole(config.routesPermissions.elevator.delete),
         celebrate({
             params: Joi.object({
                 id: Joi.string().required(),
@@ -59,6 +67,7 @@ export default (app: Router) => {
 
     route.put(
         '',
+        authorizeRole(config.routesPermissions.elevator.put),
         celebrate({
             body: Joi.object({
                 id: Joi.string().required(),

@@ -6,15 +6,30 @@ import IRoomController from '../../controllers/IControllers/IRoomController';
 
 import config from '../../../config';
 
+// auth
+import isAuth from '../middlewares/isAuth';
+import authorizeRole from '../middlewares/authorizeRole';
+import attachCurrentUser from '../middlewares/attachCurrentUser';
+
 const route = Router();
 
 export default (app: Router) => {
     app.use('/rooms', route);
 
+    // apply isAuth to secure routes that require authentication
+    route.use(isAuth);
+
+    // apply attachCurrentUser to attach user information to the request
+    route.use(attachCurrentUser);
+
+    // apply authorizeRole to allow only the configured roles
+    // route.use(authorizeRole(config.routes.room.permissions));
+
     const ctrl = Container.get(config.controllers.room.name) as IRoomController;
 
     route.post(
         '',
+        authorizeRole(config.routesPermissions.room.post),
         celebrate({
             body: Joi.object({
                 number: Joi.string().required(),
@@ -24,12 +39,15 @@ export default (app: Router) => {
         (req, res, next) => ctrl.createRoom(req, res, next),
     );
 
-    route.get('', (req, res, next) => ctrl.getRooms(req, res, next));
+    route.get('', authorizeRole(config.routesPermissions.room.get), (req, res, next) => ctrl.getRooms(req, res, next));
 
-    route.get('/:id', (req, res, next) => ctrl.getRoomById(req, res, next));
+    route.get('/:id', authorizeRole(config.routesPermissions.room.getById), (req, res, next) =>
+        ctrl.getRoomById(req, res, next),
+    );
 
     route.put(
         '',
+        authorizeRole(config.routesPermissions.room.put),
         celebrate({
             body: Joi.object({
                 id: Joi.string().required(),
@@ -42,6 +60,7 @@ export default (app: Router) => {
 
     route.delete(
         '/:id',
+        authorizeRole(config.routesPermissions.room.delete),
         celebrate({
             params: Joi.object({
                 id: Joi.string().required(),

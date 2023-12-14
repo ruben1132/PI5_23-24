@@ -5,6 +5,7 @@ import { Container } from 'typedi';
 import IBuildingController from '../../controllers/IControllers/IBuildingController';
 
 import config from '../../../config';
+import { roles } from '../../../config';
 
 // auth
 import isAuth from '../middlewares/isAuth';
@@ -22,13 +23,14 @@ export default (app: Router) => {
     // apply attachCurrentUser to attach user information to the request
     route.use(attachCurrentUser);
 
-    // apply authorizeRole to allow only 'gestor campus' role
-    route.use(authorizeRole(['gestor campus']));
+    // // apply authorizeRole to allow only the configured roles
+    // route.use(authorizeRole(config.routesPermissions.building.permissions));
 
     const ctrl = Container.get(config.controllers.building.name) as IBuildingController;
 
     route.post(
         '',
+        authorizeRole(config.routesPermissions.building.post),
         celebrate({
             body: Joi.object({
                 code: Joi.string().required(),
@@ -41,6 +43,7 @@ export default (app: Router) => {
 
     route.get(
         '/ranges/:min/:max',
+        authorizeRole(config.routesPermissions.building.getRanges),
         celebrate({
             params: Joi.object({
                 min: Joi.number().required(),
@@ -52,6 +55,7 @@ export default (app: Router) => {
 
     route.get(
         '/:id',
+        authorizeRole(config.routesPermissions.building.getById),
         celebrate({
             params: Joi.object({
                 id: Joi.string().required(),
@@ -60,10 +64,13 @@ export default (app: Router) => {
         (req, res, next) => ctrl.getBuildingById(req, res, next),
     );
 
-    route.get('', (req, res, next) => ctrl.getBuildings(req, res, next));
+    route.get('', authorizeRole(config.routesPermissions.building.get), (req, res, next) =>
+        ctrl.getBuildings(req, res, next),
+    );
 
     route.put(
         '',
+        authorizeRole(config.routesPermissions.building.put),
         celebrate({
             body: Joi.object({
                 id: Joi.string().required(),
@@ -77,6 +84,7 @@ export default (app: Router) => {
 
     route.delete(
         '/:id',
+        authorizeRole(config.routesPermissions.building.delete),
         celebrate({
             params: Joi.object({
                 id: Joi.string().required(),

@@ -15,13 +15,13 @@ const attachCurrentUser = async (req, res, next) => {
 
     try {
         if (!req.token || req.token === undefined || req.token === null) {
-            next(new Error('Invalid token.'));
+            return res.status(401).json({ error: 'Invalid token.' });
         }
 
         const result : IAuthUserDTO | boolean = await validateToken(req.token);
 
         if (result === false) {
-            next(new Error('Invalid user.'));
+            return res.status(401).json({ error: 'Invalid user.' });
         } else {
             const user: IAuthUserDTO = result as IAuthUserDTO;
             req.user = user;
