@@ -57,6 +57,7 @@ namespace Mpt.Infrastructure.Tasks
                 .HasForeignKey(pt => pt.TaskId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
+        
 
         private static string ConvertMovementsToString(List<List<RobotMovement>> movements)
         {
