@@ -7,23 +7,12 @@ import IRobotTypeController from '../../controllers/IControllers/IRobotTypeContr
 import config from '../../../config';
 
 // auth
-import isAuth from '../middlewares/isAuth';
 import authorizeRole from '../middlewares/authorizeRole';
-import attachCurrentUser from '../middlewares/attachCurrentUser';
 
 const route = Router();
 
 export default (app: Router) => {
     app.use('/robotTypes', route);
-
-    // apply isAuth to secure routes that require authentication
-    route.use(isAuth);
-
-    // apply attachCurrentUser to attach user information to the request
-    route.use(attachCurrentUser);
-
-    // apply authorizeRole to allow only the configured roles
-    // route.use(authorizeRole(config.routes.elevator.permissions));
 
     const ctrl = Container.get(config.controllers.robotType.name) as IRobotTypeController;
 

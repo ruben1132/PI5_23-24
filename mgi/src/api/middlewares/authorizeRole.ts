@@ -5,14 +5,14 @@ import winston from 'winston';
 const authorizeRole = (roles: string[]) => {
     return (req, res, next) => {
         const Logger = Container.get('logger') as winston.Logger;
-
+        
         try {
             // Check if req.user has the required role
             if (!req.user || !req.user.role || !req.user.role.name) {
                 return res.status(403).json({ message: 'Forbidden: User not authenticated' });
             }
 
-            if (roles.includes(req.user.role.name)) {
+            if (roles.includes(req.user.role.name)) {                
                 next();
             } else {
                 return res.status(403).json({ message: 'Forbidden: Insufficient permissions' });
