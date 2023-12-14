@@ -66,6 +66,9 @@ namespace Mpt
                     };
                 });
 
+            // add a singleton HttpClient
+            services.AddHttpClient();
+
             // services.AddAuthorization();
 
             ConfigureMyServices(services);

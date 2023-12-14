@@ -10,13 +10,23 @@ namespace Mpt.Services
 {
     public class TaskService : ITaskService
     {
+        private readonly IConfiguration _config;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ITaskRepository _repo;
+        private readonly IUserRepository _userRepo;
+        private readonly HttpClient _httpClient;
+        private readonly string _mpApiUrl;
 
-        public TaskService(IUnitOfWork unitOfWork, ITaskRepository repo)
+        public TaskService(IConfiguration config, IUnitOfWork unitOfWork, ITaskRepository repo, IUserRepository userRepo, HttpClient httpClient)
         {
+            this._config = config;
+
+            this._mpApiUrl = config.GetValue<string>("MPApiUrl") ?? "http://localhost:5000/";
+
             this._unitOfWork = unitOfWork;
             this._repo = repo;
+            this._userRepo = userRepo;
+            this._httpClient = httpClient;
         }
 
         public async Task<Result<List<TaskDto>>> GetAllAsync()
@@ -29,10 +39,14 @@ namespace Mpt.Services
 
                 foreach (var task in tasks)
                 {
+                    // get user
+                    var user = await this._userRepo.GetByIdAsync(task.UserId);
+                    var userDto = UserMapper.ToDtoTaskInfo(user);
+
                     if (task is SurveillanceTask)
-                        tasksDto.Add(TaskMapper.ToDto(task as SurveillanceTask));
+                        tasksDto.Add(TaskMapper.ToDto(task as SurveillanceTask, userDto));
                     else if (task is PickupDeliveryTask)
-                        tasksDto.Add(TaskMapper.ToDto(task as PickupDeliveryTask));
+                        tasksDto.Add(TaskMapper.ToDto(task as PickupDeliveryTask, userDto));
                 }
 
                 return Result<List<TaskDto>>.Ok(tasksDto);
@@ -53,14 +67,18 @@ namespace Mpt.Services
                 if (task == null)
                     return Result<TaskDto>.Fail("Task not found.");
 
+                // get user
+                var user = await this._userRepo.GetByIdAsync(task.UserId);
+                var userDto = UserMapper.ToDtoTaskInfo(user);
+
                 if (task is SurveillanceTask)
                 {
-                    var taskDto = TaskMapper.ToDto(task as SurveillanceTask);
+                    var taskDto = TaskMapper.ToDto(task as SurveillanceTask, userDto);
                     return Result<TaskDto>.Ok(taskDto);
                 }
                 else if (task is PickupDeliveryTask)
                 {
-                    var taskDto = TaskMapper.ToDto(task as PickupDeliveryTask);
+                    var taskDto = TaskMapper.ToDto(task as PickupDeliveryTask, userDto);
                     return Result<TaskDto>.Ok(taskDto);
                 }
 
@@ -94,7 +112,11 @@ namespace Mpt.Services
 
                 await this._unitOfWork.CommitAsync();
 
-                var taskDto = TaskMapper.ToDto(task);
+                // get user
+                var user = await this._userRepo.GetByIdAsync(task.UserId);
+                var userDto = UserMapper.ToDtoTaskInfo(user);
+
+                var taskDto = TaskMapper.ToDto(task, userDto);
                 return Result<TaskDto>.Ok(taskDto);
             }
             catch (Exception ex)
@@ -118,7 +140,11 @@ namespace Mpt.Services
                 this._repo.Remove(task);
                 await this._unitOfWork.CommitAsync();
 
-                var taskDto = TaskMapper.ToDto(task);
+                // get user
+                var user = await this._userRepo.GetByIdAsync(task.UserId);
+                var userDto = UserMapper.ToDtoTaskInfo(user);
+
+                var taskDto = TaskMapper.ToDto(task, userDto);
                 return Result<TaskDto>.Ok(taskDto);
             }
             catch (Exception ex)
@@ -128,16 +154,26 @@ namespace Mpt.Services
             }
         }
 
-        public async Task<Result<SurveillanceTaskDto>> AddSurveillanceTaskAsync(CreateSurveillanceTaskDto dto)
+        public async Task<Result<SurveillanceTaskDto>> AddSurveillanceTaskAsync(CreateSurveillanceTaskDto dto, string userId)
         {
             try
             {
-                var surveillanceTask = TaskMapper.ToSurveillanceDomain(dto);
+                // get path and movements of the robot
+                var pathMovementDto = await this.GetPathAsync(dto.Origin, dto.Destiny);
+
+                if (pathMovementDto.IsFailure)
+                    return Result<SurveillanceTaskDto>.Fail(pathMovementDto.Error);
+
+                var surveillanceTask = TaskMapper.ToSurveillanceDomain(dto, userId, pathMovementDto.GetValue());
 
                 await this._repo.AddAsync(surveillanceTask);
                 await this._unitOfWork.CommitAsync();
 
-                var taskDto = TaskMapper.ToDto(surveillanceTask);
+                // get user
+                var user = await this._userRepo.GetByIdAsync(surveillanceTask.UserId);
+                var userDto = UserMapper.ToDtoTaskInfo(user);
+
+                var taskDto = TaskMapper.ToDto(surveillanceTask, userDto);
                 return Result<SurveillanceTaskDto>.Ok(taskDto);
             }
             catch (Exception ex)
@@ -147,16 +183,26 @@ namespace Mpt.Services
             }
         }
 
-        public async Task<Result<PickupDeliveryTaskDto>> AddPickupDeliveryTaskAsync(CreatePickupDeliveryTaskDto dto)
+        public async Task<Result<PickupDeliveryTaskDto>> AddPickupDeliveryTaskAsync(CreatePickupDeliveryTaskDto dto, string userId)
         {
             try
             {
-                var pickupDeliveryTask = TaskMapper.ToPickupDeliveryDomain(dto);
+                // get path and movements of the robot
+                var pathMovementDto = await this.GetPathAsync(dto.Origin, dto.Destiny);
+
+                if (pathMovementDto.IsFailure)
+                    return Result<PickupDeliveryTaskDto>.Fail(pathMovementDto.Error);
+
+                var pickupDeliveryTask = TaskMapper.ToPickupDeliveryDomain(dto, userId, pathMovementDto.GetValue());
 
                 await this._repo.AddAsync(pickupDeliveryTask);
                 await this._unitOfWork.CommitAsync();
 
-                var taskDto = TaskMapper.ToDto(pickupDeliveryTask);
+                // get user
+                var user = await this._userRepo.GetByIdAsync(pickupDeliveryTask.UserId);
+                var userDto = UserMapper.ToDtoTaskInfo(user);
+
+                var taskDto = TaskMapper.ToDto(pickupDeliveryTask, userDto);
                 return Result<PickupDeliveryTaskDto>.Ok(taskDto);
             }
             catch (Exception ex)
@@ -164,6 +210,28 @@ namespace Mpt.Services
                 Console.WriteLine(ex.Message);
                 return Result<PickupDeliveryTaskDto>.Fail(ex.Message);
 
+            }
+        }
+
+        private async Task<Result<PathMovementDto>> GetPathAsync(string origin, string destiny)
+        {
+            try
+            {
+                // call MP API
+                this._httpClient.BaseAddress = new Uri(this._mpApiUrl);
+                var response = await this._httpClient.GetAsync($"findPath?algorithm=astar&origin={origin}&destiny={destiny}");
+
+                if (!response.IsSuccessStatusCode)
+                    return Result<PathMovementDto>.Fail("There was an error calculating the robot path. Please try again later.");
+
+                var pathMovementDto = await response.Content.ReadFromJsonAsync<PathMovementDto>();
+
+                return Result<PathMovementDto>.Ok(pathMovementDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<PathMovementDto>.Fail(ex.Message);
             }
         }
     }
