@@ -8,8 +8,16 @@ namespace Mpt.Domain.Shared
     {
         public string Value { get; private set; }
 
-        public PhoneNumber(string value)
+    
+
+        public PhoneNumber(string value, bool? isVerified = true)
         {
+            if (isVerified == false)
+            {
+                this.Value = value;
+                return;
+            }
+            
             if (!IsValidPhoneNumber(value))
             {
                 throw new BusinessRuleValidationException("Invalid phone number");

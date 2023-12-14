@@ -34,6 +34,7 @@ namespace Mpt.Services
             try
             {
                 var tasks = await this._repo.GetAllAsync();
+                Console.WriteLine("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
                 var tasksDto = new List<TaskDto>();
 

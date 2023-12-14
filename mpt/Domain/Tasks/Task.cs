@@ -33,6 +33,7 @@ namespace Mpt.Domain.Tasks
         public Task(UserId userId, string taskType, List<string> path, List<List<RobotMovement>> robotMovements,
             string originType, string origin, string destinyType, string destiny, bool? isApproved = null)
         {
+            this.Id = new TaskId(Guid.NewGuid());
             this.UserId = userId;
             this.TaskType = taskType;
             this.Path = path;

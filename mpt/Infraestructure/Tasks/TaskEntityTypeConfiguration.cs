@@ -13,6 +13,7 @@ namespace Mpt.Infrastructure.Tasks
         {
             builder.HasKey(b => b.Id);
             builder.Property(b => b.Id).HasConversion(b => b.AsGuid(), b => new TaskId(b));
+
             // robot movements
             builder.Property(t => t.RobotMovements)
                 .HasConversion(

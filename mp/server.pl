@@ -28,7 +28,7 @@ stopServer:-
 
 find_caminho_handler(Request) :-
     cors_enable(Request, [methods([get]),
-                          origin('http://localhost:2225')]),
+                          origin('http://localhost:5095')]),
     % Extract parameters from the request
     http_parameters(Request, [algorithm(A, []),origin(O,[]),destiny(D,[])]),
   
