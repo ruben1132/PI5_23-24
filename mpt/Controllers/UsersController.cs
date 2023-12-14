@@ -107,6 +107,28 @@ namespace Mpt.Controllers
             }
         }
 
+        // PATCH: api/User/5
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<UserDto>> Update(Guid id, UserIsApprovedDto user)
+        {
+            try
+            {
+                var updatedUser = await _service.UpdateIsApprovedAsync(id, user);
+
+                if (updatedUser.IsFailure)
+                {
+                    return BadRequest(new { error = updatedUser.Error });
+                }
+
+                return Ok(updatedUser.GetValue());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]
