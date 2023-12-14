@@ -200,6 +200,7 @@ namespace Mpt.Services
                 await this._unitOfWork.CommitAsync();
 
                 var userDto = UserMapper.ToDto(user);
+                userDto.Password = null; // hide
                 return Result<UserDto>.Ok(userDto);
             }
             catch (Exception ex)

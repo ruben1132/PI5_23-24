@@ -352,12 +352,12 @@ obter_coordenadas_sala(Piso, Sala, SalaX, SalaY) :-
 
 
 % print info do processar
-print_info_processar(_, A, B, _, _, _, _):-
+print_info_processar(_, _, _, _, _, _, _).
                         % nl,
                         % nl,
                         % write('Piso: '), write(Piso), nl,
-                        write('Origem: '), write(A), write(" - "), 
-                        write('Destino: '), write(B),  nl.
+                        % write('Origem: '), write(A), write(" - "), 
+                        % write('Destino: '), write(B),  nl.
                         % write('Coordenadas Origem: '), write(cel(StartX,StartY)), write(" - "),  
                         % write('Coordenadas Destino: '), write(cel(EndX,EndY)).
 
@@ -373,10 +373,10 @@ criar_grafos_pisos(Piso) :-
 
 
 find_caminho_robot(bestFirst,Piso,StarX, StartY, EndX, EndY, Cam, Custo) :-   
-                        write('StarX: '), write(StarX), nl,
-                        bestFirst(cel(StarX, StartY), cel(EndX, EndY), Cam, Custo, Piso),
-                        write('Custo: '), write(Custo), nl,
-                        write('Caminho: '), write(Cam), nl.    
+                        % write('StarX: '), write(StarX), nl,
+                        bestFirst(cel(StarX, StartY), cel(EndX, EndY), Cam, Custo, Piso).
+                        % write('Custo: '), write(Custo), nl,
+                        % write('Caminho: '), write(Cam), nl.    
                                              
 find_caminho_robot(astar,Piso,StarX, StartY, EndX, EndY, Cam, Custo) :-   
                         % write('StarX: '), write(StarX), nl,
@@ -432,7 +432,7 @@ find_caminho_entidades(Algorith,ElementoOr, ElementoDest, CaminhoCompleto2, Movi
                      find_caminho(PisoOr, PisoDest, Caminho),                                               % encontrar o melhor caminho entre os pisos
                      append([ElementoOr|Caminho], [ElementoDest], CaminhoCompleto),                         % add o ponto de partida e o ponto de chegada à lista do caminho
                      remove_consecutive_duplicates(CaminhoCompleto, CaminhoCompleto2),                       % remove elementos consecutivos repetidos (so acontece pq...codigo batata q fiz no determinar_tipo_entidade)
-                     write('Melhor Caminho: '),write(CaminhoCompleto2),nl,        
+                    %  write('Melhor Caminho: '),write(CaminhoCompleto2),nl,        
                      CustoTot = 0,
                      processar_caminho(Algorith,CaminhoCompleto2,Movimentos, CustoTot).                      % processa o caminho encontrado
                      %  write("Caminho total: "), write(Movimentos), nl,                                        

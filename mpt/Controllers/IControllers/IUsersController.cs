@@ -6,11 +6,11 @@ namespace Mpt.IControllers
 {
     public interface IUsersController
     {
-        Task<ActionResult<UserDto>> Create(CreateUserDto role);
-        Task<ActionResult<UserDto>> Update(UserDto role);
-        Task<ActionResult<UserDto>> Update(Guid id, UserIsApprovedDto user);
-        Task<ActionResult<IEnumerable<UserDto>>> GetAll([FromQuery] bool? isSysUser, [FromQuery] bool? isApproved, bool? all);
-        Task<ActionResult<UserDto>> GetById(Guid id);
+        Task<ActionResult<UserWithRoleDto>> Create(CreateUserDto role);
+        Task<ActionResult<UserWithRoleDto>> Update(UserDto role);
+        Task<ActionResult<UserWithRoleDto>> ApproveReject(Guid id, UserIsApprovedDto user);
+        Task<ActionResult<IEnumerable<UserWithRoleDto>>> GetAll([FromQuery] bool? isSysUser, [FromQuery] bool? isApproved, bool? all);
+        Task<ActionResult<UserWithRoleDto>> GetById(Guid id);
         Task<ActionResult<string>> Delete(Guid id);
     }
 }

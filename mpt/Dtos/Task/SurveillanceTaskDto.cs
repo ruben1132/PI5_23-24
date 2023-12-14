@@ -6,11 +6,11 @@ namespace Mpt.Dtos
     {
         public string PhoneNumber { get; private set; }
 
-        public SurveillanceTaskDto(string id, string userId, List<string> path, List<List<RobotMovementDto>> robotMovements, 
+        public SurveillanceTaskDto(string id, List<string> path, List<List<RobotMovementDto>> robotMovements, 
             string originType, string origin, string destinyType, string destiny,
-            bool isCompleted, string taskType, string phoneNumber, bool? isApproved=null)
+            bool isCompleted, string taskType, string phoneNumber, UserTaskInfoDto? user = null, bool? isApproved=null)
             
-            : base(id, userId, path, robotMovements, originType, origin, destinyType, destiny, isCompleted, taskType, isApproved)
+            : base(id, path, robotMovements, originType, origin, destinyType, destiny, isCompleted, taskType, user, isApproved)
         {
             this.PhoneNumber = phoneNumber;
         }
