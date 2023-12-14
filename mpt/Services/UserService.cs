@@ -183,6 +183,32 @@ namespace Mpt.Services
             }
         }
 
+        public async Task<Result<UserDto>> UpdateIsApprovedAsync(Guid id, UserIsApprovedDto u)
+        {
+            try
+            {
+                var user = await this._repo.GetByIdAsync(new UserId(id));
+                
+                if (user == null)
+                    return Result<UserDto>.Fail("User not found.");
+                
+                if (u.IsApproved)
+                    user.Approve();
+                else
+                    user.Disapprove();
+
+                await this._unitOfWork.CommitAsync();
+
+                var userDto = UserMapper.ToDto(user);
+                return Result<UserDto>.Ok(userDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<UserDto>.Fail(ex.Message);
+            }
+        }
+
 
         public async Task<Result<UserDto>> DeleteAsync(Guid id)
         {
