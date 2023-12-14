@@ -25,7 +25,7 @@ const attachCurrentUser = async (req, res, next) => {
         } else {
             const user: IAuthUserDTO = result as IAuthUserDTO;
             req.user = user;
-            console.log('User attached to req.user');
+            // console.log('User attached to req.user');
             next();
         }
     } catch (e) {

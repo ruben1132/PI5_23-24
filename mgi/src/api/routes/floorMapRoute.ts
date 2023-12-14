@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { celebrate, Joi } from 'celebrate';
 
 import { Container } from 'typedi';
 import IFloorMapController from '../../controllers/IControllers/IFloorMapController';
@@ -7,9 +6,7 @@ import IFloorMapController from '../../controllers/IControllers/IFloorMapControl
 import config from '../../../config';
 
 // auth
-import isAuth from '../middlewares/isAuth';
 import authorizeRole from '../middlewares/authorizeRole';
-import attachCurrentUser from '../middlewares/attachCurrentUser';
 
 import multer from 'multer';
 
@@ -20,15 +17,6 @@ const route = Router();
 
 export default (app: Router) => {
     app.use('/floorMaps', route);
-
-    // apply isAuth to secure routes that require authentication
-    route.use(isAuth);
-
-    // apply attachCurrentUser to attach user information to the request
-    route.use(attachCurrentUser);
-
-    // apply authorizeRole to allow only the configured roles
-    // route.use(authorizeRole(config.routes.floorMap.permissions));
 
     const ctrl = Container.get(config.controllers.floorMap.name) as IFloorMapController;
 

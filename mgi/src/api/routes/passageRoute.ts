@@ -7,23 +7,12 @@ import IPassageController from '../../controllers/IControllers/IPassageControlle
 import config from '../../../config';
 
 // auth
-import isAuth from '../middlewares/isAuth';
 import authorizeRole from '../middlewares/authorizeRole';
-import attachCurrentUser from '../middlewares/attachCurrentUser';
 
 const route = Router();
 
 export default (app: Router) => {
     app.use('/passages', route);
-
-    // apply isAuth to secure routes that require authentication
-    route.use(isAuth);
-
-    // apply attachCurrentUser to attach user information to the request
-    route.use(attachCurrentUser);
-
-    // apply authorizeRole to allow only the configured roles
-    // route.use(authorizeRole(config.routes.passage.permissions));
 
     const ctrl = Container.get(config.controllers.passage.name) as IPassageController;
 

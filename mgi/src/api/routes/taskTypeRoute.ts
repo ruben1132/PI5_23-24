@@ -9,21 +9,10 @@ import config from '../../../config';
 const route = Router();
 
 // auth
-import isAuth from '../middlewares/isAuth';
 import authorizeRole from '../middlewares/authorizeRole';
-import attachCurrentUser from '../middlewares/attachCurrentUser';
 
 export default (app: Router) => {
     app.use('/taskTypes', route);
-
-    // apply isAuth to secure routes that require authentication
-    route.use(isAuth);
-
-    // apply attachCurrentUser to attach user information to the request
-    route.use(attachCurrentUser);
-
-    // apply authorizeRole to allow only the configured roles
-    // route.use(authorizeRole(config.routes.taskType.permissions));
 
     const ctrl = Container.get(config.controllers.taskType.name) as ITaskTypeController;
 
