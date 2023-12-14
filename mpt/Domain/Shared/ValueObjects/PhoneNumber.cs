@@ -9,6 +9,11 @@ namespace Mpt.Domain.Shared
         public string Value { get; private set; }
 
     
+         // required for EF 
+        private PhoneNumber(string value)
+        {
+            this.Value = value;
+        }
 
         public PhoneNumber(string value, bool? isVerified = true)
         {

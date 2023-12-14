@@ -14,7 +14,6 @@ namespace Mpt.Infrastructure.PickupDeliveryTasks
             builder.Property(b => b.PickupPersonName);
             builder.Property(b => b.DeliveryPersonName);
             builder.Property(b => b.TaskDescription);
-            builder.OwnsOne(b => b.DeliveryPersonPhoneNumber);
             builder.OwnsOne(b => b.ConfirmationCode);
 
             builder.Property(e => e.PickupPersonPhoneNumber)
