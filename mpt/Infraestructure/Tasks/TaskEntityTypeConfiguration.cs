@@ -20,7 +20,7 @@ namespace Mpt.Infrastructure.Tasks
                     v => ConvertStringToMovements(v))
                 .HasColumnName("Movements")
                 .Metadata.SetValueComparer(
-                        new ValueComparer<List<RobotMovement>>(
+                        new ValueComparer<List<List<RobotMovement>>>(
                             (c1, c2) => c1.Equals(c2),
                             c => c.GetHashCode()));
 
