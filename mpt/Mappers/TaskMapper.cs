@@ -62,7 +62,7 @@ namespace Mpt.Mappers
         {
             return new SurveillanceTask(
                 new UserId(userId),
-                dto.TaskType,
+                "Surveillance",
                 new List<string>() { floorCode },
                 new List<List<RobotMovement>>(),
                 new PhoneNumber(dto.PhoneNumber),

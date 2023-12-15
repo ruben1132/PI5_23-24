@@ -4,13 +4,12 @@ namespace Mpt.Dtos
 {
     public class FloorInfoDto
     {
-        public string FloorId { get; private set; }
+        public string Code { get; private set; }
 
-        public FloorInfoDto(string token)
+        public FloorInfoDto(string code)
         {
-            this.Token = token;
+            this.Code = code;
         }
-
     }
  
 }

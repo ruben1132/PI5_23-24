@@ -27,8 +27,9 @@ namespace Mpt.Controllers
             {
                 // get current user
                 var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+                var token = GetToken();
 
-                var createdTask = await _service.AddSurveillanceTaskAsync(task, currentUser.Id);
+                var createdTask = await _service.AddSurveillanceTaskAsync(task, currentUser.Id, token);
 
                 if (createdTask.IsFailure)
                 {
@@ -52,6 +53,7 @@ namespace Mpt.Controllers
             {
                 // get current user
                 var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+                var token = GetToken();
 
                 var createdTask = await _service.AddPickupDeliveryTaskAsync(task, currentUser.Id);
 
@@ -157,6 +159,12 @@ namespace Mpt.Controllers
             }
         }
 
+        private string GetToken()
+        {
+            string authorizationHeader = HttpContext.Request.Headers["Authorization"];
+            string token = authorizationHeader.Substring("Bearer ".Length);
 
+            return token;
+        }
     }
 }

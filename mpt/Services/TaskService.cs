@@ -5,6 +5,7 @@ using Mpt.Domain.Tasks;
 using Mpt.IServices;
 using Mpt.Core.Domain;
 using Mpt.Core.Logic;
+using System.Net.Http.Headers;
 
 namespace Mpt.Services
 {
@@ -15,16 +16,10 @@ namespace Mpt.Services
         private readonly ITaskRepository _repo;
         private readonly IUserRepository _userRepo;
         private readonly HttpClient _httpClient;
-        private readonly string _mpApiUrl;
-        private readonly string _mgiApiUrl;
 
         public TaskService(IConfiguration config, IUnitOfWork unitOfWork, ITaskRepository repo, IUserRepository userRepo, HttpClient httpClient)
         {
             this._config = config;
-
-            this._mpApiUrl = config.GetValue<string>("MPApiUrl") ?? "http://localhost:5000/";
-            this._mgiApiUrl = config.GetValue<string>("MGIApiUrl") ?? "http://localhost:2225/";
-
             this._unitOfWork = unitOfWork;
             this._repo = repo;
             this._userRepo = userRepo;
@@ -157,16 +152,16 @@ namespace Mpt.Services
             }
         }
 
-        public async Task<Result<SurveillanceTaskDto>> AddSurveillanceTaskAsync(CreateSurveillanceTaskDto dto, string userId)
+        public async Task<Result<SurveillanceTaskDto>> AddSurveillanceTaskAsync(CreateSurveillanceTaskDto dto, string userId, string token)
         {
             try
             {
                 // get floor info
+                var floorInfo = await this.GetFloorInfoAsync(dto.FloorId, token);
+                if (floorInfo.IsFailure)
+                    return Result<SurveillanceTaskDto>.Fail(floorInfo.Error);
 
-                if (pathMovementDto.IsFailure)
-                    return Result<SurveillanceTaskDto>.Fail(pathMovementDto.Error);
-
-                var surveillanceTask = TaskMapper.ToSurveillanceDomain(dto, userId, pathMovementDto.GetValue());
+                var surveillanceTask = TaskMapper.ToSurveillanceDomain(dto, userId, floorInfo.GetValue());
 
                 await this._repo.AddAsync(surveillanceTask);
                 await this._unitOfWork.CommitAsync();
@@ -175,7 +170,7 @@ namespace Mpt.Services
                 var user = await this._userRepo.GetByIdAsync(surveillanceTask.UserId);
                 var userDto = UserMapper.ToDtoTaskInfo(user);
 
-                var taskDto = TaskMapper.ToDto(surveillanceTask, userDto);
+                var taskDto = TaskMapper.ToDto(surveillanceTask, floorInfo.GetValue(), userDto);
                 return Result<SurveillanceTaskDto>.Ok(taskDto);
             }
             catch (Exception ex)
@@ -220,7 +215,8 @@ namespace Mpt.Services
             try
             {
                 // call MP API
-                this._httpClient.BaseAddress = new Uri(this._mpApiUrl);
+                var route = this._config.GetValue<string>("MPApiUrl") ?? "http://localhost:5000/";
+                this._httpClient.BaseAddress = new Uri(route);
                 var response = await this._httpClient.GetAsync($"findPath?algorithm=astar&origin={origin}&destiny={destiny}");
 
                 if (!response.IsSuccessStatusCode)
@@ -237,20 +233,35 @@ namespace Mpt.Services
             }
         }
 
-        private async Task<Result<string>> GetFloorInfoAsync(string floorId)
+        private async Task<Result<string>> GetFloorInfoAsync(string floorId, string token)
         {
             try
             {
+                // Create HttpClientHandler with withCredentials set to true
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    UseDefaultCredentials = true,
+                    AllowAutoRedirect = true,
+                };
+
+                // new http client cuz i need to set the handler
+                using var httpClient = new HttpClient(handler);
                 // call MGI API
-                this._httpClient.BaseAddress = new Uri(this._mgiApiUrl);
-                var response = await this._httpClient.GetAsync($"floors/{floorId}");
+                var route = this._config.GetValue<string>("MGIApiUrl:floor") ?? "http://localhost:2225/api/floors/";
+                httpClient.BaseAddress = new Uri(route);
+
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                // httpClient.DefaultRequestHeaders.Add("withCredentials", "true");
+
+                var response = await httpClient.GetAsync($"{floorId}");
 
                 if (!response.IsSuccessStatusCode)
-                    return Result<string>.Fail("There was an error calculating the robot path. Please try again later.");
+                    return Result<string>.Fail(response.ReasonPhrase);
 
-                var pathMovementDto = await response.Content.ReadFromJsonAsync<PathMovementDto>();
+                var floor = await response.Content.ReadFromJsonAsync<FloorInfoDto>();
 
-                return Result<string>.Ok(pathMovementDto);
+                return Result<string>.Ok(floor.Code);
             }
             catch (Exception ex)
             {
