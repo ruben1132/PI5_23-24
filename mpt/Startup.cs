@@ -40,7 +40,7 @@ namespace Mpt
                 options.AddPolicy(name: "MyAllowSpecificOrigins",
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://localhost:2223")
+                                      builder.WithOrigins("http://localhost:2223", "http://localhost:2225")
                                       .AllowAnyHeader()
                                       .AllowAnyMethod()
                                       .AllowCredentials();
@@ -65,6 +65,9 @@ namespace Mpt
                         ClockSkew = TimeSpan.Zero
                     };
                 });
+
+            // add a singleton HttpClient
+            services.AddHttpClient();
 
             // services.AddAuthorization();
 

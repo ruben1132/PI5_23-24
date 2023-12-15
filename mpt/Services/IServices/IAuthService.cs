@@ -8,11 +8,9 @@ namespace Mpt.IServices
     {
 
         Task<Result<UserAuthDto>> LoginAsync(UserLoginDto login);
-
         Task<Result<UserAuthDto>> SignupAsync(SignupUserDto user);
-
         Task<Result<UserAuthDto>> SessionAsync(string token);
-
         Result<string> GenerateJwtToken(UserAuthDto user);
+        
     }
 }

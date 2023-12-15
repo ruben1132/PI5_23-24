@@ -25,7 +25,10 @@ namespace Mpt.Controllers
         {
             try
             {
-                var createdTask = await _service.AddSurveillanceTaskAsync(task);
+                // get current user
+                var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+
+                var createdTask = await _service.AddSurveillanceTaskAsync(task, currentUser.Id);
 
                 if (createdTask.IsFailure)
                 {
@@ -47,7 +50,10 @@ namespace Mpt.Controllers
         {
             try
             {
-                var createdTask = await _service.AddPickupDeliveryTaskAsync(task);
+                // get current user
+                var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+
+                var createdTask = await _service.AddPickupDeliveryTaskAsync(task, currentUser.Id);
 
                 if (createdTask.IsFailure)
                 {

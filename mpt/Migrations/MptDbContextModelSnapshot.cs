@@ -63,11 +63,27 @@ namespace mpt.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Destiny")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DestinyType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("IsApproved")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OriginType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Path")
                         .IsRequired()
@@ -148,7 +164,7 @@ namespace mpt.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DeliveryPlace")
+                    b.Property<string>("DeliveryPersonPhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -156,7 +172,7 @@ namespace mpt.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PickupPlace")
+                    b.Property<string>("PickupPersonPhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -171,7 +187,7 @@ namespace mpt.Migrations
                 {
                     b.HasBaseType("Mpt.Domain.Tasks.Task");
 
-                    b.Property<string>("FloorIds")
+                    b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -306,40 +322,6 @@ namespace mpt.Migrations
 
             modelBuilder.Entity("Mpt.Domain.Tasks.PickupDeliveryTask", b =>
                 {
-                    b.OwnsOne("Mpt.Domain.Shared.PhoneNumber", "DeliveryPersonPhoneNumber", b1 =>
-                        {
-                            b1.Property<Guid>("PickupDeliveryTaskId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("PickupDeliveryTaskId");
-
-                            b1.ToTable("Tasks");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PickupDeliveryTaskId");
-                        });
-
-                    b.OwnsOne("Mpt.Domain.Shared.PhoneNumber", "PickupPersonPhoneNumber", b1 =>
-                        {
-                            b1.Property<Guid>("PickupDeliveryTaskId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("PickupDeliveryTaskId");
-
-                            b1.ToTable("Tasks");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PickupDeliveryTaskId");
-                        });
-
                     b.OwnsOne("Mpt.Domain.Users.TaskConfirmationCode", "ConfirmationCode", b1 =>
                         {
                             b1.Property<Guid>("PickupDeliveryTaskId")
@@ -358,35 +340,6 @@ namespace mpt.Migrations
                         });
 
                     b.Navigation("ConfirmationCode")
-                        .IsRequired();
-
-                    b.Navigation("DeliveryPersonPhoneNumber")
-                        .IsRequired();
-
-                    b.Navigation("PickupPersonPhoneNumber")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Mpt.Domain.Tasks.SurveillanceTask", b =>
-                {
-                    b.OwnsOne("Mpt.Domain.Shared.PhoneNumber", "PhoneNumber", b1 =>
-                        {
-                            b1.Property<Guid>("SurveillanceTaskId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("SurveillanceTaskId");
-
-                            b1.ToTable("Tasks");
-
-                            b1.WithOwner()
-                                .HasForeignKey("SurveillanceTaskId");
-                        });
-
-                    b.Navigation("PhoneNumber")
                         .IsRequired();
                 });
 

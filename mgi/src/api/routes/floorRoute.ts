@@ -6,6 +6,9 @@ import IFloorController from '../../controllers/IControllers/IFloorController';
 
 import config from '../../../config';
 
+// auth
+import authorizeRole from '../middlewares/authorizeRole';
+
 const route = Router();
 
 export default (app: Router) => {
@@ -15,6 +18,7 @@ export default (app: Router) => {
 
     route.post(
         '',
+        authorizeRole(config.routesPermissions.floor.post),
         celebrate({
             body: Joi.object({
                 building: Joi.string().required(),
@@ -25,18 +29,27 @@ export default (app: Router) => {
         (req, res, next) => ctrl.createFloor(req, res, next),
     );
 
-    route.get('', (req, res, next) => ctrl.getFloors(req, res, next));
+    route.get('', authorizeRole(config.routesPermissions.floor.get), (req, res, next) =>
+        ctrl.getFloors(req, res, next),
+    );
 
     //get floors with passages
-    route.get('/withpass/', (req, res, next) => ctrl.getFloorsWithPassages(req, res, next));
+    route.get('/withpass/', authorizeRole(config.routesPermissions.floor.getWithPass), (req, res, next) =>
+        ctrl.getFloorsWithPassages(req, res, next),
+    );
 
     //get floors by building id
-    route.get('/buildingId/:id', (req, res, next) => ctrl.getFloorsByBuildingId(req, res, next));
+    route.get('/buildingId/:id', authorizeRole(config.routesPermissions.floor.getByBuildingId), (req, res, next) =>
+        ctrl.getFloorsByBuildingId(req, res, next),
+    );
 
-    route.get('/:id', (req, res, next) => ctrl.getFloorById(req, res, next));
+    route.get('/:id', authorizeRole(config.routesPermissions.floor.getById), (req, res, next) =>
+        ctrl.getFloorById(req, res, next),
+    );
 
     route.put(
         '',
+        authorizeRole(config.routesPermissions.floor.put),
         celebrate({
             body: Joi.object({
                 id: Joi.string().required(),
@@ -48,5 +61,7 @@ export default (app: Router) => {
         (req, res, next) => ctrl.updateFloor(req, res, next),
     );
 
-    route.delete('/:id', (req, res, next) => ctrl.deleteFloor(req, res, next));
+    route.delete('/:id', authorizeRole(config.routesPermissions.floor.delete), (req, res, next) =>
+        ctrl.deleteFloor(req, res, next),
+    );
 };

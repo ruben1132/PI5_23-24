@@ -1,10 +1,12 @@
 import { Router } from 'express';
-import { celebrate, Joi } from 'celebrate';
 
 import { Container } from 'typedi';
 import IFloorMapController from '../../controllers/IControllers/IFloorMapController';
 
 import config from '../../../config';
+
+// auth
+import authorizeRole from '../middlewares/authorizeRole';
 
 import multer from 'multer';
 
@@ -20,21 +22,17 @@ export default (app: Router) => {
 
     route.patch(
         '',
-        upload.single('jsonFile'),                 
+        authorizeRole(config.routesPermissions.floorMap.patch),
+        upload.single('jsonFile'),
         (req, res, next) => ctrl.createFloorMap(req, res, next),
     );
 
-    route.get('', (req, res, next) => ctrl.getFloorMaps(req, res, next));
+    route.get('', authorizeRole(config.routesPermissions.floorMap.patch), (req, res, next) =>
+        ctrl.getFloorMaps(req, res, next),
+    );
 
     //ger floorMaps by building id
-    route.get('/floor/:id', (req, res, next) => ctrl.getFloorMapByFloorId(req, res, next));
-
-    //   route.put('',
-    //     celebrate({
-    //       body: Joi.object({
-    //         id: Joi.string().required(),
-    //         designation: Joi.string().required()
-    //       }),
-    //     }),
-    //     (req, res, next) => ctrl.updateFloorMap(req, res, next) );
+    route.get('/floor/:id',authorizeRole(config.routesPermissions.floorMap.getByFloorId), (req, res, next) =>
+        ctrl.getFloorMapByFloorId(req, res, next),
+    );
 };

@@ -1,4 +1,5 @@
 :- consult('caminhos.pl').
+:- consult('algGenetico.pl').
 :- consult('parsers.pl').
 
 :- use_module(library(http/thread_httpd)).
@@ -23,10 +24,11 @@ stopServer:-
 
 
 :- http_handler('/findPath', find_caminho_handler, []).
+:- http_handler('/planning', planning_handler, []).
 
 find_caminho_handler(Request) :-
     cors_enable(Request, [methods([get]),
-                          origin('http://localhost:2225')]),
+                          origin('http://localhost:5095')]),
     % Extract parameters from the request
     http_parameters(Request, [algorithm(A, []),origin(O,[]),destiny(D,[])]),
   
@@ -49,6 +51,19 @@ find_caminho_handler(Request) :-
     reply_json(json{path: CaminhoJson, movements: MovimentosJson, totalCost: Custo },[json_object(dict)]).
 
 
- 
+ planning_handler(Request):-
+   cors_enable(Request, [methods([get]),
+                          origin('http://localhost:2225')]),
+    http_read_json_dict(Request, JSONData),         % Extract JSON data from the request
+    Tasks = JSONData.get(tasks, []),                % Extract tasks array from JSON data
+
+    % Extract algorithm from JSON data
+    Algorithm = JSONData.get(algorithm, ''),
+
+    % Process the tasks as needed
+    process_tasks(Tasks, Algorithm, Result),
+
+    % Respond with the result
+    reply_json(Result, [json_object(dict)]).
 
 

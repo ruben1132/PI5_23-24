@@ -8,11 +8,9 @@ namespace Mpt.IControllers
     {
 
         Task<ActionResult<UserWithRoleDto>> Login(UserLoginDto login);
-
         Task<ActionResult<UserWithRoleDto>> Signup(SignupUserDto user);
-
         Task<ActionResult<UserWithRoleDto>> Session();
-
+        Task<ActionResult<UserWithRoleDto>> ValidateToken(TokenDto token);
         ActionResult Logout();
 
 

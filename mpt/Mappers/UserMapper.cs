@@ -49,6 +49,14 @@ namespace Mpt.Mappers
                 );
         }
 
+        public static UserTaskInfoDto ToDtoTaskInfo(User user){
+            return new UserTaskInfoDto(
+                    user.Email.Value,
+                    user.Name,
+                    user.Phone.Value
+                );
+        }
+
         public static User ToDomain(CreateUserDto dto)
         {
             return new User(

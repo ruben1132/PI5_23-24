@@ -8,6 +8,9 @@ import config from '../../../config';
 
 const route = Router();
 
+// auth
+import authorizeRole from '../middlewares/authorizeRole';
+
 export default (app: Router) => {
     app.use('/taskTypes', route);
 
@@ -15,6 +18,7 @@ export default (app: Router) => {
 
     route.post(
         '',
+        authorizeRole(config.routesPermissions.taskType.post),
         celebrate({
             body: Joi.object({
                 name: Joi.string().required(),
@@ -24,10 +28,13 @@ export default (app: Router) => {
         (req, res, next) => ctrl.createTaskType(req, res, next),
     );
 
-    route.get('', (req, res, next) => ctrl.getTaskTypes(req, res, next));
+    route.get('', authorizeRole(config.routesPermissions.taskType.get), (req, res, next) =>
+        ctrl.getTaskTypes(req, res, next),
+    );
 
     route.put(
         '',
+        authorizeRole(config.routesPermissions.taskType.put),
         celebrate({
             body: Joi.object({
                 id: Joi.string().required(),
@@ -38,5 +45,7 @@ export default (app: Router) => {
         (req, res, next) => ctrl.updateTaskType(req, res, next),
     );
 
-    route.delete('/:id', (req, res, next) => ctrl.deleteTaskType(req, res, next));
+    route.delete('/:id', authorizeRole(config.routesPermissions.taskType.delete), (req, res, next) =>
+        ctrl.deleteTaskType(req, res, next),
+    );
 };

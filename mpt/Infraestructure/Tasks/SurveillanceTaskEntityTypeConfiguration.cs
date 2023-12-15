@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Mpt.Domain.Shared;
 using Mpt.Domain.Tasks;
 
 namespace Mpt.Infrastructure.SurveillanceTasks
@@ -9,8 +10,10 @@ namespace Mpt.Infrastructure.SurveillanceTasks
         public void Configure(EntityTypeBuilder<SurveillanceTask> builder)
         {
 
-            builder.OwnsOne(b => b.PhoneNumber);
-            builder.Property(b => b.FloorIds);
+            builder.Property(e => e.PhoneNumber)
+            .HasConversion(
+                v => v.Value,  // to db
+                v => new PhoneNumber(v ?? "", false));  // from db
 
         }
     }

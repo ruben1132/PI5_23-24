@@ -15,6 +15,9 @@ namespace Mpt.IServices
         Task<Result<List<UserWithRoleDto>>> GetAllAsync(bool? isSysUser, bool? isApproved, bool? all);
 
         Task<Result<UserWithRoleDto>> UpdateAsync(UserDto dto);
+
+        Task<Result<UserDto>> UpdateIsApprovedAsync(Guid id, UserIsApprovedDto dto);
+
         Task<Result<UserDto>> DeleteAsync(Guid id);
     }
 }

@@ -116,6 +116,29 @@ namespace Mpt.Controllers
             }
         }
 
+        // POST: api/Auth/validate
+        [AllowAnonymous]
+        [HttpPost("validate")]
+        public async Task<ActionResult<UserWithRoleDto>> ValidateToken(TokenDto token)
+        {
+            try
+            {
+                var user = await _service.SessionAsync(token.Token);
+
+                if (user.IsFailure)
+                {
+                    return BadRequest(new { error = user.Error });
+                }
+
+                return Ok(user.GetValue());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
         // POST: apit/Auth/logout
         [AllowAnonymous]
         [HttpPost("logout")]

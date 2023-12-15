@@ -5,13 +5,13 @@ namespace Mpt.Dtos
     public class CreateSurveillanceTaskDto : CreateTaskDto
     {
         public string PhoneNumber { get; private set; }
-        public List<string> FloorIds { get; set; }
 
-        public CreateSurveillanceTaskDto(string userId, string taskType, List<string> path, List<RobotMovementDto> robotMovements, string phoneNumber, List<string> floorIds)
-            : base(userId, taskType, path, robotMovements)
+        public CreateSurveillanceTaskDto(string taskType, string originType, string origin, 
+            string destinyType, string destiny, string phoneNumber)
+
+            : base(taskType, originType, origin, destinyType, destiny)
         {
             this.PhoneNumber = phoneNumber;
-            this.FloorIds = floorIds;
         }
 
     }

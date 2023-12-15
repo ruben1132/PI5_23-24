@@ -6,6 +6,9 @@ import IBuildingController from '../../controllers/IControllers/IBuildingControl
 
 import config from '../../../config';
 
+// auth
+import authorizeRole from '../middlewares/authorizeRole';
+
 const route = Router();
 
 export default (app: Router) => {
@@ -15,6 +18,7 @@ export default (app: Router) => {
 
     route.post(
         '',
+        authorizeRole(config.routesPermissions.building.post),
         celebrate({
             body: Joi.object({
                 code: Joi.string().required(),
@@ -27,6 +31,7 @@ export default (app: Router) => {
 
     route.get(
         '/ranges/:min/:max',
+        authorizeRole(config.routesPermissions.building.getRanges),
         celebrate({
             params: Joi.object({
                 min: Joi.number().required(),
@@ -38,6 +43,7 @@ export default (app: Router) => {
 
     route.get(
         '/:id',
+        authorizeRole(config.routesPermissions.building.getById),
         celebrate({
             params: Joi.object({
                 id: Joi.string().required(),
@@ -46,11 +52,13 @@ export default (app: Router) => {
         (req, res, next) => ctrl.getBuildingById(req, res, next),
     );
 
-
-    route.get('', (req, res, next) => ctrl.getBuildings(req, res, next));
+    route.get('', authorizeRole(config.routesPermissions.building.get), (req, res, next) =>
+        ctrl.getBuildings(req, res, next),
+    );
 
     route.put(
         '',
+        authorizeRole(config.routesPermissions.building.put),
         celebrate({
             body: Joi.object({
                 id: Joi.string().required(),
@@ -64,6 +72,7 @@ export default (app: Router) => {
 
     route.delete(
         '/:id',
+        authorizeRole(config.routesPermissions.building.delete),
         celebrate({
             params: Joi.object({
                 id: Joi.string().required(),

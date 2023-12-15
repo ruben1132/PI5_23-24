@@ -1,35 +1,40 @@
-// remove by JRT : import jwt from 'express-jwt';
-var { expressjwt: jwt } = require("express-jwt");
 import config from '../../../config';
 
 /**
- * We are assuming that the JWT will come in a header with the form
- *
- * Authorization: Bearer ${JWT}
- *
- * But it could come in a query parameter with the name that you want like
- * GET https://my-bulletproof-api.com/stats?apiKey=${JWT}
- * Luckily this API follow _common sense_ ergo a _good design_ and don't allow that ugly stuff
+ * Get the JWT from the Authorization header or a cookie
  */
-const getTokenFromHeader = req => {
-  /**
-   * @TODO Edge and Internet Explorer do some weird things with the headers
-   * So I believe that this should handle more 'edge' cases ;)
-   */
-  if (
-    (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Token') ||
-    (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer')
-  ) {
-    return req.headers.authorization.split(' ')[1];
-  }
-  return null;
+const getToken = req => {
+    const authHeader = req.headers.authorization;
+
+    // check if the JWT is in the Authorization header
+    if (authHeader && (authHeader.split(' ')[0] === 'Token' || authHeader.split(' ')[0] === 'Bearer')) {
+        return authHeader.split(' ')[1];
+    }
+
+    // check if the JWT is in a cookie
+    if (req.cookies[config.cookieName] != undefined || req.cookies[config.cookieName] != null) {
+        return req.cookies[config.cookieName];
+    }
+
+    return null;
 };
 
-const isAuth = jwt({
-  secret: config.jwtSecret, // The _secret_ to sign the JWTs
-  userProperty: 'token', // Use req.token to store the JWT
-  getToken: getTokenFromHeader, // How to extract the JWT from the request
-  algorithms: ["HS256"],  // Added by JRT
-});
+const isAuth = (req, res, next) => {
+    try {
+        // get the token from the request
+        const token = getToken(req);
+
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized: Token missing' });
+        }
+
+        // attach the token to the request
+        req.token = token;
+
+        next();
+    } catch (error) {
+        return next(error);
+    }
+};
 
 export default isAuth;

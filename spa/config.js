@@ -84,7 +84,7 @@ export default {
         {
             routeName: 'v3d',
             displayName: '3D Viewer',
-            permissions: [userRole.UTENTE, userRole.GESTOR_FROTA],
+            permissions: [userRole.GESTOR_FROTA, userRole.GESTOR_CAMPUS, userRole.GESTOR_TAREFAS],
         },
         {
             routeName: 'profile',
@@ -102,7 +102,6 @@ export default {
             passages: 'passages/',
             robots: 'robots',
             robottypes: 'robottypes/',
-            tasks: 'tasks/',
             tasktypes: 'tasktypes/',
             users: 'users/',
             floormaps: 'floormaps/',
@@ -140,7 +139,9 @@ export default {
             usersmain: 'users/',
             users: 'users?isSysUser=false',
             sysusers: 'users?isSysUser=true',
-            tasks: 'tasks/',
+            tasks: 'tasks',
+            taskSurveillance: 'task/surveillance',
+            taskPickupdelivery: 'task/pickupdelivery',
             roles: 'roles/',
             sysroles: 'roles?isSysRole=true',
         },
@@ -166,6 +167,7 @@ export default {
 
     gestorCampusRoutes: [
         '/dashboard',
+        '/dashboard/v3d',
         '/dashboard/buildings',
         '/dashboard/elevators',
         '/dashboard/floors',
@@ -177,6 +179,7 @@ export default {
 
     gestorTarefasRoutes: [
         '/dashboard',
+        '/dashboard/v3d',
         '/dashboard/tasks',
         '/dashboard/tasktypes',
         '/dashboard/taskplanning',

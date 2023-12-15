@@ -11,6 +11,15 @@ const getEnvVariable = (name, defaultValue) => {
     return process.env[name] || defaultValue;
 };
 
+// roles
+export const roles = {
+    ADMIN: 'admin',
+    GESTOR_FROTA: 'gestor frota',
+    GESTOR_CAMPUS: 'gestor campus',
+    UTENTE: 'utente',
+    GESTOR_TAREFAS: 'gestor tarefas',
+};
+
 export default {
     // Your favorite port: optional change to 80 by JRT
     // port: parseInt(getEnvVariable('PORT', 8080), 10),
@@ -23,7 +32,7 @@ export default {
     ),
 
     // cookie name
-    cookieName: 'mgiAPI:authCookie',
+    cookieName: 'robdronego_authCookie',
 
     // Your secret sauce
     jwtSecret: getEnvVariable('JWT_SECRET', 'secret'),
@@ -33,6 +42,9 @@ export default {
 
     // MP API
     mpAPI: getEnvVariable('MP_API', 'http://localhost:5000'),
+
+    // MPT API
+    mptAPI: getEnvVariable('MPT_API', 'http://localhost:5095'),
 
     // Logging configuration
     logs: {
@@ -44,7 +56,75 @@ export default {
         prefix: '/api',
     },
 
-    // Controllers, Repos, Services, and Schemas
+    // Routes permissions, Controllers, Repos, Services, and Schemas
+    routesPermissions: {
+        building: {
+            post: [roles.GESTOR_CAMPUS],
+            get: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            getById: [roles.GESTOR_CAMPUS],
+            getRanges: [roles.GESTOR_CAMPUS],
+            put: [roles.GESTOR_CAMPUS],
+            delete: [roles.GESTOR_CAMPUS],
+        },
+        elevator: {
+            post: [roles.GESTOR_CAMPUS],
+            get: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            getById: [roles.GESTOR_CAMPUS],
+            put: [roles.GESTOR_CAMPUS],
+            delete: [roles.GESTOR_CAMPUS],
+        },
+        floor: {
+            post: [roles.GESTOR_CAMPUS],
+            get: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            getById: [roles.GESTOR_CAMPUS],
+            getByBuildingId: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            getWithPass: [roles.GESTOR_CAMPUS],
+            put: [roles.GESTOR_CAMPUS],
+            delete: [roles.GESTOR_CAMPUS],
+        },
+        floorMap: {
+            patch: [roles.GESTOR_CAMPUS],
+            get: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            getByFloorId: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+        },
+        passage: {
+            post: [roles.GESTOR_CAMPUS],
+            get: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            getById: [roles.GESTOR_CAMPUS],
+            getBetween: [roles.GESTOR_CAMPUS],
+            put: [roles.GESTOR_CAMPUS],
+            delete: [roles.GESTOR_CAMPUS],
+        },
+        room: {
+            post: [roles.GESTOR_CAMPUS],
+            get: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            getById: [roles.GESTOR_CAMPUS],
+            put: [roles.GESTOR_CAMPUS],
+            delete: [roles.GESTOR_CAMPUS],
+        },
+        taskType: {
+            post: [roles.GESTOR_TAREFAS],
+            get: [roles.GESTOR_TAREFAS, roles.GESTOR_FROTA],
+            put: [roles.GESTOR_TAREFAS],
+            delete: [roles.GESTOR_TAREFAS],
+        },
+        robotType: {
+            post: [roles.GESTOR_FROTA],
+            get: [roles.GESTOR_FROTA],
+            getById: [roles.GESTOR_FROTA],
+            put: [roles.GESTOR_FROTA],
+            delete: [roles.GESTOR_FROTA],
+        },
+        robot: {
+            post: [roles.GESTOR_FROTA],
+            patch: [roles.GESTOR_FROTA],
+            get: [roles.GESTOR_FROTA],
+            getById: [roles.GESTOR_FROTA],
+            put: [roles.GESTOR_FROTA],
+            delete: [roles.GESTOR_FROTA],
+        },
+    },
+
     controllers: {
         role: {
             name: 'RoleController',

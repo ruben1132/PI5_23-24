@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { celebrate, Joi } from 'celebrate';
 
 import { Container } from 'typedi';
 import IPlanningController from '../../controllers/IControllers/IPlanningController';

@@ -20,7 +20,7 @@ namespace Mpt.Controllers
 
         // GET: api/User
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetAll([FromQuery] bool? isSysUser, [FromQuery] bool? isApproved, [FromQuery] bool? all)
+        public async Task<ActionResult<IEnumerable<UserWithRoleDto>>> GetAll([FromQuery] bool? isSysUser, [FromQuery] bool? isApproved, [FromQuery] bool? all)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace Mpt.Controllers
         // GET: api/User/5
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDto>> GetById(Guid id)
+        public async Task<ActionResult<UserWithRoleDto>> GetById(Guid id)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace Mpt.Controllers
 
         // POST: api/User        
         [HttpPost]
-        public async Task<ActionResult<UserDto>> Create(CreateUserDto user)
+        public async Task<ActionResult<UserWithRoleDto>> Create(CreateUserDto user)
         {
             try
             {
@@ -87,11 +87,33 @@ namespace Mpt.Controllers
 
         // PUT: api/User/
         [HttpPatch]
-        public async Task<ActionResult<UserDto>> Update(UserDto user)
+        public async Task<ActionResult<UserWithRoleDto>> Update(UserDto user)
         {
             try
             {
                 var updatedUser = await _service.UpdateAsync(user);
+
+                if (updatedUser.IsFailure)
+                {
+                    return BadRequest(new { error = updatedUser.Error });
+                }
+
+                return Ok(updatedUser.GetValue());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        // PATCH: api/User/5
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<UserWithRoleDto>> ApproveReject(Guid id, UserIsApprovedDto user)
+        {
+            try
+            {
+                var updatedUser = await _service.UpdateIsApprovedAsync(id, user);
 
                 if (updatedUser.IsFailure)
                 {

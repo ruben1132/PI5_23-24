@@ -1,5 +1,3 @@
-using Mpt.Domain.Tasks;
-
 namespace Mpt.Dtos
 {
     public class RobotMovementDto

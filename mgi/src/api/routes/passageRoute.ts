@@ -6,6 +6,9 @@ import IPassageController from '../../controllers/IControllers/IPassageControlle
 
 import config from '../../../config';
 
+// auth
+import authorizeRole from '../middlewares/authorizeRole';
+
 const route = Router();
 
 export default (app: Router) => {
@@ -15,6 +18,7 @@ export default (app: Router) => {
 
     route.post(
         '',
+        authorizeRole(config.routesPermissions.passage.post),
         celebrate({
             body: Joi.object({
                 designation: Joi.string().required(),
@@ -25,12 +29,17 @@ export default (app: Router) => {
         (req, res, next) => ctrl.createPassage(req, res, next),
     );
 
-    route.get('', (req, res, next) => ctrl.getPassages(req, res, next));
+    route.get('', authorizeRole(config.routesPermissions.passage.get), (req, res, next) =>
+        ctrl.getPassages(req, res, next),
+    );
 
-    route.get('/:id', (req, res, next) => ctrl.getPassageById(req, res, next));
+    route.get('/:id', authorizeRole(config.routesPermissions.passage.getById), (req, res, next) =>
+        ctrl.getPassageById(req, res, next),
+    );
 
     route.get(
         '/:first/:second',
+        authorizeRole(config.routesPermissions.passage.getBetween),
         celebrate({
             params: Joi.object({
                 first: Joi.string().required(),
@@ -40,10 +49,13 @@ export default (app: Router) => {
         (req, res, next) => ctrl.getPassagesBetweenBuildings(req, res, next),
     );
 
-    route.delete('/:id', (req, res, next) => ctrl.deletePassage(req, res, next));
+    route.delete('/:id', authorizeRole(config.routesPermissions.passage.delete), (req, res, next) =>
+        ctrl.deletePassage(req, res, next),
+    );
 
     route.put(
         '',
+        authorizeRole(config.routesPermissions.passage.put),
         celebrate({
             body: Joi.object({
                 id: Joi.string().required(),

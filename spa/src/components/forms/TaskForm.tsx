@@ -50,14 +50,10 @@ export default function TaskForm(props: Props) {
     const passagesDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages);
     const elevatorsDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators);
 
-    // form submitter
-    const tasksForm = useSubmitData(
-        config.mgiAPI.baseUrl + config.mgiAPI.routes.tasks,
-        props.action === 'edit' ? 'PUT' : 'POST',
-    );
-
     // deleter
-    const taskDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.planningFindPath + props.item?.value.id);
+    const taskDeleter = useDeleteData(
+        config.mptAPI.baseUrl + config.mptAPI.routes.tasks + '/' + props.item?.value.id,
+    );
 
     // inputs
     const originType = useFormStringInput('room');
@@ -65,12 +61,22 @@ export default function TaskForm(props: Props) {
     const origin = useFormSelectBox(props.item.value?.origin);
     const destiny = useFormSelectBox(props.item.value?.destiny);
     const [path, setPath] = useState<Path>();
+    const taskType = useFormSelectBoxInput('');
     const algorith = useFormSelectBoxInput('');
 
     const [origElevator, setOrigElevator] = useState<ElevatorWithFloors>({} as ElevatorWithFloors);
     const [destElevator, setDestElevator] = useState<ElevatorWithFloors>({} as ElevatorWithFloors);
     const origFloor = useFormSelectBox('');
     const destFloor = useFormSelectBox('');
+
+    // form submitter
+    const tasksForm = useSubmitData(
+        config.mgiAPI.baseUrl +
+            (taskType.value === 'Surveillance'
+                ? config.mptAPI.routes.taskSurveillance
+                : config.mptAPI.routes.taskPickupdelivery),
+        props.action === 'edit' ? 'PUT' : 'POST',
+    );
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
@@ -123,7 +129,7 @@ export default function TaskForm(props: Props) {
     };
 
     const handleFindPath = async () => {
-        setEnabled(false);        
+        setEnabled(false);
 
         let formatedOrig = '';
         let formatedDest = '';
@@ -150,11 +156,11 @@ export default function TaskForm(props: Props) {
             case 'elevator':
                 const elev = floorFinder(origFloor.value, 'orig');
                 console.log(elev);
-                
+
                 formatedOrig = 'elev(' + elev.code + ')';
                 break;
             case 'passage':
-                const pass = passFinder(origin.value);                
+                const pass = passFinder(origin.value);
                 formatedOrig = 'pass(' + pass?.fromFloor.code + ',' + pass?.toFloor.code + ')';
                 break;
             case 'room':
@@ -379,11 +385,21 @@ export default function TaskForm(props: Props) {
                 </Col>
             </Row>
             <Row>
-                <Col sm={12}>
+                <Col sm={6}>
+                    <Form.Group className="mb-6">
+                        <Form.Label htmlFor="select">Task type</Form.Label>
+                        <Form.Select onChange={taskType.handleChange}>
+                            <option defaultChecked={true}>Select a type</option>
+                            <option value={'Surveillance'}>Surveillance</option>
+                            <option value={'Pickup & Delivery'}>Pickup & Delivery</option>
+                        </Form.Select>
+                    </Form.Group>
+                </Col>
+                <Col sm={6}>
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Algorithm</Form.Label>
                         <Form.Select onChange={algorith.handleChange}>
-                            <option defaultChecked={true}>Select a type</option>
+                            <option defaultChecked={true}>Select a algotithm</option>
                             <option value={'astar'}>A*</option>
                             <option value={'dfs'}>Depth-first search </option>
                             <option value={'bfs'}>Breadth-first search </option>
@@ -392,10 +408,10 @@ export default function TaskForm(props: Props) {
                     </Form.Group>
                 </Col>
             </Row>
-                    <br />
+            <br />
             <Row>
                 <Col sm={12}>
-                    {path !==undefined && (
+                    {path !== undefined && (
                         <Col sm={12}>
                             <Form.Group controlId="preview" className="mb-3">
                                 <Form.Label>Path</Form.Label>

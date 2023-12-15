@@ -6,8 +6,8 @@ namespace Mpt.IServices
 {
     public interface ITaskService{
 
-        Task<Result<SurveillanceTaskDto>> AddSurveillanceTaskAsync(CreateSurveillanceTaskDto dto);
-        Task<Result<PickupDeliveryTaskDto>> AddPickupDeliveryTaskAsync(CreatePickupDeliveryTaskDto dto);
+        Task<Result<SurveillanceTaskDto>> AddSurveillanceTaskAsync(CreateSurveillanceTaskDto dto, string userId);
+        Task<Result<PickupDeliveryTaskDto>> AddPickupDeliveryTaskAsync(CreatePickupDeliveryTaskDto dto, string userId);
         Task<Result<TaskDto>> GetByIdAsync(Guid id);
         Task<Result<List<TaskDto>>> GetAllAsync();
         Task<Result<TaskDto>> UpdateAsync(TaskDto dto);
