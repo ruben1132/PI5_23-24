@@ -100,6 +100,18 @@ namespace Mpt.Mappers
             );
         }
 
+        public static List<TaskSimpleDto> BulkToDto(List<Domain.Tasks.Task> task)
+        {
+            List<TaskSimpleDto> tasks = new List<TaskSimpleDto>();
+
+            foreach (var item in task)
+            {
+                tasks.Add(ToDto(item));
+            }
+
+            return tasks;
+        }
+
         // to domain 
         public static SurveillanceTask ToSurveillanceDomain(CreateSurveillanceTaskDto dto, string userId, string floorCode)
         {

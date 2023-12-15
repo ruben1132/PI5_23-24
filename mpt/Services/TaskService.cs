@@ -26,33 +26,33 @@ namespace Mpt.Services
             this._httpClient = httpClient;
         }
 
-        public async Task<Result<List<TaskDto>>> GetAllAsync(string token, string? type, bool? isApproved, string? userId = null)
+        public async Task<Result<List<TaskDto>>> GetAllAsync(string token, string? type, bool? isApproved, string? userId)
         {
             try
             {
                 var tasks = await this._repo.GetAllFilteredAsync(type, isApproved, userId);
-
-                var tasksDto = new List<TaskDto>();
-
-                foreach (var task in tasks)
-                {
-                    // get user
-                    var user = await this._userRepo.GetByIdAsync(task.UserId);
-
-                    var userDto = UserMapper.ToDtoTaskInfo(user);
-
-                    if (task is SurveillanceTask)
-                        tasksDto.Add(TaskMapper.ToFullDto(task as SurveillanceTask, userDto));
-                    else if (task is PickupDeliveryTask)
-                        tasksDto.Add(TaskMapper.ToFullDto(task as PickupDeliveryTask, userDto));
-                }
-
+                var tasksDto = await MapTasksToDto(tasks, token);
                 return Result<List<TaskDto>>.Ok(tasksDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return Result<List<TaskDto>>.Fail(ex.Message);
+            }
+        }
+
+        public async Task<Result<List<TaskSimpleDto>>> GetMyTasksAsync(string token, string? type, bool? isApproved, string? userId)
+        {
+            try
+            {
+                var tasks = await this._repo.GetAllFilteredAsync(type, isApproved, userId);
+                var tasksDto = await MapTasksToSimpleDto(tasks, token);
+                return Result<List<TaskSimpleDto>>.Ok(tasksDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<List<TaskSimpleDto>>.Fail(ex.Message);
             }
         }
 
@@ -244,7 +244,7 @@ namespace Mpt.Services
                 var response = await httpClient.GetAsync($"{floorId}");
 
                 if (!response.IsSuccessStatusCode)
-                    return Result<string>.Fail(response.ReasonPhrase);
+                    return Result<string>.Ok("unavailable");
 
                 var floor = await response.Content.ReadFromJsonAsync<FloorInfoDto>();
 
@@ -255,6 +255,52 @@ namespace Mpt.Services
                 Console.WriteLine(ex.Message);
                 return Result<string>.Fail(ex.Message);
             }
+        }
+
+        private async Task<List<TaskDto>> MapTasksToDto(IEnumerable<Domain.Tasks.Task> tasks, string token)
+        {
+            var tasksDto = new List<TaskDto>();
+
+            foreach (var task in tasks)
+            {
+                // get user
+                var user = await this._userRepo.GetByIdAsync(task.UserId);
+                var userDto = UserMapper.ToDtoTaskInfo(user);
+
+                if (task is SurveillanceTask surveillanceTask)
+                {
+                    // get floor info
+                    var floorInfo = await this.GetFloorInfoAsync(surveillanceTask.FloorId, token);
+                    tasksDto.Add(TaskMapper.ToFullDto(surveillanceTask, floorInfo.GetValue(), userDto));
+                }
+                else if (task is PickupDeliveryTask pickupDeliveryTask)
+                {
+                    tasksDto.Add(TaskMapper.ToFullDto(pickupDeliveryTask, userDto));
+                }
+            }
+
+            return tasksDto;
+        }
+
+        private async Task<List<TaskSimpleDto>> MapTasksToSimpleDto(IEnumerable<Domain.Tasks.Task> tasks, string token)
+        {
+            var tasksDto = new List<TaskSimpleDto>();
+
+            foreach (var task in tasks)
+            {
+                if (task is SurveillanceTask surveillanceTask)
+                {
+                    // get floor info
+                    var floorInfo = await this.GetFloorInfoAsync(surveillanceTask.FloorId, token);
+                    tasksDto.Add(TaskMapper.ToDto(surveillanceTask, floorInfo.GetValue()));
+                }
+                else if (task is PickupDeliveryTask pickupDeliveryTask)
+                {
+                    tasksDto.Add(TaskMapper.ToDto(pickupDeliveryTask));
+                }
+            }
+
+            return tasksDto;
         }
     }
 }

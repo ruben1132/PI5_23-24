@@ -133,7 +133,7 @@ namespace Mpt.Controllers
                 // get token
                 var token = GetToken();
 
-                var Tasks = await _service.GetAllAsync(token, type, isApproved, currentUser.Id);
+                var Tasks = await _service.GetMyTasksAsync(token, type, isApproved, currentUser.Id);
 
                 if (Tasks.IsFailure)
                 {
