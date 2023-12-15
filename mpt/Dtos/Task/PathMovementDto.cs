@@ -1,4 +1,3 @@
-using Mpt.Domain.Tasks;
 
 namespace Mpt.Dtos
 {

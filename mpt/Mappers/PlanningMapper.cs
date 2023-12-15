@@ -9,7 +9,7 @@ namespace Mpt.Mappers
 {
     public class PlanningMapper
     {
-        public static PlanningWithTasksDto ToDto(Planning planning, List<TaskDto> tasks)
+        public static PlanningWithTasksDto ToDto(Planning planning, List<TaskSimpleDto> tasks)
         {
             return new PlanningWithTasksDto(
                     planning.Id.Value, 

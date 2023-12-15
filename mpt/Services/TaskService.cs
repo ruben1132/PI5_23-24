@@ -42,9 +42,9 @@ namespace Mpt.Services
                     var userDto = UserMapper.ToDtoTaskInfo(user);
 
                     if (task is SurveillanceTask)
-                        tasksDto.Add(TaskMapper.ToDto(task as SurveillanceTask, userDto));
+                        tasksDto.Add(TaskMapper.ToFullDto(task as SurveillanceTask, userDto));
                     else if (task is PickupDeliveryTask)
-                        tasksDto.Add(TaskMapper.ToDto(task as PickupDeliveryTask, userDto));
+                        tasksDto.Add(TaskMapper.ToFullDto(task as PickupDeliveryTask, userDto));
                 }
 
                 return Result<List<TaskDto>>.Ok(tasksDto);
@@ -71,12 +71,12 @@ namespace Mpt.Services
 
                 if (task is SurveillanceTask)
                 {
-                    var taskDto = TaskMapper.ToDto(task as SurveillanceTask, userDto);
+                    var taskDto = TaskMapper.ToFullDto(task as SurveillanceTask, userDto);
                     return Result<TaskDto>.Ok(taskDto);
                 }
                 else if (task is PickupDeliveryTask)
                 {
-                    var taskDto = TaskMapper.ToDto(task as PickupDeliveryTask, userDto);
+                    var taskDto = TaskMapper.ToFullDto(task as PickupDeliveryTask, userDto);
                     return Result<TaskDto>.Ok(taskDto);
                 }
 
@@ -90,14 +90,14 @@ namespace Mpt.Services
 
         }
 
-        public async Task<Result<TaskDto>> UpdateAsync(TaskDto dto)
+        public async Task<Result<TaskSimpleDto>> UpdateAsync(TaskDto dto)
         {
             try
             {
                 var task = await this._repo.GetByIdAsync(new TaskId(dto.Id));
 
                 if (task == null)
-                    return Result<TaskDto>.Fail("Task not found.");
+                    return Result<TaskSimpleDto>.Fail("Task not found.");
 
                 if (task.IsApproved == true)
                     task.AproveTask();
@@ -110,56 +110,47 @@ namespace Mpt.Services
 
                 await this._unitOfWork.CommitAsync();
 
-                // get user
-                var user = await this._userRepo.GetByIdAsync(task.UserId);
-                var userDto = UserMapper.ToDtoTaskInfo(user);
-
-                var taskDto = TaskMapper.ToDto(task, userDto);
-                return Result<TaskDto>.Ok(taskDto);
+                var taskDto = TaskMapper.ToDto(task);
+                return Result<TaskSimpleDto>.Ok(taskDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return Result<TaskDto>.Fail(ex.Message);
+                return Result<TaskSimpleDto>.Fail(ex.Message);
             }
         }
 
 
-        public async Task<Result<TaskDto>> DeleteAsync(Guid id)
+        public async Task<Result<string>> DeleteAsync(Guid id)
         {
             try
             {
                 var task = await this._repo.GetByIdAsync(new TaskId(id));
 
                 if (task == null)
-                    return Result<TaskDto>.Fail("Task not found.")
+                    return Result<string>.Fail("Task not found.")
 
                 ;
                 this._repo.Remove(task);
                 await this._unitOfWork.CommitAsync();
 
-                // get user
-                var user = await this._userRepo.GetByIdAsync(task.UserId);
-                var userDto = UserMapper.ToDtoTaskInfo(user);
-
-                var taskDto = TaskMapper.ToDto(task, userDto);
-                return Result<TaskDto>.Ok(taskDto);
+                return Result<string>.Ok("Deleted successfully.");
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return Result<TaskDto>.Fail(ex.Message);
+                return Result<string>.Fail(ex.Message);
             }
         }
 
-        public async Task<Result<SurveillanceTaskDto>> AddSurveillanceTaskAsync(CreateSurveillanceTaskDto dto, string userId, string token)
+        public async Task<Result<SurveillanceTaskSimpleDto>> AddSurveillanceTaskAsync(CreateSurveillanceTaskDto dto, string userId, string token)
         {
             try
             {
                 // get floor info
                 var floorInfo = await this.GetFloorInfoAsync(dto.FloorId, token);
                 if (floorInfo.IsFailure)
-                    return Result<SurveillanceTaskDto>.Fail(floorInfo.Error);
+                    return Result<SurveillanceTaskSimpleDto>.Fail(floorInfo.Error);
 
                 var surveillanceTask = TaskMapper.ToSurveillanceDomain(dto, userId, floorInfo.GetValue());
 
@@ -170,17 +161,17 @@ namespace Mpt.Services
                 var user = await this._userRepo.GetByIdAsync(surveillanceTask.UserId);
                 var userDto = UserMapper.ToDtoTaskInfo(user);
 
-                var taskDto = TaskMapper.ToDto(surveillanceTask, floorInfo.GetValue(), userDto);
-                return Result<SurveillanceTaskDto>.Ok(taskDto);
+                var taskDto = TaskMapper.ToDto(surveillanceTask, floorInfo.GetValue());
+                return Result<SurveillanceTaskSimpleDto>.Ok(taskDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return Result<SurveillanceTaskDto>.Fail(ex.Message);
+                return Result<SurveillanceTaskSimpleDto>.Fail(ex.Message);
             }
         }
 
-        public async Task<Result<PickupDeliveryTaskDto>> AddPickupDeliveryTaskAsync(CreatePickupDeliveryTaskDto dto, string userId)
+        public async Task<Result<PickupDeliveryTaskSimpleDto>> AddPickupDeliveryTaskAsync(CreatePickupDeliveryTaskDto dto, string userId)
         {
             try
             {
@@ -188,24 +179,20 @@ namespace Mpt.Services
                 var pathMovementDto = await this.GetPathAsync(dto.Origin, dto.Destiny);
 
                 if (pathMovementDto.IsFailure)
-                    return Result<PickupDeliveryTaskDto>.Fail(pathMovementDto.Error);
+                    return Result<PickupDeliveryTaskSimpleDto>.Fail(pathMovementDto.Error);
 
                 var pickupDeliveryTask = TaskMapper.ToPickupDeliveryDomain(dto, userId, pathMovementDto.GetValue());
 
                 await this._repo.AddAsync(pickupDeliveryTask);
                 await this._unitOfWork.CommitAsync();
 
-                // get user
-                var user = await this._userRepo.GetByIdAsync(pickupDeliveryTask.UserId);
-                var userDto = UserMapper.ToDtoTaskInfo(user);
-
-                var taskDto = TaskMapper.ToDto(pickupDeliveryTask, userDto);
-                return Result<PickupDeliveryTaskDto>.Ok(taskDto);
+                var taskDto = TaskMapper.ToDto(pickupDeliveryTask);
+                return Result<PickupDeliveryTaskSimpleDto>.Ok(taskDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return Result<PickupDeliveryTaskDto>.Fail(ex.Message);
+                return Result<PickupDeliveryTaskSimpleDto>.Fail(ex.Message);
 
             }
         }

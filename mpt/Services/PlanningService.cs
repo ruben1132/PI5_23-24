@@ -126,16 +126,16 @@ namespace Mpt.Services
             }
         }
 
-        private async Task<Result<List<TaskDto>>> GetTasksByIdsAsync(Planning planning)
+        private async Task<Result<List<TaskSimpleDto>>> GetTasksByIdsAsync(Planning planning)
         {
             try
             {
                 var tasks = await this._repo.GetTasksForPlanningAsync(planning.Id);
 
-                var tasksDto = new List<TaskDto>();
+                var tasksDto = new List<TaskSimpleDto>();
 
                 if (tasks == null)
-                    return Result<List<TaskDto>>.Ok(tasksDto);
+                    return Result<List<TaskSimpleDto>>.Ok(tasksDto);
 
                 // to dto
                 foreach (var task in tasks)
@@ -143,12 +143,12 @@ namespace Mpt.Services
                     tasksDto.Add(TaskMapper.ToDto(task));
                 }
 
-                return Result<List<TaskDto>>.Ok(tasksDto);
+                return Result<List<TaskSimpleDto>>.Ok(tasksDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return Result<List<TaskDto>>.Fail(ex.Message);
+                return Result<List<TaskSimpleDto>>.Fail(ex.Message);
             }
         }
     }

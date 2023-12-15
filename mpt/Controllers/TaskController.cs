@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Mpt.Controllers
 {
-    [Authorize(Roles = "gestor tarefas")]
     [Route("api/[controller]")]
     [ApiController]
     public class TasksController : ControllerBase, ITasksController
@@ -20,6 +19,7 @@ namespace Mpt.Controllers
 
 
         // POST: api/Task/Surveillance
+        [Authorize(Roles = "utente,gestor tarefas")]
         [HttpPost("Surveillance")]
         public async Task<ActionResult<TaskDto>> CreateSurveillanceTaskAsync(CreateSurveillanceTaskDto task)
         {
@@ -46,6 +46,7 @@ namespace Mpt.Controllers
         }
 
         // POST: api/Task/Pickupdelivery
+        [Authorize(Roles = "utente,gestor tarefas")]
         [HttpPost("Pickupdelivery")]
         public async Task<ActionResult<TaskDto>> CreatePickupDeliveryTaskAsync(CreatePickupDeliveryTaskDto task)
         {
@@ -72,6 +73,7 @@ namespace Mpt.Controllers
         }
 
         // PUT: api/Task/
+        [Authorize(Roles = "gestor tarefas")]
         [HttpPut]
         public async Task<ActionResult<TaskDto>> Update(TaskDto Task)
         {
@@ -94,6 +96,7 @@ namespace Mpt.Controllers
         }
 
         // GET: api/Task
+        [Authorize(Roles = "gestor tarefas")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TaskDto>>> GetAll()
         {
@@ -116,6 +119,7 @@ namespace Mpt.Controllers
         }
 
         // GET: api/Task/5
+        [Authorize(Roles = "gestor tarefas")]
         [HttpGet("{id}")]
         public async Task<ActionResult<TaskDto>> GetById(Guid id)
         {
@@ -138,6 +142,7 @@ namespace Mpt.Controllers
         }
 
         // DELETE: api/Task/5
+        [Authorize(Roles = "gestor tarefas")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<string>> Delete(Guid id)
         {

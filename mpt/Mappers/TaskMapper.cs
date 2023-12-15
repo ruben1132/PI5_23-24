@@ -9,7 +9,49 @@ namespace Mpt.Mappers
 {
     public class TaskMapper
     {
-        public static TaskDto ToDto(Mpt.Domain.Tasks.Task task, UserTaskInfoDto? user = null)
+        // simple data, no user, no path, no robot movements
+        public static TaskSimpleDto ToDto(Domain.Tasks.Task task)
+        {
+            return new TaskSimpleDto(
+                task.IsCompleted,
+                task.TaskType,
+                task.IsApproved
+            );
+        }
+
+        public static SurveillanceTaskSimpleDto ToDto(SurveillanceTask surveillanceTask, string floorCode)
+        {
+            return new SurveillanceTaskSimpleDto(
+                surveillanceTask.IsCompleted,
+                surveillanceTask.TaskType,
+                surveillanceTask.PhoneNumber.Value,
+                floorCode,
+                surveillanceTask.IsApproved
+            );
+        }
+
+        public static PickupDeliveryTaskSimpleDto ToDto(PickupDeliveryTask pickupDeliveryTask)
+        {
+            return new PickupDeliveryTaskSimpleDto(
+                pickupDeliveryTask.IsCompleted,
+                pickupDeliveryTask.TaskType,
+                pickupDeliveryTask.PickupPersonName,
+                pickupDeliveryTask.PickupPersonPhoneNumber.Value,
+                pickupDeliveryTask.DeliveryPersonName,
+                pickupDeliveryTask.DeliveryPersonPhoneNumber.Value,
+                pickupDeliveryTask.TaskDescription,
+                pickupDeliveryTask.ConfirmationCode.Value,
+                pickupDeliveryTask.OriginType,
+                pickupDeliveryTask.Origin,
+                pickupDeliveryTask.DestinyType,
+                pickupDeliveryTask.Destiny,
+                pickupDeliveryTask.IsApproved
+            );
+        }
+
+
+        // has full data except for the path and robot movements
+        public static TaskDto ToFullDto(Domain.Tasks.Task task, UserTaskInfoDto user)
         {
             return new TaskDto(
                 task.Id.Value,
@@ -22,7 +64,7 @@ namespace Mpt.Mappers
 
         }
 
-        public static SurveillanceTaskDto ToDto(SurveillanceTask surveillanceTask, string floorCode, UserTaskInfoDto user)
+        public static SurveillanceTaskDto ToFullDto(SurveillanceTask surveillanceTask, string floorCode, UserTaskInfoDto user)
         {
             return new SurveillanceTaskDto(
                 surveillanceTask.Id.Value,
@@ -36,7 +78,7 @@ namespace Mpt.Mappers
             );
         }
 
-        public static PickupDeliveryTaskDto ToDto(PickupDeliveryTask pickupDeliveryTask, UserTaskInfoDto user)
+        public static PickupDeliveryTaskDto ToFullDto(PickupDeliveryTask pickupDeliveryTask, UserTaskInfoDto user)
         {
             return new PickupDeliveryTaskDto(
                 pickupDeliveryTask.Id.Value,
@@ -58,6 +100,7 @@ namespace Mpt.Mappers
             );
         }
 
+        // to domain 
         public static SurveillanceTask ToSurveillanceDomain(CreateSurveillanceTaskDto dto, string userId, string floorCode)
         {
             return new SurveillanceTask(
@@ -90,7 +133,9 @@ namespace Mpt.Mappers
             );
         }
 
-        public static List<List<RobotMovement>> RobotMovementBulkToDomain(List<List<RobotMovementDto>> dto)
+
+        // helpers
+        private static List<List<RobotMovement>> RobotMovementBulkToDomain(List<List<RobotMovementDto>> dto)
         {
             List<List<RobotMovement>> robotMovements = new List<List<RobotMovement>>();
 
@@ -109,7 +154,7 @@ namespace Mpt.Mappers
             return robotMovements;
         }
 
-        public static List<List<RobotMovementDto>> RobotMovementBulkToDto(List<List<RobotMovement>> dto)
+        private static List<List<RobotMovementDto>> RobotMovementBulkToDto(List<List<RobotMovement>> dto)
         {
 
             List<List<RobotMovementDto>> robotMovements = new List<List<RobotMovementDto>>();
