@@ -10,5 +10,21 @@ namespace Mpt.Infrastructure.Tasks
         {
            
         }
+
+        public async Task<List<Domain.Tasks.Task>> GetAllFilteredAsync(string type, bool? isApproved, string? userId)
+        {
+            var tasks = await this.GetAllAsync();
+
+            if (type != null)
+                tasks = tasks.Where(t => t.TaskType == type).ToList();
+
+            if (isApproved != null)
+                tasks = tasks.Where(t => t.IsApproved == isApproved).ToList();
+
+            if (userId != null)
+                tasks = tasks.Where(t => t.UserId.Value == userId).ToList();
+
+            return tasks;
+        }
     }
 }

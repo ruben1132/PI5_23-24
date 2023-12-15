@@ -9,7 +9,8 @@ namespace Mpt.IControllers
         Task<ActionResult<TaskDto>> CreateSurveillanceTaskAsync(CreateSurveillanceTaskDto task);
         Task<ActionResult<TaskDto>> CreatePickupDeliveryTaskAsync(CreatePickupDeliveryTaskDto task);
         Task<ActionResult<TaskDto>> Update(TaskDto Task);
-        Task<ActionResult<IEnumerable<TaskDto>>> GetAll();
+        Task<ActionResult<IEnumerable<TaskDto>>> GetAll([FromQuery] string type, [FromQuery] bool? isApproved, [FromQuery] string? user);
+        Task<ActionResult<IEnumerable<TaskSimpleDto>>> GetMyTasks([FromQuery] string type, [FromQuery] bool? isApproved);
         Task<ActionResult<TaskDto>> GetById(Guid id);
         Task<ActionResult<string>> Delete(Guid id);
     }

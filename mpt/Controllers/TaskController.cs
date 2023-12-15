@@ -27,6 +27,7 @@ namespace Mpt.Controllers
             {
                 // get current user
                 var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+                // get token
                 var token = GetToken();
 
                 var createdTask = await _service.AddSurveillanceTaskAsync(task, currentUser.Id, token);
@@ -98,11 +99,41 @@ namespace Mpt.Controllers
         // GET: api/Task
         [Authorize(Roles = "gestor tarefas")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<TaskDto>>> GetAll([FromQuery] string type, [FromQuery] bool? isApproved, [FromQuery] string? user)
         {
             try
             {
-                var Tasks = await _service.GetAllAsync();
+                // get token
+                var token = GetToken();
+
+                var Tasks = await _service.GetAllAsync(token, type, isApproved, user);
+
+                if (Tasks.IsFailure)
+                {
+                    return BadRequest(new { error = Tasks.Error });
+                }
+
+                return Ok(Tasks.GetValue());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+        // GET: api/Task/my
+        [Authorize(Roles = "gestor tarefas, utente")]
+        [HttpGet("my")]
+        public async Task<ActionResult<IEnumerable<TaskSimpleDto>>> GetMyTasks([FromQuery] string type, [FromQuery] bool? isApproved)
+        {
+            try
+            {
+                // get current user
+                var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+                // get token
+                var token = GetToken();
+
+                var Tasks = await _service.GetAllAsync(token, type, isApproved, currentUser.Id);
 
                 if (Tasks.IsFailure)
                 {
@@ -171,5 +202,6 @@ namespace Mpt.Controllers
 
             return token;
         }
+
     }
 }

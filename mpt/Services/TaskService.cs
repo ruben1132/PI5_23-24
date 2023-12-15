@@ -26,11 +26,11 @@ namespace Mpt.Services
             this._httpClient = httpClient;
         }
 
-        public async Task<Result<List<TaskDto>>> GetAllAsync()
+        public async Task<Result<List<TaskDto>>> GetAllAsync(string token, string? type, bool? isApproved, string? userId = null)
         {
             try
             {
-                var tasks = await this._repo.GetAllAsync();
+                var tasks = await this._repo.GetAllFilteredAsync(type, isApproved, userId);
 
                 var tasksDto = new List<TaskDto>();
 

@@ -9,7 +9,7 @@ namespace Mpt.IServices
         Task<Result<SurveillanceTaskSimpleDto>> AddSurveillanceTaskAsync(CreateSurveillanceTaskDto dto, string userId, string token);
         Task<Result<PickupDeliveryTaskSimpleDto>> AddPickupDeliveryTaskAsync(CreatePickupDeliveryTaskDto dto, string userId);
         Task<Result<TaskDto>> GetByIdAsync(Guid id);
-        Task<Result<List<TaskDto>>> GetAllAsync();
+        Task<Result<List<TaskDto>>> GetAllAsync(string token, string type, bool? isApproved, string? userId);
         Task<Result<TaskSimpleDto>> UpdateAsync(TaskDto dto);
         Task<Result<string>> DeleteAsync(Guid id);
         
