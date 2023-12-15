@@ -1,7 +1,7 @@
 'use client';
 
 // react
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 // react bootstrap components
 import Form from 'react-bootstrap/Form';
@@ -23,6 +23,7 @@ import {
     useFetchData,
     useFormSelectBox,
     useFormSelectBoxInput,
+    useFormStringInputWithRegex,
 } from '@/util/customHooks';
 
 // model
@@ -32,14 +33,18 @@ import FloorSelectBox from '../selectBoxes/FloorSelectBox';
 import ElevatorSelectBox from '../selectBoxes/ElevatorSelectBox';
 import { ElevatorWithFloors } from '@/models/Elevator';
 import PassageSelectBox from '../selectBoxes/PassageSelectBox';
-import { Passage, PassageWithFloor } from '@/models/Passage';
+import { PassageWithFloor } from '@/models/Passage';
 import { Floor } from '@/models/Floor';
-import { Room, RoomWithFloor } from '@/models/Room';
+import { RoomWithFloor } from '@/models/Room';
 import axios from 'axios';
+import { SurveillanceTask } from '@/models/SurveillanceTask';
+import { PickupDeliveryTask } from '@/models/PickupDeliveryTask';
+import SurveillanceTaskForm from './subForms/SurveillanceTaskForm';
+import PickupDeliveryTaskForm from './subForms/PickupDeliveryTask';
 
 interface Props {
     item: {
-        value: Task;
+        value: SurveillanceTask | PickupDeliveryTask;
     };
     action: string;
     reFetchData: () => void;
@@ -51,9 +56,7 @@ export default function TaskForm(props: Props) {
     const elevatorsDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators);
 
     // deleter
-    const taskDeleter = useDeleteData(
-        config.mptAPI.baseUrl + config.mptAPI.routes.tasks + '/' + props.item?.value.id,
-    );
+    const taskDeleter = useDeleteData(config.mptAPI.baseUrl + config.mptAPI.routes.tasks + '/' + props.item?.value.id);
 
     // inputs
     const originType = useFormStringInput('room');
@@ -68,6 +71,23 @@ export default function TaskForm(props: Props) {
     const [destElevator, setDestElevator] = useState<ElevatorWithFloors>({} as ElevatorWithFloors);
     const origFloor = useFormSelectBox('');
     const destFloor = useFormSelectBox('');
+
+    // surveillance task inputs
+    const phoneNumber = useFormStringInputWithRegex((props.item.value as SurveillanceTask)?.phoneNumber, /^9\d{8}$/);
+
+    // pickup delivery task inputs
+    const pickupPersonName = useFormStringInput((props.item.value as PickupDeliveryTask)?.pickupPersonName);
+    const pickupPersonPhoneNumber = useFormStringInputWithRegex(
+        (props.item.value as PickupDeliveryTask)?.pickupPersonPhoneNumber,
+        /^9\d{8}$/,
+    );
+    const deliveryPersonName = useFormStringInput((props.item.value as PickupDeliveryTask)?.deliveryPersonName);
+    const deliveryPersonPhoneNumber = useFormStringInputWithRegex(
+        (props.item.value as PickupDeliveryTask)?.deliveryPersonPhoneNumber,
+        /^9\d{8}$/,
+    );
+    const taskDescription = useFormStringInput((props.item.value as PickupDeliveryTask)?.taskDescription);
+    const confirmationCode = useFormStringInput((props.item.value as PickupDeliveryTask)?.confirmationCode);
 
     // form submitter
     const tasksForm = useSubmitData(
@@ -298,6 +318,14 @@ export default function TaskForm(props: Props) {
         }
     };
 
+    useEffect(() => {
+        if (props.item.value.taskType === 'Surveillance') {
+            props.item.value = props.item.value as SurveillanceTask;
+            return;
+        }
+        props.item.value = props.item.value as PickupDeliveryTask;
+    }, [props.item.value]);
+
     return (
         <Form>
             {props.action === 'edit' && (
@@ -391,7 +419,7 @@ export default function TaskForm(props: Props) {
                         <Form.Select onChange={taskType.handleChange}>
                             <option defaultChecked={true}>Select a type</option>
                             <option value={'Surveillance'}>Surveillance</option>
-                            <option value={'Pickup & Delivery'}>Pickup & Delivery</option>
+                            <option value={'PickupDelivery'}>Pickup & Delivery</option>
                         </Form.Select>
                     </Form.Group>
                 </Col>
@@ -408,6 +436,19 @@ export default function TaskForm(props: Props) {
                     </Form.Group>
                 </Col>
             </Row>
+            <br />
+            {taskType.value === 'Surveillance' ? (
+                <SurveillanceTaskForm
+                    item={props.item.value as SurveillanceTask}
+                    setPhoneNumber={phoneNumber.handleChange}
+                />
+            ) : (
+              <PickupDeliveryTaskForm
+                    item={props.item.value as PickupDeliveryTask}
+                    setPhoneNumber={phoneNumber.handleLoad}
+                />
+            )}
+
             <br />
             <Row>
                 <Col sm={12}>
@@ -443,6 +484,8 @@ export default function TaskForm(props: Props) {
                                         destiny.value === undefined ||
                                         path === null ||
                                         algorith.value === '' ||
+                                        (props.item.value.taskType === 'Surveillance' && !phoneNumber.isValid) ||
+                                        (props.item.value.taskType === 'PickupDelivery' && !phoneNumber.isValid) ||
                                         !enabled
                                     }
                                 >

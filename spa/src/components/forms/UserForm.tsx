@@ -8,12 +8,7 @@ import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { Button } from 'react-bootstrap';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
 
-// icons
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 // notification component
 import { notify } from '@/components/notification/Notification';
@@ -23,11 +18,7 @@ import config from '../../../config';
 
 // custom hooks
 import {
-    useFetchData,
     useSubmitData,
-    useFormStringInput,
-    useDeleteData,
-    useFormStringInputWithRegex,
 } from '@/util/customHooks';
 
 // models
