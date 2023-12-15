@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace Mpt.Dtos
 {
-    public class TaskDto
+    public class TaskWithRobotMovDto
     {
         public string Id { get; private set; }
         
@@ -10,10 +10,11 @@ namespace Mpt.Dtos
         public UserTaskInfoDto? User { get; private set; }
         public string TaskType { get; private set; }
         public List<string> Path { get; private set; }
+        public List<List<RobotMovementDto>> RobotMovements { get; private set; }
         public bool IsCompleted { get; private set; }
         public bool? IsApproved { get; private set; }
 
-        public TaskDto(string id, List<string> path,
+        public TaskWithRobotMovDto(string id, List<string> path, List<List<RobotMovementDto>> robotMovements,
             bool isCompleted, string taskType, UserTaskInfoDto? user, bool? isApproved)
         {
             this.Id = id;
@@ -21,6 +22,7 @@ namespace Mpt.Dtos
             this.IsCompleted = isCompleted;
             this.IsApproved = isApproved;
             this.TaskType = taskType;
+            this.RobotMovements = robotMovements;
             this.Path = path;
         }
 

@@ -11,14 +11,17 @@ namespace Mpt.Dtos
         public string DeliveryPersonPhoneNumber { get; private set; }
         public string TaskDescription { get; private set; }
         public string ConfirmationCode { get; private set; }
+        public string OriginType { get; set; }
+        public string Origin { get; set; }
+        public string DestinyType { get; set; }
+        public string Destiny { get; set; }
 
-        public PickupDeliveryTaskDto(string id, List<string> path, List<List<RobotMovementDto>> robotMovements,
-            string originType, string origin, string destinyType, string destiny,
-            bool isCompleted, string taskType, string pickupPersonName, string pickupPersonPhoneNumber,
-            string deliveryPersonName, string deliveryPersonPhoneNumber, string taskDescription,
-            string confirmationCode, UserTaskInfoDto? user = null, bool? isApproved = null)
-
-            : base(id, path, robotMovements, originType, origin, destinyType, destiny, isCompleted, taskType, user, isApproved)
+        public PickupDeliveryTaskDto(string id, List<string> path,
+            bool isCompleted, string taskType, string pickupPersonName,
+            string pickupPersonPhoneNumber, string deliveryPersonName, string deliveryPersonPhoneNumber,
+            string taskDescription, string confirmationCode, string originType, string origin, string destinyType, 
+            string destiny, UserTaskInfoDto? user = null, bool? isApproved = null)
+            : base(id, path, isCompleted, taskType, user, isApproved)
         {
             this.PickupPersonName = pickupPersonName;
             this.PickupPersonPhoneNumber = pickupPersonPhoneNumber;
@@ -26,6 +29,10 @@ namespace Mpt.Dtos
             this.DeliveryPersonPhoneNumber = deliveryPersonPhoneNumber;
             this.TaskDescription = taskDescription;
             this.ConfirmationCode = confirmationCode;
+            this.OriginType = originType;
+            this.Origin = origin;
+            this.DestinyType = destinyType;
+            this.Destiny = destiny;
         }
 
     }

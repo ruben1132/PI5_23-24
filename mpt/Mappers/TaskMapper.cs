@@ -9,16 +9,11 @@ namespace Mpt.Mappers
 {
     public class TaskMapper
     {
-        public static TaskDto ToDto(Mpt.Domain.Tasks.Task task,  UserTaskInfoDto? user = null)
+        public static TaskDto ToDto(Mpt.Domain.Tasks.Task task, UserTaskInfoDto? user = null)
         {
             return new TaskDto(
                 task.Id.Value,
                 task.Path,
-                RobotMovementBulkToDto(task.RobotMovements),
-                task.OriginType,
-                task.Origin,
-                task.DestinyType,
-                task.Destiny,
                 task.IsCompleted,
                 task.TaskType,
                 user,
@@ -27,19 +22,15 @@ namespace Mpt.Mappers
 
         }
 
-        public static SurveillanceTaskDto ToDto(SurveillanceTask surveillanceTask, UserTaskInfoDto user)
+        public static SurveillanceTaskDto ToDto(SurveillanceTask surveillanceTask, string floorCode, UserTaskInfoDto user)
         {
             return new SurveillanceTaskDto(
                 surveillanceTask.Id.Value,
                 surveillanceTask.Path,
-                RobotMovementBulkToDto(surveillanceTask.RobotMovements),
-                surveillanceTask.OriginType,
-                surveillanceTask.Origin,
-                surveillanceTask.DestinyType,
-                surveillanceTask.Destiny,
                 surveillanceTask.IsCompleted,
                 surveillanceTask.TaskType,
                 surveillanceTask.PhoneNumber.Value,
+                floorCode,
                 user,
                 surveillanceTask.IsApproved
             );
@@ -50,11 +41,6 @@ namespace Mpt.Mappers
             return new PickupDeliveryTaskDto(
                 pickupDeliveryTask.Id.Value,
                 pickupDeliveryTask.Path,
-                RobotMovementBulkToDto(pickupDeliveryTask.RobotMovements),
-                pickupDeliveryTask.OriginType,
-                pickupDeliveryTask.Origin,
-                pickupDeliveryTask.DestinyType,
-                pickupDeliveryTask.Destiny,
                 pickupDeliveryTask.IsCompleted,
                 pickupDeliveryTask.TaskType,
                 pickupDeliveryTask.PickupPersonName,
@@ -63,23 +49,24 @@ namespace Mpt.Mappers
                 pickupDeliveryTask.DeliveryPersonPhoneNumber.Value,
                 pickupDeliveryTask.TaskDescription,
                 pickupDeliveryTask.ConfirmationCode.Value,
-                user,     
+                pickupDeliveryTask.OriginType,
+                pickupDeliveryTask.Origin,
+                pickupDeliveryTask.DestinyType,
+                pickupDeliveryTask.Destiny,
+                user,
                 pickupDeliveryTask.IsApproved
             );
         }
 
-        public static SurveillanceTask ToSurveillanceDomain(CreateSurveillanceTaskDto dto, string userId, PathMovementDto pm)
+        public static SurveillanceTask ToSurveillanceDomain(CreateSurveillanceTaskDto dto, string userId, string floorCode)
         {
             return new SurveillanceTask(
                 new UserId(userId),
                 dto.TaskType,
-                pm.Path,
-                RobotMovementBulkToDomain(pm.Movements),
-                dto.OriginType,
-                dto.Origin,
-                dto.DestinyType,
-                dto.Destiny,
-                new PhoneNumber(dto.PhoneNumber)
+                new List<string>() { floorCode },
+                new List<List<RobotMovement>>(),
+                new PhoneNumber(dto.PhoneNumber),
+                dto.FloorId
             );
         }
 
@@ -94,11 +81,11 @@ namespace Mpt.Mappers
                 dto.Origin,
                 dto.DestinyType,
                 dto.Destiny,
+                dto.TaskDescription,
                 dto.PickupPersonName,
                 new PhoneNumber(dto.PickupPersonPhoneNumber),
                 dto.DeliveryPersonName,
                 new PhoneNumber(dto.DeliveryPersonPhoneNumber),
-                dto.TaskDescription,
                 new TaskConfirmationCode()
             );
         }

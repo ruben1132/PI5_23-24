@@ -16,12 +16,14 @@ namespace Mpt.Services
         private readonly IUserRepository _userRepo;
         private readonly HttpClient _httpClient;
         private readonly string _mpApiUrl;
+        private readonly string _mgiApiUrl;
 
         public TaskService(IConfiguration config, IUnitOfWork unitOfWork, ITaskRepository repo, IUserRepository userRepo, HttpClient httpClient)
         {
             this._config = config;
 
             this._mpApiUrl = config.GetValue<string>("MPApiUrl") ?? "http://localhost:5000/";
+            this._mgiApiUrl = config.GetValue<string>("MGIApiUrl") ?? "http://localhost:2225/";
 
             this._unitOfWork = unitOfWork;
             this._repo = repo;
@@ -159,8 +161,7 @@ namespace Mpt.Services
         {
             try
             {
-                // get path and movements of the robot
-                var pathMovementDto = await this.GetPathAsync(dto.Origin, dto.Destiny);
+                // get floor info
 
                 if (pathMovementDto.IsFailure)
                     return Result<SurveillanceTaskDto>.Fail(pathMovementDto.Error);
@@ -233,6 +234,28 @@ namespace Mpt.Services
             {
                 Console.WriteLine(ex.Message);
                 return Result<PathMovementDto>.Fail(ex.Message);
+            }
+        }
+
+        private async Task<Result<string>> GetFloorInfoAsync(string floorId)
+        {
+            try
+            {
+                // call MGI API
+                this._httpClient.BaseAddress = new Uri(this._mgiApiUrl);
+                var response = await this._httpClient.GetAsync($"floors/{floorId}");
+
+                if (!response.IsSuccessStatusCode)
+                    return Result<string>.Fail("There was an error calculating the robot path. Please try again later.");
+
+                var pathMovementDto = await response.Content.ReadFromJsonAsync<PathMovementDto>();
+
+                return Result<string>.Ok(pathMovementDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<string>.Fail(ex.Message);
             }
         }
     }

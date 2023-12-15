@@ -14,27 +14,33 @@ namespace Mpt.Domain.Tasks
         public PhoneNumber DeliveryPersonPhoneNumber { get; private set; }
         public string TaskDescription { get; private set; }
         public TaskConfirmationCode ConfirmationCode { get; private set; }
+        public string OriginType { get; set; }
+        public string Origin { get; set; }
+        public string DestinyType { get; set; }
+        public string Destiny { get; set; }
 
+        // ef
         public PickupDeliveryTask() : base()
         {
         }
 
         // Constructors
-        public PickupDeliveryTask(UserId userId, string taskType, List<string> path,
-            List<List<RobotMovement>> robotMovements, string originType, 
-            string origin, string destinyType, string destiny, string pickupPersonName,
-            PhoneNumber pickupPersonPhoneNumber, string deliveryPersonName,
-            PhoneNumber deliveryPersonPhoneNumber, string taskDescription,
-            TaskConfirmationCode confirmationCode, bool? isApproved = null)
-
-            : base(userId, taskType, path, robotMovements, originType, origin, destinyType, destiny, isApproved)
+        public PickupDeliveryTask(UserId userId, string taskType, List<string> path, List<List<RobotMovement>> robotMovements,
+            string originType, string origin, string destinyType, string destiny, string taskDescription, string pickupPersonName,
+            PhoneNumber pickupPersonPhoneNumber, string deliveryPersonName, PhoneNumber deliveryPersonPhoneNumber,
+            TaskConfirmationCode taskConfirmationCode, bool? isApproved = null)
+            : base(userId, taskType, path, robotMovements, isApproved)
         {
+            this.TaskDescription = taskDescription;
             this.PickupPersonName = pickupPersonName;
             this.PickupPersonPhoneNumber = pickupPersonPhoneNumber;
             this.DeliveryPersonName = deliveryPersonName;
             this.DeliveryPersonPhoneNumber = deliveryPersonPhoneNumber;
-            this.TaskDescription = taskDescription;
-            this.ConfirmationCode = confirmationCode;
+            this.ConfirmationCode = taskConfirmationCode;
+            this.OriginType = originType;
+            this.Origin = origin;
+            this.DestinyType = destinyType;
+            this.Destiny = destiny;
         }
 
         public void ChangeTaskDescription(string taskDescription)
