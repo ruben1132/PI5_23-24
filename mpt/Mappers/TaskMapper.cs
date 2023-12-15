@@ -74,7 +74,7 @@ namespace Mpt.Mappers
         {
             return new PickupDeliveryTask(
                 new UserId(userId),
-                dto.TaskType,
+                "PickupDelivery",
                 pm.Path,
                 RobotMovementBulkToDomain(pm.Movements),
                 dto.OriginType,

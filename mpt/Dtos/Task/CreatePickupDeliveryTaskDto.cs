@@ -3,8 +3,6 @@ namespace Mpt.Dtos
 {
     public class CreatePickupDeliveryTaskDto : CreateTaskDto
     {
-        public string PickupPlace { get; private set; }
-        public string DeliveryPlace { get; private set; }
         public string PickupPersonName { get; private set; }
         public string PickupPersonPhoneNumber { get; private set; }
         public string DeliveryPersonName { get; private set; }
@@ -21,8 +19,6 @@ namespace Mpt.Dtos
             string originType, string origin, string destinyType, string destiny)
             : base(taskType)
         {
-            this.PickupPlace = pickupPlace;
-            this.DeliveryPlace = deliveryPlace;
             this.PickupPersonName = pickupPersonName;
             this.PickupPersonPhoneNumber = pickupPersonPhoneNumber;
             this.DeliveryPersonName = deliveryPersonName;
