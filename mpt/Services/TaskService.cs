@@ -34,7 +34,6 @@ namespace Mpt.Services
             try
             {
                 var tasks = await this._repo.GetAllAsync();
-                Console.WriteLine("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
 
                 var tasksDto = new List<TaskDto>();
 
@@ -42,6 +41,7 @@ namespace Mpt.Services
                 {
                     // get user
                     var user = await this._userRepo.GetByIdAsync(task.UserId);
+
                     var userDto = UserMapper.ToDtoTaskInfo(user);
 
                     if (task is SurveillanceTask)

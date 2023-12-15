@@ -72,7 +72,7 @@ namespace Mpt.Mappers
         {
             return new SurveillanceTask(
                 new UserId(userId),
-                dto.TaskType,
+                "Surveillance",
                 pm.Path,
                 RobotMovementBulkToDomain(pm.Movements),
                 dto.OriginType,
@@ -87,7 +87,7 @@ namespace Mpt.Mappers
         {
             return new PickupDeliveryTask(
                 new UserId(userId),
-                dto.TaskType,
+                "PickupDelivery",
                 pm.Path,
                 RobotMovementBulkToDomain(pm.Movements),
                 dto.OriginType,
