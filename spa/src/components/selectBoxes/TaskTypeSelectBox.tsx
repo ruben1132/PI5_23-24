@@ -59,7 +59,6 @@ const TaskTypeSelectBox = (props: Props) => {
         return val;
     };
 
-
     return (
         <Form.Select onChange={props.customHandleChange ?? handleChange} id="taskType-sb">
             {props.selectedValue ? (
@@ -73,6 +72,7 @@ const TaskTypeSelectBox = (props: Props) => {
                     {item.name}
                 </option>
             ))}
+            <option value={''}>All</option>
         </Form.Select>
     );
 };

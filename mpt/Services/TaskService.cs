@@ -26,7 +26,7 @@ namespace Mpt.Services
             this._httpClient = httpClient;
         }
 
-        public async Task<Result<List<TaskDto>>> GetAllAsync(string token, string type, string? userId, string? isApproved = null)
+        public async Task<Result<List<TaskDto>>> GetAllAsync(string token, string? type, string? userId, string? isApproved = null)
         {
             try
             {
@@ -182,7 +182,7 @@ namespace Mpt.Services
             try
             {
                 // get path and movements of the robot
-                var pathMovementDto = await this.GetPathAsync(dto.Origin, dto.Destiny);
+                var pathMovementDto = await this.GetPathAsync(dto.ParsedDestiny, dto.ParsedDestiny);
 
                 if (pathMovementDto.IsFailure)
                     return Result<PickupDeliveryTaskSimpleDto>.Fail(pathMovementDto.Error);

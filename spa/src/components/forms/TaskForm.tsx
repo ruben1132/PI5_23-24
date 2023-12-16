@@ -11,7 +11,7 @@ import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 // icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faCircleInfo, faClipboard } from '@fortawesome/free-solid-svg-icons';
 
 // notification component
 import { notify } from '@/components/notification/Notification';
@@ -41,8 +41,8 @@ import { PassageWithFloor } from '@/models/Passage';
 import { Floor } from '@/models/Floor';
 import { RoomWithFloor } from '@/models/Room';
 import axios from 'axios';
-import { SurveillanceTask } from '@/models/SurveillanceTask';
-import { PickupDeliveryTask } from '@/models/PickupDeliveryTask';
+import { CreateSurveillanceTask, SurveillanceTask } from '@/models/SurveillanceTask';
+import { CreatePickupDeliveryTask, PickupDeliveryTask } from '@/models/PickupDeliveryTask';
 import BuildingSelectBox from '../selectBoxes/BuildingSelectBox';
 
 interface Props {
@@ -72,7 +72,7 @@ export default function TaskForm(props: Props) {
     const destinyType = useFormStringInput('room');
     const origin = useFormSelectBox((props.item.value as PickupDeliveryTask)?.origin);
     const destiny = useFormSelectBox((props.item.value as PickupDeliveryTask)?.destiny);
-    const taskType = useFormSelectBoxInput('');
+    const taskType = useFormSelectBoxInput(props.item.value.taskType ?? '');
     const algorith = useFormSelectBoxInput('');
 
     const [origElevator, setOrigElevator] = useState<ElevatorWithFloors>({} as ElevatorWithFloors);
@@ -100,7 +100,7 @@ export default function TaskForm(props: Props) {
 
     // form submitter
     const tasksForm = useSubmitData(
-        config.mgiAPI.baseUrl +
+        config.mptAPI.baseUrl +
             (taskType.value === 'Surveillance'
                 ? config.mptAPI.routes.taskSurveillance
                 : config.mptAPI.routes.taskPickupdelivery),
@@ -109,16 +109,35 @@ export default function TaskForm(props: Props) {
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
-    // updates the floor and refreshes the table
+
+    // submits a task
     const handleSubmitData = async () => {
         setEnabled(false);
 
-        // set task data
-        let item: Task = {
-            ...props.item.value,
-        };
-        item.id = props.item.value?.id;
-        // item.path = path.value;
+        let item: CreateSurveillanceTask | CreatePickupDeliveryTask | null = null;
+
+        if (taskType.value === 'Surveillance') {
+            item = {
+                phoneNumber: phoneNumber.value,
+                floorCode: floor.value,
+            };
+        } else {
+            const { originParsed, destinyParsed } = handleParse();
+
+            item = {
+                parsedOrigin: originParsed,
+                originType: originType.value,
+                origin: origin.value,
+                parsedDestiny: destinyParsed,
+                destinyType: destinyType.value,
+                destiny: destiny.value,
+                pickupPersonName: pickupPersonName.value,
+                pickupPersonPhoneNumber: pickupPersonPhoneNumber.value,
+                deliveryPersonName: deliveryPersonName.value,
+                deliveryPersonPhoneNumber: deliveryPersonPhoneNumber.value,
+                taskDescription: taskDescription.value,
+            };
+        }
 
         // submit data
         let res = await tasksForm.submit(item);
@@ -132,12 +151,13 @@ export default function TaskForm(props: Props) {
         props.reFetchData(); // refresh data
         setEnabled(true); // enable buttons
         // show alert
-        notify.success(`Floor ${props.action == 'edit' ? 'edited' : 'added'} successfully`);
+        notify.success(`Task ${props.action == 'edit' ? 'updated' : 'submitted'} successfully`);
     };
 
-    const handleFindPath = async () => {
-        setEnabled(false);
+    // TODO: approve/reject a stask
+    const handleUpdateData = async () => {};
 
+    const handleParse = (): { originParsed: string; destinyParsed: string } => {
         let formatedOrig = '';
         let formatedDest = '';
 
@@ -162,8 +182,6 @@ export default function TaskForm(props: Props) {
         switch (originType.value) {
             case 'elevator':
                 const elev = floorFinder(origFloor.value, 'orig');
-                console.log(elev);
-
                 formatedOrig = 'elev(' + elev.code + ')';
                 break;
             case 'passage':
@@ -196,9 +214,7 @@ export default function TaskForm(props: Props) {
         }
 
         // set query
-        const query = '?algorithm=' + algorith.value + '&origin=' + formatedOrig + '&destiny=' + formatedDest;
-
-        setEnabled(true); // enable buttons
+        return { originParsed: formatedOrig, destinyParsed: formatedDest };
     };
     // handle for selecting origin type
     const handleChangeOriginType = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -544,16 +560,32 @@ export default function TaskForm(props: Props) {
                             <Col sm={6}>
                                 <Form.Group className="mb-6">
                                     <Form.Label htmlFor="select">Confirmation Code</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        defaultValue={(props.item.value as PickupDeliveryTask)?.confirmationCode}
-                                        style={{ cursor: 'pointer' }}
+                                    <div
+                                        style={{ position: 'relative', display: 'inline-block' }}
                                         onClick={() => {
                                             navigator.clipboard.writeText(confirmationCode.value);
                                             notify.success('Confirmation code copied to clipboard');
                                         }}
-                                        disabled={true}
-                                    />
+                                    >
+                                        <Form.Control
+                                            type="text"
+                                            style={{
+                                                cursor: 'pointer',
+                                                position: 'absolute',
+                                                opacity: 0,
+                                                pointerEvents: 'none',
+                                                backgroundColor: '#e9e9e9',
+                                            }}
+                                            disabled={true}
+                                        />
+                                        <Form.Control
+                                            type="text"
+                                            defaultValue={(props.item.value as PickupDeliveryTask)?.confirmationCode}
+                                            style={{ cursor: 'pointer', backgroundColor: '#e9e9e9' }}
+                                            readOnly
+                                        />
+                                         <FontAwesomeIcon icon={faClipboard} style={{ position: 'absolute', cursor: 'pointer', right: '5px', top: '50%', transform: 'translateY(-50%)', color: '#555' }} />
+                                    </div>
                                 </Form.Group>
                             </Col>
                         )}
@@ -567,7 +599,7 @@ export default function TaskForm(props: Props) {
                     <Form.Group className="mb-12">
                         {props.action === 'edit' ? (
                             <>
-                                <Button type="button" variant="success" onClick={handleFindPath}>
+                                <Button type="button" variant="success" onClick={props.close}>
                                     Approve
                                 </Button>{' '}
                                 <Button type="button" variant="danger" onClick={props.close}>

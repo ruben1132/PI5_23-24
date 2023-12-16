@@ -1,7 +1,7 @@
 import { UserTaskInfo } from "./UserTaskInfo";
 
 export interface TaskWithUser {
-    id: string;
+    id?: string;
     user: UserTaskInfo;
     taskType: string;
     isCompleted?: boolean;
@@ -9,8 +9,8 @@ export interface TaskWithUser {
 }
 
 export interface Task {
-    id: string;
+    id?: string;
     taskType: string;
     isCompleted?: boolean;
-    isApproved?: boolean;
+    isApproved?: string;
 }

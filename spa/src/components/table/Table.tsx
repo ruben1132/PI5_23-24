@@ -8,7 +8,7 @@ import MeekoLoader from '../loaders/MeekoLoader';
 import Button from 'react-bootstrap/Button';
 import RowItem from './RowItem';
 import SadRaccoon from '../noData/SadRaccoon';
-import { RenderFilteredSearch } from '../forms/search/RenderFilteredSearch';
+import TaskTable from './TaskTable';
 
 interface Props {
     type: string;
@@ -79,24 +79,34 @@ function ContentTable(props: Props) {
 
             <br />
             <br />
-            <Table striped>
-                <thead>
-                    <tr>
-                        {filteredColumns.map((column: string, index: number) => (
-                            <th key={index}>{column}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {useFetchdata?.data.map((item: any, index: number) => (
-                        <tr key={index} onClick={() => handleRowClick(item)} style={{ cursor: 'pointer' }}>
-                            {filteredColumns?.map((column: string, jindex: number) => (
-                                <RowItem key={jindex} index={jindex} type={props.type} item={item[column]} />
+            {props.type === 'task' ? (
+                <TaskTable
+                    type={props.type}
+                    routeToFetch={props.routeToFetch}
+                    showAddButton={props.showAddButton}
+                    handleClickRow={handleRowClick}
+                    data={useFetchdata.data}
+                />
+            ) : (
+                <Table striped>
+                    <thead>
+                        <tr>
+                            {filteredColumns.map((column: string, index: number) => (
+                                <th key={index}>{column}</th>
                             ))}
                         </tr>
-                    ))}
-                </tbody>
-            </Table>
+                    </thead>
+                    <tbody>
+                        {useFetchdata?.data.map((item: any, index: number) => (
+                            <tr key={index} onClick={() => handleRowClick(item)} style={{ cursor: 'pointer' }}>
+                                {filteredColumns?.map((column: string, jindex: number) => (
+                                    <RowItem key={jindex} index={jindex} type={props.type} item={item[column]} />
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            )}
         </>
     );
 }

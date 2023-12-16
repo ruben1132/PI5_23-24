@@ -41,25 +41,23 @@ export default function TaskSearchForm(props: Props) {
     const userSelected = useFormStringInput('');
 
     const buildQueryParams = () => {
+        
         let isApprovedString = '';
         if (taskIsApproved.value !== config.states[3]) isApprovedString = `&isApproved=${taskIsApproved.value}`;
 
+        let taskTypeName = taskTypeDataFetch.data?.find((t) => t.id === taskType.value)?.name;
+
         if (user?.role.name === userRole.UTENTE) {
-            return `${config.mptAPI.routes.mytasks}?type=${taskType.value}${isApprovedString}`;
+            return `${config.mptAPI.routes.mytasks}?type=${taskTypeName ?? ""}${isApprovedString}`;
         }
-        return `?type=${taskType.value}${isApprovedString}&user=${userSelected.value}`;
+        return `?type=${taskTypeName ?? ""}${isApprovedString}&user=${userSelected.value}`;
     };
 
     useEffect(() => {
         const queryParams = buildQueryParams();
         props.setParams(queryParams);
-    }, [taskType.value, taskIsApproved.value]);
+    }, [taskType.value, taskIsApproved.value, userSelected.value]);
 
-    useEffect(() => {
-        if (taskTypeDataFetch.data && taskTypeDataFetch.data.length > 0) {
-            taskType.handleLoad(taskTypeDataFetch.data[0].id);
-        }
-    }, [taskTypeDataFetch.data]);
 
     return (
         <Form>
@@ -67,7 +65,6 @@ export default function TaskSearchForm(props: Props) {
                 <Col sm={3}>
                     <Form.Group className="mb-4">
                         <TaskTypeSelectBox
-                            selectedValue={taskType.value}
                             data={taskTypeDataFetch.data}
                             isLoading={taskTypeDataFetch.isLoading}
                             isError={taskTypeDataFetch.isError}
@@ -93,8 +90,8 @@ export default function TaskSearchForm(props: Props) {
                     <Form.Group className="mb-2">
                         <CloseButton
                             onClick={() => {
-                                taskType.handleLoad(taskTypeDataFetch.data[0].id);
-                                taskIsApproved.handleLoad(config.states[0]);
+                                taskType.handleLoad('');
+                                taskIsApproved.handleLoad('');
                                 userSelected.handleLoad('');
                             }}
                         />

@@ -12,3 +12,17 @@ export interface PickupDeliveryTask extends Task {
     taskDescription: string;
     confirmationCode: string;
 }
+
+export interface CreatePickupDeliveryTask {
+    parsedOrigin: string;
+    originType: string;
+    origin: string;
+    parsedDestiny: string;
+    destinyType: string;
+    destiny: string;
+    pickupPersonName: string;
+    pickupPersonPhoneNumber: string;
+    deliveryPersonName: string;
+    deliveryPersonPhoneNumber: string;
+    taskDescription: string;
+}

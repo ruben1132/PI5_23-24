@@ -34,6 +34,7 @@ const UserSelectBox = (props: Props) => {
             </Form.Select>
         );
     }
+    
 
     // filter data so it removes the element already selected
     const filteredSelectBox = props.data?.filter((item: User) => item.id !== props?.selectedValue);
@@ -71,7 +72,7 @@ const UserSelectBox = (props: Props) => {
 
             {filteredSelectBox?.map((item: User) => (
                 <option key={item.id} value={item.id}>
-                    {item.name}
+                    {item.email}
                 </option>
             ))}
         </Form.Select>

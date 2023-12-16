@@ -13,7 +13,7 @@ import { Button } from 'react-bootstrap';
 import { notify } from '@/components/notification/Notification';
 
 // config
-import config from '../../../config';
+import config, { userRole } from '../../../config';
 
 // custom hooks
 import {
@@ -24,10 +24,15 @@ import {
     useDeleteData,
 } from '@/util/customHooks';
 
+import { useAuth } from '@/context/AuthContext';
+
 // models
 import { Profile, ProfileWithPassword } from '@/models/Profile';
 
 export default function ProfileForm() {
+    // auth context
+    const { user } = useAuth();
+
     // form submitter
     const profileForm = useSubmitData(config.mgiAPI.baseUrl + config.mgiAPI.routes.roles, 'PATCH');
 
@@ -178,14 +183,18 @@ export default function ProfileForm() {
                         >
                             Update
                         </Button>
-                        {' | '}
-                        <Button variant="info" onClick={handleDeleteData}>
-                            Download my personal data
-                        </Button>
-                        {' | '}
-                        <Button variant="danger" onClick={handleDeleteData}>
-                            Delete Account
-                        </Button>
+                        {user.role.name === userRole.UTENTE && (
+                            <>
+                                {' | '}
+                                <Button variant="info" onClick={handleDeleteData}>
+                                    Download my personal data
+                                </Button>
+                                {' | '}
+                                <Button variant="danger" onClick={handleDeleteData}>
+                                    Delete Account
+                                </Button>
+                            </>
+                        )}
                     </Form.Group>
                 </Col>
             </Row>

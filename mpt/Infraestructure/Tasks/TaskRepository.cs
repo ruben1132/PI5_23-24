@@ -11,7 +11,7 @@ namespace Mpt.Infrastructure.Tasks
            
         }
 
-        public async Task<List<Domain.Tasks.Task>> GetAllFilteredAsync(string type, string? userId, ApprovalStatus? isApproved = null)
+        public async Task<List<Domain.Tasks.Task>> GetAllFilteredAsync(string? type, string? userId, ApprovalStatus? isApproved = null)
         {
             var tasks = await this.GetAllAsync();
 

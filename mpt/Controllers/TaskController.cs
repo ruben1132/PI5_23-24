@@ -99,7 +99,7 @@ namespace Mpt.Controllers
         // GET: api/Task
         [Authorize(Roles = "gestor tarefas")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskDto>>> GetAll([FromQuery] string type, [FromQuery] string? isApproved, [FromQuery] string? user)
+        public async Task<ActionResult<IEnumerable<TaskDto>>> GetAll([FromQuery] string? type, [FromQuery] string? isApproved, [FromQuery] string? user)
         {
             try
             {

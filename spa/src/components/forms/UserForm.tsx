@@ -136,7 +136,7 @@ export default function UserForm(props: Props) {
                     </Form.Group>
                 </Col>
             </Row>
-            {/* ... (other rows) */}
+         
         </Form>
     );
 }
