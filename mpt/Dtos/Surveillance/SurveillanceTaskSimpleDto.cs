@@ -5,7 +5,7 @@ namespace Mpt.Dtos
         public string PhoneNumber { get; private set; }
         public string FloorCode { get; set; }
 
-        public SurveillanceTaskSimpleDto(bool isCompleted, string taskType, string phoneNumber, string floorCode, bool? isApproved=null)
+        public SurveillanceTaskSimpleDto(bool isCompleted, string taskType, string phoneNumber, string floorCode, string isApproved)
             : base(isCompleted, taskType, isApproved)
         {
             this.PhoneNumber = phoneNumber;

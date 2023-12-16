@@ -28,7 +28,7 @@ namespace Mpt.Domain.Tasks
         public PickupDeliveryTask(UserId userId, string taskType, List<string> path, List<List<RobotMovement>> robotMovements,
             string originType, string origin, string destinyType, string destiny, string taskDescription, string pickupPersonName,
             PhoneNumber pickupPersonPhoneNumber, string deliveryPersonName, PhoneNumber deliveryPersonPhoneNumber,
-            TaskConfirmationCode taskConfirmationCode, bool? isApproved = null)
+            TaskConfirmationCode taskConfirmationCode, ApprovalStatus isApproved)
             : base(userId, taskType, path, robotMovements, isApproved)
         {
             this.TaskDescription = taskDescription;
@@ -45,7 +45,7 @@ namespace Mpt.Domain.Tasks
 
         public void ChangeTaskDescription(string taskDescription)
         {
-            if (base.IsApproved == false)
+            if (base.IsApproved == ApprovalStatus.rejected)
                 throw new BusinessRuleValidationException("It is not possible to change the task description of an unapproved task.");
 
             if (base.IsCompleted)
@@ -56,7 +56,7 @@ namespace Mpt.Domain.Tasks
 
         public void ChangePickupPersonName(string pickupPersonName)
         {
-            if (base.IsApproved == false)
+            if (base.IsApproved == ApprovalStatus.rejected)
                 throw new BusinessRuleValidationException("It is not possible to change the pickup person name of an unapproved task.");
 
             if (base.IsCompleted)
@@ -67,7 +67,7 @@ namespace Mpt.Domain.Tasks
 
         public void ChangePickupPersonPhoneNumber(PhoneNumber pickupPersonPhoneNumber)
         {
-            if (base.IsApproved == false)
+            if (base.IsApproved == ApprovalStatus.rejected)
                 throw new BusinessRuleValidationException("It is not possible to change the pickup person phone number of an unapproved task.");
 
             if (base.IsCompleted)
@@ -78,7 +78,7 @@ namespace Mpt.Domain.Tasks
 
         public void ChangeDeliveryPersonName(string deliveryPersonName)
         {
-            if (base.IsApproved == false)
+            if (base.IsApproved == ApprovalStatus.rejected)
                 throw new BusinessRuleValidationException("It is not possible to change the delivery person name of an unapproved task.");
 
             if (base.IsCompleted)
@@ -89,7 +89,7 @@ namespace Mpt.Domain.Tasks
 
         public void ChangeDeliveryPersonPhoneNumber(PhoneNumber deliveryPersonPhoneNumber)
         {
-            if (base.IsApproved == false)
+            if (base.IsApproved == ApprovalStatus.rejected)
                 throw new BusinessRuleValidationException("It is not possible to change the delivery person phone number of an unapproved task.");
 
             if (base.IsCompleted)

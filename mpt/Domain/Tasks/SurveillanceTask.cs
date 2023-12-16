@@ -18,7 +18,7 @@ namespace Mpt.Domain.Tasks
 
         public SurveillanceTask(UserId userId, string taskType,
             List<string> path, List<List<RobotMovement>> robotMovements,
-            PhoneNumber phoneNumber, string floorId, bool? isApproved = null)
+            PhoneNumber phoneNumber, string floorId, ApprovalStatus isApproved)
 
             : base(userId, taskType, path, robotMovements, isApproved)
         {
@@ -29,7 +29,7 @@ namespace Mpt.Domain.Tasks
 
         public void ChangePhoneNumber(PhoneNumber phoneNumber)
         {
-            if (base.IsApproved == false)
+            if (base.IsApproved == ApprovalStatus.rejected)
                 throw new BusinessRuleValidationException("It is not possible to change the phone number of an unapproved task.");
 
             if (base.IsCompleted)

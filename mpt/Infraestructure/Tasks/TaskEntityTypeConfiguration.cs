@@ -33,11 +33,9 @@ namespace Mpt.Infrastructure.Tasks
                 v => string.Join(',', v),   // Convert List<string> to string
                 v => v.Split(',', StringSplitOptions.RemoveEmptyEntries).ToList());  // Convert string to List<string>
 
-            // isApproved allow to be null
             builder
-                .Property(t => t.IsApproved)
-                .HasDefaultValue(null)
-                .IsRequired(false); 
+                .Property(u => u.IsApproved)
+                .HasDefaultValue(ApprovalStatus.pending).HasConversion<string>();
 
             // TPH
             builder.HasDiscriminator<string>("TaskType")

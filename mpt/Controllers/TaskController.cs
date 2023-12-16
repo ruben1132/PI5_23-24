@@ -99,14 +99,14 @@ namespace Mpt.Controllers
         // GET: api/Task
         [Authorize(Roles = "gestor tarefas")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskDto>>> GetAll([FromQuery] string type, [FromQuery] bool? isApproved, [FromQuery] string? user)
+        public async Task<ActionResult<IEnumerable<TaskDto>>> GetAll([FromQuery] string type, [FromQuery] string? isApproved, [FromQuery] string? user)
         {
             try
             {
                 // get token
                 var token = GetToken();
 
-                var Tasks = await _service.GetAllAsync(token, type, isApproved, user);
+                var Tasks = await _service.GetAllAsync(token, type, user, isApproved);
 
                 if (Tasks.IsFailure)
                 {
@@ -124,7 +124,7 @@ namespace Mpt.Controllers
         // GET: api/Task/my
         [Authorize(Roles = "gestor tarefas, utente")]
         [HttpGet("my")]
-        public async Task<ActionResult<IEnumerable<TaskSimpleDto>>> GetMyTasks([FromQuery] string type, [FromQuery] bool? isApproved)
+        public async Task<ActionResult<IEnumerable<TaskSimpleDto>>> GetMyTasks([FromQuery] string type, [FromQuery] string? isApproved)
         {
             try
             {
@@ -133,7 +133,7 @@ namespace Mpt.Controllers
                 // get token
                 var token = GetToken();
 
-                var Tasks = await _service.GetMyTasksAsync(token, type, isApproved, currentUser.Id);
+                var Tasks = await _service.GetMyTasksAsync(token, type, currentUser.Id, isApproved);
 
                 if (Tasks.IsFailure)
                 {

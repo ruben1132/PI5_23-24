@@ -26,11 +26,14 @@ namespace Mpt.Services
             this._httpClient = httpClient;
         }
 
-        public async Task<Result<List<TaskDto>>> GetAllAsync(string token, string? type, bool? isApproved, string? userId)
+        public async Task<Result<List<TaskDto>>> GetAllAsync(string token, string type, string? userId, string? isApproved = null)
         {
             try
             {
-                var tasks = await this._repo.GetAllFilteredAsync(type, isApproved, userId);
+                // parse string to enum
+                var parsedApproved = this.ParseApprovalStatus(isApproved);
+
+                var tasks = await this._repo.GetAllFilteredAsync(type, userId, parsedApproved);
                 var tasksDto = await MapTasksToDto(tasks, token);
                 return Result<List<TaskDto>>.Ok(tasksDto);
             }
@@ -41,11 +44,14 @@ namespace Mpt.Services
             }
         }
 
-        public async Task<Result<List<TaskSimpleDto>>> GetMyTasksAsync(string token, string? type, bool? isApproved, string? userId)
+        public async Task<Result<List<TaskSimpleDto>>> GetMyTasksAsync(string token, string type, string? userId, string? isApproved = null)
         {
             try
             {
-                var tasks = await this._repo.GetAllFilteredAsync(type, isApproved, userId);
+                // parse string to enum
+                var parsedApproved = this.ParseApprovalStatus(isApproved);
+
+                var tasks = await this._repo.GetAllFilteredAsync(type, userId, parsedApproved);
                 var tasksDto = await MapTasksToSimpleDto(tasks, token);
                 return Result<List<TaskSimpleDto>>.Ok(tasksDto);
             }
@@ -99,7 +105,7 @@ namespace Mpt.Services
                 if (task == null)
                     return Result<TaskSimpleDto>.Fail("Task not found.");
 
-                if (task.IsApproved == true)
+                if (task.IsApproved == ApprovalStatus.approved)
                     task.AproveTask();
                 else
                     task.DisaproveTask();
@@ -301,6 +307,15 @@ namespace Mpt.Services
             }
 
             return tasksDto;
+        }
+
+        private ApprovalStatus? ParseApprovalStatus(string? isApproved)
+        {
+            if (isApproved == null)
+                return null;
+
+            isApproved = isApproved.ToLower();
+            return (ApprovalStatus)Enum.Parse(typeof(ApprovalStatus), isApproved, true);
         }
     }
 }

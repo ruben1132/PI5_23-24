@@ -12,7 +12,7 @@ namespace Mpt.Domain.Tasks
         // Properties
         public UserId UserId { get; private set; }
         public bool IsCompleted { get; private set; }
-        public bool? IsApproved { get; private set; }
+        public ApprovalStatus IsApproved { get; private set; }
         public string TaskType { get; private set; }
         public List<string> Path { get; private set; }
         public List<List<RobotMovement>> RobotMovements { get; private set; }
@@ -26,7 +26,7 @@ namespace Mpt.Domain.Tasks
         {
         }
 
-        public Task(UserId userId, string taskType, List<string> path, List<List<RobotMovement>> robotMovements, bool? isApproved = null)
+        public Task(UserId userId, string taskType, List<string> path, List<List<RobotMovement>> robotMovements, ApprovalStatus isApproved)
         {
             this.Id = new TaskId(Guid.NewGuid());
             this.UserId = userId;
@@ -39,7 +39,7 @@ namespace Mpt.Domain.Tasks
         // Methods
         public void CompleteTask()
         {
-            if (this.IsApproved == false)
+            if (this.IsApproved == ApprovalStatus.rejected)
                 throw new BusinessRuleValidationException("It is not possible to complete an unapproved task.");
             this.IsCompleted = true;
         }
@@ -51,12 +51,12 @@ namespace Mpt.Domain.Tasks
 
         public void AproveTask()
         {
-            this.IsApproved = true;
+            this.IsApproved = ApprovalStatus.approved;
         }
 
         public void DisaproveTask()
         {
-            this.IsApproved = false;
+            this.IsApproved = ApprovalStatus.rejected;
         }
 
 

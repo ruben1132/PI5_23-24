@@ -10,10 +10,10 @@ namespace Mpt.Dtos
         public string TaskType { get; private set; }
         public List<string> Path { get; private set; }
         public bool IsCompleted { get; private set; }
-        public bool? IsApproved { get; private set; }
+        public string IsApproved { get; private set; }
 
         public TaskDto(string id, List<string> path,
-            bool isCompleted, string taskType, UserTaskInfoDto user, bool? isApproved)
+            bool isCompleted, string taskType, UserTaskInfoDto user, string isApproved)
         {
             this.Id = id;
             this.User = user;

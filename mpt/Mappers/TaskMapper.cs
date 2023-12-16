@@ -15,7 +15,7 @@ namespace Mpt.Mappers
             return new TaskSimpleDto(
                 task.IsCompleted,
                 task.TaskType,
-                task.IsApproved
+                task.IsApproved.ToString()
             );
         }
 
@@ -26,7 +26,7 @@ namespace Mpt.Mappers
                 surveillanceTask.TaskType,
                 surveillanceTask.PhoneNumber.Value,
                 floorCode,
-                surveillanceTask.IsApproved
+                surveillanceTask.IsApproved.ToString()
             );
         }
 
@@ -45,7 +45,7 @@ namespace Mpt.Mappers
                 pickupDeliveryTask.Origin,
                 pickupDeliveryTask.DestinyType,
                 pickupDeliveryTask.Destiny,
-                pickupDeliveryTask.IsApproved
+                pickupDeliveryTask.IsApproved.ToString()
             );
         }
 
@@ -59,7 +59,7 @@ namespace Mpt.Mappers
                 task.IsCompleted,
                 task.TaskType,
                 user,
-                task.IsApproved
+                task.IsApproved.ToString()
             );
 
         }
@@ -74,7 +74,7 @@ namespace Mpt.Mappers
                 surveillanceTask.PhoneNumber.Value,
                 floorCode,
                 user,
-                surveillanceTask.IsApproved
+                surveillanceTask.IsApproved.ToString()
             );
         }
 
@@ -96,7 +96,7 @@ namespace Mpt.Mappers
                 pickupDeliveryTask.DestinyType,
                 pickupDeliveryTask.Destiny,
                 user,
-                pickupDeliveryTask.IsApproved
+                pickupDeliveryTask.IsApproved.ToString()
             );
         }
 
@@ -121,7 +121,8 @@ namespace Mpt.Mappers
                 new List<string>() { floorCode },
                 new List<List<RobotMovement>>(),
                 new PhoneNumber(dto.PhoneNumber),
-                dto.FloorId
+                dto.FloorId,
+                ApprovalStatus.pending
             );
         }
 
@@ -141,7 +142,8 @@ namespace Mpt.Mappers
                 new PhoneNumber(dto.PickupPersonPhoneNumber),
                 dto.DeliveryPersonName,
                 new PhoneNumber(dto.DeliveryPersonPhoneNumber),
-                new TaskConfirmationCode()
+                new TaskConfirmationCode(),
+                  ApprovalStatus.pending
             );
         }
 

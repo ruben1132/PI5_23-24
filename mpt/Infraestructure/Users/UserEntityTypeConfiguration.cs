@@ -16,10 +16,10 @@ namespace Mpt.Infrastructure.Users
             builder.OwnsOne(u => u.Phone);
             builder.OwnsOne(u => u.Nif);
 
-            // isApproved allow to be null
             builder
                 .Property(u => u.IsApproved)
                 .HasDefaultValue(ApprovalStatus.pending).HasConversion<string>();
+                
 
             builder.HasOne<Role>()
                 .WithMany()
