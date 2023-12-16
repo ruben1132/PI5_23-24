@@ -76,7 +76,7 @@ export default {
         floor: {
             post: [roles.GESTOR_CAMPUS],
             get: [...Object.values(roles)],
-            getById: [roles.GESTOR_CAMPUS, roles.GESTOR_TAREFAS],
+            getById: [roles.GESTOR_CAMPUS, roles.GESTOR_TAREFAS, roles.UTENTE],
             getByBuildingId: [...Object.values(roles)],
             getWithPass: [roles.GESTOR_CAMPUS],
             put: [roles.GESTOR_CAMPUS],

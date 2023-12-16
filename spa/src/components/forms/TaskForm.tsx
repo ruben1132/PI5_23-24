@@ -114,6 +114,11 @@ export default function TaskForm(props: Props) {
         props.action === 'edit' ? 'PUT' : 'POST',
     );
 
+    const taskFormApproval = useSubmitData(
+        config.mptAPI.baseUrl + config.mptAPI.routes.tasks + '/' + props.item.value?.id,
+        'PATCH',
+    );
+
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
 
@@ -162,7 +167,27 @@ export default function TaskForm(props: Props) {
     };
 
     // TODO: approve/reject a stask
-    const handleUpdateData = async () => {};
+    const handleUpdateData = async (isApproved: string) => {
+        setEnabled(false);
+
+        let item = {
+            isApproved: isApproved,
+        };
+
+        // submit data
+        let res = await taskFormApproval.submit(item);
+
+        if (res.error) {
+            setEnabled(true);
+            notify.error(res.error);
+            return;
+        }
+
+        props.reFetchData(); // refresh data
+        setEnabled(true); // enable buttons
+        notify.success(`Task ${isApproved} successfully`); // show alert
+        props.close(); // close modal
+    };
 
     const handleParse = (): { originParsed: string; destinyParsed: string } => {
         let formatedOrig = '';
@@ -393,13 +418,21 @@ export default function TaskForm(props: Props) {
                         <Col sm={6}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Floor</Form.Label>
-                                <FloorSelectBox
-                                    disabled={props.action === 'edit'}
-                                    setValue={floor.handleLoad}
-                                    data={floorsDataFecher.data}
-                                    isError={floorsDataFecher.isError}
-                                    isLoading={floorsDataFecher.isLoading}
+                                {props.action === 'edit' ? (
+                                    <Form.Control
+                                    type="text"
+                                    defaultValue={(props.item.value as SurveillanceTask)?.floorCode}
+                                    disabled={true}
                                 />
+                                ) : (
+                                    <FloorSelectBox
+                                        disabled={props.action === 'edit'}
+                                        setValue={floor.handleLoad}
+                                        data={floorsDataFecher.data}
+                                        isError={floorsDataFecher.isError}
+                                        isLoading={floorsDataFecher.isLoading}
+                                    />
+                                )}
                             </Form.Group>
                         </Col>
                     </Row>
@@ -650,10 +683,18 @@ export default function TaskForm(props: Props) {
                         {props.action === 'edit' ? (
                             user?.role.name !== userRole.UTENTE && (
                                 <>
-                                    <Button type="button" variant="success" onClick={props.close}>
+                                    <Button
+                                        type="button"
+                                        variant="success"
+                                        onClick={() => handleUpdateData(config.states.APPROVED)}
+                                    >
                                         Approve
                                     </Button>{' '}
-                                    <Button type="button" variant="danger" onClick={props.close}>
+                                    <Button
+                                        type="button"
+                                        variant="danger"
+                                        onClick={() => handleUpdateData(config.states.REJECTED)}
+                                    >
                                         Reject
                                     </Button>
                                 </>

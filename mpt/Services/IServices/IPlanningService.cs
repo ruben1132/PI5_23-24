@@ -6,8 +6,9 @@ namespace Mpt.IServices
 {
     public interface IPlanningService{
 
-        Task<Result<PlanningWithTasksDto>> AddAsync(CreatePlanningDto dto);
-        Task<Result<PlanningWithTasksDto>> GetByIdAsync(PlanningId id);
-        Task<Result<List<PlanningWithTasksDto>>> GetAllAsync();
+        Task<Result<PlanningFullDto>> AddAsync(CreatePlanningDto dto, Guid userId);
+        Task<Result<PlanningFullDto>> GetByIdAsync(Guid id);
+        Task<Result<List<PlanningFullDto>>> GetAllAsync();
+        Task<Result<PlanningSimpleDto>> DeleteAsync(Guid id);
     }
 }

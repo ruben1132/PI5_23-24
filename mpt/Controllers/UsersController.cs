@@ -206,7 +206,7 @@ namespace Mpt.Controllers
         // PATCH: api/User/5
         [Authorize(Roles = "admin")]
         [HttpPatch("{id}")]
-        public async Task<ActionResult<UserWithRoleDto>> ApproveReject(Guid id, UserIsApprovedDto user)
+        public async Task<ActionResult<UserWithRoleDto>> ApproveReject(Guid id, IsApprovedDto user)
         {
             try
             {

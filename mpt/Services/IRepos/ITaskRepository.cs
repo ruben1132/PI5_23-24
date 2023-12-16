@@ -6,7 +6,8 @@ namespace Mpt.IRepositories
     public interface ITaskRepository: IRepository<Domain.Tasks.Task,TaskId>
     {
 
-        Task<List<Mpt.Domain.Tasks.Task>> GetAllFilteredAsync(string? type, string? userId, ApprovalStatus? isApproved);
+        Task<List<Domain.Tasks.Task>> GetAllFilteredAsync(string? type, string? userId, ApprovalStatus? isApproved);
+        Task<List<Domain.Tasks.Task>> GetByIds( List<TaskId> ids);
 
         Task<List<Mpt.Dtos.TaskWithoutUserDto>> GetTasksWithoutUserInfo(string userId);
 
