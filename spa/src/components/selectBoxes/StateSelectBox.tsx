@@ -11,7 +11,7 @@ interface Props {
 }
 
 const StateSelectBox = (props: Props) => {
-    const data = config.states;
+    const data = config.statesArray;
 
     // filter data so it removes the element already selected
     const filteredSelectBox = data?.filter((item: string) => item !== props?.selectedValue);
@@ -20,20 +20,6 @@ const StateSelectBox = (props: Props) => {
         props.setValue(event.target.value);
     };
 
-    const getSelectedValue = (): string => {
-        let val = null;
-        if (props?.selectedValue) {
-            val = data.find((item: string) => item === props?.selectedValue);
-        }
-
-        if (!val) {
-            return filteredSelectBox[0];
-        }
-
-        return val;
-    };
-
-    const selectedValue = getSelectedValue();
 
     return (
         <Form.Select
@@ -41,7 +27,7 @@ const StateSelectBox = (props: Props) => {
             onChange={handleChange}
             id="state-sb"
         >
-            {props?.selectedValue && <option defaultChecked={true}>{selectedValue}</option>}
+            {props?.selectedValue && <option defaultChecked={true}>{props.selectedValue}</option>}
 
             {filteredSelectBox?.map((item: string) => (
                 <option key={item} value={item}>

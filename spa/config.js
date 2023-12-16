@@ -39,7 +39,7 @@ export default {
         {
             routeName: 'tasks',
             displayName: 'Tasks',
-            permissions: [userRole.GESTOR_TAREFAS],
+            permissions: [userRole.GESTOR_TAREFAS, userRole.UTENTE],
         },
         {
             routeName: 'tasktypes',
@@ -89,11 +89,17 @@ export default {
         {
             routeName: 'profile',
             displayName: 'Profile',
-            permissions: [userRole.UTENTE, userRole.GESTOR_FROTA, userRole.GESTOR_CAMPUS, userRole.ADMIN],
+            permissions: [...Object.values(userRole)],
         },
     ],
 
-    states: ['pending', 'approved', 'rejected', 'all'],
+    statesArray: ['all', 'pending', 'approved', 'rejected'],
+    states: {
+        ALL: 'all',
+        PENDING: 'pending',
+        APPROVED: 'approved',
+        REJECTED: 'rejected',
+    },
 
     mgiAPI: {
         baseUrl:
@@ -156,7 +162,7 @@ export default {
 
     authRoutes: ['/login', '/signin'],
 
-    utenteRoutes: ['/dashboard', '/dashboard/v3d', '/dashboard/profile'],
+    utenteRoutes: ['/dashboard', '/dashboard/tasks', '/dashboard/profile'],
 
     adminRoutes: ['/dashboard', '/dashboard/roles', '/dashboard/users', '/dashboard/sysusers', '/dashboard/profile'],
 

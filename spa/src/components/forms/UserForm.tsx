@@ -118,7 +118,7 @@ export default function UserForm(props: Props) {
                         <Button
                             id="approve-btn"
                             variant="success"
-                            onClick={()=>{handleSubmitData(config.states[1])}}
+                            onClick={()=>{handleSubmitData(config.states.APPROVED)}}
                             disabled={!enabled}
                             data-testid="approve-button"
                         >
@@ -127,7 +127,7 @@ export default function UserForm(props: Props) {
                         <Button
                             id="approve-btn"
                             variant="danger"
-                            onClick={()=>{handleSubmitData(config.states[2])}}
+                            onClick={()=>{handleSubmitData(config.states.REJECTED)}}
                             disabled={!enabled}
                             data-testid="approve-button"
                         >

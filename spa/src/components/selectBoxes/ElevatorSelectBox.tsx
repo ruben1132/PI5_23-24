@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 
 interface Props {
+    disabled?: boolean;
     data: ElevatorWithFloors[];
     setValue: (val: string) => void;
     selectedValue?: string;
@@ -77,7 +78,7 @@ const ElevatorSelectBox = (props: Props) => {
     , []);
     
     return (
-        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='elevator-sb'>
+        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='elevator-sb' disabled={props.disabled}>
             {props?.selectedValue && <option defaultChecked={true} value={props.selectedValue}>{getSelectedValue().designation}</option>}
 
             {filteredSelectBox?.map((item: ElevatorWithFloors) => (

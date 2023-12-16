@@ -60,7 +60,7 @@ export default {
     routesPermissions: {
         building: {
             post: [roles.GESTOR_CAMPUS],
-            get: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            get: [...Object.values(roles)],
             getById: [roles.GESTOR_CAMPUS],
             getRanges: [roles.GESTOR_CAMPUS],
             put: [roles.GESTOR_CAMPUS],
@@ -68,16 +68,16 @@ export default {
         },
         elevator: {
             post: [roles.GESTOR_CAMPUS],
-            get: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            get: [...Object.values(roles)],
             getById: [roles.GESTOR_CAMPUS],
             put: [roles.GESTOR_CAMPUS],
             delete: [roles.GESTOR_CAMPUS],
         },
         floor: {
             post: [roles.GESTOR_CAMPUS],
-            get: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            get: [...Object.values(roles)],
             getById: [roles.GESTOR_CAMPUS, roles.GESTOR_TAREFAS],
-            getByBuildingId: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            getByBuildingId: [...Object.values(roles)],
             getWithPass: [roles.GESTOR_CAMPUS],
             put: [roles.GESTOR_CAMPUS],
             delete: [roles.GESTOR_CAMPUS],
@@ -89,7 +89,7 @@ export default {
         },
         passage: {
             post: [roles.GESTOR_CAMPUS],
-            get: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            get: [...Object.values(roles)],
             getById: [roles.GESTOR_CAMPUS],
             getBetween: [roles.GESTOR_CAMPUS],
             put: [roles.GESTOR_CAMPUS],
@@ -97,14 +97,14 @@ export default {
         },
         room: {
             post: [roles.GESTOR_CAMPUS],
-            get: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
+            get: [...Object.values(roles)],
             getById: [roles.GESTOR_CAMPUS],
             put: [roles.GESTOR_CAMPUS],
             delete: [roles.GESTOR_CAMPUS],
         },
         taskType: {
             post: [roles.GESTOR_TAREFAS],
-            get: [roles.GESTOR_TAREFAS, roles.GESTOR_FROTA],
+            get: [roles.GESTOR_TAREFAS, roles.GESTOR_FROTA, roles.UTENTE],
             put: [roles.GESTOR_TAREFAS],
             delete: [roles.GESTOR_TAREFAS],
         },
