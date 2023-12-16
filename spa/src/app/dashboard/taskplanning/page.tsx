@@ -8,7 +8,7 @@ export default async function Tasks() {
 
             <PageContent
                 type="taskplanning"
-                routeToFetch={""}
+                routeToFetch={config.mptAPI.baseUrl + config.mptAPI.routes.plannings}
             />
         </div>
     );
