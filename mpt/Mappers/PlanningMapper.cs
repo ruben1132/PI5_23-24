@@ -9,20 +9,29 @@ namespace Mpt.Mappers
 {
     public class PlanningMapper
     {
-        public static PlanningWithTasksDto ToDto(Planning planning, List<TaskSimpleDto> tasks)
+        public static PlanningSimpleDto ToDto(Planning planning)
         {
-            return new PlanningWithTasksDto(
-                    planning.Id.Value, 
+            return new PlanningSimpleDto(
+                    planning.Id.Value,
+                    planning.Cost,
+                    planning.UserId.Value
+                );
+        }
+
+        public static PlanningFullDto ToDto(Planning planning, List<TaskSimpleDto> tasks)
+        {
+            return new PlanningFullDto(
+                    planning.Id.Value,
                     tasks,
                     planning.Cost,
                     planning.UserId.Value
                 );
         }
 
-        public static Planning ToDomain(CreatePlanningDto dto)
+        public static Planning ToDomain(CreatePlanningDto dto, int cost)
         {
             return new Planning(
-                    dto.Cost,
+                    cost,
                     new UserId(dto.UserId)
                 );
         }

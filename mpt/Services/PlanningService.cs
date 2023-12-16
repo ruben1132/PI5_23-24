@@ -14,75 +14,88 @@ namespace Mpt.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPlanningRepository _repo;
+        private readonly IPlanningRepository _tasksRepo;
         private readonly ITaskRepository _taskRepo;
+        private readonly HttpClient _httpClient;
+        private readonly IConfiguration _config;
 
-
-        public PlanningService(IUnitOfWork unitOfWork, IPlanningRepository repo, ITaskRepository taskRepo)
+        public PlanningService(IConfiguration config, IUnitOfWork unitOfWork, IPlanningRepository repo, IPlanningRepository tasksRepo, 
+                ITaskRepository taskRepo, HttpClient httpClient)
         {
+            this._config = config;
+            this._httpClient = httpClient;
             this._unitOfWork = unitOfWork;
             this._repo = repo;
+            this._tasksRepo = tasksRepo;
             this._taskRepo = taskRepo;
         }
 
-        public async Task<Result<List<PlanningWithTasksDto>>> GetAllAsync()
+        public async Task<Result<List<PlanningFullDto>>> GetAllAsync()
         {
             try
             {
                 var plannings = await this._repo.GetAllAsync();
 
                 if (plannings == null)
-                    return Result<List<PlanningWithTasksDto>>.Ok(new List<PlanningWithTasksDto>());
+                    return Result<List<PlanningFullDto>>.Ok(new List<PlanningFullDto>());
 
-                var planningsDto = new List<PlanningWithTasksDto>();
+                var planningsDto = new List<PlanningFullDto>();
 
                 foreach (var planning in plannings)
                 {
-                    var tasksDto = await this.GetTasksByIdsAsync(planning);
+                    var tasksDto = await this.GetTasksByIdAsync(planning);
                     planningsDto.Add(PlanningMapper.ToDto(planning, tasksDto.GetValue()));
                 }
 
-                return Result<List<PlanningWithTasksDto>>.Ok(planningsDto);
+                return Result<List<PlanningFullDto>>.Ok(planningsDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return Result<List<PlanningWithTasksDto>>.Fail(ex.Message);
+                return Result<List<PlanningFullDto>>.Fail(ex.Message);
             }
         }
 
-        public async Task<Result<PlanningWithTasksDto>> GetByIdAsync(PlanningId id)
+        public async Task<Result<PlanningFullDto>> GetByIdAsync(Guid id)
         {
             try
             {
-                var planning = await this._repo.GetByIdAsync(id);
+                var planning = await this._repo.GetByIdAsync(new PlanningId(id));
 
                 if (planning == null)
-                    return Result<PlanningWithTasksDto>.Fail("Planning not found.");
+                    return Result<PlanningFullDto>.Fail("Planning not found.");
 
-                var tasksDto = await this.GetTasksByIdsAsync(planning);
+                var tasksDto = await this.GetTasksByIdAsync(planning);
                 var planningDto = PlanningMapper.ToDto(planning, tasksDto.GetValue());
-                return Result<PlanningWithTasksDto>.Ok(planningDto);
+                return Result<PlanningFullDto>.Ok(planningDto);
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return Result<PlanningWithTasksDto>.Fail(ex.Message);
+                return Result<PlanningFullDto>.Fail(ex.Message);
             }
         }
 
-        public async Task<Result<PlanningWithTasksDto>> AddAsync(CreatePlanningDto dto)
+        public async Task<Result<PlanningFullDto>> AddAsync(CreatePlanningDto dto, Guid userId)
         {
             try
             {
-                var planning = PlanningMapper.ToDomain(dto);
+                // get tasks
+                var tasks = await this._taskRepo.GetByIds(dto.Tasks);
+                
+                // TODO: call MP API
+                // var tasksDto = await this.GetPlanningAsync(tasks);
+                // if (tasksDto.IsFailure)
+                //     return Result<PlanningFullDto>.Fail(tasksDto.Error);
+
+                var planning = PlanningMapper.ToDomain(dto, 0);
 
                 // Create PlanningTasks and add them to the Planning
                 int sequence = 0;
-                foreach (var taskId in dto.Tasks)
+                foreach (var t in tasks)
                 {
-                    var task = await this._taskRepo.GetByIdAsync(taskId);
-                    var planningTask = new PlanningTask { Planning = planning, Task = task, SequenceOrder = 0 };
+                    var planningTask = new PlanningTask { Planning = planning, Task = t, SequenceOrder = sequence };
                     planning.PlanningTasks.Add(planningTask);
 
                     sequence++;
@@ -91,42 +104,42 @@ namespace Mpt.Services
                 await this._repo.AddAsync(planning);
                 await this._unitOfWork.CommitAsync();
 
-                var tasksDto = await this.GetTasksByIdsAsync(planning);
+                var tasksDto = await this.GetTasksByIdAsync(planning);
                 var planningDto = PlanningMapper.ToDto(planning, tasksDto.GetValue());
-                return Result<PlanningWithTasksDto>.Ok(planningDto);
+                return Result<PlanningFullDto>.Ok(planningDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return Result<PlanningWithTasksDto>.Fail(ex.Message);
+                return Result<PlanningFullDto>.Fail(ex.Message);
             }
 
         }
 
-        public async Task<Result<PlanningWithTasksDto>> DeleteAsync(PlanningId id)
+        public async Task<Result<PlanningSimpleDto>> DeleteAsync(Guid id)
         {
             try
             {
-                var planning = await this._repo.GetByIdAsync(id);
+                var planning = await this._repo.GetByIdAsync(new PlanningId(id));
 
                 if (planning == null)
-                    return Result<PlanningWithTasksDto>.Fail("Planning not found.");
+                    return Result<PlanningSimpleDto>.Fail("Planning not found.");
 
                 this._repo.Remove(planning);
                 await this._unitOfWork.CommitAsync();
 
-                var tasksDto = await this.GetTasksByIdsAsync(planning);
-                var planningDto = PlanningMapper.ToDto(planning, tasksDto.GetValue());
-                return Result<PlanningWithTasksDto>.Ok(planningDto);
+                var tasksDto = await this.GetTasksByIdAsync(planning);
+                var planningDto = PlanningMapper.ToDto(planning);
+                return Result<PlanningSimpleDto>.Ok(planningDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return Result<PlanningWithTasksDto>.Fail(ex.Message);
+                return Result<PlanningSimpleDto>.Fail(ex.Message);
             }
         }
 
-        private async Task<Result<List<TaskSimpleDto>>> GetTasksByIdsAsync(Planning planning)
+        private async Task<Result<List<TaskSimpleDto>>> GetTasksByIdAsync(Planning planning)
         {
             try
             {
@@ -151,5 +164,30 @@ namespace Mpt.Services
                 return Result<List<TaskSimpleDto>>.Fail(ex.Message);
             }
         }
+
+        private async Task<Result<List<TaskSimpleDto>>> GetPlanningAsync(List<Domain.Tasks.Task> tasks)
+        {
+            try
+            {
+                // call MP API
+                var route = this._config.GetValue<string>("MPApiUrl:planning") ?? "http://localhost:5000/findPath";
+                this._httpClient.BaseAddress = new Uri(route);
+                var response = await this._httpClient.GetAsync("");
+
+                if (!response.IsSuccessStatusCode)
+                    return Result<List<TaskSimpleDto>>.Fail("There was an error calculating the robot path. Please try again later.");
+
+                var pathMovementDto = await response.Content.ReadFromJsonAsync<List<TaskSimpleDto>>();
+
+                return Result<List<TaskSimpleDto>>.Ok(pathMovementDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<List<TaskSimpleDto>>.Fail(ex.Message);
+            }
+        }
+
+
     }
 }

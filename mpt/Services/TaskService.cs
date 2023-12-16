@@ -205,9 +205,9 @@ namespace Mpt.Services
             try
             {
                 // call MP API
-                var route = this._config.GetValue<string>("MPApiUrl") ?? "http://localhost:5000/";
+                var route = this._config.GetValue<string>("MPApiUrl:findPath") ?? "http://localhost:5000/findPath";
                 this._httpClient.BaseAddress = new Uri(route);
-                var response = await this._httpClient.GetAsync($"findPath?algorithm=astar&origin={origin}&destiny={destiny}");
+                var response = await this._httpClient.GetAsync($"?algorithm=astar&origin={origin}&destiny={destiny}");
 
                 if (!response.IsSuccessStatusCode)
                     return Result<PathMovementDto>.Fail("There was an error calculating the robot path. Please try again later.");

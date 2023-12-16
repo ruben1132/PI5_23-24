@@ -418,13 +418,21 @@ export default function TaskForm(props: Props) {
                         <Col sm={6}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Floor</Form.Label>
-                                <FloorSelectBox
-                                    disabled={props.action === 'edit'}
-                                    setValue={floor.handleLoad}
-                                    data={floorsDataFecher.data}
-                                    isError={floorsDataFecher.isError}
-                                    isLoading={floorsDataFecher.isLoading}
+                                {props.action === 'edit' ? (
+                                    <Form.Control
+                                    type="text"
+                                    defaultValue={(props.item.value as SurveillanceTask)?.floorCode}
+                                    disabled={true}
                                 />
+                                ) : (
+                                    <FloorSelectBox
+                                        disabled={props.action === 'edit'}
+                                        setValue={floor.handleLoad}
+                                        data={floorsDataFecher.data}
+                                        isError={floorsDataFecher.isError}
+                                        isLoading={floorsDataFecher.isLoading}
+                                    />
+                                )}
                             </Form.Group>
                         </Col>
                     </Row>
