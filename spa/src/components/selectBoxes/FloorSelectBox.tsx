@@ -64,7 +64,7 @@ const FloorSelectBox = (props: Props) => {
                     {getSelectedValue()?.code}
                 </option>
             ) : (
-                <option>select floors allowed</option>
+                <option>select a floor</option>
             )}
 
             {filteredSelectBox?.map((item: FloorWithBuilding | Floor) => (

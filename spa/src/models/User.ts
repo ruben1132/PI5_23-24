@@ -21,7 +21,7 @@ export interface User {
     phone: string;
     roleId: string;
     active: boolean;
-    isApproved: string;
+    isApproved?: string;
 }
 
 export interface PostUser {
@@ -32,4 +32,12 @@ export interface PostUser {
     active: boolean;
     password?: string;
     roleId: string;
+}
+
+export interface UserProfile {
+    name: string;
+    email: string;
+    nif: string;
+    phone: string;
+    password?: string;
 }

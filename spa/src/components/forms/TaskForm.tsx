@@ -7,7 +7,11 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { Button } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+
+// icons
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 // notification component
 import { notify } from '@/components/notification/Notification';
@@ -39,8 +43,7 @@ import { RoomWithFloor } from '@/models/Room';
 import axios from 'axios';
 import { SurveillanceTask } from '@/models/SurveillanceTask';
 import { PickupDeliveryTask } from '@/models/PickupDeliveryTask';
-import SurveillanceTaskForm from './subForms/SurveillanceTaskForm';
-import PickupDeliveryTaskForm from './subForms/PickupDeliveryTask';
+import BuildingSelectBox from '../selectBoxes/BuildingSelectBox';
 
 interface Props {
     item: {
@@ -54,16 +57,21 @@ export default function TaskForm(props: Props) {
     const roomsDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms);
     const passagesDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages);
     const elevatorsDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators);
+    const buildingsDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings);
 
-    // deleter
-    const taskDeleter = useDeleteData(config.mptAPI.baseUrl + config.mptAPI.routes.tasks + '/' + props.item?.value.id);
+    const building = useFormStringInput('');
+
+    const floorsDataFecher = useFetchData(
+        `${config.mgiAPI.baseUrl}${config.mgiAPI.routes.floors}${
+            building.value ? '/buildingId/' + building.value : ''
+        }`,
+    );
 
     // inputs
     const originType = useFormStringInput('room');
     const destinyType = useFormStringInput('room');
-    const origin = useFormSelectBox(props.item.value?.origin);
-    const destiny = useFormSelectBox(props.item.value?.destiny);
-    const [path, setPath] = useState<Path>();
+    const origin = useFormSelectBox((props.item.value as PickupDeliveryTask)?.origin);
+    const destiny = useFormSelectBox((props.item.value as PickupDeliveryTask)?.destiny);
     const taskType = useFormSelectBoxInput('');
     const algorith = useFormSelectBoxInput('');
 
@@ -74,6 +82,7 @@ export default function TaskForm(props: Props) {
 
     // surveillance task inputs
     const phoneNumber = useFormStringInputWithRegex((props.item.value as SurveillanceTask)?.phoneNumber, /^9\d{8}$/);
+    const floor = useFormSelectBox((props.item.value as SurveillanceTask)?.floorCode);
 
     // pickup delivery task inputs
     const pickupPersonName = useFormStringInput((props.item.value as PickupDeliveryTask)?.pickupPersonName);
@@ -124,28 +133,6 @@ export default function TaskForm(props: Props) {
         setEnabled(true); // enable buttons
         // show alert
         notify.success(`Floor ${props.action == 'edit' ? 'edited' : 'added'} successfully`);
-    };
-
-    const handleDeleteData = async () => {
-        setEnabled(false);
-
-        // delete data
-        let res = await taskDeleter.del();
-
-        if (res.error) {
-            setEnabled(true);
-            notify.error(res.error);
-            return;
-        }
-
-        props.reFetchData(); // refresh data
-        setEnabled(true); // enable buttons
-
-        // show alert
-        notify.success(`Task deleted successfully`);
-
-        // close modal
-        props.close();
     };
 
     const handleFindPath = async () => {
@@ -210,23 +197,6 @@ export default function TaskForm(props: Props) {
 
         // set query
         const query = '?algorithm=' + algorith.value + '&origin=' + formatedOrig + '&destiny=' + formatedDest;
-
-        try {
-            const response = await axios(config.mgiAPI.baseUrl + config.mgiAPI.routes.planningFindPath + query, {
-                method: 'GET',
-            });
-
-            if (response.status === 200) {
-                setEnabled(true);
-                notify.success('Path found successfully!');
-                setPath(response.data);
-                return;
-            } else {
-                notify.warning('Coud not find a path');
-            }
-        } catch (err) {
-            notify.error('Error while finding a path');
-        }
 
         setEnabled(true); // enable buttons
     };
@@ -318,100 +288,24 @@ export default function TaskForm(props: Props) {
         }
     };
 
+    // when building changes, load the floors
     useEffect(() => {
-        if (props.item.value.taskType === 'Surveillance') {
-            props.item.value = props.item.value as SurveillanceTask;
-            return;
+        if (building.value) {
+            floorsDataFecher.revalidate();
+
+            floor.handleReset();
         }
-        props.item.value = props.item.value as PickupDeliveryTask;
-    }, [props.item.value]);
+    }, [building.value]);
+
+    // when loads the buildings, select the first one
+    useEffect(() => {
+        if (buildingsDataFecher.data && buildingsDataFecher.data.length > 0) {
+            building.handleLoad(buildingsDataFecher.data[0].id);
+        }
+    }, [buildingsDataFecher.data]);
 
     return (
         <Form>
-            {props.action === 'edit' && (
-                <>
-                    <Row>
-                        <Col sm={12}>
-                            <Form.Group className="mb-6">
-                                <Form.Label htmlFor="select">Tasks ID</Form.Label>
-                                <Form.Control type="text" defaultValue={props.item.value?.id} disabled />
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <br />
-                </>
-            )}
-            <Row>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Type of Origin</Form.Label>
-                        <Form.Select onChange={handleChangeOriginType}>
-                            <option defaultChecked={true}>Select a type</option>
-                            <option value={'room'}>Room</option>
-                            <option value={'passage'}>Passage</option>
-                            <option value={'elevator'}>Elevator</option>
-                        </Form.Select>
-                    </Form.Group>
-                </Col>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Type of Destiny</Form.Label>
-                        <Form.Select onChange={handleChangeDestinyType}>
-                            <option defaultChecked={true}>Select a type</option>
-                            <option value={'room'}>Room</option>
-                            <option value={'passage'}>Passage</option>
-                            <option value={'elevator'}>Elevator</option>
-                        </Form.Select>
-                    </Form.Group>
-                </Col>
-            </Row>
-            <br />
-            <Row>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Origin</Form.Label>
-                        <OriginSelectBox />
-                    </Form.Group>
-                </Col>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Destinity</Form.Label>
-                        <DestinySelectBox />
-                    </Form.Group>
-                </Col>
-            </Row>
-            <br />
-
-            <Row>
-                <Col sm={6}>
-                    {originType.value === 'elevator' && (
-                        <Form.Group className="mb-6">
-                            <Form.Label htmlFor="select">Floor</Form.Label>
-                            <FloorSelectBox
-                                selectedValue={origFloor.value}
-                                setValue={origFloor.handleLoad}
-                                data={origElevator.floorsAllowed}
-                                isError={elevatorsDataFecher.isError}
-                                isLoading={elevatorsDataFecher.isLoading}
-                            />
-                        </Form.Group>
-                    )}
-                </Col>
-                <Col sm={6}>
-                    {destinyType.value === 'elevator' && (
-                        <Form.Group className="mb-6">
-                            <Form.Label htmlFor="select">Floor</Form.Label>
-                            <FloorSelectBox
-                                selectedValue={destFloor.value}
-                                setValue={destFloor.handleLoad}
-                                data={destElevator.floorsAllowed}
-                                isError={elevatorsDataFecher.isError}
-                                isLoading={elevatorsDataFecher.isLoading}
-                            />
-                        </Form.Group>
-                    )}
-                </Col>
-            </Row>
             <Row>
                 <Col sm={6}>
                     <Form.Group className="mb-6">
@@ -438,35 +332,234 @@ export default function TaskForm(props: Props) {
             </Row>
             <br />
             {taskType.value === 'Surveillance' ? (
-                <SurveillanceTaskForm
-                    item={props.item.value as SurveillanceTask}
-                    setPhoneNumber={phoneNumber.handleChange}
-                />
-            ) : (
-              <PickupDeliveryTaskForm
-                    item={props.item.value as PickupDeliveryTask}
-                    setPhoneNumber={phoneNumber.handleLoad}
-                />
-            )}
-
-            <br />
-            <Row>
-                <Col sm={12}>
-                    {path !== undefined && (
-                        <Col sm={12}>
-                            <Form.Group controlId="preview" className="mb-3">
-                                <Form.Label>Path</Form.Label>
-                                <Form.Control
-                                    as={'textarea'}
-                                    value={JSON.stringify(path, null, 2)}
-                                    disabled={true}
-                                    style={{ height: '600px' }}
+                <>
+                    <Row>
+                        <Col sm={6}>
+                            <Form.Group className="mb-6">
+                                <Form.Label htmlFor="select">Building</Form.Label>
+                                <BuildingSelectBox
+                                    data={buildingsDataFecher.data}
+                                    setValue={building.handleLoad}
+                                    selectedValue={building.value}
+                                    isLoading={buildingsDataFecher.isLoading}
+                                    isError={buildingsDataFecher.isError}
+                                    data-testid="building-sb"
                                 />
                             </Form.Group>
                         </Col>
-                    )}
-                </Col>
-            </Row>
+                        <Col sm={6}>
+                            <Form.Group className="mb-6">
+                                <Form.Label htmlFor="select">Floor</Form.Label>
+                                <FloorSelectBox
+                                    setValue={floor.handleLoad}
+                                    data={floorsDataFecher.data}
+                                    isError={floorsDataFecher.isError}
+                                    isLoading={floorsDataFecher.isLoading}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col sm={6}>
+                            <Form.Group className="mb-6">
+                                <Form.Label htmlFor="select">
+                                    Phone Number{' '}
+                                    <OverlayTrigger
+                                        placement="right"
+                                        overlay={
+                                            <Tooltip id="tooltip-password">
+                                                Phone number must start with the digit 9 and must have 9 digits.
+                                            </Tooltip>
+                                        }
+                                    >
+                                        <FontAwesomeIcon icon={faCircleInfo} size="xs" />
+                                    </OverlayTrigger>
+                                </Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    defaultValue={phoneNumber.value}
+                                    onChange={phoneNumber.handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                </>
+            ) : (
+                <>
+                    <Row>
+                        <Col sm={6}>
+                            <Form.Group className="mb-6">
+                                <Form.Label htmlFor="select">Type of Origin</Form.Label>
+                                <Form.Select onChange={handleChangeOriginType}>
+                                    <option defaultChecked={true}>Select a type</option>
+                                    <option value={'room'}>Room</option>
+                                    <option value={'passage'}>Passage</option>
+                                    <option value={'elevator'}>Elevator</option>
+                                </Form.Select>
+                            </Form.Group>
+                        </Col>
+                        <Col sm={6}>
+                            <Form.Group className="mb-6">
+                                <Form.Label htmlFor="select">Type of Destiny</Form.Label>
+                                <Form.Select onChange={handleChangeDestinyType}>
+                                    <option defaultChecked={true}>Select a type</option>
+                                    <option value={'room'}>Room</option>
+                                    <option value={'passage'}>Passage</option>
+                                    <option value={'elevator'}>Elevator</option>
+                                </Form.Select>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col sm={6}>
+                            <Form.Group className="mb-6">
+                                <Form.Label htmlFor="select">Origin</Form.Label>
+                                <OriginSelectBox />
+                            </Form.Group>
+                        </Col>
+                        <Col sm={6}>
+                            <Form.Group className="mb-6">
+                                <Form.Label htmlFor="select">Destinity</Form.Label>
+                                <DestinySelectBox />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col sm={6}>
+                            {originType.value === 'elevator' && (
+                                <Form.Group className="mb-6">
+                                    <Form.Label htmlFor="select">Floor</Form.Label>
+                                    <FloorSelectBox
+                                        selectedValue={origFloor.value}
+                                        setValue={origFloor.handleLoad}
+                                        data={origElevator.floorsAllowed}
+                                        isError={elevatorsDataFecher.isError}
+                                        isLoading={elevatorsDataFecher.isLoading}
+                                    />
+                                </Form.Group>
+                            )}
+                        </Col>
+                        <Col sm={6}>
+                            {destinyType.value === 'elevator' && (
+                                <Form.Group className="mb-6">
+                                    <Form.Label htmlFor="select">Floor</Form.Label>
+                                    <FloorSelectBox
+                                        selectedValue={destFloor.value}
+                                        setValue={destFloor.handleLoad}
+                                        data={destElevator.floorsAllowed}
+                                        isError={elevatorsDataFecher.isError}
+                                        isLoading={elevatorsDataFecher.isLoading}
+                                    />
+                                </Form.Group>
+                            )}
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col sm={6}>
+                            <Form.Group className="mb-6">
+                                <Form.Label htmlFor="select">Pickup Person Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    defaultValue={pickupPersonName.value}
+                                    onChange={pickupPersonName.handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col sm={6}>
+                            <Form.Group className="mb-6">
+                                <Form.Label htmlFor="select">
+                                    Pickup Person's Phone Number{' '}
+                                    <OverlayTrigger
+                                        placement="right"
+                                        overlay={
+                                            <Tooltip id="tooltip-password">
+                                                Phone number must start with the digit 9 and must have 9 digits.
+                                            </Tooltip>
+                                        }
+                                    >
+                                        <FontAwesomeIcon icon={faCircleInfo} size="xs" />
+                                    </OverlayTrigger>
+                                </Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    defaultValue={pickupPersonPhoneNumber.value}
+                                    onChange={pickupPersonPhoneNumber.handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col sm={6}>
+                            <Form.Group className="mb-6">
+                                <Form.Label htmlFor="select">Delivery Person Name</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    defaultValue={deliveryPersonName.value}
+                                    onChange={deliveryPersonName.handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col sm={6}>
+                            <Form.Group className="mb-6">
+                                <Form.Label htmlFor="select">
+                                    Delivery Person's Phone Number{' '}
+                                    <OverlayTrigger
+                                        placement="right"
+                                        overlay={
+                                            <Tooltip id="tooltip-password">
+                                                Phone number must start with the digit 9 and must have 9 digits.
+                                            </Tooltip>
+                                        }
+                                    >
+                                        <FontAwesomeIcon icon={faCircleInfo} size="xs" />
+                                    </OverlayTrigger>
+                                </Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    defaultValue={deliveryPersonPhoneNumber.value}
+                                    onChange={deliveryPersonPhoneNumber.handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+
+                    <Row>
+                        <Col sm={6}>
+                            <Form.Group className="mb-6">
+                                <Form.Label htmlFor="select">Description</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    defaultValue={taskDescription.value}
+                                    onChange={taskDescription.handleChange}
+                                />
+                            </Form.Group>
+                        </Col>
+                        {props.action === 'edit' && (
+                            <Col sm={6}>
+                                <Form.Group className="mb-6">
+                                    <Form.Label htmlFor="select">Confirmation Code</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={(props.item.value as PickupDeliveryTask)?.confirmationCode}
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => {
+                                            navigator.clipboard.writeText(confirmationCode.value);
+                                            notify.success('Confirmation code copied to clipboard');
+                                        }}
+                                        disabled={true}
+                                    />
+                                </Form.Group>
+                            </Col>
+                        )}
+                    </Row>
+                </>
+            )}
 
             <br />
             <Row>
@@ -474,43 +567,36 @@ export default function TaskForm(props: Props) {
                     <Form.Group className="mb-12">
                         {props.action === 'edit' ? (
                             <>
-                                <Button
-                                    variant="success"
-                                    onClick={handleSubmitData}
-                                    disabled={
-                                        origin.value === '' ||
-                                        origin.value === undefined ||
-                                        destiny.value === '' ||
-                                        destiny.value === undefined ||
-                                        path === null ||
-                                        algorith.value === '' ||
-                                        (props.item.value.taskType === 'Surveillance' && !phoneNumber.isValid) ||
-                                        (props.item.value.taskType === 'PickupDelivery' && !phoneNumber.isValid) ||
-                                        !enabled
-                                    }
-                                >
-                                    Add
-                                </Button>
-
-                                <Button variant="danger" onClick={handleDeleteData}>
-                                    Delete
+                                <Button type="button" variant="success" onClick={handleFindPath}>
+                                    Approve
+                                </Button>{' '}
+                                <Button type="button" variant="danger" onClick={props.close}>
+                                    Reject
                                 </Button>
                             </>
                         ) : (
                             <Button
-                                variant="primary"
-                                onClick={handleFindPath}
+                                variant="success"
+                                onClick={handleSubmitData}
                                 disabled={
-                                    origin.value === '' ||
-                                    origin.value === undefined ||
-                                    destiny.value === '' ||
-                                    destiny.value === undefined ||
-                                    path === null ||
+                                    taskType.value === '' ||
                                     algorith.value === '' ||
-                                    !enabled
+                                    !enabled ||
+                                    (taskType.value === 'Surveillance'
+                                        ? !phoneNumber.isValid || floor.value === ''
+                                        : origin.value === '' ||
+                                          originType.value === '' ||
+                                          destiny.value === '' ||
+                                          destinyType.value === '' ||
+                                          (originType.value === 'elevator' && origFloor.value === '') ||
+                                          (destinyType.value === 'elevator' && destFloor.value === '') ||
+                                          pickupPersonName.value === '' ||
+                                          !pickupPersonPhoneNumber.isValid ||
+                                          deliveryPersonName.value === '' ||
+                                          !deliveryPersonPhoneNumber.isValid)
                                 }
                             >
-                                Find Path
+                                Add
                             </Button>
                         )}
                     </Form.Group>
