@@ -39,6 +39,16 @@ namespace Mpt.Mappers
                 );
         }
 
+        public static UserProfileDto ToProfileDto(User user)
+        {
+            return new UserProfileDto(
+                    user.Email.Value,
+                    user.Name,
+                    user.Phone.Value,
+                    user.Nif.Value
+                );
+        }
+
         public static UserAuthDto ToDtoAuth(User user, RoleDto role)
         {
             return new UserAuthDto(

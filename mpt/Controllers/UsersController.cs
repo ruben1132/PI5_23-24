@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Mpt.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase, IUsersController
@@ -64,8 +64,40 @@ namespace Mpt.Controllers
             }
         }
 
+
+        // GET: api/User/profile
+        [AllowAnonymous]
+        [HttpGet("profile")]
+        public async Task<ActionResult<UserProfileDto>> GetMyProfile()
+        {
+            try
+            {
+                // get current user
+                var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+
+                if (currentUser == null)
+                {
+                    return BadRequest(new { error = "Not authenticated" });
+                }
+
+                var user = await _service.GetByIdAsync(new Guid(currentUser.Id));
+
+                if (user.IsFailure)
+                {
+                    return BadRequest(new { error = user.Error });
+                }
+
+                return Ok(user.GetValue());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
         // POST: api/User   
-        [Authorize(Roles = "admin")]     
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<ActionResult<UserWithRoleDto>> Create(CreateUserDto user)
         {
@@ -87,7 +119,7 @@ namespace Mpt.Controllers
             }
         }
 
-        // PUT: api/User/
+        // PATCH: api/User/
         [Authorize(Roles = "admin")]
         [HttpPatch]
         public async Task<ActionResult<UserWithRoleDto>> Update(UserDto user)
@@ -95,6 +127,32 @@ namespace Mpt.Controllers
             try
             {
                 var updatedUser = await _service.UpdateAsync(user);
+
+                if (updatedUser.IsFailure)
+                {
+                    return BadRequest(new { error = updatedUser.Error });
+                }
+
+                return Ok(updatedUser.GetValue());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        // PATCH: api/User/
+        [Authorize(Roles = "admin, utente, gestor tarefas, gestor frota, gestor campus")]
+        [HttpPatch("profile")]
+        public async Task<ActionResult<UserProfileDto>> UpdateMyProfile(UpdateUserProfile user)
+        {
+            try
+            {
+                // get current user
+                var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+
+                var updatedUser = await _service.UpdateMyProfileAsync(user, currentUser.Id);
 
                 if (updatedUser.IsFailure)
                 {

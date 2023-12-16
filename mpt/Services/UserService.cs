@@ -33,7 +33,7 @@ namespace Mpt.Services
         public async Task<Result<List<UserWithRoleDto>>> GetAllAsync(bool? isSysUser, string? isApproved = null)
         {
             try
-            {   
+            {
                 // parse string to enum
                 ApprovalStatus? parsedApproved = null;
                 if (isApproved != null)
@@ -78,6 +78,27 @@ namespace Mpt.Services
                 var roleDto = RoleMapper.ToDto(role);
                 var userDto = UserMapper.ToDto(user, roleDto);
                 return Result<UserWithRoleDto>.Ok(userDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<Result<UserProfileDto>> GetMyProfileAsync(Guid id)
+        {
+            try
+            {
+                var user = await this._repo.GetByIdAsync(new UserId(id));
+
+                if (user == null)
+                    return Result<UserProfileDto>.Fail("User not found.");
+
+                var role = await this._roleRepo.GetByIdAsync(user.RoleId);
+
+                var userDto = UserMapper.ToProfileDto(user);
+                return Result<UserProfileDto>.Ok(userDto);
             }
             catch (Exception ex)
             {
@@ -144,7 +165,6 @@ namespace Mpt.Services
                 if (role.Active == false)
                     return Result<UserWithRoleDto>.Fail("You are trying to create a user with an inactive role.");
 
-                // only updates values if user is active (null value means it's a patch request from the utente)
                 if (u.Active == null || u.Active == true)
                 {
                     user.Enable();
@@ -184,6 +204,55 @@ namespace Mpt.Services
             {
                 Console.WriteLine(ex.Message);
                 return Result<UserWithRoleDto>.Fail(ex.Message);
+            }
+        }
+
+
+        public async Task<Result<UserProfileDto>> UpdateMyProfileAsync(UpdateUserProfile dto, string userId)
+        {
+            try
+            {
+                var user = await this._repo.GetByIdAsync(new UserId(userId));
+
+                if (user == null)
+                    return Result<UserProfileDto>.Fail("User not found.");
+
+                // only updates values if user is active 
+                if (user.Active != true)
+                    return Result<UserProfileDto>.Fail("You are trying to update a disabled user.");
+
+                user.ChangeNif(new UserNif(dto.Nif));
+
+                // check if email already exists
+                var userByEmail = await this._repo.GetByEmailAsync(dto.Email);
+
+                if (userByEmail != null && userByEmail.Id != user.Id)
+                    return Result<UserProfileDto>.Fail("Email already exists.");
+
+                user.ChangeEmail(new UserEmail(dto.Email, _emailDomain));
+                user.ChangeName(dto.Name);
+                user.ChangeNif(new UserNif(dto.Nif));
+                user.ChangePhone(new PhoneNumber(dto.Phone));
+
+                // only change password if it is not null
+                if (dto.Password != null)
+                {
+                    var password = new UserPassword(dto.Password, true);  // validates password - throws exception if invalid
+                    var hashedPassword = BCrypt.Net.BCrypt.HashPassword(password.Value, BCrypt.Net.BCrypt.GenerateSalt());
+                    user.ChangePassword(new UserPassword(hashedPassword, false));
+                }
+
+                await this._unitOfWork.CommitAsync();
+
+                var userDto = UserMapper.ToProfileDto(user);
+
+                return Result<UserProfileDto>.Ok(userDto);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<UserProfileDto>.Fail(ex.Message);
             }
         }
 
@@ -241,5 +310,6 @@ namespace Mpt.Services
                 return Result<UserDto>.Fail(ex.Message);
             }
         }
+
     }
 }
