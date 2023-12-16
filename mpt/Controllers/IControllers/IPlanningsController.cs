@@ -6,7 +6,7 @@ namespace Mpt.IControllers
 {
     public interface IPlanningsController
     {
-        Task<ActionResult<PlanningFullDto>> Create(CreatePlanningDto planning);
+        Task<ActionResult<PlanningFullDto>> Create(CreatePlanningDto tasks);
         Task<ActionResult<IEnumerable<PlanningFullDto>>> GetAll();
         Task<ActionResult<PlanningFullDto>> GetById(Guid id);
         Task<ActionResult<string>> Delete(Guid id);

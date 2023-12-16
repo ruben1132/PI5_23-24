@@ -21,14 +21,14 @@ namespace Mpt.Controllers
 
         // POST: api/Planning
         [HttpPost]
-        public async Task<ActionResult<PlanningFullDto>> Create(CreatePlanningDto planning)
+        public async Task<ActionResult<PlanningFullDto>> Create(CreatePlanningDto tasks)
         {
             try
             {
                  // get current user
                 var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
 
-                var createdPlanning = await _service.AddAsync(planning, new Guid(currentUser.Id));
+                var createdPlanning = await _service.AddAsync(tasks, new Guid(currentUser.Id));
 
                 if (createdPlanning.IsFailure)
                 {

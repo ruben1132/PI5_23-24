@@ -18,13 +18,13 @@ namespace Mpt.Mappers
                 );
         }
 
-        public static PlanningFullDto ToDto(Planning planning, List<TaskSimpleDto> tasks)
+        public static PlanningFullDto ToDto(Planning planning, List<TaskSimpleDto> tasks, UserProfileDto user)
         {
             return new PlanningFullDto(
                     planning.Id.Value,
                     tasks,
                     planning.Cost,
-                    planning.UserId.Value
+                    user
                 );
         }
 

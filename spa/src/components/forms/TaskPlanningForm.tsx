@@ -56,6 +56,7 @@ export default function TaskPlanningForm(props: Props) {
         item.id = props.item.value?.id;
         item.tasks = tasks.map((item) => item.id);
 
+        console.log(item.tasks )
         // submit data
         let res = await planningForm.submit(item);
 
