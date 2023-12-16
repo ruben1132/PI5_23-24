@@ -1,11 +1,11 @@
 namespace Mpt.Dtos
 {
-    public class UserIsApprovedDto
+    public class IsApprovedDto
     {
 
         public string IsApproved { get; set; }
 
-        public UserIsApprovedDto( string isApproved )
+        public IsApprovedDto( string isApproved )
         {
             this.IsApproved = isApproved;
         }

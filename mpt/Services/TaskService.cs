@@ -96,22 +96,19 @@ namespace Mpt.Services
 
         }
 
-        public async Task<Result<TaskSimpleDto>> UpdateAsync(TaskDto dto)
+        public async Task<Result<TaskSimpleDto>> UpdateIsApprovedAsync(Guid id, IsApprovedDto isApproved)
         {
             try
             {
-                var task = await this._repo.GetByIdAsync(new TaskId(dto.Id));
+                var task = await this._repo.GetByIdAsync(new TaskId(id));
 
                 if (task == null)
                     return Result<TaskSimpleDto>.Fail("Task not found.");
 
-                if (task.IsApproved == ApprovalStatus.approved)
+                if (isApproved.IsApproved == ApprovalStatus.approved.ToString())
                     task.AproveTask();
                 else
                     task.DisaproveTask();
-
-                if (task.IsCompleted)
-                    task.CompleteTask();
 
 
                 await this._unitOfWork.CommitAsync();

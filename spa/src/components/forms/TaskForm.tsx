@@ -114,6 +114,11 @@ export default function TaskForm(props: Props) {
         props.action === 'edit' ? 'PUT' : 'POST',
     );
 
+    const taskFormApproval = useSubmitData(
+        config.mptAPI.baseUrl + config.mptAPI.routes.tasks + '/' + props.item.value?.id,
+        'PATCH',
+    );
+
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
 
@@ -162,7 +167,27 @@ export default function TaskForm(props: Props) {
     };
 
     // TODO: approve/reject a stask
-    const handleUpdateData = async () => {};
+    const handleUpdateData = async (isApproved: string) => {
+        setEnabled(false);
+
+        let item = {
+            isApproved: isApproved,
+        };
+
+        // submit data
+        let res = await taskFormApproval.submit(item);
+
+        if (res.error) {
+            setEnabled(true);
+            notify.error(res.error);
+            return;
+        }
+
+        props.reFetchData(); // refresh data
+        setEnabled(true); // enable buttons
+        notify.success(`Task ${isApproved} successfully`); // show alert
+        props.close(); // close modal
+    };
 
     const handleParse = (): { originParsed: string; destinyParsed: string } => {
         let formatedOrig = '';
@@ -650,10 +675,18 @@ export default function TaskForm(props: Props) {
                         {props.action === 'edit' ? (
                             user?.role.name !== userRole.UTENTE && (
                                 <>
-                                    <Button type="button" variant="success" onClick={props.close}>
+                                    <Button
+                                        type="button"
+                                        variant="success"
+                                        onClick={() => handleUpdateData(config.states.APPROVED)}
+                                    >
                                         Approve
                                     </Button>{' '}
-                                    <Button type="button" variant="danger" onClick={props.close}>
+                                    <Button
+                                        type="button"
+                                        variant="danger"
+                                        onClick={() => handleUpdateData(config.states.REJECTED)}
+                                    >
                                         Reject
                                     </Button>
                                 </>

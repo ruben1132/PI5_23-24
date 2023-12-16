@@ -256,7 +256,7 @@ namespace Mpt.Services
             }
         }
 
-        public async Task<Result<UserDto>> UpdateIsApprovedAsync(Guid id, UserIsApprovedDto u)
+        public async Task<Result<UserDto>> UpdateIsApprovedAsync(Guid id, IsApprovedDto u)
         {
             try
             {

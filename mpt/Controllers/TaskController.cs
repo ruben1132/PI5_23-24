@@ -73,14 +73,14 @@ namespace Mpt.Controllers
             }
         }
 
-        // PUT: api/Task/
+        // PATCH: api/Task/
         [Authorize(Roles = "gestor tarefas")]
-        [HttpPut]
-        public async Task<ActionResult<TaskDto>> Update(TaskDto Task)
+        [HttpPatch("{id}")]
+        public async Task<ActionResult<TaskSimpleDto>> ApproveReject(Guid id, IsApprovedDto isApproved)
         {
             try
             {
-                var updatedTask = await _service.UpdateAsync(Task);
+                var updatedTask = await _service.UpdateIsApprovedAsync(id, isApproved);
 
                 if (updatedTask.IsFailure)
                 {
