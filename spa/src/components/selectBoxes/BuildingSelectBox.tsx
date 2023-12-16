@@ -4,6 +4,7 @@ import { Building } from '@/models/Building';
 import { Form } from 'react-bootstrap';
 
 interface Props {
+    disabled?: boolean;
     data: Building[];
     setValue: (val: string) => void;
     selectedValue?: string;
@@ -61,7 +62,7 @@ const BuildingSelectBox = (props: Props) => {
 
     return (
       
-        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='building-sb'>
+        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='building-sb' disabled={props.disabled}>
 
             {props?.selectedValue && <option defaultChecked={true}>{selectedValue.code + " - " + selectedValue.name}</option>}
 

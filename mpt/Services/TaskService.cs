@@ -44,7 +44,7 @@ namespace Mpt.Services
             }
         }
 
-        public async Task<Result<List<TaskSimpleDto>>> GetMyTasksAsync(string token, string type, string? userId, string? isApproved = null)
+        public async Task<Result<List<TaskSimpleDto>>> GetMyTasksAsync(string token, string? type, string? userId, string? isApproved = null)
         {
             try
             {

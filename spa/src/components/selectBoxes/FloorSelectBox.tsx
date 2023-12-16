@@ -32,7 +32,7 @@ const FloorSelectBox = (props: Props) => {
     if (!props.data) {
         return (
             <Form.Select>
-                <option>No data</option>
+                 <option>No data</option>
             </Form.Select>
         );
     }

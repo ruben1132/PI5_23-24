@@ -12,9 +12,6 @@ import Row from 'react-bootstrap/Row';
 import config from '../../../../config';
 import { userRole } from '../../../../config';
 
-// auth context
-import { useAuth } from '@/context/AuthContext';
-
 // custom hooks
 import { useFetchData, useFormStringInput } from '@/util/customHooks';
 import TaskTypeSelectBox from '@/components/selectBoxes/TaskTypeSelectBox';
@@ -22,12 +19,16 @@ import CloseButton from 'react-bootstrap/CloseButton';
 import StateSelectBox from '@/components/selectBoxes/StateSelectBox';
 import UserSelectBox from '@/components/selectBoxes/UserSelectBox';
 
+// auth context
+import { useAuth } from '@/context/AuthContext';
+
 interface Props {
     setParams: (params: string) => void;
 }
 
 export default function TaskSearchForm(props: Props) {
-    const { user } = useAuth();
+// auth context
+const { user } = useAuth();
 
     // data fetch
     const taskTypeDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.tasktypes);
@@ -45,7 +46,7 @@ export default function TaskSearchForm(props: Props) {
         let isApprovedString = '';
         if (taskIsApproved.value !== config.states.ALL) isApprovedString = `&isApproved=${taskIsApproved.value}`;
 
-        let taskTypeName = taskTypeDataFetch.data?.find((t) => t.id === taskType.value)?.name;
+        let taskTypeName = taskTypeDataFetch.data?.find((t) => t.id === taskType.value)?.name;            
 
         if (user?.role.name === userRole.UTENTE) {
             return `${config.mptAPI.routes.mytasks}?type=${taskTypeName ?? ""}${isApprovedString}`;
@@ -56,7 +57,7 @@ export default function TaskSearchForm(props: Props) {
     useEffect(() => {
         const queryParams = buildQueryParams();
         props.setParams(queryParams);
-    }, [taskType.value, taskIsApproved.value, userSelected.value]);
+    }, [taskType.value, taskIsApproved.value, userSelected.value, user?.role.name]);
 
 
     return (

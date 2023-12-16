@@ -17,7 +17,10 @@ import { faCircleInfo, faClipboard } from '@fortawesome/free-solid-svg-icons';
 import { notify } from '@/components/notification/Notification';
 
 // config
-import config from '../../../config';
+import config, { userRole } from '../../../config';
+
+// auth context
+import { useAuth } from '@/context/AuthContext';
 
 // custom hooks
 import {
@@ -54,6 +57,10 @@ interface Props {
     close: () => void;
 }
 export default function TaskForm(props: Props) {
+    // auth context
+    const { user } = useAuth();
+
+    // data fetchers
     const roomsDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms);
     const passagesDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages);
     const elevatorsDataFecher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.elevators);
@@ -119,7 +126,7 @@ export default function TaskForm(props: Props) {
         if (taskType.value === 'Surveillance') {
             item = {
                 phoneNumber: phoneNumber.value,
-                floorCode: floor.value,
+                floorId: floor.value,
             };
         } else {
             const { originParsed, destinyParsed } = handleParse();
@@ -244,7 +251,7 @@ export default function TaskForm(props: Props) {
                 return (
                     <PassageSelectBox
                         disabled={props.action === 'edit'}
-                        selectedValue={origin.value}
+                        selectedValue={origin.value ?? passagesDataFecher.data[0].id}
                         setValue={origin.handleLoad}
                         data={passagesDataFecher.data}
                         isError={passagesDataFecher.isError}
@@ -286,7 +293,7 @@ export default function TaskForm(props: Props) {
                 return (
                     <PassageSelectBox
                         disabled={props.action === 'edit'}
-                        selectedValue={destiny.value}
+                        selectedValue={destiny.value ?? passagesDataFecher.data[0].id}
                         setValue={destiny.handleLoad}
                         data={passagesDataFecher.data}
                         isError={passagesDataFecher.isError}
@@ -326,6 +333,14 @@ export default function TaskForm(props: Props) {
         }
     }, [buildingsDataFecher.data]);
 
+    // when rooms load, select the first one
+    useEffect(() => {
+        if (roomsDataFecher.data && roomsDataFecher.data.length > 0) {
+            origin.handleLoad(roomsDataFecher.data[0].id);
+            destiny.handleLoad(roomsDataFecher.data[1]?.id ?? roomsDataFecher.data[0].id);
+        }
+    }, [roomsDataFecher.data]);
+
     return (
         <Form>
             <Row>
@@ -358,23 +373,28 @@ export default function TaskForm(props: Props) {
             {taskType.value === 'Surveillance' ? (
                 <>
                     <Row>
-                        <Col sm={6}>
-                            <Form.Group className="mb-6">
-                                <Form.Label htmlFor="select">Building</Form.Label>
-                                <BuildingSelectBox
-                                    data={buildingsDataFecher.data}
-                                    setValue={building.handleLoad}
-                                    selectedValue={building.value}
-                                    isLoading={buildingsDataFecher.isLoading}
-                                    isError={buildingsDataFecher.isError}
-                                    data-testid="building-sb"
-                                />
-                            </Form.Group>
-                        </Col>
+                        {props.action !== 'edit' && (
+                            <Col sm={6}>
+                                <Form.Group className="mb-6">
+                                    <Form.Label htmlFor="select">Building</Form.Label>
+                                    <BuildingSelectBox
+                                        disabled={props.action === 'edit'}
+                                        data={buildingsDataFecher.data}
+                                        setValue={building.handleLoad}
+                                        selectedValue={building.value}
+                                        isLoading={buildingsDataFecher.isLoading}
+                                        isError={buildingsDataFecher.isError}
+                                        data-testid="building-sb"
+                                    />
+                                </Form.Group>
+                            </Col>
+                        )}
+
                         <Col sm={6}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Floor</Form.Label>
                                 <FloorSelectBox
+                                    disabled={props.action === 'edit'}
                                     setValue={floor.handleLoad}
                                     data={floorsDataFecher.data}
                                     isError={floorsDataFecher.isError}
@@ -404,6 +424,7 @@ export default function TaskForm(props: Props) {
                                     type="text"
                                     defaultValue={phoneNumber.value}
                                     onChange={phoneNumber.handleChange}
+                                    disabled={props.action === 'edit'}
                                 />
                             </Form.Group>
                         </Col>
@@ -627,14 +648,16 @@ export default function TaskForm(props: Props) {
                 <Col sm={12}>
                     <Form.Group className="mb-12">
                         {props.action === 'edit' ? (
-                            <>
-                                <Button type="button" variant="success" onClick={props.close}>
-                                    Approve
-                                </Button>{' '}
-                                <Button type="button" variant="danger" onClick={props.close}>
-                                    Reject
-                                </Button>
-                            </>
+                            user?.role.name !== userRole.UTENTE && (
+                                <>
+                                    <Button type="button" variant="success" onClick={props.close}>
+                                        Approve
+                                    </Button>{' '}
+                                    <Button type="button" variant="danger" onClick={props.close}>
+                                        Reject
+                                    </Button>
+                                </>
+                            )
                         ) : (
                             <Button
                                 variant="success"

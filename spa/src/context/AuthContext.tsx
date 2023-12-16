@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import axios from 'axios';
 import config from '../../config';
 import { UserWithRole } from '../models/User';
+import { redirect } from 'next/navigation';
 
 interface LoginResponse {
     content: string | UserWithRole;
@@ -24,12 +25,15 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [user, setUser] = useState<UserWithRole | null>(null);
 
-    const fetchSession = async () => {
+    const fetchSession = async (): Promise<boolean> => {
         const response = await request(config.authAPI.baseUrl + config.authAPI.routes.session, 'GET');
 
         if (response) {
             setUser(response.content as UserWithRole);
+            return true;
         }
+
+        return false;
     };
 
     const login = async (email: string, password: string): Promise<string> => {
@@ -56,7 +60,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     useEffect(() => {
-        fetchSession();
+        const sesh = async () => {
+            const result = await fetchSession();
+
+            if (!result) redirect('/login');
+        };
+
+        sesh();
     }, []);
 
     return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
@@ -79,9 +89,16 @@ const request = async (url: string, method: string, data?: any): Promise<LoginRe
 
         const response: AxiosResponse = await axios(config);
 
+        if (response.status === 200) {
+            return {
+                content: response.data,
+                value: true,
+            };
+        }
+
         return {
-            content: response.data,
-            value: true,
+            content: 'error',
+            value: false,
         };
     } catch (error: any) {
         console.log(error.response.data.error);

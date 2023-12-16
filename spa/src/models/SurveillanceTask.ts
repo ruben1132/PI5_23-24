@@ -7,5 +7,5 @@ export interface SurveillanceTask extends Task {
 
 export interface CreateSurveillanceTask{
     phoneNumber: string;
-    floorCode: string;
+    floorId: string;
 }

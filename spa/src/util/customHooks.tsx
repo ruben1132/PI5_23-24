@@ -169,7 +169,7 @@ export function useSubmitData(route: string, type: string) {
                 return { data: responseData, error: null };
             }
         } catch (res: any) {            
-            const errorMessage = res.response.data?.error || res.response.data?.errors?.message || 'An error occurred';
+            const errorMessage = res.response.data?.error || res.response.data?.errors?.message ||res.response.data?.errors || 'An error occurred';
             return { data: null, error: errorMessage };
         }
     }
