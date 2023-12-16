@@ -1,14 +1,14 @@
-import PageContent from '@/components/pageContent/PageContent';
 import config from '../../../../config';
+import PageContentTask from '@/components/pageContent/PageContentTask';
 
 export default async function Tasks() {
     return (
         <div>
             <p>Tasks</p>
 
-            <PageContent
+            <PageContentTask
                 type="task"
-                routeToFetch={""}
+                routeToFetch={config.mptAPI.baseUrl + config.mptAPI.routes.tasks}
             />
         </div>
     );

@@ -1,4 +1,4 @@
-const userRole = {
+export const userRole = {
     ADMIN: 'admin',
     GESTOR_FROTA: 'gestor frota',
     GESTOR_CAMPUS: 'gestor campus',
@@ -93,6 +93,8 @@ export default {
         },
     ],
 
+    states: ['pending', 'approved', 'rejected', 'all'],
+
     mgiAPI: {
         baseUrl:
             process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MGI_API_URL : 'http://localhost:2225/api/',
@@ -140,6 +142,7 @@ export default {
             users: 'users?isSysUser=false',
             sysusers: 'users?isSysUser=true',
             tasks: 'tasks',
+            mytasks: '/my',
             taskSurveillance: 'task/surveillance',
             taskPickupdelivery: 'task/pickupdelivery',
             roles: 'roles/',
@@ -188,5 +191,5 @@ export default {
 
     cookieName: 'robdronego_authCookie',
 
-    emailDomain: "isep.ipp.pt"
+    emailDomain: 'isep.ipp.pt',
 };

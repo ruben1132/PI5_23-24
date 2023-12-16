@@ -13,6 +13,7 @@ import { RenderFilteredSearch } from '../forms/search/RenderFilteredSearch';
 interface Props {
     type: string;
     routeToFetch: string;
+    showAddButton?: boolean;
 }
 
 function ContentTable(props: Props) {
@@ -38,7 +39,7 @@ function ContentTable(props: Props) {
 
     const addButton =
         // dont render for page users
-        props.type === 'user' ? null : (
+        props.type === 'user' || props.showAddButton === false ? null : (
             <Button variant="success" onClick={handleAddButtonClick} data-testid="open-modal">
                 Add {props.type}
             </Button>
@@ -75,6 +76,7 @@ function ContentTable(props: Props) {
             {contentModal.show && modal}
 
             {addButton}
+
             <br />
             <br />
             <Table striped>

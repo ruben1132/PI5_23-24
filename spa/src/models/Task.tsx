@@ -1,22 +1,16 @@
 import { UserTaskInfo } from "./UserTaskInfo";
 
-export interface Task {
+export interface TaskWithUser {
     id: string;
     user: UserTaskInfo;
     taskType: string;
-    path: string;
-    robotMovements: [
-        [
-            {
-                x: number;
-                y: number;
-            },
-        ],
-    ];
-    originType: string;
-    origin: string;
-    destinyType: string;
-    destiny: string;
+    isCompleted?: boolean;
+    isApproved?: boolean;
+}
+
+export interface Task {
+    id: string;
+    taskType: string;
     isCompleted?: boolean;
     isApproved?: boolean;
 }

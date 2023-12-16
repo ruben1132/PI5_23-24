@@ -13,37 +13,22 @@ import config from '../../../../config';
 
 // custom hooks
 import { useFetchData, useFormStringInput } from '@/util/customHooks';
+import StateSelectBox from '@/components/selectBoxes/StateSelectBox';
 
 interface Props {
     setParams: (params: string) => void;
 }
 
 export default function UserSearchForm(props: Props) {
-    const taskTypeDataFetch = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.tasktypes);
 
     // inputs
     const isApproved = useFormStringInput('');
 
     const buildQueryParams = () => {
-        switch (isApproved.value) {
-            case 'needsApproval':
-                return ``;
-            case 'rejected':
-                return `&isApproved=${false}`;
-            case 'approved':
-                return `&isApproved=${true}`;
-            case 'all':
-                return `&all=true`;
-            default:
-                return ``;
-        }
-    
-        
-    };
+        if(isApproved.value !== config.states[3])
+            return `&isApproved=${isApproved.value}`
 
-
-    const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        isApproved.handleLoad(event.target.value);
+        return '';
     };
 
     useEffect(() => {
@@ -51,9 +36,9 @@ export default function UserSearchForm(props: Props) {
         props.setParams(queryParams);
     }, [isApproved.value]);
 
-    // by default define as requesting approval
+    // by default define as pending approval
     useEffect(() => {
-        isApproved.handleLoad('needsApproval');
+        isApproved.handleLoad(config.states[0]);
     }, []);
 
     return (
@@ -61,12 +46,7 @@ export default function UserSearchForm(props: Props) {
             <Row className="justify-content-md-center">
                 <Col sm={4}>
                     <Form.Group className="mb-4">
-                        <Form.Select onChange={handleChange}>
-                            <option value="needsApproval" defaultChecked={true}>Requesting approval</option>
-                            <option value="rejected">Rejected</option>
-                            <option value="approved">Approved</option>
-                            <option value="all">all</option>
-                        </Form.Select>
+                        <StateSelectBox setValue={isApproved.handleLoad} selectedValue={isApproved.value} />
                     </Form.Group>
                 </Col>
             </Row>
