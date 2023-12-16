@@ -196,7 +196,7 @@ namespace Mpt.Services
                 if (user == null)
                     return Result<UserDto>.Fail("User not found.");
 
-                if (u.IsApproved)
+                if (u.IsApproved == ApprovalStatus.approved.ToString())
                     user.Approve();
                 else
                     user.Disapprove();

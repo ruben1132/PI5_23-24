@@ -9,7 +9,7 @@ export interface UserWithRole {
     phone: string;
     role: Role;
     active: boolean;
-    isApproved: boolean;
+    isApproved: string;
 }
 
 export interface User {
@@ -21,7 +21,7 @@ export interface User {
     phone: string;
     roleId: string;
     active: boolean;
-    isApproved?: boolean;
+    isApproved: string;
 }
 
 export interface PostUser {

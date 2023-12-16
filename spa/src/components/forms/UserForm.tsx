@@ -45,11 +45,12 @@ export default function UserForm(props: Props) {
     const [enabled, setEnabled] = useState<boolean>(true);
 
     // updates the user and refreshes the table
-    const handleSubmitData = async (isApproved : boolean) => {
+    const handleSubmitData = async (isApproved : string) => {
         setEnabled(false);
 
-        // TODO: implementar a parte de aprovar/rejeitar - implmentar endpoint PATCH /users/:id onde receba um DTO apenas com o campo isApproved
-        let item = null
+        let item = {
+            isApproved: isApproved,
+        }
 
         // submit data
         let res = await userForm.submit(item);
@@ -117,7 +118,7 @@ export default function UserForm(props: Props) {
                         <Button
                             id="approve-btn"
                             variant="success"
-                            onClick={()=>{handleSubmitData(true)}}
+                            onClick={()=>{handleSubmitData(config.states[1])}}
                             disabled={!enabled}
                             data-testid="approve-button"
                         >
@@ -126,7 +127,7 @@ export default function UserForm(props: Props) {
                         <Button
                             id="approve-btn"
                             variant="danger"
-                            onClick={()=>{handleSubmitData(false)}}
+                            onClick={()=>{handleSubmitData(config.states[2])}}
                             disabled={!enabled}
                             data-testid="approve-button"
                         >
