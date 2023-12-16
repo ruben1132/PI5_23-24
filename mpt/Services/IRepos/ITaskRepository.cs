@@ -8,5 +8,7 @@ namespace Mpt.IRepositories
 
         Task<List<Mpt.Domain.Tasks.Task>> GetAllFilteredAsync(string? type, string? userId, ApprovalStatus? isApproved);
 
+        Task<List<Mpt.Dtos.TaskWithoutUserDto>> GetTasksWithoutUserInfo(string userId);
+
     }
 }

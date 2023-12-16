@@ -26,5 +26,21 @@ namespace Mpt.Infrastructure.Tasks
 
             return tasks;
         }
+
+        
+        public async Task<List<Mpt.Dtos.TaskWithoutUserDto>> GetTasksWithoutUserInfo(string userId)
+        {
+            var tasks = await this.GetAllAsync();
+            tasks = tasks.Where(t => t.UserId.Value == userId).ToList();
+
+            var tasksWithoutUserInfo = new List<Mpt.Dtos.TaskWithoutUserDto>();
+
+            foreach (var task in tasks)
+            {
+                tasksWithoutUserInfo.Add(new Mpt.Dtos.TaskWithoutUserDto(task.Id.ToString(), task.Path, task.IsCompleted, task.TaskType, task.IsApproved.ToString()));
+            }
+
+            return tasksWithoutUserInfo;
+        }
     }
 }

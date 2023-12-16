@@ -3,6 +3,7 @@ using Mpt.IServices;
 using Mpt.Dtos;
 using Mpt.IControllers;
 using Microsoft.AspNetCore.Authorization;
+using mpt.Dtos.User;
 
 namespace Mpt.Controllers
 {
@@ -69,6 +70,38 @@ namespace Mpt.Controllers
         [AllowAnonymous]
         [HttpGet("profile")]
         public async Task<ActionResult<UserProfileDto>> GetMyProfile()
+        {
+            try
+            {
+                // get current user
+                var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+
+                if (currentUser == null)
+                {
+                    return BadRequest(new { error = "Not authenticated" });
+                }
+
+                var user = await _service.GetByIdAsync(new Guid(currentUser.Id));
+
+                if (user.IsFailure)
+                {
+                    return BadRequest(new { error = user.Error });
+                }
+
+                return Ok(user.GetValue());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+
+        // GET: api/User/allInfo
+        [AllowAnonymous]
+        [HttpGet("allInfo")]
+        public async Task<ActionResult<UserWithTasks>> GetUserAllInfo()
         {
             try
             {

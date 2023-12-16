@@ -8,6 +8,7 @@ using Mpt.Domain.Users;
 using Mpt.IServices;
 using Mpt.Core.Domain;
 using Mpt.Core.Logic;
+using mpt.Dtos.User;
 
 namespace Mpt.Services
 {
@@ -17,6 +18,7 @@ namespace Mpt.Services
         private readonly IUnitOfWork _unitOfWork;
         private readonly IUserRepository _repo;
         private readonly IRoleRepository _roleRepo;
+        private readonly ITaskRepository _taskRepo;
         private readonly string _emailDomain;
 
         public UserService(IConfiguration config, IUnitOfWork unitOfWork, IUserRepository repo, IRoleRepository roleRepo)
@@ -61,6 +63,38 @@ namespace Mpt.Services
             {
                 Console.WriteLine(ex.Message);
                 return Result<List<UserWithRoleDto>>.Fail(ex.Message);
+            }
+        }
+
+
+
+        public async Task<Result<List<UserWithTasks>>> GetUserAllInfo(Guid id)
+        {
+            try
+            {
+                var user = await this._repo.GetByIdAsync(new UserId(id));
+
+                if (user == null)
+                    return Result<List<UserWithTasks>>.Fail("User not found.");
+
+                var userDto = UserMapper.ToDto(user);
+
+                var tasks = await this._taskRepo.GetTasksWithoutUserInfo(user.Id.Value);
+
+                var tasksDto = new List<TaskWithoutUserDto>();
+                foreach (var task in tasks)
+                {
+                    tasksDto.Add(task);
+                }
+
+                var userWithTasks = new UserWithTasks(userDto, tasksDto);
+
+                return Result<List<UserWithTasks>>.Ok(new List<UserWithTasks>() { userWithTasks });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<List<UserWithTasks>>.Fail(ex.Message);
             }
         }
 
