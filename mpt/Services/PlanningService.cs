@@ -82,14 +82,14 @@ namespace Mpt.Services
             try
             {
                 // get tasks
-                var tasks = await this._taskRepo.GetByIds(dto.Tasks);
+                var tasks = await this._taskRepo.GetByIdsAsync(dto.Tasks);
                 
                 // TODO: call MP API
                 // var tasksDto = await this.GetPlanningAsync(tasks);
                 // if (tasksDto.IsFailure)
                 //     return Result<PlanningFullDto>.Fail(tasksDto.Error);
 
-                var planning = PlanningMapper.ToDomain(dto, 0);
+                var planning = PlanningMapper.ToDomain(dto,userId.ToString(), 0);
 
                 // Create PlanningTasks and add them to the Planning
                 int sequence = 0;

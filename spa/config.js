@@ -142,13 +142,13 @@ export default {
         baseUrl:
             process.env.NODE_ENV === 'production' ? process.env.NEXT_PUBLIC_MPT_API_URL : 'http://localhost:5095/api/',
         routes: {
-            planning: 'planning/',
-            planningFindPath: 'planning/findpath',
+            plannings: 'plannings/',
             usersmain: 'users/',
             userprofile: 'users/profile',
             users: 'users?isSysUser=false',
             sysusers: 'users?isSysUser=true',
             tasks: 'tasks',
+            tasksapproved: 'tasks?isApproved=approved',
             mytasks: '/my',
             taskSurveillance: 'tasks/surveillance',
             taskPickupdelivery: 'tasks/pickupdelivery',

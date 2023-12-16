@@ -28,11 +28,11 @@ namespace Mpt.Mappers
                 );
         }
 
-        public static Planning ToDomain(CreatePlanningDto dto, int cost)
+        public static Planning ToDomain(CreatePlanningDto dto, string userId, int cost)
         {
             return new Planning(
                     cost,
-                    new UserId(dto.UserId)
+                    new UserId(userId)
                 );
         }
     }
