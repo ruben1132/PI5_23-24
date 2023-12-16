@@ -232,6 +232,7 @@ export default function TaskForm(props: Props) {
             case 'room':
                 return (
                     <RoomSelectBox
+                        disabled={props.action === 'edit'}
                         selectedValue={origin.value}
                         setValue={origin.handleLoad}
                         data={roomsDataFecher.data}
@@ -242,6 +243,7 @@ export default function TaskForm(props: Props) {
             case 'passage':
                 return (
                     <PassageSelectBox
+                        disabled={props.action === 'edit'}
                         selectedValue={origin.value}
                         setValue={origin.handleLoad}
                         data={passagesDataFecher.data}
@@ -252,6 +254,7 @@ export default function TaskForm(props: Props) {
             case 'elevator':
                 return (
                     <ElevatorSelectBox
+                        disabled={props.action === 'edit'}
                         selectedValue={origin.value ?? elevatorsDataFecher.data[0].id}
                         setValue={origin.handleLoad}
                         setObj={setOrigElevator}
@@ -271,6 +274,7 @@ export default function TaskForm(props: Props) {
             case 'room':
                 return (
                     <RoomSelectBox
+                        disabled={props.action === 'edit'}
                         selectedValue={destiny.value}
                         setValue={destiny.handleLoad}
                         data={roomsDataFecher.data}
@@ -281,6 +285,7 @@ export default function TaskForm(props: Props) {
             case 'passage':
                 return (
                     <PassageSelectBox
+                        disabled={props.action === 'edit'}
                         selectedValue={destiny.value}
                         setValue={destiny.handleLoad}
                         data={passagesDataFecher.data}
@@ -291,6 +296,7 @@ export default function TaskForm(props: Props) {
             case 'elevator':
                 return (
                     <ElevatorSelectBox
+                        disabled={props.action === 'edit'}
                         selectedValue={destiny.value ?? elevatorsDataFecher.data[0].id}
                         setValue={destiny.handleLoad}
                         setObj={setDestElevator}
@@ -326,25 +332,27 @@ export default function TaskForm(props: Props) {
                 <Col sm={6}>
                     <Form.Group className="mb-6">
                         <Form.Label htmlFor="select">Task type</Form.Label>
-                        <Form.Select onChange={taskType.handleChange}>
-                            <option defaultChecked={true}>Select a type</option>
+                        <Form.Select onChange={taskType.handleChange} disabled={props.action === 'edit'}>
+                            <option defaultChecked={true}>{props.item?.value?.taskType ?? 'Select a type'}</option>
                             <option value={'Surveillance'}>Surveillance</option>
                             <option value={'PickupDelivery'}>Pickup & Delivery</option>
                         </Form.Select>
                     </Form.Group>
                 </Col>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Algorithm</Form.Label>
-                        <Form.Select onChange={algorith.handleChange}>
-                            <option defaultChecked={true}>Select a algotithm</option>
-                            <option value={'astar'}>A*</option>
-                            <option value={'dfs'}>Depth-first search </option>
-                            <option value={'bfs'}>Breadth-first search </option>
-                            <option value={'bdfs'}>Better Depth-first search</option>
-                        </Form.Select>
-                    </Form.Group>
-                </Col>
+                {props.action === 'add' && (
+                    <Col sm={6}>
+                        <Form.Group className="mb-6">
+                            <Form.Label htmlFor="select">Algorithm</Form.Label>
+                            <Form.Select onChange={algorith.handleChange}>
+                                <option defaultChecked={true}>Select a algotithm</option>
+                                <option value={'astar'}>A*</option>
+                                <option value={'dfs'}>Depth-first search </option>
+                                <option value={'bfs'}>Breadth-first search </option>
+                                <option value={'bdfs'}>Better Depth-first search</option>
+                            </Form.Select>
+                        </Form.Group>
+                    </Col>
+                )}
             </Row>
             <br />
             {taskType.value === 'Surveillance' ? (
@@ -407,8 +415,10 @@ export default function TaskForm(props: Props) {
                         <Col sm={6}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Type of Origin</Form.Label>
-                                <Form.Select onChange={handleChangeOriginType}>
-                                    <option defaultChecked={true}>Select a type</option>
+                                <Form.Select onChange={handleChangeOriginType} disabled={props.action === 'edit'}>
+                                    <option defaultChecked={true}>
+                                        {(props.item?.value as PickupDeliveryTask)?.originType ?? 'Select a type'}
+                                    </option>
                                     <option value={'room'}>Room</option>
                                     <option value={'passage'}>Passage</option>
                                     <option value={'elevator'}>Elevator</option>
@@ -418,8 +428,10 @@ export default function TaskForm(props: Props) {
                         <Col sm={6}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Type of Destiny</Form.Label>
-                                <Form.Select onChange={handleChangeDestinyType}>
-                                    <option defaultChecked={true}>Select a type</option>
+                                <Form.Select onChange={handleChangeDestinyType} disabled={props.action === 'edit'}>
+                                    <option defaultChecked={true}>
+                                        {(props.item?.value as PickupDeliveryTask)?.destinyType ?? 'Select a type'}
+                                    </option>
                                     <option value={'room'}>Room</option>
                                     <option value={'passage'}>Passage</option>
                                     <option value={'elevator'}>Elevator</option>
@@ -437,7 +449,7 @@ export default function TaskForm(props: Props) {
                         </Col>
                         <Col sm={6}>
                             <Form.Group className="mb-6">
-                                <Form.Label htmlFor="select">Destinity</Form.Label>
+                                <Form.Label htmlFor="select">Destiny</Form.Label>
                                 <DestinySelectBox />
                             </Form.Group>
                         </Col>
@@ -449,6 +461,7 @@ export default function TaskForm(props: Props) {
                                 <Form.Group className="mb-6">
                                     <Form.Label htmlFor="select">Floor</Form.Label>
                                     <FloorSelectBox
+                                        disabled={props.action === 'edit'}
                                         selectedValue={origFloor.value}
                                         setValue={origFloor.handleLoad}
                                         data={origElevator.floorsAllowed}
@@ -463,6 +476,7 @@ export default function TaskForm(props: Props) {
                                 <Form.Group className="mb-6">
                                     <Form.Label htmlFor="select">Floor</Form.Label>
                                     <FloorSelectBox
+                                        disabled={props.action === 'edit'}
                                         selectedValue={destFloor.value}
                                         setValue={destFloor.handleLoad}
                                         data={destElevator.floorsAllowed}
@@ -482,6 +496,7 @@ export default function TaskForm(props: Props) {
                                     type="text"
                                     defaultValue={pickupPersonName.value}
                                     onChange={pickupPersonName.handleChange}
+                                    disabled={props.action === 'edit'}
                                 />
                             </Form.Group>
                         </Col>
@@ -504,6 +519,7 @@ export default function TaskForm(props: Props) {
                                     type="text"
                                     defaultValue={pickupPersonPhoneNumber.value}
                                     onChange={pickupPersonPhoneNumber.handleChange}
+                                    disabled={props.action === 'edit'}
                                 />
                             </Form.Group>
                         </Col>
@@ -517,6 +533,7 @@ export default function TaskForm(props: Props) {
                                     type="text"
                                     defaultValue={deliveryPersonName.value}
                                     onChange={deliveryPersonName.handleChange}
+                                    disabled={props.action === 'edit'}
                                 />
                             </Form.Group>
                         </Col>
@@ -539,6 +556,7 @@ export default function TaskForm(props: Props) {
                                     type="text"
                                     defaultValue={deliveryPersonPhoneNumber.value}
                                     onChange={deliveryPersonPhoneNumber.handleChange}
+                                    disabled={props.action === 'edit'}
                                 />
                             </Form.Group>
                         </Col>
@@ -553,6 +571,7 @@ export default function TaskForm(props: Props) {
                                     type="text"
                                     defaultValue={taskDescription.value}
                                     onChange={taskDescription.handleChange}
+                                    disabled={props.action === 'edit'}
                                 />
                             </Form.Group>
                         </Col>
@@ -584,7 +603,17 @@ export default function TaskForm(props: Props) {
                                             style={{ cursor: 'pointer', backgroundColor: '#e9e9e9' }}
                                             readOnly
                                         />
-                                         <FontAwesomeIcon icon={faClipboard} style={{ position: 'absolute', cursor: 'pointer', right: '5px', top: '50%', transform: 'translateY(-50%)', color: '#555' }} />
+                                        <FontAwesomeIcon
+                                            icon={faClipboard}
+                                            style={{
+                                                position: 'absolute',
+                                                cursor: 'pointer',
+                                                right: '5px',
+                                                top: '50%',
+                                                transform: 'translateY(-50%)',
+                                                color: '#555',
+                                            }}
+                                        />
                                     </div>
                                 </Form.Group>
                             </Col>

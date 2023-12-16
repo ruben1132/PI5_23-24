@@ -22,10 +22,12 @@ interface Props {
 export default function UserSearchForm(props: Props) {
 
     // inputs
-    const isApproved = useFormStringInput('');
+    const isApproved = useFormStringInput(config.states.ALL);
 
     const buildQueryParams = () => {
-        if(isApproved.value !== config.states[3])
+        console.log(config.states.ALL);
+        
+        if(isApproved.value !== config.states.ALL)
             return `&isApproved=${isApproved.value}`
 
         return '';
@@ -35,11 +37,6 @@ export default function UserSearchForm(props: Props) {
         const queryParams = buildQueryParams();
         props.setParams(queryParams);
     }, [isApproved.value]);
-
-    // by default define as pending approval
-    useEffect(() => {
-        isApproved.handleLoad(config.states[0]);
-    }, []);
 
     return (
         <Form>

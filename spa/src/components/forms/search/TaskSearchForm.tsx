@@ -37,13 +37,13 @@ export default function TaskSearchForm(props: Props) {
 
     // inputs
     const taskType = useFormStringInput(null);
-    const taskIsApproved = useFormStringInput(config.states[0]);
+    const taskIsApproved = useFormStringInput('');
     const userSelected = useFormStringInput('');
 
     const buildQueryParams = () => {
         
         let isApprovedString = '';
-        if (taskIsApproved.value !== config.states[3]) isApprovedString = `&isApproved=${taskIsApproved.value}`;
+        if (taskIsApproved.value !== config.states.ALL) isApprovedString = `&isApproved=${taskIsApproved.value}`;
 
         let taskTypeName = taskTypeDataFetch.data?.find((t) => t.id === taskType.value)?.name;
 
@@ -73,7 +73,7 @@ export default function TaskSearchForm(props: Props) {
                     </Form.Group>
                 </Col>
                 <Col sm={3}>
-                    <StateSelectBox setValue={taskIsApproved.handleLoad} selectedValue={taskIsApproved.value} />
+                    <StateSelectBox setValue={taskIsApproved.handleLoad} />
                 </Col>
                 {user?.role.name !== userRole.UTENTE && (
                     <Col sm={3}>

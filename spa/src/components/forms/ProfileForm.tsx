@@ -183,7 +183,7 @@ export default function ProfileForm() {
                         >
                             Update
                         </Button>
-                        {user.role.name === userRole.UTENTE && (
+                        {user?.role.name === userRole.UTENTE && (
                             <>
                                 {' | '}
                                 <Button variant="info" onClick={handleDeleteData}>

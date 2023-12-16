@@ -32,7 +32,7 @@ const PageContentTask = (props: Props) => {
             <TaskSearchForm setParams={setQueryParms} />
             <br />
 
-            <ContentTable type={props.type} routeToFetch={route} showAddButton={user?.role.name !== userRole.UTENTE}/>
+            <ContentTable type={props.type} routeToFetch={route} showAddButton={user?.role.name === userRole.UTENTE}/>
         </div>
     );
 };

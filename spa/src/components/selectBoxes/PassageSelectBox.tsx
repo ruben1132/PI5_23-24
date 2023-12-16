@@ -4,6 +4,7 @@ import { PassageWithFloor } from '@/models/Passage';
 import { Form } from 'react-bootstrap';
 
 interface Props {
+    disabled?: boolean;
     data: PassageWithFloor[];
     setValue: (val: string) => void;
     selectedValue?: string;
@@ -58,7 +59,7 @@ const PassageSelectBox = (props: Props) => {
     };
 
     return (
-        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='passage-sb'>
+        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='passage-sb' disabled={props.disabled}>
             {props?.selectedValue && <option defaultChecked={true}>{getSelectedValue().designation}</option>}
 
             {filteredSelectBox?.map((item: PassageWithFloor) => (

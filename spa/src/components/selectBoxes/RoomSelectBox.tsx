@@ -4,6 +4,7 @@ import { RoomWithFloor } from '@/models/Room';
 import { Form } from 'react-bootstrap';
 
 interface Props {
+    disabled?: boolean;
     data: RoomWithFloor[];
     setValue: (val: string) => void;
     selectedValue?: string;
@@ -58,7 +59,7 @@ const RoomSelectBox = (props: Props) => {
     };
 
     return (
-        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='room-sb'>
+        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='room-sb' disabled={props.disabled}>
             {props?.selectedValue && <option defaultChecked={true}>{getSelectedValue().number}</option>}
 
             {filteredSelectBox?.map((item: RoomWithFloor) => (

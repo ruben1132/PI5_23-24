@@ -4,6 +4,7 @@ import { Floor, FloorWithBuilding } from '@/models/Floor';
 import { Form } from 'react-bootstrap';
 
 interface Props {
+    disabled?: boolean;
     data: FloorWithBuilding[] | Floor[];
     setValue?: (val: string) => void;
     selectedValue?: string;
@@ -57,7 +58,7 @@ const FloorSelectBox = (props: Props) => {
     };
 
     return (
-        <Form.Select onChange={props.customHandleChange ?? handleChange} id='floor-sb'>
+        <Form.Select onChange={props.customHandleChange ?? handleChange} id='floor-sb' disabled={props.disabled}>
             {props.selectedValue ? ( 
                 
                 <option value={props.selectedValue} selected>

@@ -93,7 +93,13 @@ export default {
         },
     ],
 
-    states: ['pending', 'approved', 'rejected', 'all'],
+    statesArray: ['all', 'pending', 'approved', 'rejected'],
+    states: {
+        ALL: 'all',
+        PENDING: 'pending',
+        APPROVED: 'approved',
+        REJECTED: 'rejected',
+    },
 
     mgiAPI: {
         baseUrl:
