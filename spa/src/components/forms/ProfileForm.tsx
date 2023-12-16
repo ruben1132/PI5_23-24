@@ -33,6 +33,12 @@ export default function ProfileForm() {
     // auth context
     const { user } = useAuth();
 
+    // console.log(user);
+
+    const getInfo = useFetchData(config.mptAPI.baseUrl + config.mptAPI.routes.users + "/profile");
+
+    console.log(getInfo);
+
     // form submitter
     const profileForm = useSubmitData(config.mgiAPI.baseUrl + config.mgiAPI.routes.roles, 'PATCH');
 

@@ -76,6 +76,8 @@ namespace Mpt.Controllers
                 // get current user
                 var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
 
+                Console.WriteLine(currentUser);
+
                 if (currentUser == null)
                 {
                     return BadRequest(new { error = "Not authenticated" });
@@ -99,7 +101,7 @@ namespace Mpt.Controllers
 
 
         // GET: api/User/allInfo
-        [AllowAnonymous]
+        [Authorize(Roles = "utente")]
         [HttpGet("allInfo")]
         public async Task<ActionResult<UserWithTasks>> GetUserAllInfo()
         {
