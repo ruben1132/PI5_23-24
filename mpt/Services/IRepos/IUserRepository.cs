@@ -6,6 +6,6 @@ namespace Mpt.IRepositories
     public interface IUserRepository: IRepository<User,UserId>
     {
         Task<User> GetByEmailAsync(string email);
-        Task<List<User>> GetAllFilteredAsync(bool isSysUser, bool? isApproved, bool? all);
+        Task<List<User>> GetAllFilteredAsync(bool isSysUser, ApprovalStatus? isApproved);
     }
 }

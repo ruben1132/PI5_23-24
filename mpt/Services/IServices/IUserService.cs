@@ -12,7 +12,7 @@ namespace Mpt.IServices
 
         Task<Result<UserWithRoleDto>> GetByIdAsync(Guid id);
 
-        Task<Result<List<UserWithRoleDto>>> GetAllAsync(bool? isSysUser, bool? isApproved, bool? all);
+        Task<Result<List<UserWithRoleDto>>> GetAllAsync(bool? isSysUser, string? isApproved);
 
         Task<Result<UserWithRoleDto>> UpdateAsync(UserDto dto);
 

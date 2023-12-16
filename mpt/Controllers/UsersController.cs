@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Mpt.Controllers
 {
-    [Authorize(Roles = "admin")]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase, IUsersController
@@ -19,12 +19,13 @@ namespace Mpt.Controllers
         }
 
         // GET: api/User
+        [Authorize(Roles = "admin, gestor tarefas")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserWithRoleDto>>> GetAll([FromQuery] bool? isSysUser, [FromQuery] bool? isApproved, [FromQuery] bool? all)
+        public async Task<ActionResult<IEnumerable<UserWithRoleDto>>> GetAll([FromQuery] bool? isSysUser, [FromQuery] string? isApproved)
         {
             try
             {
-                var users = await _service.GetAllAsync(isSysUser, isApproved, all);
+                var users = await _service.GetAllAsync(isSysUser, isApproved);
 
                 if (users.IsFailure)
                 {
@@ -41,7 +42,7 @@ namespace Mpt.Controllers
         }
 
         // GET: api/User/5
-
+        [Authorize(Roles = "admin")]
         [HttpGet("{id}")]
         public async Task<ActionResult<UserWithRoleDto>> GetById(Guid id)
         {
@@ -63,7 +64,8 @@ namespace Mpt.Controllers
             }
         }
 
-        // POST: api/User        
+        // POST: api/User   
+        [Authorize(Roles = "admin")]     
         [HttpPost]
         public async Task<ActionResult<UserWithRoleDto>> Create(CreateUserDto user)
         {
@@ -86,6 +88,7 @@ namespace Mpt.Controllers
         }
 
         // PUT: api/User/
+        [Authorize(Roles = "admin")]
         [HttpPatch]
         public async Task<ActionResult<UserWithRoleDto>> Update(UserDto user)
         {
@@ -108,6 +111,7 @@ namespace Mpt.Controllers
         }
 
         // PATCH: api/User/5
+        [Authorize(Roles = "admin")]
         [HttpPatch("{id}")]
         public async Task<ActionResult<UserWithRoleDto>> ApproveReject(Guid id, UserIsApprovedDto user)
         {
@@ -131,6 +135,7 @@ namespace Mpt.Controllers
 
 
         // DELETE: api/User/5
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<string>> Delete(Guid id)
         {

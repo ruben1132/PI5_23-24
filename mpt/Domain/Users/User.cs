@@ -16,14 +16,14 @@ namespace Mpt.Domain.Users
         public UserNif Nif { get; private set; }
         public bool Active { get; private set; }
         public RoleId RoleId { get; private set; }
-        public bool? IsApproved { get; private set; }
+        public ApprovalStatus IsApproved { get; private set; }
 
         // Constructors
         private User()
         {
         }
 
-        public User(UserEmail email, string name, PhoneNumber phone, UserNif nif, RoleId roleId, UserPassword password, bool? isApproved = null)
+        public User(UserEmail email, string name, PhoneNumber phone, UserNif nif, RoleId roleId, UserPassword password, ApprovalStatus isApproved)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new BusinessRuleValidationException("Name cannot be null.");
@@ -99,12 +99,12 @@ namespace Mpt.Domain.Users
 
         public void Approve()
         {
-            this.IsApproved = true;
+            this.IsApproved = ApprovalStatus.approved;
         }
 
         public void Disapprove()
         {
-            this.IsApproved = false;
+            this.IsApproved = ApprovalStatus.rejected;
         }
     }
 }

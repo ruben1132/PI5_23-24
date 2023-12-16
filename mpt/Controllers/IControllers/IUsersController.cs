@@ -9,7 +9,7 @@ namespace Mpt.IControllers
         Task<ActionResult<UserWithRoleDto>> Create(CreateUserDto role);
         Task<ActionResult<UserWithRoleDto>> Update(UserDto role);
         Task<ActionResult<UserWithRoleDto>> ApproveReject(Guid id, UserIsApprovedDto user);
-        Task<ActionResult<IEnumerable<UserWithRoleDto>>> GetAll([FromQuery] bool? isSysUser, [FromQuery] bool? isApproved, bool? all);
+        Task<ActionResult<IEnumerable<UserWithRoleDto>>> GetAll([FromQuery] bool? isSysUser, [FromQuery] string? isApproved);
         Task<ActionResult<UserWithRoleDto>> GetById(Guid id);
         Task<ActionResult<string>> Delete(Guid id);
     }

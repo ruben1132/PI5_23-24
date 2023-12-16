@@ -212,12 +212,12 @@ namespace Mpt.Services
         {
 
 
-            if (user.IsApproved == null)
+            if (user.IsApproved == ApprovalStatus.pending)
             {
                 return Result<string>.Fail("Your account needs to be approved by the system first!");
             }
 
-            if (user.IsApproved == false)
+            if (user.IsApproved == ApprovalStatus.rejected)
             {
                 return Result<string>.Fail("Your account was rejected by the system!");
             }

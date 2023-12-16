@@ -19,8 +19,7 @@ namespace Mpt.Infrastructure.Users
             // isApproved allow to be null
             builder
                 .Property(u => u.IsApproved)
-                .HasDefaultValue(null)
-                .IsRequired(false); 
+                .HasDefaultValue(ApprovalStatus.pending).HasConversion<string>();
 
             builder.HasOne<Role>()
                 .WithMany()

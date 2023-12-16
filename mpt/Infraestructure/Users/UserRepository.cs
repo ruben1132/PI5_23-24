@@ -21,7 +21,7 @@ namespace Mpt.Infrastructure.Users
             return await this._context.Users.FirstOrDefaultAsync(u => u.Email.Value == email);
         }
 
-        public async Task<List<User>> GetAllFilteredAsync(bool isSysUser, bool? isApproved = null, bool? all = false)
+        public async Task<List<User>> GetAllFilteredAsync(bool isSysUser, ApprovalStatus? isApproved = null)
         {
 
             // get default role
@@ -32,8 +32,8 @@ namespace Mpt.Infrastructure.Users
                 ? query.Where(u => _context.Roles.Any(r => r.Id == u.RoleId && r.Name != defaultRole))
                 : query.Where(u => _context.Roles.Any(r => r.Id == u.RoleId && r.Name == defaultRole));
 
-            // if all is true, then return all users
-            if (all == false)
+            // if isApproved is null, then it will return all users
+            if (isApproved != null)
                 query = query.Where(u => u.IsApproved == isApproved);
           
             return await query.ToListAsync();

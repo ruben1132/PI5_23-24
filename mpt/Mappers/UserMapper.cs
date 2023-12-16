@@ -35,7 +35,7 @@ namespace Mpt.Mappers
                     user.Nif.Value,
                     user.Active,
                     role,
-                    user.IsApproved
+                    user.IsApproved.ToString()
                 );
         }
 
@@ -66,7 +66,7 @@ namespace Mpt.Mappers
                     new UserNif(dto.Nif),
                     new RoleId(dto.RoleId),
                     new UserPassword(dto.Password, true),
-                    true
+                    ApprovalStatus.approved
                 );
         }
 
@@ -78,7 +78,8 @@ namespace Mpt.Mappers
                     new PhoneNumber(dto.Phone),
                     new UserNif(dto.Nif),
                     roleId,
-                    new UserPassword(dto.Password, true)
+                    new UserPassword(dto.Password, true),
+                    ApprovalStatus.pending
                 );
         }
     }

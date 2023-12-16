@@ -10,9 +10,9 @@ namespace Mpt.Dtos
         public string Nif { get; private set; }
         public RoleDto Role { get; private set; }
         public bool Active { get; private set; }
-        public bool? IsApproved { get; set; }
+        public string IsApproved { get; set; }
 
-        public UserWithRoleDto(string id, string email, string name, string phone, string nif, bool active, RoleDto role, bool? isApproved = null)
+        public UserWithRoleDto(string id, string email, string name, string phone, string nif, bool active, RoleDto role, string isApproved)
         {
             this.Id = id;
             this.Email = email;

@@ -30,15 +30,19 @@ namespace Mpt.Services
             this._roleRepo = roleRepo;
         }
 
-        public async Task<Result<List<UserWithRoleDto>>> GetAllAsync(bool? isSysUser, bool? isApproved, bool? all)
+        public async Task<Result<List<UserWithRoleDto>>> GetAllAsync(bool? isSysUser, string? isApproved = null)
         {
             try
-            {
-                // if it wants sysusers, then isApproved is true
-                if (isSysUser == true)
-                    isApproved = true;
+            {   
+                // parse string to enum
+                ApprovalStatus? parsedApproved = null;
+                if (isApproved != null)
+                {
+                    isApproved = isApproved.ToLower();
+                    parsedApproved = (ApprovalStatus)Enum.Parse(typeof(ApprovalStatus), isApproved, true);
+                }
 
-                var users = await this._repo.GetAllFilteredAsync(isSysUser ?? true, isApproved, all ?? false);
+                var users = await this._repo.GetAllFilteredAsync(isSysUser ?? true, parsedApproved);
 
                 if (users == null)
                     return Result<List<UserWithRoleDto>>.Ok(new List<UserWithRoleDto>());
@@ -94,7 +98,7 @@ namespace Mpt.Services
 
                 // validate email
                 var email = new UserEmail(u.Email, _emailDomain);
-                
+
                 var role = await this._roleRepo.GetByIdAsync(new RoleId(u.RoleId));
                 if (role == null)
                     return Result<UserWithRoleDto>.Fail("Role not found.");
@@ -188,10 +192,10 @@ namespace Mpt.Services
             try
             {
                 var user = await this._repo.GetByIdAsync(new UserId(id));
-                
+
                 if (user == null)
                     return Result<UserDto>.Fail("User not found.");
-                
+
                 if (u.IsApproved)
                     user.Approve();
                 else
