@@ -145,6 +145,7 @@ export default {
             planning: 'planning/',
             planningFindPath: 'planning/findpath',
             usersmain: 'users/',
+            userprofile: 'users/profile',
             users: 'users?isSysUser=false',
             sysusers: 'users?isSysUser=true',
             tasks: 'tasks',
