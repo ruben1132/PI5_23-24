@@ -7,9 +7,9 @@ namespace mpt.Dtos.User
     {
 
         public UserDto user { get; private set; }
-        public List<TaskWithoutUserDto> tasks { get; private set; }
+        public List<TaskSimpleDto> tasks { get; private set; }
 
-        public UserWithTasks(UserDto user, List<TaskWithoutUserDto> tasks)
+        public UserWithTasks(UserDto user, List<TaskSimpleDto> tasks)
         {
             this.user = user;
             this.tasks = tasks;

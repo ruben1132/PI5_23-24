@@ -21,7 +21,7 @@ namespace Mpt.Services
         private readonly ITaskRepository _taskRepo;
         private readonly string _emailDomain;
 
-        public UserService(IConfiguration config, IUnitOfWork unitOfWork, IUserRepository repo, IRoleRepository roleRepo)
+        public UserService(IConfiguration config, IUnitOfWork unitOfWork, IUserRepository repo, IRoleRepository roleRepo, ITaskRepository taskRepo)
         {
             this._config = config;
             var emailDomain = _config.GetValue<string>("EmailDomain") ?? "isep.ipp.pt";
@@ -30,6 +30,7 @@ namespace Mpt.Services
             this._unitOfWork = unitOfWork;
             this._repo = repo;
             this._roleRepo = roleRepo;
+            this._taskRepo = taskRepo;
         }
 
         public async Task<Result<List<UserWithRoleDto>>> GetAllAsync(bool? isSysUser, string? isApproved = null)
@@ -79,17 +80,17 @@ namespace Mpt.Services
 
                 var userDto = UserMapper.ToDto(user);
 
-                var tasks = await this._taskRepo.GetTasksWithoutUserInfo(user.Id.Value);
+                var tasks = await this._taskRepo.GetTasksWithoutUserInfo(userDto.Id);
 
-                var tasksDto = new List<TaskWithoutUserDto>();
+                var tasksDto = new List<TaskSimpleDto>();
                 foreach (var task in tasks)
                 {
                     tasksDto.Add(task);
                 }
 
-                var userWithTasks = new UserWithTasks(userDto, tasksDto);
+                var userwithtasks = new UserWithTasks(userDto, tasksDto);
 
-                return Result<List<UserWithTasks>>.Ok(new List<UserWithTasks>() { userWithTasks });
+                return Result<List<UserWithTasks>>.Ok(new List<UserWithTasks>() { userwithtasks });
             }
             catch (Exception ex)
             {

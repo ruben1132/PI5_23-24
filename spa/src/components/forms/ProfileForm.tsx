@@ -40,6 +40,7 @@ export default function ProfileForm() {
     // console.log(user);
 
     const getInfo = useFetchData(config.mptAPI.baseUrl + config.mptAPI.routes.userprofile);
+    const userData = useFetchData(config.mptAPI.baseUrl + config.mptAPI.routes.userdata);
 
     // form submitter
     const profileForm = useSubmitData(config.mptAPI.baseUrl + config.mptAPI.routes.userprofile, 'PATCH');
@@ -80,6 +81,8 @@ export default function ProfileForm() {
             };
         }
 
+        console.log(item);
+
         // submit data
         let res = await profileForm.submit(item);
 
@@ -94,6 +97,36 @@ export default function ProfileForm() {
         // show alert
         notify.success(`Profile edited successfully`);
     };
+
+    const handleDownloadData = async () => {
+        try {
+      
+          // Convert data to JSON string
+          const jsonData = JSON.stringify(userData, null, 2);
+      
+          // Create a Blob containing the JSON data
+          const blob = new Blob([jsonData], { type: 'application/json' });
+      
+          // Create a temporary URL for the Blob
+          const url = window.URL.createObjectURL(blob);
+      
+          // Create a link element
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = 'data.json'; // Set the file name
+      
+          // Simulate a click on the link to trigger the download
+          document.body.appendChild(link);
+          link.click();
+      
+          // Clean up: remove the link and revoke the URL
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+        } catch (error) {
+          console.error('Error:', error);
+          // Handle errors here
+        }
+      };
 
     const handleDeleteData = async () => {
         setEnabled(false);
@@ -212,7 +245,7 @@ export default function ProfileForm() {
                         {user?.role.name === userRole.UTENTE && (
                             <>
                                 {' | '}
-                                <Button variant="info" onClick={handleDeleteData}>
+                                <Button variant="info" onClick={handleDownloadData}>
                                     Download my personal data
                                 </Button>
                                 {' | '}

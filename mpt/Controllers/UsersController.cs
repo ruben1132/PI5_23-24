@@ -113,7 +113,7 @@ namespace Mpt.Controllers
                     return BadRequest(new { error = "Not authenticated" });
                 }
 
-                var user = await _service.GetByIdAsync(new Guid(currentUser.Id));
+                var user = await _service.GetUserAllInfo(new Guid(currentUser.Id));
 
                 if (user.IsFailure)
                 {

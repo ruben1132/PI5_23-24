@@ -145,6 +145,7 @@ export default {
             plannings: 'plannings/',
             usersmain: 'users/',
             userprofile: 'users/profile',
+            userdata: 'users/allInfo',
             users: 'users?isSysUser=false',
             sysusers: 'users?isSysUser=true',
             tasks: 'tasks',

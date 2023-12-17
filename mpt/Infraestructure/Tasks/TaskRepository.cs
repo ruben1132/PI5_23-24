@@ -6,9 +6,12 @@ namespace Mpt.Infrastructure.Tasks
 {
     public class TaskRepository : BaseRepository<Domain.Tasks.Task, TaskId>, ITaskRepository
     {
+
+        private readonly MptDbContext _context;
+
         public TaskRepository(MptDbContext context) : base(context.Tasks)
         {
-
+            this._context = context;
         }
 
         public async Task<List<Domain.Tasks.Task>> GetAllFilteredAsync(string? type, string? userId, ApprovalStatus? isApproved = null)
@@ -27,16 +30,16 @@ namespace Mpt.Infrastructure.Tasks
             return tasks;
         }
 
-        public async Task<List<Mpt.Dtos.TaskWithoutUserDto>> GetTasksWithoutUserInfo(string userId)
+        public async Task<List<Mpt.Dtos.TaskSimpleDto>> GetTasksWithoutUserInfo(string userId)
         {
             var tasks = await this.GetAllAsync();
             tasks = tasks.Where(t => t.UserId.Value == userId).ToList();
 
-            var tasksWithoutUserInfo = new List<Mpt.Dtos.TaskWithoutUserDto>();
+            var tasksWithoutUserInfo = new List<Mpt.Dtos.TaskSimpleDto>();
 
             foreach (var task in tasks)
             {
-                tasksWithoutUserInfo.Add(new Mpt.Dtos.TaskWithoutUserDto(task.Id.ToString(), task.Path, task.IsCompleted, task.TaskType, task.IsApproved.ToString()));
+                tasksWithoutUserInfo.Add(new Mpt.Dtos.TaskSimpleDto(task.IsCompleted, task.TaskType, task.IsApproved.ToString()));
             }
 
             return tasksWithoutUserInfo;
