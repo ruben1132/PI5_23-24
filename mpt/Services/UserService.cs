@@ -345,5 +345,29 @@ namespace Mpt.Services
             }
         }
 
+        public async Task<Result<UserDto>> DeleteIgnoringActiveAsync(Guid id)
+        {
+            try
+            {
+                var user = await this._repo.GetByIdAsync(new UserId(id));
+
+                if (user == null)
+                    return Result<UserDto>.Fail("User not found.");
+
+                this._repo.Remove(user);
+                await this._unitOfWork.CommitAsync();
+
+                var userDto = UserMapper.ToDto(user);
+                userDto.Password = null;
+
+                return Result<UserDto>.Ok(userDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<UserDto>.Fail(ex.Message);
+            }
+        }
+
     }
 }

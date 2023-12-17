@@ -247,5 +247,31 @@ namespace Mpt.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+
+        // DELETE: api/User/profile
+        [Authorize(Roles = "utente")]
+        [HttpDelete("profile")]
+        public async Task<ActionResult<string>> DeleteMyProfile()
+        {
+            try
+            {
+                // get current user
+                var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+
+                if (currentUser == null)
+                {
+                    return BadRequest(new { error = "Not authenticated" });
+                }
+
+                var user = await _service.DeleteIgnoringActiveAsync(Guid.Parse(currentUser.Id));
+
+                return Ok(new { message = "User profile deleted successfully" });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }

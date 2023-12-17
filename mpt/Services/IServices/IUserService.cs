@@ -20,5 +20,6 @@ namespace Mpt.IServices
         Task<Result<UserDto>> UpdateIsApprovedAsync(Guid id, IsApprovedDto dto);
 
         Task<Result<UserDto>> DeleteAsync(Guid id);
+        Task<Result<UserDto>> DeleteIgnoringActiveAsync(Guid id);
     }
 }

@@ -14,5 +14,6 @@ namespace Mpt.IControllers
         Task<ActionResult<UserWithRoleDto>> GetById(Guid id);
         Task<ActionResult<UserProfileDto>> GetMyProfile();
         Task<ActionResult<string>> Delete(Guid id);
+        Task<ActionResult<string>> DeleteMyProfile();
     }
 }
