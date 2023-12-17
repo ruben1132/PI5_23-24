@@ -1,7 +1,7 @@
-import { Task } from './Task';
+import { Task, TaskWithUser } from './Task';
 
 export interface TaskPlanning {
-    id: string;
+    id?: string;
     tasks: string[];
 }
 

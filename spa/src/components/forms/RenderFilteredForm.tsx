@@ -120,6 +120,7 @@ export function RenderFilteredForm(props: Props) {
                     return (
                         <TaskPlanningForm
                             item={{ value: props.item.value }}
+                            action={props.action}
                             reFetchData={props.reFetchData}
                             close={props.close}
                         />

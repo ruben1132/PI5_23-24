@@ -6,9 +6,9 @@ namespace Mpt.Infrastructure.Tasks
 {
     public class TaskRepository : BaseRepository<Domain.Tasks.Task, TaskId>, ITaskRepository
     {
-        public TaskRepository(MptDbContext context):base(context.Tasks)
+        public TaskRepository(MptDbContext context) : base(context.Tasks)
         {
-           
+
         }
 
         public async Task<List<Domain.Tasks.Task>> GetAllFilteredAsync(string? type, string? userId, ApprovalStatus? isApproved = null)
