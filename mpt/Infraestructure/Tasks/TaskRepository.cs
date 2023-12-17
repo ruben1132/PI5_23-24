@@ -27,11 +27,6 @@ namespace Mpt.Infrastructure.Tasks
             return tasks;
         }
 
-        public Task<List<Domain.Tasks.Task>> GetByIds(List<TaskId> ids)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<List<Mpt.Dtos.TaskWithoutUserDto>> GetTasksWithoutUserInfo(string userId)
         {
             var tasks = await this.GetAllAsync();
