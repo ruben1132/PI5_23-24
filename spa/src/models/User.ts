@@ -24,20 +24,13 @@ export interface User {
     isApproved?: string;
 }
 
-export interface PostUser {
+export interface UserSignUp {
     name: string;
     email: string;
+    password: string;
     nif: string;
     phone: string;
-    active: boolean;
-    password?: string;
-    roleId: string;
 }
 
-export interface UserProfile {
-    name: string;
-    email: string;
-    nif: string;
-    phone: string;
-    password?: string;
-}
+
+

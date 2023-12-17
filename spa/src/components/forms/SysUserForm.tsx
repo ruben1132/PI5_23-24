@@ -334,10 +334,10 @@ export default function SysUserForm(props: Props) {
                                 onClick={handleSubmitData}
                                 disabled={
                                     userName.value === '' ||
-                                    // !userEmail.isValid ||
+                                    !userEmail.isValid ||
                                     !userPhone.isValid ||
-                                    // !userNif.isValid ||
-                                    // !userPassword.isValid ||
+                                    !userNif.isValid ||
+                                    !userPassword.isValid ||
 
                                     !enabled
                                 }

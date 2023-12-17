@@ -161,7 +161,7 @@ export default {
 
     nullRoutes: ['/', '/aboutus', '/termsandconditions'],
 
-    authRoutes: ['/login', '/signin'],
+    authRoutes: ['/login', '/signup'],
 
     utenteRoutes: ['/dashboard', '/dashboard/tasks', '/dashboard/profile'],
 
