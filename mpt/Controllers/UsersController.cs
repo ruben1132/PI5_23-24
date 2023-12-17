@@ -76,8 +76,6 @@ namespace Mpt.Controllers
                 // get current user
                 var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
 
-                Console.WriteLine(currentUser);
-
                 if (currentUser == null)
                 {
                     return BadRequest(new { error = "Not authenticated" });

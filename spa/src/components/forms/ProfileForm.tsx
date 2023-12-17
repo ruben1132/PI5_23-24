@@ -28,6 +28,10 @@ import { useAuth } from '@/context/AuthContext';
 
 // models
 import { Profile, ProfileWithPassword } from '@/models/Profile';
+import { get } from 'cypress/types/lodash';
+import { skip } from 'node:test';
+import { delay } from 'cypress/types/bluebird';
+import MeekoLoader from '../loaders/MeekoLoader';
 
 export default function ProfileForm() {
     // auth context
@@ -35,22 +39,27 @@ export default function ProfileForm() {
 
     // console.log(user);
 
-    const getInfo = useFetchData(config.mptAPI.baseUrl + config.mptAPI.routes.users + "/profile");
-
-    console.log(getInfo);
-
+    const getInfo = useFetchData(config.mptAPI.baseUrl + config.mptAPI.routes.userprofile);
+ 
     // form submitter
     const profileForm = useSubmitData(config.mgiAPI.baseUrl + config.mgiAPI.routes.roles, 'PATCH');
 
     // deleter
     const profileDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.profiles + 'user id here');
 
-    // inputs
+    
+    // const profileName = useFormStringInput(getInfo.data?.name);
+    // const profileEmail = useFormStringInput(getInfo.data?.email);
+    // const profilePhone = useFormStringInputWithRegex(getInfo.data.phone, /^[0-9]{9}$/);
+    // const profileNif = useFormStringInputWithRegex(getInfo.data.nif, /^[0-9]{9}$/);
+    // const profilePassword = useFormStringInput(getInfo.data.password);
+
     const profileName = useFormStringInput('user name here');
     const profileEmail = useFormStringInput('user email here');
     const profilePhone = useFormStringInputWithRegex('987654321', /^[0-9]{9}$/);
     const profileNif = useFormStringInputWithRegex('123456789', /^[0-9]{9}$/);
     const profilePassword = useFormStringInput('');
+
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
@@ -108,6 +117,13 @@ export default function ProfileForm() {
         notify.success(`Profile deleted successfully`);
     };
 
+    if (getInfo.isLoading){
+        return <Form>Loading...</Form>;
+    }   
+    if (getInfo.isError) {
+        return <Form>Error</Form>;
+    }
+
     return (
         <Form>
             <Row>
@@ -118,7 +134,7 @@ export default function ProfileForm() {
                             id="profileName"
                             type="text"
                             placeholder="your name..."
-                            defaultValue={profileName.value}
+                            defaultValue={getInfo.data?.name}
                             onChange={profileName.handleChange}
                         />
                     </Form.Group>
@@ -130,7 +146,7 @@ export default function ProfileForm() {
                             id="profileEmail"
                             type="email"
                             placeholder="your email..."
-                            defaultValue={profileEmail.value}
+                            defaultValue={getInfo.data?.email}
                             onChange={profileEmail.handleChange}
                         />
                     </Form.Group>
@@ -145,7 +161,7 @@ export default function ProfileForm() {
                             id="profileNif"
                             type="text"
                             placeholder="your nif..."
-                            defaultValue={profileNif.value}
+                            defaultValue={getInfo.data?.nif}
                             onChange={profileNif.handleChange}
                         />
                     </Form.Group>
@@ -157,7 +173,7 @@ export default function ProfileForm() {
                             id="profilePhone"
                             type="text"
                             placeholder="your nif..."
-                            defaultValue={profileNif.value}
+                            defaultValue={getInfo.data?.phone}
                             onChange={profileNif.handleChange}
                         />
                     </Form.Group>
@@ -182,8 +198,8 @@ export default function ProfileForm() {
                             disabled={
                                 profileName.value === '' ||
                                 profileEmail.value === '' ||
-                                !profileNif.isValid ||
-                                !profilePhone.isValid ||
+                                !profileNif ||
+                                !profilePhone ||
                                 !enabled
                             }
                         >

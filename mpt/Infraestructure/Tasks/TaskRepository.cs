@@ -4,7 +4,7 @@ using Mpt.IRepositories;
 
 namespace Mpt.Infrastructure.Tasks
 {
-    public class TaskRepository : BaseRepository<Domain.Tasks.Task, TaskId>,ITaskRepository
+    public class TaskRepository : BaseRepository<Domain.Tasks.Task, TaskId>, ITaskRepository
     {
         public TaskRepository(MptDbContext context):base(context.Tasks)
         {
@@ -27,7 +27,11 @@ namespace Mpt.Infrastructure.Tasks
             return tasks;
         }
 
-        
+        public Task<List<Domain.Tasks.Task>> GetByIds(List<TaskId> ids)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<Mpt.Dtos.TaskWithoutUserDto>> GetTasksWithoutUserInfo(string userId)
         {
             var tasks = await this.GetAllAsync();
