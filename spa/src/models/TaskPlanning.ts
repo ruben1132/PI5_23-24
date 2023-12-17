@@ -7,5 +7,5 @@ export interface TaskPlanning {
 
 export interface TaskPlanningWithTasks {
     id: string;
-    tasks: TaskWithUser[];
+    tasks: Task[];
 }

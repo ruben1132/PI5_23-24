@@ -15,7 +15,7 @@ import CloseButton from 'react-bootstrap/CloseButton';
 import { notify } from '@/components/notification/Notification';
 
 // custom hooks
-import { useFetchData, useSubmitData, useDeleteData } from '@/util/customHooks';
+import { useFetchData, useSubmitData } from '@/util/customHooks';
 
 // models
 import { TaskPlanning, TaskPlanningWithTasks } from '@/models/TaskPlanning';
@@ -28,6 +28,7 @@ interface Props {
     item: {
         value: TaskPlanningWithTasks;
     };
+    action: string;
     reFetchData: () => void;
     close: () => void;
 }
@@ -72,14 +73,6 @@ export default function TaskPlanningForm(props: Props) {
         notify.success(`Planning added successfully`);
     };
 
-
-    // load tasks on mount
-    useEffect(() => {
-        if (props.item.value.tasks) {
-            setTasks(props.item.value.tasks);
-        }
-    }, []);
-
     // filter data so it removes the element(s) already selected
     const filteredSelectBoxData = selectBoxTasksDataFetch?.data?.filter((item: TaskWithUser) => {
         return !tasks?.some((task) => task.id === item.id);
@@ -87,10 +80,9 @@ export default function TaskPlanningForm(props: Props) {
 
     // add the selected value
     const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
-
         const selectedValue = e.target.value;
         const selectedType = selectBoxTasksDataFetch.data.find((type: TaskWithUser) => type.id === selectedValue);
-     
+
         const newArray: TaskWithUser[] = [...tasks, selectedType];
         setTasks(newArray);
     };
@@ -102,6 +94,7 @@ export default function TaskPlanningForm(props: Props) {
 
     return (
         <Form>
+            {props.action === 'add' ? (
                 <Row>
                     <Col sm={6}>
                         <Form.Group className="mb-6">
@@ -110,7 +103,7 @@ export default function TaskPlanningForm(props: Props) {
                                 <option defaultChecked={true}>select a task</option>
                                 {filteredSelectBoxData?.map((item: TaskWithUser) => (
                                     <option key={item.id} value={item.id}>
-                                        {item.taskType} {" - "} {item.user.name} 
+                                        {item.taskType} {' - ' + item.user.name}
                                     </option>
                                 ))}
                             </Form.Select>
@@ -121,24 +114,42 @@ export default function TaskPlanningForm(props: Props) {
                             {tasks?.map((item) => (
                                 <ListGroup.Item key={item.id}>
                                     <CloseButton onClick={() => handleRemoveTask(item)} />
-                                    {item.taskType} {" - "} {item.user.name} 
+                                    {item.taskType} {' - '} {item.user.name}
                                 </ListGroup.Item>
                             ))}
                         </ListGroup>
                     </Col>
                 </Row>
-          
+            ) : (
+                <>
+                    <Row>
+                        <Col sm={12}>
+                            <ListGroup>
+                                {props.item?.value.tasks.map((item: Task, i: number) => (
+                                    <ListGroup.Item key={item.id}>{i + ' - ' + item.taskType}</ListGroup.Item>
+                                ))}
+                            </ListGroup>
+                        </Col>
+                    </Row>
+                </>
+            )}
 
             <br />
-            <Row>
-                <Col sm={12}>
-                    <Form.Group className="mb-12">
-                        <Button variant="primary" onClick={handleSubmitData} disabled={tasks?.length === 0 || !enabled}>
-                            Create
-                        </Button>{' '}
-                    </Form.Group>
-                </Col>
-            </Row>
+            {props.action === 'add' && (
+                <Row>
+                    <Col sm={12}>
+                        <Form.Group className="mb-12">
+                            <Button
+                                variant="primary"
+                                onClick={handleSubmitData}
+                                disabled={tasks?.length === 0 || !enabled}
+                            >
+                                Create
+                            </Button>{' '}
+                        </Form.Group>
+                    </Col>
+                </Row>
+            )}
         </Form>
     );
 }
