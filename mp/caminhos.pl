@@ -193,16 +193,21 @@ aStar2(Piso, Dest, [(_, Ca, LA)|Outros], Cam, Custo) :-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% auxiliar - processar %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % processa cada piso da lista do caminho e chamar cria_grafo/3
-processar_caminho(_, [], _, _) :- !.
-processar_caminho(_, [_], _, _) :-!.            
+
+processar_caminho(Algorith, Elementos, Caminhos, TotCusto) :-
+    processar_caminho_aux(Algorith, Elementos, Caminhos, 0, TotCusto).
 
 
+% processar_caminho_aux(_,_, [], TotalCusto, TotalCusto).
+% processar_caminho_aux(_,_, [_], TotalCusto, TotalCusto).
+            
+processar_caminho_aux(_,[_], [], TotalCusto, TotalCusto).
 
 
-processar_caminho(Algorith, [Elemento1, Elemento2 | Resto], [Cam|CamResto], CustoTot) :-!,
+processar_caminho_aux(Algorith, [Elemento1, Elemento2 | Resto], [Cam|CamResto], PartialCusto, TotCusto) :-!,
                             processar_elementos(Algorith, Elemento1, Elemento2, Cam, Custo),
-                            CustoTotNew is CustoTot + Custo,
-                            processar_caminho(Algorith, [Elemento2 | Resto], CamResto, CustoTotNew).
+                            NovoPartialCusto is PartialCusto + Custo,
+                            processar_caminho_aux(Algorith, [Elemento2 | Resto], CamResto, NovoPartialCusto, TotCusto).
 
 % tem de se deslocar entre salas (pode acontecer se o user mandar 2 salas no mesmo piso)
 % (sala(Nome) so aparece na lista como primeiro e ultimo elemento, pq significa q foi o q foi introduzido pelo user) 
@@ -385,7 +390,7 @@ find_caminho_robot(astar,Piso,StarX, StartY, EndX, EndY, Cam, Custo) :-
                         % write('Caminho: '), write(Cam), nl.                         
 
 find_caminho_robot(dfs,Piso,StarX, StartY, EndX, EndY, Cam, 0) :-    
-                        write('ffff'),nl,                   
+                        % write('ffff'),nl,                   
                         dfs(Piso,cel(StarX, StartY), cel(EndX, EndY), Cam).    
                         % write('Caminho: '), write(Cam), nl.   
 
@@ -432,8 +437,8 @@ find_caminho_entidades(Algorith,ElementoOr, ElementoDest, CaminhoCompleto2, Movi
                      find_caminho(PisoOr, PisoDest, Caminho),                                               % encontrar o melhor caminho entre os pisos
                      append([ElementoOr|Caminho], [ElementoDest], CaminhoCompleto),                         % add o ponto de partida e o ponto de chegada à lista do caminho
                      remove_consecutive_duplicates(CaminhoCompleto, CaminhoCompleto2),                       % remove elementos consecutivos repetidos (so acontece pq...codigo batata q fiz no determinar_tipo_entidade)
-                    %  write('Melhor Caminho: '),write(CaminhoCompleto2),nl,        
-                     CustoTot = 0,
+                     write('Melhor Caminho: '),write(CaminhoCompleto2),nl,        
+                    %  CustoTot = 0,
                      processar_caminho(Algorith,CaminhoCompleto2,Movimentos, CustoTot).                      % processa o caminho encontrado
                      %  write("Caminho total: "), write(Movimentos), nl,                                        
                      %  write('Custo Total: '), write(CustoTot), nl.                               
