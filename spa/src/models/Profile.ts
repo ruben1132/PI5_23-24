@@ -1,17 +1,15 @@
 export interface Profile{
-    id: string;
     name: string;
-    nif: number;
+    nif: string;
     email: string;
-    phone: number;
+    phone: string;
 }
 
 export interface ProfileWithPassword{
-    id: string;
     name: string;
-    nif: number;
+    nif: string;
     email: string;
     password: string;
-    phone: number;
+    phone: string;
 }
 

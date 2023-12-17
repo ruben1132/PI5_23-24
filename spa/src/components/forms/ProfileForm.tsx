@@ -40,26 +40,18 @@ export default function ProfileForm() {
     // console.log(user);
 
     const getInfo = useFetchData(config.mptAPI.baseUrl + config.mptAPI.routes.userprofile);
- 
+
     // form submitter
-    const profileForm = useSubmitData(config.mgiAPI.baseUrl + config.mgiAPI.routes.roles, 'PATCH');
+    const profileForm = useSubmitData(config.mptAPI.baseUrl + config.mptAPI.routes.userprofile, 'PATCH');
 
     // deleter
     const profileDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.profiles + 'user id here');
 
-    
-    // const profileName = useFormStringInput(getInfo.data?.name);
-    // const profileEmail = useFormStringInput(getInfo.data?.email);
-    // const profilePhone = useFormStringInputWithRegex(getInfo.data.phone, /^[0-9]{9}$/);
-    // const profileNif = useFormStringInputWithRegex(getInfo.data.nif, /^[0-9]{9}$/);
-    // const profilePassword = useFormStringInput(getInfo.data.password);
-
-    const profileName = useFormStringInput('user name here');
-    const profileEmail = useFormStringInput('user email here');
-    const profilePhone = useFormStringInputWithRegex('987654321', /^[0-9]{9}$/);
-    const profileNif = useFormStringInputWithRegex('123456789', /^[0-9]{9}$/);
+    const profileName = useFormStringInput('');
+    const profileEmail = useFormStringInput('');
+    const profilePhone = useFormStringInputWithRegex('', /^[0-9]{9}$/);
+    const profileNif = useFormStringInputWithRegex('', /^[0-9]{9}$/);
     const profilePassword = useFormStringInput('');
-
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
@@ -69,23 +61,27 @@ export default function ProfileForm() {
         setEnabled(false);
 
         // set profile data
-        let item: Profile | ProfileWithPassword = {
-            id: '',
-            name: '',
-            email: '',
-            phone: 987654321,
-            nif: 123456789,
-            password: '',
-        };
+        let item: Profile | ProfileWithPassword | null = null;
 
-        item.name = profileName.value;
-        item.email = profileEmail.value;
-        item.nif = parseInt(profileNif.value);
-        item.password = profilePassword.value;
+        if (profilePassword.value === '') {
+            item = {
+                name: profileName.value,
+                email: profileEmail.value,
+                phone: profilePhone.value,
+                nif: profileNif.value,
+            };
+        } else {
+            item = {
+                name: profileName.value,
+                email: profileEmail.value,
+                phone: profilePhone.value,
+                nif: profileNif.value,
+                password: profilePassword.value,
+            };
+        }
 
         // submit data
         let res = await profileForm.submit(item);
-        console.log(res);
 
         if (res.error) {
             setEnabled(true);
@@ -117,9 +113,17 @@ export default function ProfileForm() {
         notify.success(`Profile deleted successfully`);
     };
 
-    if (getInfo.isLoading){
+    // on load, set the form values
+    useEffect(() => {
+        profileName.handleLoad(getInfo.data?.name);
+        profileEmail.handleLoad(getInfo.data?.email);
+        profilePhone.handleLoad(getInfo.data?.phone);
+        profileNif.handleLoad(getInfo.data?.nif);
+    }, [getInfo.data]);
+
+    if (getInfo.isLoading) {
         return <Form>Loading...</Form>;
-    }   
+    }
     if (getInfo.isError) {
         return <Form>Error</Form>;
     }

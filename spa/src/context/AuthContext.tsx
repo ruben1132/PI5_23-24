@@ -101,7 +101,7 @@ const request = async (url: string, method: string, data?: any): Promise<LoginRe
             value: false,
         };
     } catch (error: any) {
-        console.log(error.response.data.error);
+        console.log(error?.response?.data?.error);
 
         return {
             content: error.response.data.error,
