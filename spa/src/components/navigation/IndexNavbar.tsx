@@ -34,6 +34,9 @@ export default function IndexNavBar() {
                         <Link href={'/login'} className="navbarLink">
                             Login
                         </Link>
+                        <Link href={'/signup'} className="navbarLink">
+                            Signup
+                        </Link>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
