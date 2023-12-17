@@ -113,7 +113,10 @@ namespace Mpt.Controllers
                     return BadRequest(new { error = "Not authenticated" });
                 }
 
-                var user = await _service.GetUserAllInfo(new Guid(currentUser.Id));
+                // get token
+                var token = GetToken();
+
+                var user = await _service.GetUserAllInfo(new Guid(currentUser.Id), token);
 
                 if (user.IsFailure)
                 {
@@ -272,6 +275,14 @@ namespace Mpt.Controllers
                 Console.WriteLine(ex.Message);
                 return BadRequest(new { error = ex.Message });
             }
+        }
+
+        private string GetToken()
+        {
+            string authorizationHeader = HttpContext.Request.Headers["Authorization"];
+            string token = authorizationHeader.Substring("Bearer ".Length);
+
+            return token;
         }
     }
 }

@@ -9,6 +9,9 @@ using Mpt.IServices;
 using Mpt.Core.Domain;
 using Mpt.Core.Logic;
 using mpt.Dtos.User;
+using Mpt.Domain.Tasks;
+using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
 
 namespace Mpt.Services
 {
@@ -69,7 +72,7 @@ namespace Mpt.Services
 
 
 
-        public async Task<Result<List<UserWithTasks>>> GetUserAllInfo(Guid id)
+        public async Task<Result<List<UserWithTasks>>> GetUserAllInfo(Guid id, string token)
         {
             try
             {
@@ -80,15 +83,11 @@ namespace Mpt.Services
 
                 var userDto = UserMapper.ToDto(user);
 
-                var tasks = await this._taskRepo.GetTasksWithoutUserInfo(userDto.Id);
+                var tasks = await this._taskRepo.GetAllFilteredAsync(null, userDto.Id, null);
 
-                var tasksDto = new List<TaskSimpleDto>();
-                foreach (var task in tasks)
-                {
-                    tasksDto.Add(task);
-                }
+                var tasksDto = MapTasksToSimpleDto(tasks, token);
 
-                var userwithtasks = new UserWithTasks(userDto, tasksDto);
+                var userwithtasks = new UserWithTasks(userDto, tasksDto.Result);
 
                 return Result<List<UserWithTasks>>.Ok(new List<UserWithTasks>() { userwithtasks });
             }
@@ -367,6 +366,65 @@ namespace Mpt.Services
             {
                 Console.WriteLine(ex.Message);
                 return Result<UserDto>.Fail(ex.Message);
+            }
+        }
+
+
+        private async Task<List<TaskSimpleDto>> MapTasksToSimpleDto(IEnumerable<Domain.Tasks.Task> tasks, string token)
+        {
+            var tasksDto = new List<TaskSimpleDto>();
+
+            foreach (var task in tasks)
+            {
+                if (task is SurveillanceTask surveillanceTask)
+                {
+                    // get floor info
+                    var floorInfo = await this.GetFloorInfoAsync(surveillanceTask.FloorId, token);
+                    tasksDto.Add(TaskMapper.ToDto(surveillanceTask, floorInfo.GetValue()));
+                }
+                else if (task is PickupDeliveryTask pickupDeliveryTask)
+                {
+                    tasksDto.Add(TaskMapper.ToDto(pickupDeliveryTask));
+                }
+            }
+
+            return tasksDto;
+        }
+
+        private async Task<Result<string>> GetFloorInfoAsync(string floorId, string token)
+        {
+            try
+            {
+                // Create HttpClientHandler with withCredentials set to true
+                var handler = new HttpClientHandler
+                {
+                    UseCookies = true,
+                    UseDefaultCredentials = true,
+                    AllowAutoRedirect = true,
+                };
+
+                // new http client cuz i need to set the handler
+                using var httpClient = new HttpClient(handler);
+                // call MGI API
+                var route = this._config.GetValue<string>("MGIApiUrl:floor") ?? "http://localhost:2225/api/floors/";
+                httpClient.BaseAddress = new Uri(route);
+
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                // httpClient.DefaultRequestHeaders.Add("withCredentials", "true");
+
+                var response = await httpClient.GetAsync($"{floorId}");
+
+                if (!response.IsSuccessStatusCode)
+                    return Result<string>.Ok("unavailable");
+
+                var floor = await response.Content.ReadFromJsonAsync<FloorInfoDto>();
+
+                return Result<string>.Ok(floor.Code);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<string>.Fail(ex.Message);
             }
         }
 
