@@ -76,7 +76,7 @@ export default {
         floor: {
             post: [roles.GESTOR_CAMPUS],
             get: [...Object.values(roles)],
-            getById: [roles.GESTOR_CAMPUS, roles.GESTOR_TAREFAS, roles.UTENTE],
+            getById: [...Object.values(roles)],
             getByBuildingId: [...Object.values(roles)],
             getWithPass: [roles.GESTOR_CAMPUS],
             put: [roles.GESTOR_CAMPUS],
@@ -90,7 +90,7 @@ export default {
         passage: {
             post: [roles.GESTOR_CAMPUS],
             get: [...Object.values(roles)],
-            getById: [roles.GESTOR_CAMPUS],
+            getById: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
             getBetween: [roles.GESTOR_CAMPUS],
             put: [roles.GESTOR_CAMPUS],
             delete: [roles.GESTOR_CAMPUS],

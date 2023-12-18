@@ -24,26 +24,27 @@ import ThumbRaiser from './thumb_raiser.js';
 // notification component
 import { notify } from '@/components/notification/Notification';
 import { PassageWithFloor } from '@/models/Passage';
+import { useFetchData, useFormStringInput } from '@/util/customHooks';
+import BuildingSelectBox from '../selectBoxes/BuildingSelectBox';
 
-interface Props {
-    buildings: Building[];
-}
 
 interface objPass {
     passageId: string;
     floor: string;
 }
 
-export default function Scene(props: Props) {
+export default function Scene() {
     let animationFrameId: number;
+    const buildingsFetcher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings);
     const [thumbRaiser, setThumbRaiser] = useState<ThumbRaiser>();
-    const [building, setBuilding] = useState<Building>();
+    const building = useFormStringInput('');
     const [floors, setFloors] = useState<Floor[]>([]);
     const [isInElevator, setIsInElevator] = useState<boolean>(false); // this is for when the robot enters the elevator
     const [floor, setFloor] = useState<string>(''); // this is for when the robot changes floor through a passage
     const [passage, setPassage] = useState<objPass>(null);
     const [navigator, setNavigator] = useState<boolean>(true); // buildings and floors selects
 
+    // load threejs stuff on mount
     useEffect(() => {
         let thumbRaiserr: ThumbRaiser;
 
@@ -377,10 +378,6 @@ export default function Scene(props: Props) {
         };
     }, []);
 
-    const handleSelectBuilding = async (event: ChangeEvent<HTMLSelectElement>) => {
-        setBuilding(props.buildings.find((building) => building.id === event.target.value));
-    };
-
     const handleSelectFloor = (event: ChangeEvent<HTMLSelectElement>): void => {
         setFloor(event.target.value);
     };
@@ -396,11 +393,16 @@ export default function Scene(props: Props) {
     };
 
     useEffect(() => {
-        if (passage !== null) {
+        if (passage === null) {
+            return;
+        }
 
             const fetchFloor = async () => {
 
-                const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages + passage.passageId);
+                const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages + passage.passageId,
+                    {
+                        withCredentials: true
+                    });
                 if (response.status !== 200) {
                     notify.error('Error fetching passage');
                     return;
@@ -416,12 +418,12 @@ export default function Scene(props: Props) {
                     floor = passageData.fromFloor.id;
                 }
 
-                setFloor(floor);
+                // setFloor(floor);
+                thumbRaiser.changeMaze(floor + '.json');
             };
 
             fetchFloor();
 
-        }
     }, [passage]);
 
 
@@ -438,14 +440,17 @@ export default function Scene(props: Props) {
         // get current building - when the robot changes to a dif building, we need to load its floors
         const fetchFloor = async () => {
             try {
-                const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + floor);
+                const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + floor,
+                    {
+                        withCredentials: true
+                    });
                 if (response.status !== 200) {
                     notify.error('Error fetching floors');
                     return;
                 }
 
                 const floorData = response.data as FloorWithBuilding;
-                setBuilding(floorData.building);
+                building.handleLoad(floorData.building.id);
             } catch (e) {
                 console.error(e);
             }
@@ -463,7 +468,10 @@ export default function Scene(props: Props) {
         const fetchFloors = async () => {
             try {
                 const response = await axios.get(
-                    config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + 'buildingId/' + building.id,
+                    config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + 'buildingId/' + building.value,
+                    {
+                        withCredentials: true
+                    }
                 );
                 if (response.status !== 200) {
                     notify.error('Error fetching floors');
@@ -477,7 +485,7 @@ export default function Scene(props: Props) {
         };
 
         fetchFloors();
-    }, [building]);
+    }, [building.value]);
 
     return (
         <>
@@ -538,14 +546,22 @@ export default function Scene(props: Props) {
                                     <tr>
                                         <td>
                                             Buildings:
-                                            <Form.Select onChange={handleSelectBuilding}>
+                                            <BuildingSelectBox
+                                                selectedValue=''
+                                                isLoading={buildingsFetcher.isLoading}
+                                                isError={buildingsFetcher.isError}
+                                                data={buildingsFetcher.data}
+                                                setValue={building.handleLoad}
+
+                                            />
+                                            {/* <Form.Select onChange={handleSelectBuilding}>
                                                 <option defaultChecked={true}>Select building</option>
-                                                {props.buildings.map((building) => (
+                                                {buildingsFetcher.data.map((building) => (
                                                     <option value={building.id} key={building.id}>
                                                         {building.name}
                                                     </option>
                                                 ))}
-                                            </Form.Select>
+                                            </Form.Select> */}
                                         </td>
                                         <td>
                                             {floors.length > 0 && (
