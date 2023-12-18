@@ -2,19 +2,48 @@ import * as THREE from 'three';
 import { merge } from './merge.js';
 import { FBXLoader } from 'three/examples/jsm/Addons.js';
 
-/*
- * parameters = {
- *  url: String,
- *  door: {positionX: Number, positionY: Number, direction: String},
- *  halfSize: {width: Number, depth: Number},
- * }
- */
+// Function to create a texture with text
+function createTextTexture(text) {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    const fontSize = 24;
+    context.font = `${fontSize}px Arial`;
+    context.fillStyle = 'white';
+    context.fillText(text, 0, fontSize);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.minFilter = THREE.LinearFilter;
+    texture.needsUpdate = true;
+
+    return texture;
+}
+
 export default class Door extends THREE.Group {
     constructor(parameters) {
         super();
         merge(this, parameters);
 
         this.loaded = false;
+
+        this.createTextSprite = (doorName, posX, posY) => {
+            const textTexture = createTextTexture(doorName);
+            const textMaterial = new THREE.SpriteMaterial({ map: textTexture });
+        
+            // Adjusting material properties to make the sprite black and fully opaque
+            textMaterial.color.setHex(0x000000); // Set color to black
+            textMaterial.opacity = 1; // Set opacity to fully opaque
+        
+            const doorNameSprite = new THREE.Sprite(textMaterial);
+            doorNameSprite.scale.set(1, 1, 1);
+            doorNameSprite.position.set(posX, posY + 0.5, 0);
+        
+            doorNameSprite.renderOrder = 1;
+            doorNameSprite.material.depthTest = false;
+        
+            this.add(doorNameSprite);
+        
+            console.log('Sprite created for:', doorName);
+        };
 
         this.onLoad = function (object) {
             object.scale.set(0.1, 0.1, 0.1);
@@ -48,6 +77,14 @@ export default class Door extends THREE.Group {
 
             // Add the door object to the scene
             this.add(object);
+
+            // Assuming you have access to door names and positions
+            const doorName = this.door.position.positionX + " - " + this.door.position.positionY; // Replace with your door name logic
+            const doorPosX = this.door.position.positionX;
+            const doorPosY = this.door.position.positionY;
+
+            this.createTextSprite(doorName, doorPosX, doorPosY);
+
             this.loaded = true;
         };
 
