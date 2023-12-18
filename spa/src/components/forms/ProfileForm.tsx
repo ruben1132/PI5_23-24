@@ -46,7 +46,7 @@ export default function ProfileForm() {
     const profileForm = useSubmitData(config.mptAPI.baseUrl + config.mptAPI.routes.userprofile, 'PATCH');
 
     // deleter
-    const profileDeleter = useDeleteData(config.mgiAPI.baseUrl + config.mgiAPI.routes.profiles + 'user id here');
+    const profileDeleter = useDeleteData(config.mptAPI.baseUrl + config.mptAPI.routes.userprofile);
 
     const profileName = useFormStringInput('');
     const profileEmail = useFormStringInput('');
@@ -129,7 +129,7 @@ export default function ProfileForm() {
       };
 
     const handleDeleteData = async () => {
-        setEnabled(false);
+        setEnabled(true);
 
         // delete data
         let res = await profileDeleter.del();
