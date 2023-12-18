@@ -4,8 +4,8 @@ describe('UserForm Component', () => {
     cy.visit('/login');
 
     // Interact with form elements
-    cy.get('[id="email"]').type('gestorfrota@robdronego.com');
-    cy.get('[id="password"]').type('pass123');
+    cy.get('[id="email"]').type('gestorfrota@isep.ipp.pt');
+    cy.get('[id="password"]').type('Pa$$w0rd!!');
 
     // Click the Login button
     cy.get('[id="login-btn"]').click();

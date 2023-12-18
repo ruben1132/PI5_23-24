@@ -42,7 +42,7 @@ export default function TermsAndConditions() {
         <>
             <p>
                 Se tiver dúvidas ou preocupações sobre estes Termos e Condições, entre em contato conosco pelo e-mail:
-                contato@robdronego.com.
+                contato@isep.ipp.pt.
             </p>
         </>,
     ];

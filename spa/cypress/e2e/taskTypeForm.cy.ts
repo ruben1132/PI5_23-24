@@ -4,8 +4,8 @@ describe('TaskTypeForm Component', () => {
     beforeEach(() => {
         // Log in before running the tests
         cy.visit('/login'); // Replace with your login page URL
-        cy.get('[id="email"]').type('gestortarefas@robdronego.com');
-        cy.get('[id="password"]').type('pass123');
+        cy.get('[id="email"]').type('gestortarefas@isep.ipp.pt');
+        cy.get('[id="password"]').type('Pa$$w0rd!!');
         cy.get('[id="login-btn"]').click();
         cy.url().should('include', '/dashboard');
         cy.get('[id="open-sidebar"]').click();

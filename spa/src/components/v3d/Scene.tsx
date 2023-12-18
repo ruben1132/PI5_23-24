@@ -27,7 +27,6 @@ import { PassageWithFloor } from '@/models/Passage';
 import { useFetchData, useFormStringInput } from '@/util/customHooks';
 import BuildingSelectBox from '../selectBoxes/BuildingSelectBox';
 
-
 interface objPass {
     passageId: string;
     floor: string;
@@ -43,6 +42,7 @@ export default function Scene() {
     const [floor, setFloor] = useState<string>(''); // this is for when the robot changes floor through a passage
     const [passage, setPassage] = useState<objPass>(null);
     const [navigator, setNavigator] = useState<boolean>(true); // buildings and floors selects
+    const [auto, setAuto] = useState<boolean>(false);
 
     // load threejs stuff on mount
     useEffect(() => {
@@ -250,7 +250,7 @@ export default function Scene() {
                 }, // Cube texture parameters
                 {
                     // url: '/v3d/mazes/defaultPlant.json',
-                    url: '/v3d/mazes/plantEdAFloor2.json',
+                    url: '/v3d/mazes/plantEdAFloor1.json',
                     designCredits: '',
                     texturesCredits: '',
                     helpersColor: new THREE.Color(0xff0077),
@@ -351,6 +351,117 @@ export default function Scene() {
                 setIsInElevator,
                 setFloor,
                 setPassage,
+                {
+                    isOn: auto,
+                    movements: [
+                        [
+                            { x: 11, y: 6 },
+                            { x: 12, y: 5 },
+                            { x: 13, y: 5 },
+                            { x: 14, y: 4 },
+                            { x: 15, y: 3 },
+                            { x: 16, y: 3 },
+                            { x: 17, y: 3 },
+                            { x: 18, y: 3 },
+                            { x: 19, y: 3 },
+                            { x: 20, y: 3 },
+                            { x: 21, y: 2 },
+                            { x: 21, y: 1 },
+                        ],
+                        [
+                            { x: 20, y: 1 },
+                            { x: 20, y: 2 },
+                            { x: 20, y: 3 },
+                            { x: 20, y: 4 },
+                            { x: 21, y: 5 },
+                            { x: 22, y: 5 },
+                        ],
+                        [
+                            { x: 0, y: 4 },
+                            { x: 1, y: 4 },
+                            { x: 1, y: 5 },
+                            { x: 1, y: 6 },
+                            { x: 1, y: 7 },
+                            { x: 1, y: 8 },
+                            { x: 2, y: 8 },
+                            { x: 3, y: 8 },
+                            { x: 4, y: 8 },
+                            { x: 5, y: 8 },
+                            { x: 6, y: 8 },
+                            { x: 7, y: 8 },
+                            { x: 8, y: 8 },
+                            { x: 8, y: 7 },
+                            { x: 7, y: 7 },
+                            { x: 6, y: 7 },
+                            { x: 6, y: 6 },
+                            { x: 7, y: 6 },
+                            { x: 8, y: 6 },
+                            { x: 8, y: 5 },
+                            { x: 7, y: 5 },
+                            { x: 6, y: 5 },
+                            { x: 6, y: 4 },
+                            { x: 7, y: 4 },
+                            { x: 8, y: 4 },
+                            { x: 8, y: 3 },
+                            { x: 7, y: 3 },
+                            { x: 6, y: 3 },
+                            { x: 6, y: 2 },
+                            { x: 7, y: 2 },
+                            { x: 8, y: 2 },
+                            { x: 9, y: 2 },
+                            { x: 10, y: 2 },
+                            { x: 11, y: 2 },
+                            { x: 12, y: 2 },
+                            { x: 13, y: 2 },
+                            { x: 14, y: 2 },
+                            { x: 15, y: 2 },
+                            { x: 15, y: 3 },
+                            { x: 14, y: 3 },
+                            { x: 13, y: 3 },
+                            { x: 13, y: 4 },
+                            { x: 14, y: 4 },
+                            { x: 15, y: 4 },
+                            { x: 15, y: 5 },
+                            { x: 14, y: 5 },
+                            { x: 13, y: 5 },
+                            { x: 13, y: 6 },
+                            { x: 14, y: 6 },
+                            { x: 15, y: 6 },
+                            { x: 15, y: 7 },
+                            { x: 14, y: 7 },
+                            { x: 13, y: 7 },
+                            { x: 13, y: 8 },
+                            { x: 14, y: 8 },
+                            { x: 15, y: 8 },
+                            { x: 16, y: 8 },
+                            { x: 17, y: 8 },
+                            { x: 18, y: 8 },
+                            { x: 19, y: 8 },
+                            { x: 20, y: 8 },
+                            { x: 21, y: 8 },
+                            { x: 22, y: 8 },
+                        ],
+                        [
+                            { x: 0, y: 8 },
+                            { x: 1, y: 8 },
+                            { x: 1, y: 9 },
+                            { x: 1, y: 10 },
+                            { x: 1, y: 11 },
+                        ],
+                        [
+                            { x: 1, y: 11 },
+                            { x: 2, y: 10 },
+                            { x: 3, y: 9 },
+                            { x: 4, y: 8 },
+                            { x: 5, y: 7 },
+                            { x: 6, y: 6 },
+                            { x: 6, y: 5 },
+                            { x: 6, y: 4 },
+                            { x: 6, y: 3 },
+                            { x: 6, y: 2 },
+                        ],
+                    ],
+                },
             );
 
             setThumbRaiser(thumbRaiserr);
@@ -398,35 +509,33 @@ export default function Scene() {
             return;
         }
 
-            const fetchFloor = async () => {
+        const fetchFloor = async () => {
+            const response = await axios.get(
+                config.mgiAPI.baseUrl + config.mgiAPI.routes.passages + passage.passageId,
+                {
+                    withCredentials: true,
+                },
+            );
+            if (response.status !== 200) {
+                notify.error('Error fetching passage');
+                return;
+            }
 
-                const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages + passage.passageId,
-                    {
-                        withCredentials: true
-                    });
-                if (response.status !== 200) {
-                    notify.error('Error fetching passage');
-                    return;
-                }
+            const passageData = response.data as PassageWithFloor;
+            console.log(JSON.stringify(passageData));
+            let floor = '';
+            if (passageData.fromFloor.id == passage.floor) {
+                floor = passageData.toFloor.id;
+            } else {
+                floor = passageData.fromFloor.id;
+            }
 
-                const passageData = response.data as PassageWithFloor;
-                console.log(JSON.stringify(passageData));
-                let floor = "";
-                if (passageData.fromFloor.id == passage.floor) {
-                    floor = passageData.toFloor.id;
-                }
-                else {
-                    floor = passageData.fromFloor.id;
-                }
+            // setFloor(floor);
+            thumbRaiser.changeMaze(floor + '.json');
+        };
 
-                // setFloor(floor);
-                thumbRaiser.changeMaze(floor + '.json');
-            };
-
-            fetchFloor();
-
+        fetchFloor();
     }, [passage]);
-
 
     // when the robot changes floor through a passage or a elevator | or when user selects a floor
     useEffect(() => {
@@ -441,10 +550,9 @@ export default function Scene() {
         // get current building - when the robot changes to a dif building, we need to load its floors
         const fetchFloor = async () => {
             try {
-                const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + floor,
-                    {
-                        withCredentials: true
-                    });
+                const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + floor, {
+                    withCredentials: true,
+                });
                 if (response.status !== 200) {
                     notify.error('Error fetching floors');
                     return;
@@ -471,8 +579,8 @@ export default function Scene() {
                 const response = await axios.get(
                     config.mgiAPI.baseUrl + config.mgiAPI.routes.floors + 'buildingId/' + building.value,
                     {
-                        withCredentials: true
-                    }
+                        withCredentials: true,
+                    },
                 );
                 if (response.status !== 200) {
                     notify.error('Error fetching floors');
@@ -540,22 +648,35 @@ export default function Scene() {
                             </tbody>
                         </table>
                     </div>
-                    {navigator && (
-                        <div id="selects-panel">
-                            <table className="v3dtable views">
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            Buildings:
-                                            <BuildingSelectBox
-                                                selectedValue=''
-                                                isLoading={buildingsFetcher.isLoading}
-                                                isError={buildingsFetcher.isError}
-                                                data={buildingsFetcher.data}
-                                                setValue={building.handleLoad}
-
-                                            />
-                                            {/* <Form.Select onChange={handleSelectBuilding}>
+                    <div id="selects-panel">
+                        <table className="v3dtable views">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Auto mov
+                                        <Button
+                                            type="button"
+                                            variant={auto ? 'danger' : 'success'}
+                                            onClick={() => {
+                                                setAuto(!auto);
+                                                thumbRaiser.toogleAutoMovs();
+                                            }}
+                                        >
+                                            {auto ? 'Stop' : 'Start'} auto
+                                        </Button>
+                                    </td>
+                                    {navigator && (
+                                        <>
+                                            <td>
+                                                Buildings:
+                                                <BuildingSelectBox
+                                                    selectedValue=""
+                                                    isLoading={buildingsFetcher.isLoading}
+                                                    isError={buildingsFetcher.isError}
+                                                    data={buildingsFetcher.data}
+                                                    setValue={building.handleLoad}
+                                                />
+                                                {/* <Form.Select onChange={handleSelectBuilding}>
                                                 <option defaultChecked={true}>Select building</option>
                                                 {buildingsFetcher.data.map((building) => (
                                                     <option value={building.id} key={building.id}>
@@ -563,27 +684,28 @@ export default function Scene() {
                                                     </option>
                                                 ))}
                                             </Form.Select> */}
-                                        </td>
-                                        <td>
-                                            {floors.length > 0 && (
-                                                <>
-                                                    <span> Floors:</span>
-                                                    <Form.Select onChange={handleSelectFloor}>
-                                                        <option defaultChecked={true}>Select floor</option>
-                                                        {floors.map((floor) => (
-                                                            <option value={floor.id} key={floor.id}>
-                                                                {floor.information}
-                                                            </option>
-                                                        ))}
-                                                    </Form.Select>
-                                                </>
-                                            )}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
+                                            </td>
+                                            <td>
+                                                {floors.length > 0 && (
+                                                    <>
+                                                        <span> Floors:</span>
+                                                        <Form.Select onChange={handleSelectFloor}>
+                                                            <option defaultChecked={true}>Select floor</option>
+                                                            {floors.map((floor) => (
+                                                                <option value={floor.id} key={floor.id}>
+                                                                    {floor.information}
+                                                                </option>
+                                                            ))}
+                                                        </Form.Select>
+                                                    </>
+                                                )}
+                                            </td>
+                                        </>
+                                    )}
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                     <div id="elevator-panel">
                         <table className="v3dtable views">

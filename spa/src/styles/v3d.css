@@ -21,6 +21,14 @@
     margin-top: 20px; 
 }
 
+#auto-panel {
+    position: fixed;
+    left: 15%;
+    font-size: 1.5vmin;
+    color: white;
+    margin-top: 20px; 
+}
+
 #elevator-panel {
     position: fixed;
     right: 0; 

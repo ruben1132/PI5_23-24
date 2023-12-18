@@ -383,6 +383,7 @@ export default class ThumbRaiser {
         setIsInElevator,
         setFloor,
         setPassage,
+        autoMovs,
     ) {
         this.generalParameters = merge({}, generalData, generalParameters);
         this.audioParameters = merge({}, audioData, audioParameters);
@@ -405,6 +406,8 @@ export default class ThumbRaiser {
         this.checkIfInElevator = true;
         this.setFloor = setFloor;
         this.setPassage = setPassage;
+        this.autoMovs = autoMovs;
+        this.autoMovsStore = autoMovs;
 
         // Set the game state
         this.gameRunning = false;
@@ -1513,6 +1516,204 @@ export default class ThumbRaiser {
                         console.log('collisionResult' + JSON.stringify(collisionResult));
                         this.setPassage(collisionResult);
                         return;
+                    } else if (this.autoMovs.isOn) {
+                        // auto movement
+                        for (let i = 0; i < this.autoMovs.movements.length; i++) {
+                            for (let j = 0; j < this.autoMovs.movements[i].length; j++) {
+                                // check if last movement
+                                if (j + 1 >= this.autoMovs.movements[i].length) {
+                                    break;
+                                }
+
+                                let aTo = [];
+                                aTo.push(this.autoMovs.movements[i][j + 1].y);
+                                aTo.push(this.autoMovs.movements[i][j + 1].x);
+
+                                let toPos = this.maze.cellToCartesian(aTo);
+
+                                // right
+                                if (aTo[0] === position.x && aTo[1] === position.z + 1) {
+                                    this.player.direction = 0;
+                                    const directionRad = THREE.MathUtils.degToRad(this.player.direction);
+
+                                    if (position.z > toPos.z) {
+                                        // remove current cel
+                                        this.autoMovs.movements[i].shift();
+                                    } else {
+                                        // move
+                                        position.add(
+                                            new THREE.Vector3(
+                                                coveredDistance * Math.sin(directionRad),
+                                                0.0,
+                                                coveredDistance * Math.cos(directionRad),
+                                            ),
+                                        );
+                                        this.animations.fadeToAction('Walking', 0.2);
+                                        this.player.position.set(position.x, position.y, position.z);
+                                        this.player.rotation.y = directionRad - this.player.defaultDirection;
+                                    }
+                                }
+
+                                // left
+                                if (aTo[0] === position.x && aTo[1] === position.z - 1) {
+                                    this.player.direction = 180;
+                                    const directionRad = THREE.MathUtils.degToRad(this.player.direction);
+
+                                    if (position.z < toPos.z) {
+                                        // remove current cel
+                                        this.autoMovs.movements[i].shift();
+                                    } else {
+                                        // move
+                                        position.add(
+                                            new THREE.Vector3(
+                                                coveredDistance * Math.sin(directionRad),
+                                                0.0,
+                                                coveredDistance * Math.cos(directionRad),
+                                            ),
+                                        );
+                                        this.animations.fadeToAction('Walking', 0.2);
+                                        this.player.position.set(position.x, position.y, position.z);
+                                        this.player.rotation.y = directionRad - this.player.defaultDirection;
+                                    }
+                                }
+
+                                // up
+                                if (aTo[0] === position.x + 1 && aTo[1] === position.z) {
+                                    this.player.direction = 90;
+                                    const directionRad = THREE.MathUtils.degToRad(this.player.direction);
+
+                                    if (position.x < toPos.x) {
+                                        // remove current cel
+                                        this.autoMovs.movements[i].shift();
+                                    } else {
+                                        // move
+                                        position.add(
+                                            new THREE.Vector3(
+                                                coveredDistance * Math.sin(directionRad),
+                                                0.0,
+                                                coveredDistance * Math.cos(directionRad),
+                                            ),
+                                        );
+                                        this.animations.fadeToAction('Walking', 0.2);
+                                        this.player.position.set(position.x, position.y, position.z);
+                                        this.player.rotation.y = directionRad - this.player.defaultDirection;
+                                    }
+                                }
+
+                                // down
+                                if (aTo[0] === position.x - 1 && aTo[1] === position.z) {
+                                    this.player.direction = 270;
+                                    const directionRad = THREE.MathUtils.degToRad(this.player.direction);
+
+                                    if (position.x < toPos.x) {
+                                        // remove current cel
+                                        this.autoMovs.movements[i].shift();
+                                    } else {
+                                        // move
+                                        position.add(
+                                            new THREE.Vector3(
+                                                coveredDistance * Math.sin(directionRad),
+                                                0.0,
+                                                coveredDistance * Math.cos(directionRad),
+                                            ),
+                                        );
+                                        this.animations.fadeToAction('Walking', 0.2);
+                                        this.player.position.set(position.x, position.y, position.z);
+                                        this.player.rotation.y = directionRad - this.player.defaultDirection;
+                                    }
+                                }
+
+                                // diagonals
+                                if (aTo[0] === position.x + 1 && aTo[1] === position.z + 1) {
+                                    this.player.direction = 45;
+                                    const directionRad = THREE.MathUtils.degToRad(this.player.direction);
+
+                                    if (position.x > toPos.x && position.z > toPos.z) {
+                                        // remove current cel
+                                        this.autoMovs.movements[i].shift();
+                                    } else {
+                                        // move
+                                        position.add(
+                                            new THREE.Vector3(
+                                                coveredDistance * Math.sin(directionRad),
+                                                0.0,
+                                                coveredDistance * Math.cos(directionRad),
+                                            ),
+                                        );
+                                        this.animations.fadeToAction('Walking', 0.2);
+                                        this.player.position.set(position.x, position.y, position.z);
+                                        this.player.rotation.y = directionRad - this.player.defaultDirection;
+                                    }
+                                }
+
+                                if (aTo[0] === position.x - 1 && aTo[1] === position.z + 1) {
+                                    this.player.direction = 135;
+                                    const directionRad = THREE.MathUtils.degToRad(this.player.direction);
+
+                                    if (position.x < toPos.x && position.z > toPos.z) {
+                                        // remove current cel
+                                        this.autoMovs.movements[i].shift();
+                                    } else {
+                                        // move
+                                        position.add(
+                                            new THREE.Vector3(
+                                                coveredDistance * Math.sin(directionRad),
+                                                0.0,
+                                                coveredDistance * Math.cos(directionRad),
+                                            ),
+                                        );
+                                        this.animations.fadeToAction('Walking', 0.2);
+                                        this.player.position.set(position.x, position.y, position.z);
+                                        this.player.rotation.y = directionRad - this.player.defaultDirection;
+                                    }
+                                }
+
+                                if (aTo[0] === position.x + 1 && aTo[1] === position.z - 1) {
+                                    this.player.direction = 315;
+                                    const directionRad = THREE.MathUtils.degToRad(this.player.direction);
+
+                                    if (position.x > toPos.x && position.z < toPos.z) {
+                                        // remove current cel
+                                        this.autoMovs.movements[i].shift();
+                                    } else {
+                                        // move
+                                        position.add(
+                                            new THREE.Vector3(
+                                                coveredDistance * Math.sin(directionRad),
+                                                0.0,
+                                                coveredDistance * Math.cos(directionRad),
+                                            ),
+                                        );
+                                        this.animations.fadeToAction('Walking', 0.2);
+                                        this.player.position.set(position.x, position.y, position.z);
+                                        this.player.rotation.y = directionRad - this.player.defaultDirection;
+                                    }
+                                }
+
+                                if (aTo[0] === position.x - 1 && aTo[1] === position.z - 1) {
+                                    this.player.direction = 225;
+                                    const directionRad = THREE.MathUtils.degToRad(this.player.direction);
+
+                                    if (position.x < toPos.x && position.z < toPos.z) {
+                                        // remove current cel
+                                        this.autoMovs.movements[i].shift();
+                                    } else {
+                                        // move
+                                        position.add(
+                                            new THREE.Vector3(
+                                                coveredDistance * Math.sin(directionRad),
+                                                0.0,
+                                                coveredDistance * Math.cos(directionRad),
+                                            ),
+                                        );
+                                        this.animations.fadeToAction('Walking', 0.2);
+                                        this.player.position.set(position.x, position.y, position.z);
+                                        this.player.rotation.y = directionRad - this.player.defaultDirection;
+                                    }
+                                }
+                            }
+                            this.autoMovs.movements.shift();
+                        }
                     } else if (this.player.keyStates.jump) {
                         this.audio.play(this.audio.jumpClips, true);
                         this.animations.fadeToAction('Jump', 0.2);
@@ -1639,6 +1840,18 @@ export default class ThumbRaiser {
         }
     }
 
+    // helper function to the auto mode
+    foundCell(actual, destiny) {
+        const offset = 0.45;
+
+        // Calculate the distance from the center of the cell
+        const deltaX = Math.abs(actual.x - destiny.x);
+        const deltaZ = Math.abs(actual.z - destiny.z);
+
+        // Check if the robot is within the specified offset from the center of the cell
+        return deltaX < (0.5 - offset) * this.scale.x && deltaZ < (0.5 - offset) * this.scale.z;
+    }
+
     changeMaze(newMazeUrl) {
         this.mazeChanged = true;
 
@@ -1659,6 +1872,18 @@ export default class ThumbRaiser {
         this.checkIfInElevator = false;
 
         console.log('cancelElevatorAction');
+    }
+
+    toogleAutoMovs() {
+        this.autoMovs.isOn = !this.autoMovs.isOn;
+        console.log(this.autoMovs);
+        if (this.autoMovs.isOn) {
+            let arr = [];
+            arr.push(this.autoMovsStore.movements[0][0].y);
+            arr.push(this.autoMovsStore.movements[0][0].x);
+            let iniCart = this.maze.cellToCartesian(arr); // convert the autoMovs to cartesian coordinates
+            this.player.position.set(iniCart[1], 0.0, iniCart[0]);
+        }
     }
 
     dispose() {
