@@ -249,6 +249,7 @@ export default function Scene() {
                     selected: 2,
                 }, // Cube texture parameters
                 {
+                    // url: '/v3d/mazes/defaultPlant.json',
                     url: '/v3d/mazes/plantEdAFloor2.json',
                     designCredits: '',
                     texturesCredits: '',
