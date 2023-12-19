@@ -11,15 +11,13 @@
     <canvas id="burndownChart" width="50px" height="25px"></canvas>
 
     <script>
-        // Sample data (hours remaining)
+        // Sample data (hours remaining) - SPRINT C
         const plannedHours = [8, 8, 8, 8, 8, 0, 0,
             8, 8, 8, 8, 8, 0, 0,
-            8, 8, 8, 8, 8, 0, 0,
-            8, 8, 8, 8, 8, 0, 0]; // Planned hours for each day
-        const actualHours = [0, 3, 5, 2, 4, 10, 10,
-            4, 3, 10, 1, 2, 10, 10,
-            5, 8, 6, 9, 10, 10, 10,
-            10, 11, 9, 8, 10, 11, 10]; // Actual hours spent for each day
+            8, 8, 8]; // Planned hours for each day - SPRINT C
+        const actualHours = [0, 3, 5, 2, 4, 6, 3,
+            8, 12, 12, 9, 10, 10, 10,
+            8, 8, 6]; // Actual hours spent for each day
 
         // Days
         const days = Array.from({ length: plannedHours.length }, (_, i) => i + 1);
