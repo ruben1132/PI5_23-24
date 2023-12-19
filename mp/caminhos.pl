@@ -229,7 +229,8 @@ processar_elementos(_,sala(SalaOrig), elev(Piso), Cam, Custo):-
                         obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),     
                         obter_coordenadas_elev(Piso, EndX, EndY),     
                         print_info_processar(Piso, sala(SalaOrig), elev(Piso), StartX, StartY, EndX, EndY),  
-                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, Custo).  
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, C1),
+                        custo(elev, C2), Custo is C1 + C2.  % soma o custo de usar um elevador
 
 
 % tem de se deslocar entre uma sala e um elevador (do mesmo piso)
@@ -238,7 +239,8 @@ processar_elementos(_,sala(SalaOrig), elev(Piso, PisoDest), Cam, Custo) :-
                         obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),                
                         obter_coordenadas_elev(Piso, EndX, EndY),   
                         print_info_processar(Piso, sala(SalaOrig), elev(Piso, PisoDest), StartX, StartY, EndX, EndY),
-                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, Custo).
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, C1),
+                        custo(elev, C2), Custo is C1 + C2.  % soma o custo de usar um elevador
 
 
 % tem de se deslocar entre uma sala e uma passagem do mesmo piso
@@ -247,11 +249,12 @@ processar_elementos(_,sala(SalaOrig), pass(Piso, PisoDest), Cam, Custo) :-
                         obter_coordenadas_sala(Piso, SalaOrig, StartX, StartY),                
                         obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),   
                         print_info_processar(Piso, sala(SalaOrig), pass(Piso, PisoDest), StartX, StartY, EndX, EndY),
-                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, Custo).
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, C1),
+                        custo(pass, C2), Custo is C1 + C2.  % soma o custo de usar uma passagem
 
 
 % tem se deslocar entre pisos apenas - se o user mandar por exemplo elev(a1), elev(a2) - nao tem de fazer nada
-processar_elementos(_,elev(_), elev(_), _, 0).
+processar_elementos(_,elev(_), elev(_), _, Custo):- custo(pass, Custo).
 
 
 % tem de se deslocar entre um elevador e uma passagem
@@ -261,8 +264,8 @@ processar_elementos(_,elev(Piso), pass(Piso, PisoDest), Cam, Custo):-
                         obter_coordenadas_elev(Piso, StartX, StartY),     
                         obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),    
                         print_info_processar(Piso, elev(Piso), pass(Piso,PisoDest), StartX, StartY, EndX, EndY),  
-                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, Custo).  
-
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, C1),  
+                        custo(pass, C2), Custo is C1 + C2.  % soma o custo de usar uma passagem
 
 % tem de se deslocar entre um elevador e uma sala
 processar_elementos(_,elev(Piso), sala(SalaDest), Cam, Custo) :-
@@ -274,8 +277,9 @@ processar_elementos(_,elev(Piso), sala(SalaDest), Cam, Custo) :-
 
 
 % tem de se deslocar entre um elevador e um elevador (acontece quando na lista aparece elev(a1) elev(a1,a2))
-processar_elementos(_,elev(Piso), elev(Piso, PisoDest), _, 0):-                                    
-                        obter_coordenadas_elev(Piso, StartX, StartY),      
+processar_elementos(_,elev(Piso), elev(Piso, PisoDest), _, Custo):-                                    
+                        obter_coordenadas_elev(Piso, StartX, StartY),
+                        custo(elev, Custo),    
                         print_info_processar(astar, elev(Piso), elev(Piso, PisoDest), StartX, StartY, StartX, StartY).
 
 
@@ -286,7 +290,8 @@ processar_elementos(_,pass(PisoOrig,Piso), elev(Piso,PisoDest), Cam, Custo) :-
                         obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),                
                         obter_coordenadas_elev(Piso, EndX, EndY),   
                         print_info_processar(Piso, pass(PisoOrig,Piso), elev(Piso,PisoDest), StartX, StartY, EndX, EndY),
-                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, Custo).                             
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, C1),
+                        custo(elev, C2), Custo is C1 + C2.                               
 
 
 % tem de se deslocar entre uma passagem e uma passagem
@@ -295,7 +300,8 @@ processar_elementos(_,pass(PisoOrig, Piso), pass(Piso,PisoDest), Cam, Custo) :-
                         obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),      
                         obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),      
                         print_info_processar(Piso, pass(PisoOrig, Piso), pass(Piso,PisoDest), StartX, StartY, EndX, EndY),  
-                        find_caminho_robot(dfs,Piso, StartX, StartY, EndX, EndY, Cam, Custo). 
+                        find_caminho_robot(dfs,Piso, StartX, StartY, EndX, EndY, Cam, C1),
+                        custo(pass, C2), Custo is C1 + C2.   
 
 
 % tem de se deslocar entre uma passagem e uma sala
@@ -313,7 +319,8 @@ processar_elementos(_,pass(PisoOrig, Piso), elev(Piso), Cam, Custo) :-
                         obter_coordenadas_pass(PisoOrig, Piso, _, _, StartX, StartY),      
                         obter_coordenadas_elev(Piso, EndX, EndY),  
                         print_info_processar(Piso, pass(PisoOrig, Piso), elev(Piso), StartX, StartY, EndX, EndY),         
-                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, Custo). 
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, C1),
+                        custo(pass, C2), Custo is C1 + C2.   
 
 
 % tem de se deslocar entre um elevador e uma passagem
@@ -322,7 +329,8 @@ processar_elementos(_,elev(_,Piso), pass(Piso,PisoDest), Cam, Custo) :-
                         obter_coordenadas_elev(Piso, StartX, StartY),     
                         obter_coordenadas_pass(Piso, PisoDest, EndX, EndY, _, _),    
                         print_info_processar(Piso, elev(_,Piso), pass(Piso,PisoDest), StartX, StartY, EndX, EndY),  
-                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, Custo).                                                        
+                        find_caminho_robot(astar,Piso, StartX, StartY, EndX, EndY, Cam, C1),
+                        custo(pass, C2), Custo is C1 + C2.                                                          
 
 
 % tem de se deslocar entre um elevador e uma sala
@@ -335,8 +343,9 @@ processar_elementos(_,elev(PisoOrig, Piso), sala(SalaDest), Cam, Custo) :-
 
 
 % tem de se deslocar entre um elevador e um elevador (acontece quando na lista aparece por exemplo elev(a1,a2) elev(a2))
-processar_elementos(_,elev(PisoOrig, Piso), elev(Piso), _, 0):-                                    
+processar_elementos(_,elev(PisoOrig, Piso), elev(Piso), _, Custo):-                                    
                         obter_coordenadas_elev(Piso, StartX, StartY),      
+                        custo(elev, Custo),  
                         print_info_processar(Piso, elev(PisoOrig, Piso), elev(Piso), StartX, StartY, StartX, StartY).
 
 
@@ -461,3 +470,4 @@ remove_consecutive_duplicates([X, X | T], Result) :-
 remove_consecutive_duplicates([X, Y | T], [X | Result]) :-
     X \= Y,
     remove_consecutive_duplicates([Y | T], Result).
+

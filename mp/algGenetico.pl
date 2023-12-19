@@ -4,6 +4,8 @@
 :-dynamic prob_cruzamento/1.
 :-dynamic prob_mutacao/1.
 
+:- consult('tarefasBC.pl').
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% algoritmos %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % tarefa(Id,TempoProcessamento,TempConclusao,PesoPenalizacao).
@@ -248,6 +250,21 @@ mutacao23(G1,P,[G|Ind],G2,[G|NInd]):-
 	mutacao23(G1,P1,Ind,G2,NInd).
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% predicados auxiliares à interface %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+calcTemp(Orig, Dest, Eval):-
+   find_caminho_entidades(astar, Orig, Dest, [], [], Eval),write(Eval).
+
+
+calc([T1, T2 | Res], Eval):-
+   tarefa(T1, Orig1, Dest1),
+   tarefa(T2, Orig2, Dest2),
+   calcTemp(Dest1, Orig2, EvalA),
+   calc([T2 | Res], EvalB),
+   Eval is EvalA + EvalB.
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTERFACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Define a predicate to process the tasks
 process_tasks([], _, Result) :-
@@ -275,8 +292,6 @@ process_task(Task, Algorithm, TaskResult) :-
     
     % Dummy example: Just echoing the task for now
     TaskResult = Task.
-
-
 
 
 
