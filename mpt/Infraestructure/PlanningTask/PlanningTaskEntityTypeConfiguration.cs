@@ -17,7 +17,7 @@ public class PlanningTaskEntityTypeConfiguration : IEntityTypeConfiguration<Plan
             .HasOne(pt => pt.Task)
             .WithMany(t => t.PlanningTasks)
             .HasForeignKey(pt => pt.TaskId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         // builder.Property(pt => pt.SequenceOrder)
         //     .UseIdentityColumn(); 
