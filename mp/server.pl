@@ -1,5 +1,5 @@
 :- consult('caminhos.pl').
-:- consult('algGenetico.pl').
+% :- consult('algGenetico.pl').
 :- consult('parsers.pl').
 
 :- use_module(library(http/thread_httpd)).
