@@ -1538,7 +1538,11 @@ export default class ThumbRaiser {
 
                             // Then move the player
                             const distance = fromCartesian.distanceTo(toCartesian);
-                            const coveredDistance = Math.min(distance, this.player.walkingSpeed * deltaT);
+                            let coveredDistance = Math.min(distance, this.player.walkingSpeed * deltaT);
+
+                            // if (this.player.shiftKey) {
+                            coveredDistance *= this.player.runningFactor; // run
+                            // }
 
                             const delta = new THREE.Vector3(
                                 coveredDistance * Math.sin(directionRad),
@@ -1550,7 +1554,7 @@ export default class ThumbRaiser {
                             playerMoved = true;
 
                             this.player.position.set(position.x, position.y, position.z);
-                            this.animations.fadeToAction('Walking', 0.2);
+                            this.animations.fadeToAction('Running', 0.2);
 
                             if (coveredDistance >= distance) {
                                 // Move to the next movement
