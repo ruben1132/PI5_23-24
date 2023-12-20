@@ -1,6 +1,0 @@
-20231210033008_InitialMigration,8.0.0
-20231214001107_ChangedTasksMigration,8.0.0
-20231214234834_ChangedTasksMappingMigration,8.0.0
-20231215185644_ChangedTasks2Migration,8.0.0
-20231216025836_ChangedIsApprovedMigration,8.0.0
-20231219094331_AddedCascadeOnPlanningTaskMigration,8.0.0
