@@ -110,18 +110,16 @@ ordena_populacao_produto(PopAv,PopAvOrd):-
 
 bsort2([X],[X]):-!.
 bsort2([X|Xs],Ys):-
-    bsort(Xs,Zs),
-    btroca([X|Zs],Ys).
+    bsort2(Xs,Zs),
+    btroca2([X|Zs],Ys).
 
 btroca2([X],[X]):-!.
 
 btroca2([X*VX*VI,Y*VY*VJ|L1],[Y*VY*VJ|L2]):-
-    MultiplicacaoX is VX * VI,
-    MultiplicacaoY is VY * VJ,
-    MultiplicacaoX > MultiplicacaoY, 
-    btroca([X*VX*VI|L1],L2).
+    VI > VJ,!, 
+    btroca2([X*VX*VI|L1],L2).
 
-btroca2([X|L1],[X|L2]):-btroca(L1,L2).
+btroca2([X|L1],[X|L2]):-btroca2(L1,L2).
 
 
 gera_geracao(G,G,Pop):-!,
@@ -176,7 +174,7 @@ cruzamento([Ind1*_,Ind2*_|Resto],[NInd1,NInd2|Resto1]):-
 seleciona_melhores(PopOrdenada, MelhoresPop) :-
     length(PopOrdenada, T),
     P1 is max(1, round(0.2 * T)),
-    sublista(PopOrdenada, 1, P1, MelhoresPop).	% extrai os P primeiros individuos
+    sublista2(PopOrdenada, 1, P1, MelhoresPop).	% extrai os P primeiros individuos
 
 
 % extrair os mlhrs individuos da lista original
@@ -186,8 +184,9 @@ remove_melhores(PopOrdenada, MelhoresPop, PopRestantes) :-
 
 % associar a cada individuo o produto da sua avaliação por um num aleatorio entre 0 e 1
 associa_produto_avaliacao([], []).
-associa_produto_avaliacao([Ind*V|Resto], [Ind*V*Random|RestoComProduto]) :-
+associa_produto_avaliacao([Ind*V|Resto], [Ind*V*RMult|RestoComProduto]) :-
     random(0.0, 1.0, Random),
+	RMult is V * Random,
     associa_produto_avaliacao(Resto, RestoComProduto).
 
 
@@ -196,7 +195,7 @@ restantes_melhores(PopOrdenadaComProduto, Pop, Melhores, NovaPopulacao) :-
     length(Pop, N),
     length(Melhores, P),
     R is N - P,
-	sublista(PopOrdenadaComProduto, 1, R, NovaPopulacao).	% extrai os N-P primeiros individuos
+	sublista2(PopOrdenadaComProduto, 1, R, NovaPopulacao).	% extrai os N-P primeiros individuos
 
 
 % remover os produtos dos individuos
@@ -231,6 +230,28 @@ sublista1([_|R1],N1,N2,[h|R2]):-
 	N3 is N1 - 1,
 	N4 is N2 - 1,
 	sublista1(R1,N3,N4,R2).
+
+% obtem a sublista de uma lista a partir do indice inicio ate o indice fim
+sublista2(Lista, Inicio, Fim, Sublista) :-
+    length(Lista, Tamanho),
+    between(1, Tamanho, Inicio),
+    between(Inicio, Tamanho, Fim),
+    sublista_aux2(Lista, Inicio, Fim, Sublista).
+
+% predicado auxiliar para construir a sublista
+sublista_aux2([], _, _, []).
+sublista_aux2([H|T], Inicio, Fim, [H|Resto]) :-
+    between(Inicio, Fim, Pos),
+    PosInicio is Inicio,
+    PosFim is Fim,
+    Pos >= PosInicio,
+    Pos =< PosFim,
+    NovoInicio is Inicio + 1,
+    sublista_aux2(T, NovoInicio, Fim, Resto).
+sublista_aux2([_|T], Inicio, Fim, Sublista) :-
+    NovoInicio is Inicio + 1,
+    sublista_aux2(T, NovoInicio, Fim, Sublista).
+
 
 rotate_right(L,K,L1):-
 	tarefas(N),
