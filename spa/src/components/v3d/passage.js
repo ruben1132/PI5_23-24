@@ -1,6 +1,26 @@
 import * as THREE from 'three';
 import { merge } from './merge.js';
 import { FBXLoader } from 'three/examples/jsm/Addons.js';
+import axios from 'axios'; // Import axios
+
+import config from '../../../config';
+
+
+// Function to create a texture with text
+function createTextTexture(text) {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    const fontSize = 24;
+    context.font = `${fontSize}px Arial`;
+    context.fillStyle = 'white';
+    context.fillText(text, 0, fontSize);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.minFilter = THREE.LinearFilter;
+    texture.needsUpdate = true;
+
+    return texture;
+}
 
 /*
  * parameters = {
@@ -16,7 +36,46 @@ export default class Passage extends THREE.Group {
 
         this.loaded = false;
 
-        this.onLoad = function (object) {
+        // Function to fetch room name using axios
+        const fetchPassageFromDatabase = async (passageId) => {
+            console.log('Passage ID:', passageId);
+            console.log('Floor ID:', this.floorId);
+            try {
+                const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages + passageId, {
+                    withCredentials: true,
+                });
+
+                // console.log('Response:', response);
+
+                if(this.floorId == response.data.fromFloor.id){
+                    return response.data.toFloor.information;
+                }else{
+                    return response.data.fromFloor.information;
+                }
+            } catch (error) {
+                console.error('Error fetching room name:', error);
+                return null; // Return null in case of an error
+            }
+        };
+
+        this.createTextSprite = (passageName, posX, posY) => {
+            const finalX = posX - Math.floor(this.mapSize.width / 2);
+            const finalY = posY - Math.floor(this.mapSize.depth / 2) + 1;
+            const textTexture = createTextTexture(passageName);
+            const textMaterial = new THREE.SpriteMaterial({ map: textTexture });
+
+            const passageNameSprite = new THREE.Sprite(textMaterial);
+            passageNameSprite.scale.set(2, 2, 2);
+            passageNameSprite.position.set(finalX, 0, finalY);
+
+            passageNameSprite.material.depthTest = false;
+
+            this.add(passageNameSprite);
+
+            // console.log('Sprite created for:', passageName);
+        };
+
+        this.onLoad = async function (object) {
             object.scale.set(0.1, 0.1, 0.1);
             if (this.passage.position.direction === 'north') {
                 object.position.set(
@@ -48,6 +107,18 @@ export default class Passage extends THREE.Group {
 
             // Add the passage object to the scene
             this.add(object);
+
+            
+            // Get room name asynchronously using roomId from parameters
+            const name = await fetchPassageFromDatabase(parameters.passageId);
+
+            const passageName = `${name}`;
+            const passagePosX = this.passage.position.positionX;
+            const passagePosY = this.passage.position.positionY;
+
+            this.createTextSprite(passageName, passagePosX, passagePosY);
+
+
             this.loaded = true;
         };
 

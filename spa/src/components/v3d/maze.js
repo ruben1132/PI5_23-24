@@ -188,6 +188,7 @@ export default class Maze extends THREE.Group {
                 const elevator = new Elevator({
                     elevator: description.fmElevator,
                     halfSize: this.halfSize,
+                    mapSize: this.size,
                 });
 
                 const elevatorPos = this.cellToCartesian([
@@ -212,15 +213,17 @@ export default class Maze extends THREE.Group {
                 };
                 this.add(elevator);
             }
-
+            
             // create doors
             this.doors = []; // create array of doors to use for collisions detection
             description.fmRooms?.forEach((r) => {
                 const door = new Door({
+                    roomId: r.roomId,
                     door: r.door,
                     halfSize: this.halfSize,
                     url: '/v3d/models/door/3d-model.fbx',
                     dScale: [0.018, 0.0055, 0.025],
+                    mapSize: this.size,
                 });
 
                 if (r?.door?.position?.positionX && r?.door?.position?.positionY) {
@@ -234,10 +237,13 @@ export default class Maze extends THREE.Group {
             description.fmPassages?.forEach((p) => {
                 // console.log('Passage ' + p.position.positionX + ' ' + p.position.positionY);
                 const passage = new Passage({
+                    passageId: p.passageId,
+                    floorId: this.floorId,
                     passage: p,
                     halfSize: this.halfSize,
                     url: '/v3d/models/passage/passage.fbx',
                     dScale: [0.0015, 0.0015, 0.0005],
+                    mapSize: this.size,
                 });
 
                 this.passages.push(passage);
@@ -245,8 +251,8 @@ export default class Maze extends THREE.Group {
                 this.add(passage);
             });
 
-            console.log('Passages ' + this.passages.length);
-            console.log('Passages ' + JSON.stringify(this.passages));
+            // console.log('Passages ' + this.passages.length);
+            // console.log('Passages ' + JSON.stringify(this.passages));
 
             let mergedGeometry, mesh;
             for (let i = 0; i < 2; i++) {
@@ -570,10 +576,13 @@ export default class Maze extends THREE.Group {
         this.mazeChanged = true;
 
         const door = new Door({
+            roomId: currentDoor.roomId,
             door: currentDoor.door,
             halfSize: this.halfSize,
             url: '/v3d/models/door/door.fbx',
             dScale: [0.0058, 0.0025, 0.002],
+            mapSize: this.size,
+            camera: this.camera,
         });
 
         this.remove(currentDoor); // remove current door
