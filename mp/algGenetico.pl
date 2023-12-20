@@ -16,7 +16,7 @@
 % tarefa(t5,3,8,2).
 
 % tarefas(NTarefas).
-tarefas(3).
+tarefas(6).
 
 % parameteriza��o
 inicializa:-write('Numero de novas Geracoes: '),read(NG), 			(retract(geracoes(_));true), asserta(geracoes(NG)),
@@ -104,6 +104,25 @@ btroca([X*VX,Y*VY|L1],[Y*VY|L2]):-
 
 btroca([X|L1],[X|L2]):-btroca(L1,L2).
 
+% sort para populacao com produto
+ordena_populacao_produto(PopAv,PopAvOrd):-
+	bsort2(PopAv,PopAvOrd).
+
+bsort2([X],[X]):-!.
+bsort2([X|Xs],Ys):-
+    bsort(Xs,Zs),
+    btroca([X|Zs],Ys).
+
+btroca2([X],[X]):-!.
+
+btroca2([X*VX*VI,Y*VY*VJ|L1],[Y*VY*VJ|L2]):-
+    MultiplicacaoX is VX * VI,
+    MultiplicacaoY is VY * VJ,
+    MultiplicacaoX > MultiplicacaoY, 
+    btroca([X*VX*VI|L1],L2).
+
+btroca2([X|L1],[X|L2]):-btroca(L1,L2).
+
 
 gera_geracao(G,G,Pop):-!,
 	write('Gera��o '), write(G), write(':'), nl, write(Pop), nl.
@@ -113,9 +132,18 @@ gera_geracao(N,G,Pop):-
 	cruzamento(Pop,NPop1),
 	mutacao(NPop1,NPop),
 	avalia_populacao(NPop,NPopAv),
-	ordena_populacao(NPopAv,NPopOrd),
+	append(Pop, NPopAv, PopJuntas),												% juntar as duas populacoes
+	list_to_set(PopJuntas, PopJuntasSemRepetidos),								% remover os individuos repetidos
+	ordena_populacao(PopJuntasSemRepetidos, PopOrdenada),						% ordenar a populacao
+	seleciona_melhores(PopOrdenada, Melhores),									% selecionar os melhores individuos
+	remove_melhores(PopOrdenada, Melhores, PopRestantes),						% remove os melhores individuos da populacao
+	associa_produto_avaliacao(PopRestantes, PopComProduto),						% associa a cada individuo o produto da sua avaliacao por um num aleatorio entre 0 e 1
+	ordena_populacao_produto(PopComProduto,PopOrdenadaComProduto),				% ordena a populacao com produto
+	restantes_melhores(PopOrdenadaComProduto, Pop, Melhores, RMelhoresComProd),	% extrai os N-P primeiros individuos para a geracao seguinte
+	remover_produtos(RMelhoresComProd, RMelhores),								% remover os produtos dos individuos
+	append(Melhores, RMelhores, PopNova),										% juntar os melhores individuos com os restantes
 	N1 is N+1,
-	gera_geracao(N1,G,NPopOrd).
+	gera_geracao(N1,G,PopNova).
 
 gerar_pontos_cruzamento(P1,P2):-
 	gerar_pontos_cruzamento1(P1,P2).
@@ -143,6 +171,42 @@ cruzamento([Ind1*_,Ind2*_|Resto],[NInd1,NInd2|Resto1]):-
 	(NInd1=Ind1,NInd2=Ind2)),
 	cruzamento(Resto,Resto1).
 
+
+% selecionar os P primeiros individuos (20% de N, mas no min 1)
+seleciona_melhores(PopOrdenada, MelhoresPop) :-
+    length(PopOrdenada, T),
+    P1 is max(1, round(0.2 * T)),
+    sublista(PopOrdenada, 1, P1, MelhoresPop).	% extrai os P primeiros individuos
+
+
+% extrair os mlhrs individuos da lista original
+remove_melhores(PopOrdenada, MelhoresPop, PopRestantes) :-
+    subtract(PopOrdenada, MelhoresPop, PopRestantes).
+
+
+% associar a cada individuo o produto da sua avaliação por um num aleatorio entre 0 e 1
+associa_produto_avaliacao([], []).
+associa_produto_avaliacao([Ind*V|Resto], [Ind*V*Random|RestoComProduto]) :-
+    random(0.0, 1.0, Random),
+    associa_produto_avaliacao(Resto, RestoComProduto).
+
+
+% passar os N-P primeiros individuos para a geracao seguinte
+restantes_melhores(PopOrdenadaComProduto, Pop, Melhores, NovaPopulacao) :-
+    length(Pop, N),
+    length(Melhores, P),
+    R is N - P,
+	sublista(PopOrdenadaComProduto, 1, R, NovaPopulacao).	% extrai os N-P primeiros individuos
+
+
+% remover os produtos dos individuos
+remover_produtos([], []).
+remover_produtos([Ind*A*_|Resto], [Ind*A|RestoSemProdutos]) :-
+	remover_produtos(Resto, RestoSemProdutos).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%% auxiliares %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 preencheh([],[]).
 
 preencheh([_|R1],[h|R2]):-
