@@ -4,25 +4,27 @@
 :-dynamic prob_cruzamento/1.
 :-dynamic prob_mutacao/1.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% algoritmos %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:- consult('caminhos.pl').
+:- consult('tarefasBC.pl').
 
-% tarefa(Id,TempoProcessamento,TempConclusao,PesoPenalizacao).
-tarefa(t1,2,5,1).
-tarefa(t2,4,7,6).
-tarefa(t3,1,11,2).
-tarefa(t4,3,9,3).
-tarefa(t5,3,8,2).
+
+% tarefa(Id,TempoProcessamento,TempConc,PesoPenalizacao).
+% tarefa(t1,2,5,1).
+% tarefa(t2,4,7,6).
+% tarefa(t3,1,11,2).
+% tarefa(t4,3,9,3).
+% tarefa(t5,3,8,2).
 
 % tarefas(NTarefas).
-tarefas(5).
+tarefas(6).
 
 % parameteriza��o
-inicializa:-write('Numero de novas Geracoes: '),read(NG), (retract(geracoes(_));true), asserta(geracoes(NG)),
+inicializa:-write('Numero de novas Geracoes: '),read(NG), 			(retract(geracoes(_));true), asserta(geracoes(NG)),
 	write('Dimensao da Populacao: '),read(DP),
 	(retract(populacao(_));true), asserta(populacao(DP)),
 	write('Probabilidade de Cruzamento (%):'), read(P1),
 	PC is P1/100, 
-	(retract(prob_cruzamento(_));true), asserta(prob_cruzamento(PC)),
+	(retract(prob_cruzamento(_));true), 	asserta(prob_cruzamento(PC)),
 	write('Probabilidade de Mutacao (%):'), read(P2),
 	PM is P2/100, 
 	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)).
@@ -41,7 +43,7 @@ gera:-
 gera_populacao(Pop):-
 	populacao(TamPop),
 	tarefas(NumT),
-	findall(Tarefa,tarefa(Tarefa,_,_,_),ListaTarefas),
+	findall(Tarefa,tarefa(Tarefa,_,_),ListaTarefas),
 	gera_populacao(TamPop,ListaTarefas,NumT,Pop).
 
 gera_populacao(0,_,_,[]):-!.
@@ -70,23 +72,20 @@ retira(N,[G1|Resto],G,[G1|Resto1]):-
 
 avalia_populacao([],[]).
 avalia_populacao([Ind|Resto],[Ind*V|Resto1]):-
-	avalia(Ind,V),
+	calc(Ind,V),
 	avalia_populacao(Resto,Resto1).
 
-avalia(Seq,V):-
-	avalia(Seq,0,V).
+calc(List, Eval):-
+   calc_helper(List, 0, Eval).
 
-avalia([],_,0).
-avalia([T|Resto],Inst,V):-
-	tarefa(T,Dur,Prazo,Pen),
-	InstFim is Inst+Dur,
-	avalia(Resto,InstFim,VResto),
-	(
-		(InstFim =< Prazo,!, VT is 0)
-  ;
-		(VT is (InstFim-Prazo)*Pen)
-	),
-	V is VT+VResto.
+calc_helper([_], Total, Total).
+
+calc_helper([T1, T2 | Res], Acc, Eval):-
+   tarefa(T1, Orig1, Dest1),
+   tarefa(T2, Orig2, Dest2),
+   find_caminho_entidades(astar, Dest1, Orig2, _, _, Eval1),
+   NewAcc is Acc + Eval1,
+   calc_helper([T2 | Res], NewAcc, Eval).
 
 ordena_populacao(PopAv,PopAvOrd):-
 	bsort(PopAv,PopAvOrd).
@@ -105,6 +104,23 @@ btroca([X*VX,Y*VY|L1],[Y*VY|L2]):-
 
 btroca([X|L1],[X|L2]):-btroca(L1,L2).
 
+% sort para populacao com produto
+ordena_populacao_produto(PopAv,PopAvOrd):-
+	bsort2(PopAv,PopAvOrd).
+
+bsort2([X],[X]):-!.
+bsort2([X|Xs],Ys):-
+    bsort2(Xs,Zs),
+    btroca2([X|Zs],Ys).
+
+btroca2([X],[X]):-!.
+
+btroca2([X*VX*VI,Y*VY*VJ|L1],[Y*VY*VJ|L2]):-
+    VI > VJ,!, 
+    btroca2([X*VX*VI|L1],L2).
+
+btroca2([X|L1],[X|L2]):-btroca2(L1,L2).
+
 
 gera_geracao(G,G,Pop):-!,
 	write('Gera��o '), write(G), write(':'), nl, write(Pop), nl.
@@ -114,9 +130,18 @@ gera_geracao(N,G,Pop):-
 	cruzamento(Pop,NPop1),
 	mutacao(NPop1,NPop),
 	avalia_populacao(NPop,NPopAv),
-	ordena_populacao(NPopAv,NPopOrd),
+	append(Pop, NPopAv, PopJuntas),												% juntar as duas populacoes
+	list_to_set(PopJuntas, PopJuntasSemRepetidos),								% remover os individuos repetidos
+	ordena_populacao(PopJuntasSemRepetidos, PopOrdenada),						% ordenar a populacao
+	seleciona_melhores(PopOrdenada, Melhores),									% selecionar os melhores individuos
+	remove_melhores(PopOrdenada, Melhores, PopRestantes),						% remove os melhores individuos da populacao
+	associa_produto_avaliacao(PopRestantes, PopComProduto),						% associa a cada individuo o produto da sua avaliacao por um num aleatorio entre 0 e 1
+	ordena_populacao_produto(PopComProduto,PopOrdenadaComProduto),				% ordena a populacao com produto
+	restantes_melhores(PopOrdenadaComProduto, Pop, Melhores, RMelhoresComProd),	% extrai os N-P primeiros individuos para a geracao seguinte
+	remover_produtos(RMelhoresComProd, RMelhores),								% remover os produtos dos individuos
+	append(Melhores, RMelhores, PopNova),										% juntar os melhores individuos com os restantes
 	N1 is N+1,
-	gera_geracao(N1,G,NPopOrd).
+	gera_geracao(N1,G,PopNova).
 
 gerar_pontos_cruzamento(P1,P2):-
 	gerar_pontos_cruzamento1(P1,P2).
@@ -144,6 +169,43 @@ cruzamento([Ind1*_,Ind2*_|Resto],[NInd1,NInd2|Resto1]):-
 	(NInd1=Ind1,NInd2=Ind2)),
 	cruzamento(Resto,Resto1).
 
+
+% selecionar os P primeiros individuos (20% de N, mas no min 1)
+seleciona_melhores(PopOrdenada, MelhoresPop) :-
+    length(PopOrdenada, T),
+    P1 is max(1, round(0.2 * T)),
+    sublista2(PopOrdenada, 1, P1, MelhoresPop).	% extrai os P primeiros individuos
+
+
+% extrair os mlhrs individuos da lista original
+remove_melhores(PopOrdenada, MelhoresPop, PopRestantes) :-
+    subtract(PopOrdenada, MelhoresPop, PopRestantes).
+
+
+% associar a cada individuo o produto da sua avaliação por um num aleatorio entre 0 e 1
+associa_produto_avaliacao([], []).
+associa_produto_avaliacao([Ind*V|Resto], [Ind*V*RMult|RestoComProduto]) :-
+    random(0.0, 1.0, Random),
+	RMult is V * Random,
+    associa_produto_avaliacao(Resto, RestoComProduto).
+
+
+% passar os N-P primeiros individuos para a geracao seguinte
+restantes_melhores(PopOrdenadaComProduto, Pop, Melhores, NovaPopulacao) :-
+    length(Pop, N),
+    length(Melhores, P),
+    R is N - P,
+	sublista2(PopOrdenadaComProduto, 1, R, NovaPopulacao).	% extrai os N-P primeiros individuos
+
+
+% remover os produtos dos individuos
+remover_produtos([], []).
+remover_produtos([Ind*A*_|Resto], [Ind*A|RestoSemProdutos]) :-
+	remover_produtos(Resto, RestoSemProdutos).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%% auxiliares %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 preencheh([],[]).
 
 preencheh([_|R1],[h|R2]):-
@@ -168,6 +230,28 @@ sublista1([_|R1],N1,N2,[h|R2]):-
 	N3 is N1 - 1,
 	N4 is N2 - 1,
 	sublista1(R1,N3,N4,R2).
+
+% obtem a sublista de uma lista a partir do indice inicio ate o indice fim
+sublista2(Lista, Inicio, Fim, Sublista) :-
+    length(Lista, Tamanho),
+    between(1, Tamanho, Inicio),
+    between(Inicio, Tamanho, Fim),
+    sublista_aux2(Lista, Inicio, Fim, Sublista).
+
+% predicado auxiliar para construir a sublista
+sublista_aux2([], _, _, []).
+sublista_aux2([H|T], Inicio, Fim, [H|Resto]) :-
+    between(Inicio, Fim, Pos),
+    PosInicio is Inicio,
+    PosFim is Fim,
+    Pos >= PosInicio,
+    Pos =< PosFim,
+    NovoInicio is Inicio + 1,
+    sublista_aux2(T, NovoInicio, Fim, Resto).
+sublista_aux2([_|T], Inicio, Fim, Sublista) :-
+    NovoInicio is Inicio + 1,
+    sublista_aux2(T, NovoInicio, Fim, Sublista).
+
 
 rotate_right(L,K,L1):-
 	tarefas(N),
@@ -246,37 +330,6 @@ mutacao23(G1,1,[G2|Ind],G2,[G1|Ind]):-!.
 mutacao23(G1,P,[G|Ind],G2,[G|NInd]):-
 	P1 is P-1,
 	mutacao23(G1,P1,Ind,G2,NInd).
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% INTERFACE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Define a predicate to process the tasks
-process_tasks([], _, Result) :-
-    % Handle the case when there are no tasks
-    Result = json{message: "No tasks provided"}.
-
-process_tasks(Tasks, Algorithm, Result) :-
-    % Process each task in the array (you can implement your logic here)
-    process_each_task(Tasks, Algorithm, Result).
-
-process_each_task([], _, []).
-
-process_each_task([Task|Rest], Algorithm, [TaskResult|RestResult]) :-
-    % Process individual task (you can implement your logic here)
-    process_task(Task, Algorithm, TaskResult),
-    
-    % Recursive call for the remaining tasks
-    process_each_task(Rest, Algorithm, RestResult).
-
-% Define a predicate to process an individual task
-process_task(Task, Algorithm, TaskResult) :-
-    % Implement your logic to process each task here
-    % For example, you can access Task.taskId, Task.origin, Task.destiny, etc.
-    % and apply your planning algorithm
-    
-    % Dummy example: Just echoing the task for now
-    TaskResult = Task.
-
-
 
 
 

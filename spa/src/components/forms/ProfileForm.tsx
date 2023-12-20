@@ -131,6 +131,12 @@ export default function ProfileForm() {
     const handleDeleteData = async () => {
         setEnabled(true);
 
+        const userConfirmed = window.confirm("Are you sure you want to delete your profile?");
+
+        if (!userConfirmed) {
+            return; // If the user cancels the operation, do nothing
+        }
+        
         // delete data
         let res = await profileDeleter.del();
 
