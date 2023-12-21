@@ -1,0 +1,91 @@
+@startuml
+participant SPA
+participant "MPT API" as API
+participant "UserController" as Ctrl
+participant "UserService" as Srv
+participant "UserRepo" as Repo
+participant "UserMapper" as Map
+participant "TaskRepo" as tr
+participant "TaskMapper" as tm
+participant "MGI API" as API2
+
+
+activate SPA
+SPA -> API: GET(/api/users/allInfo)
+activate API
+
+API -> API: auth middleware 
+API -> Ctrl: GetUserAllInfo()
+activate Ctrl
+
+Ctrl -> Ctrl: permissions middleware 
+Ctrl -> Srv: GetUserAllInfo()
+activate Srv
+
+Srv -> Repo: user = GetByIdAsync(id)
+
+alt user not found
+    Srv --> Ctrl: null
+    deactivate Srv
+
+    Ctrl --> API: status code 404
+    deactivate Ctrl
+
+    API --> SPA: erro
+    deactivate API
+
+else user found
+
+    Srv -> Map: toDTO(user)
+    activate Map
+    Map --> Srv: userDto
+    deactivate Map
+
+    Srv -> tr: tasks = GetAllFilteredAsync(null, id, null)
+
+    Srv -> Srv: tasksDto = new List<TaskSimpleDto>()
+
+    loop for each task
+        alt SurveillanceTask
+
+            Srv -> API2: GET(/api/floor/:id)
+            activate API2
+            API2 --> Srv: floor
+            deactivate API2
+
+            Srv -> tm: toDTO(task, floor)
+            activate tm
+            tm -> Srv: TaskDto
+            deactivate tm
+
+            Srv -> Srv: tasksDto.Add(TaskDto)
+
+        else PickupDeliveryTask
+            Srv -> tm: toDTO(task)
+            activate tm
+            tm -> Srv: TaskDto
+            deactivate tm
+
+            Srv -> Srv: tasksDto.Add(TaskDto)
+        end
+    end
+
+    Srv -> Srv: userwithtasks = new UserWithTasks(userDto, tasksDto.Result)
+
+    Srv --> Ctrl: userwithtasks
+    deactivate Srv
+
+    Ctrl --> API: userwithtasks
+    deactivate Ctrl
+
+    API --> SPA: userwithtasks
+    deactivate API
+
+    SPA -> SPA: download de dados num ficheiro .json
+
+end
+
+
+
+
+@enduml

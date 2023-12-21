@@ -1,0 +1,26 @@
+@startuml
+
+actor GestorCampus as User
+
+participant SPA
+participant "GestaoInfoAPI" as API
+
+User -> SPA: requisita página dos edifícios
+SPA -> User: retorna página dos edifícios
+
+User -> SPA: seleciona edifício que quer editar da tabela
+SPA -> User: mostra formulário com dados do edifício
+
+User -> SPA: altera dados e submete
+
+SPA -> API: put(/api/buildings)
+
+note right of API 
+    Restantes passos representados no 
+    diagrama da API disponivel na pasta API
+end note
+
+API --> SPA: success
+SPA --> User: retorna sucesso
+
+@enduml

@@ -1,0 +1,121 @@
+@startuml
+participant SPA
+participant "MPT API" as API
+participant "TaskController" as Ctrl
+participant "TaskService" as Srv
+participant "MGI API" as API2
+
+participant "TaskRepo" as Repo
+participant "UserRepo" as ur
+participant "TaskMapper" as Map
+participant "UserMapper" as um
+participant "SurveillanceTask" as SurveillanceTask
+participant "PickupDeliveryTask" as PickupDeliveryTask
+
+activate SPA
+SPA -> API: GET(/api/tasks/)
+activate API
+
+API -> API: auth middleware 
+API -> Ctrl: GetAll(type?,Approved?,user?)
+activate Ctrl
+
+Ctrl -> Ctrl: permissions middleware 
+Ctrl -> Srv: GetAll(type?,Approved?,user?)
+activate Srv
+
+Srv -> Repo: GetAllAsync(type?,Approved?,user?)
+activate Repo
+Repo --> Srv: Task
+deactivate Repo
+
+Srv -> Srv: new List tasksDto
+
+loop for each Task
+
+    Srv -> ur: getUserById(ID)
+    activate ur
+    deactivate ur
+    Srv -> um: ToDtoTaskInfo(user)
+    activate um
+    deactivate um
+
+    alt Task is SurveillanceTask
+
+        Srv -> API2: GET(/api/floor/:id)
+        activate API2
+        deactivate API2
+
+        Srv -> Map: toFullDTO(task, floor, user)
+        activate Map
+        Map --> SurveillanceTask: create()
+        Map --> Srv: SurveillanceTask
+        deactivate Map
+
+        Srv -> Srv: tasksDto.add(SurveillanceTask)
+    else Task is PickupDeliveryTask
+        Srv -> Map: toFullDTO(task, user)
+        activate Map
+        Map --> PickupDeliveryTask: create()
+        Map --> Srv: PickupDeliveryTask
+        deactivate Map
+
+        Srv -> Srv: tasksDto.add(PickupDeliveryTask)
+    end
+
+end
+
+Srv --> Ctrl: tasksDto
+deactivate Srv
+
+Ctrl --> API: retorna tasksDto
+deactivate Ctrl
+
+API --> SPA: mostra tasks para o utilizador
+deactivate API
+
+note right of SPA 
+    Utilizador aprova ou rejeita as tarefas
+end note
+
+SPA -> API: PATCH(/api/tasks/)
+
+activate API
+API -> Ctrl: PATCH
+
+activate Ctrl
+Ctrl -> Srv: ApproveReject
+activate Srv
+Srv -> Repo: update aprove/reject field
+
+activate Repo
+Repo --> Map: toDto
+activate Map
+Map -> Repo: TaskDto
+deactivate Map
+Repo --> Srv: TaskDto
+deactivate Repo
+
+alt sucesso 
+    Srv --> Ctrl: retorna mensagem de sucesso
+else erro
+    Srv --> Ctrl: retorna mensagem de erro
+end
+deactivate Srv
+
+Ctrl --> API: retorna mensagem
+
+deactivate Ctrl
+deactivate API
+
+API --> SPA: retorna mensagem
+
+deactivate API
+
+
+
+
+
+
+
+@enduml

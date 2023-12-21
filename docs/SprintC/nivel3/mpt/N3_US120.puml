@@ -1,0 +1,71 @@
+@startuml
+participant SPA
+participant "MPT API" as API
+participant "UserController" as Ctrl
+participant "UserService" as Srv
+participant "UserRepo" as Repo
+participant "UserMapper" as Map
+
+
+activate SPA
+SPA -> API: DELETE(/api/users/:id)
+activate API
+
+API -> API: auth middleware 
+API -> Ctrl: Delete(id)
+activate Ctrl
+
+Ctrl -> Ctrl: permissions middleware 
+Ctrl -> Srv: DeleteAsync(id)
+activate Srv
+
+Srv -> Repo: user = GetByIdAsync(id)
+activate Repo
+
+alt user not found
+
+    Repo -> Srv: return null
+    deactivate Repo
+    Srv -> Ctrl: return 404
+    deactivate Srv
+    Ctrl -> API: return 404
+    deactivate Ctrl
+    API -> SPA: return 404
+    deactivate API
+    
+else user found
+
+    alt user active
+        Repo -> Srv: return error
+        deactivate Repo
+        Srv -> Ctrl: return 403
+        deactivate Srv
+        Ctrl -> API: return 403
+        deactivate Ctrl
+        API -> SPA: return 403
+        deactivate API
+
+    else user inactive
+        Srv -> Repo: Remove(user)
+        activate Repo
+        Srv -> Srv: CommitAsync()
+        deactivate Repo
+
+        Srv -> Map: Map(user)
+        activate Map
+        Map -> Srv: userDto
+        deactivate Map
+
+        Srv -> Ctrl: return 200
+        deactivate Srv
+        Ctrl -> API: return 200
+        deactivate Ctrl
+        API -> SPA: return 200
+        deactivate API
+
+    end
+
+end
+
+
+@enduml

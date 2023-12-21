@@ -1,0 +1,22 @@
+@startuml
+
+actor "Gestor de tarefas" as Actor
+participant "SPA" as Container <<Container (C4)>>
+participant "MPT API" as API <<Container (C4)>>
+
+Actor -> Container: requisita uma sequência de execução de tarefas aprovadas
+Container --> Actor: requisita o tipo de algoritmo a usar
+Actor -> Container: informa o tipo de algoritmo a usar
+
+Container -> API: POST(/api/plannings/)
+
+
+alt sucesso
+    API --> Container: retorna a sequencia de tarefas a executar
+    Container --> Actor: retorna a sequencia de tarefas a executar
+else falha
+    API --> Container: devolve mensagem de erro
+    Container --> Actor: devolve mensagem de erro
+end
+
+@enduml

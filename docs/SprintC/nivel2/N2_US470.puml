@@ -1,0 +1,30 @@
+@startuml
+
+actor "Gestor de tarefas" as Actor
+participant "SPA" as Container <<Container (C4)>>
+participant "MPT API" as API <<Container (C4)>>
+
+Actor -> Container: requisitar uma lista de tarefas para aprovação
+
+Container -> API: GET(/api/tasks/)
+API --> Container: retorna lista de tarefas
+
+alt sucesso
+    Container --> Actor: apresenta lista de tarefas
+else falha
+    Container --> Actor: devolve mensagem de erro
+end
+
+Actor -> Container: aprova ou rejeita a tarefa
+Container -> API: PUT(/api/tasks/)
+
+alt sucesso
+    API --> Container: retorna mensagem de sucesso
+    Container --> Actor: devolve mensagem de sucesso
+else falha
+    API --> Container: retorna mensagem de erro
+    Container --> Actor: devolve mensagem de erro
+end
+
+
+@enduml

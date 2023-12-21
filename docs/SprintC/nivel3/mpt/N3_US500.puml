@@ -1,0 +1,66 @@
+@startuml
+participant SPA
+participant "MPT API" as API
+participant "PlanningController" as Ctrl
+participant "PlanningService" as Srv
+participant "MGI API" as API2
+participant "PlanningRepo" as Repo
+participant "TaskRepo" as tr
+participant "PlanningMapper" as Map
+participant "Planning" as Planning
+participant "PlanningTask" as pt
+
+activate SPA
+SPA -> API: POST(/api/planning/)
+activate API
+
+API -> API: auth middleware 
+API -> Ctrl: AddAsync(tasks, userId)
+activate Ctrl
+
+Ctrl -> Ctrl: permissions middleware 
+Ctrl -> Srv: AddAsync(tasks, userId)
+activate Srv
+
+Srv -> Srv: convert tasks ids to domain ids
+
+Srv -> tr: GetByIdsAsync(taskIds)
+activate tr
+deactivate tr
+
+Srv -> Map : toDomain(dto, userId, 0)
+activate Map
+Map -> Planning: create()
+activate Planning
+deactivate Planning
+Map -> Srv: return Planning
+deactivate Map
+
+
+loop t in task
+Srv -> pt: new PlanningTask(planning, t, sequence)
+Srv -> Srv: planning.PlanningTasks.Add(planningTask)
+Srv -> Srv: sequece++
+end
+
+Srv -> Repo: AddAsync(planning)
+activate Repo
+Repo --> Srv: Planning
+deactivate Repo
+
+Srv -> Map: toDTO(Planning)
+activate Map
+Map --> Srv: PlanningDTO
+deactivate Map
+
+Srv --> Ctrl: PlanningDTO
+deactivate Srv
+
+Ctrl --> API: status code 201
+deactivate Ctrl
+
+API --> SPA: success
+deactivate API
+
+
+@enduml

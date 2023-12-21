@@ -1,0 +1,27 @@
+@startuml
+
+actor GestorCampus as User
+
+participant SPA
+participant "GestaoInfoAPI" as API
+
+User -> SPA: requisita página dos andares
+SPA -> User: retorna página dos andares
+
+User -> SPA: seleciona o andar que pretende da tabela
+SPA -> User: mostra formulário com dados do andar
+
+User -> SPA: seleciona botão de dar upload do floor map
+User -> SPA: seleciona o ficheiro do floor map
+
+SPA -> API: patch(/api/floorMaps)
+
+note right of API 
+    Restantes passos representados no 
+    diagrama da API disponivel na pasta API
+end note
+
+API --> SPA: success
+SPA --> User: retorna sucesso
+
+@enduml

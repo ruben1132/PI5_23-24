@@ -1,0 +1,104 @@
+@startuml
+participant SPA
+participant "MPT API" as API
+participant "TaskController" as Ctrl
+participant "TaskService" as Srv
+participant "MGI API" as API2
+participant "MPT API" as API3
+participant "TaskRepo" as Repo
+participant "TaskMapper" as Map
+participant "SurveillanceTask" as SurveillanceTask
+participant "PickupDeliveryTask" as PickupDeliveryTask
+
+alt surveillance
+    activate SPA
+    SPA -> API: POST(/api/tasks/surveillance)
+    activate API
+
+    API -> API: auth middleware 
+    API -> Ctrl: CreateSurveillanceTaskAsync(task)
+    activate Ctrl
+
+    Ctrl -> Ctrl: permissions middleware 
+    Ctrl -> Ctrl: currentUser = HttpContext.Items["user"];
+    Ctrl -> Srv: AddSurveillanceTaskAsync(task, currentUser.id, Token)
+    activate Srv
+
+    Srv -> API2: GET(/api/floor/:id)
+    activate API2
+    API2 --> Srv: floor
+    deactivate API2
+
+    Srv -> Map: ToSurveillanceDomain(task, userId, floor)
+    activate Map
+    Map --> SurveillanceTask: create()
+    Map --> Srv: SurveillanceTask
+    deactivate Map
+
+    Srv -> Repo: AddAsync(SurveillanceTask)
+    activate Repo
+    Repo --> Srv: Task
+    deactivate Repo
+
+    Srv -> Map: toDTO(Task)
+    activate Map
+    Map --> Srv: TaskDTO
+    deactivate Map
+
+    Srv --> Ctrl: TaskDTO
+    deactivate Srv
+
+    Ctrl --> API: status code 201
+    deactivate Ctrl
+
+    API --> SPA: success
+    deactivate API
+
+else pickupdelivery
+
+    SPA -> API: POST(/api/tasks/pickupdelivery)
+    activate API
+
+    API -> API: auth middleware 
+    API -> Ctrl: CreatePickupDeliveryTaskAsync(task)
+    activate Ctrl
+
+    Ctrl -> Ctrl: permissions middleware 
+    Ctrl -> Ctrl: currentUser = HttpContext.Items["user"];
+    Ctrl -> Srv: AddPickupDeliveryTaskAsync(task, currentUser.id)
+    activate Srv
+
+    Srv -> API3: GET(/findPath/)
+    activate API3
+    API3 --> Srv: pathMovement
+    deactivate API3
+
+    Srv -> Map: ToPickupDeliveryDomain(task, userId, pathMovement)
+    activate Map
+    Map --> PickupDeliveryTask: create()
+    Map --> Srv: PickupDeliveryTask
+    deactivate Map
+
+    Srv -> Repo: AddAsync(PickupDeliveryTask)
+    activate Repo
+    Repo --> Srv: Task
+    deactivate Repo
+
+    Srv -> Map: toDTO(Task)
+    activate Map
+    Map --> Srv: TaskDTO
+    deactivate Map
+
+    Srv --> Ctrl: TaskDTO
+    deactivate Srv
+
+    Ctrl --> API: status code 201
+    deactivate Ctrl
+
+    API --> SPA: success
+    deactivate API
+    deactivate SPA
+
+end
+
+@enduml

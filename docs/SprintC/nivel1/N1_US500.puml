@@ -1,0 +1,17 @@
+@startuml
+
+actor "Gestor de tarefas" as Actor
+participant "robDroneGo:robDroneGo" as Container <<Container (C4)>>
+
+Actor -> Container: requisita uma sequência de execução de tarefas aprovadas
+Container --> Actor: requisita o tipo de algoritmo a usar
+Actor -> Container: informa o tipo de algoritmo a usar
+
+alt sucesso
+    Container --> Actor: retorna a sequencia de tarefas a executar
+else falha
+    Container --> Actor: devolve mensagem de erro
+end
+
+
+@enduml

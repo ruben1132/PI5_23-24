@@ -1,0 +1,30 @@
+@startuml
+
+actor "Utente" as Actor
+participant "SPA" as Container <<Container (C4)>>
+participant "MPT API" as API <<Container (C4)>>
+
+Actor -> Container: requisita alteração dos dados do utilizador
+
+Container -> API: GET(/api/users/:id)
+alt sucesso
+    Container --> Actor: retorna dados do utilizador
+else falha
+    Container --> Actor: devolve mensagem de erro
+end
+
+Actor -> Container: altera e envia os novos dados do utilizador
+
+Container -> API: PATCH(/api/users/)
+
+alt 
+    API -> API: valida dados
+    API -> API: atualiza dados do utilizador
+    API -> Container: retorna mensagem de sucesso
+    Container -> Actor: retorna mensagem de sucesso
+else
+    API -> Container: retorna mensagem de erro
+    Container -> Actor: retorna mensagem de erro
+end
+
+@enduml

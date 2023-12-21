@@ -1,0 +1,31 @@
+@startuml
+
+actor GestorCampus as User
+
+participant SPA
+participant "GestaoInfoAPI" as API
+
+User -> SPA: requisita página das passagens
+SPA -> User: retorna página das passagens
+
+User -> SPA: seleciona opção passagem da tabela
+SPA -> User: mostra formulário com dados da passagem
+
+SPA -> API: get(/api/buildings)
+API --> SPA: mostra edificios nas select boxes
+
+API -> SPA: mostra dados da passagem
+
+User -> SPA: preenche formulário e submete
+
+SPA -> API: put(/api/passages)
+
+note right of API 
+    Restantes passos representados no 
+    diagrama da API disponivel na pasta API
+end note
+
+API --> SPA: success
+SPA --> User: retorna sucesso
+
+@enduml
