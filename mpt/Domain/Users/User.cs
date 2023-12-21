@@ -17,13 +17,14 @@ namespace Mpt.Domain.Users
         public bool Active { get; private set; }
         public RoleId RoleId { get; private set; }
         public ApprovalStatus IsApproved { get; private set; }
+        public DateTime LastUpdated { get; private set; }
 
         // Constructors
         private User()
         {
         }
 
-        public User(UserEmail email, string name, PhoneNumber phone, UserNif nif, RoleId roleId, UserPassword password, ApprovalStatus isApproved)
+        public User(UserEmail email, string name, PhoneNumber phone, UserNif nif, RoleId roleId, UserPassword password, ApprovalStatus isApproved, DateTime? lastUpdated = null)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new BusinessRuleValidationException("Name cannot be null.");
@@ -37,8 +38,8 @@ namespace Mpt.Domain.Users
             this.Nif = nif;
             this.RoleId = roleId;
             this.IsApproved = isApproved;
+            this.LastUpdated = lastUpdated ?? DateTime.UtcNow;
         }
-
 
         // Methods
         public void ChangePassword(UserPassword password)
@@ -105,6 +106,11 @@ namespace Mpt.Domain.Users
         public void Disapprove()
         {
             this.IsApproved = ApprovalStatus.rejected;
+        }
+
+        public void UpdateLastUpdated()
+        {
+            this.LastUpdated = DateTime.UtcNow;
         }
     }
 }

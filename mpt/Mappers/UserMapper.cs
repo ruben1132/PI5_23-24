@@ -13,6 +13,8 @@ namespace Mpt.Mappers
     {
         public static UserDto ToDto(User user)
         {
+            var date = user.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+
             return new UserDto(
                     user.Id.Value,
                     user.Email.Value,
@@ -20,6 +22,7 @@ namespace Mpt.Mappers
                     user.Phone.Value,
                     user.Nif.Value,
                     user.RoleId.Value,
+                    date,
                     user.Active,
                     user.Password.Value
                 );
@@ -27,6 +30,8 @@ namespace Mpt.Mappers
 
         public static UserWithRoleDto ToDto(User user, RoleDto role)
         {
+            var date = user.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+
             return new UserWithRoleDto(
                     user.Id.Value,
                     user.Email.Value,
@@ -35,7 +40,8 @@ namespace Mpt.Mappers
                     user.Nif.Value,
                     user.Active,
                     role,
-                    user.IsApproved.ToString()
+                    user.IsApproved.ToString(),
+                    date
                 );
         }
 
