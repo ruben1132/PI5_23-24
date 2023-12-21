@@ -442,6 +442,7 @@ export default class ThumbRaiser {
         // Create the cube texture
         this.cubeTexture = new CubeTexture(this.cubeTexturesParameters.skyboxes[this.cubeTexturesParameters.selected]);
 
+
         // Create the maze
         this.maze = new Maze(this.mazeParameters);
 

@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import { merge } from './merge.js';
 import { FBXLoader } from 'three/examples/jsm/Addons.js';
+import axios from 'axios'; // Import axios
+
+import config from '../../../config';
+
 
 // Function to create a texture with text
 function createTextTexture(text) {
@@ -25,27 +29,39 @@ export default class Door extends THREE.Group {
 
         this.loaded = false;
 
-        this.createTextSprite = (doorName, posX, posY) => {
-            const textTexture = createTextTexture(doorName);
-            const textMaterial = new THREE.SpriteMaterial({ map: textTexture });
-        
-            // Adjusting material properties to make the sprite black and fully opaque
-            textMaterial.color.setHex(0x000000); // Set color to black
-            textMaterial.opacity = 1; // Set opacity to fully opaque
-        
-            const doorNameSprite = new THREE.Sprite(textMaterial);
-            doorNameSprite.scale.set(1, 1, 1);
-            doorNameSprite.position.set(posX, posY + 0.5, 0);
-        
-            doorNameSprite.renderOrder = 1;
-            doorNameSprite.material.depthTest = false;
-        
-            this.add(doorNameSprite);
-        
-            console.log('Sprite created for:', doorName);
+        // Function to fetch room name using axios
+        const fetchRoomNameFromDatabase = async (roomId) => {
+            try {
+                const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.rooms + roomId, {
+                    withCredentials: true,
+                });
+
+                // console.log('Response:', response);
+                return response.data.number; // Assuming you get the roomName from the response
+            } catch (error) {
+                console.error('Error fetching room name:', error);
+                return null; // Return null in case of an error
+            }
         };
 
-        this.onLoad = function (object) {
+        this.createTextSprite = (doorName, posX, posY) => {
+            const finalX = posX - Math.floor(this.mapSize.width / 2);
+            const finalY = posY - Math.floor(this.mapSize.depth / 2) + 1;
+            const textTexture = createTextTexture(doorName);
+            const textMaterial = new THREE.SpriteMaterial({ map: textTexture });
+
+            const doorNameSprite = new THREE.Sprite(textMaterial);
+            doorNameSprite.scale.set(2, 2, 2);
+            doorNameSprite.position.set(finalX, 0, finalY);
+
+            doorNameSprite.material.depthTest = false;
+
+            this.add(doorNameSprite);
+
+            // console.log('Sprite created for:', doorName);
+        };
+
+        this.onLoad = async function (object) {
             object.scale.set(0.1, 0.1, 0.1);
             if (this.door.position.direction === 'north') {
                 object.position.set(
@@ -78,12 +94,17 @@ export default class Door extends THREE.Group {
             // Add the door object to the scene
             this.add(object);
 
+            // Get room name asynchronously using roomId from parameters
+            const roomName = await fetchRoomNameFromDatabase(parameters.roomId);
+
             // Assuming you have access to door names and positions
-            const doorName = this.door.position.positionX + " - " + this.door.position.positionY; // Replace with your door name logic
+            // const doorName = `${roomName} - ${this.door.position.positionX} - ${this.door.position.positionY}`;
+            const doorName = `${roomName}`;
             const doorPosX = this.door.position.positionX;
             const doorPosY = this.door.position.positionY;
 
-            this.createTextSprite(doorName, doorPosX, doorPosY);
+            this.createTextSprite(doorName, doorPosX, doorPosY, this.camera);
+
 
             this.loaded = true;
         };

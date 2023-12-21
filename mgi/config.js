@@ -28,7 +28,7 @@ export default {
     // MongoDB connection URL
     databaseURL: getEnvVariable(
         'MONGODB_URI',
-        'mongodb://mongoadmin:ca7408396943512431f6af8a@vsgate-s1.dei.isep.ipp.pt:10937/?authMechanism=SCRAM-SHA-1',
+        'mongodb://mongoadmin:ba017d9643f0dd16e45629fe@vsgate-s1.dei.isep.ipp.pt:11217/?authMechanism=SCRAM-SHA-1',
     ),
 
     // cookie name
@@ -98,7 +98,7 @@ export default {
         room: {
             post: [roles.GESTOR_CAMPUS],
             get: [...Object.values(roles)],
-            getById: [roles.GESTOR_CAMPUS],
+            getById: [roles.GESTOR_CAMPUS, roles.GESTOR_FROTA, roles.GESTOR_TAREFAS],
             put: [roles.GESTOR_CAMPUS],
             delete: [roles.GESTOR_CAMPUS],
         },
