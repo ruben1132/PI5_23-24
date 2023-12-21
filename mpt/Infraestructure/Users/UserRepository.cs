@@ -36,6 +36,9 @@ namespace Mpt.Infrastructure.Users
             if (isApproved != null)
                 query = query.Where(u => u.IsApproved == isApproved);
           
+            // order by last updated
+            query = query.OrderByDescending(u => u.LastUpdated);
+            
             return await query.ToListAsync();
         }
     }

@@ -27,6 +27,9 @@ namespace Mpt.Infrastructure.Tasks
             if (userId != null)
                 tasks = tasks.Where(t => t.UserId.Value == userId).ToList();
 
+            // order by last updated
+            tasks = tasks.OrderByDescending(t => t.LastUpdated).ToList();
+
             return tasks;
         }
     }

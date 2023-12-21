@@ -110,6 +110,7 @@ namespace Mpt.Services
                 else
                     task.DisaproveTask();
 
+                task.UpdateLastUpdated();
 
                 await this._unitOfWork.CommitAsync();
 

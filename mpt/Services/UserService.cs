@@ -304,6 +304,8 @@ namespace Mpt.Services
                 else
                     user.Disapprove();
 
+                user.UpdateLastUpdated();
+                
                 await this._unitOfWork.CommitAsync();
 
                 var userDto = UserMapper.ToDto(user);
