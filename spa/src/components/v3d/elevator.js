@@ -92,7 +92,7 @@ export default class Elevator extends THREE.Group {
             const elevatorPosX = this.elevator.position.positionX;
             const elevatorPosY = this.elevator.position.positionY;
 
-            this.createTextSprite("Elevator", elevatorPosX, elevatorPosY);
+            this.createTextSprite("Elevador", elevatorPosX, elevatorPosY);
 
             this.loaded = true;
         };

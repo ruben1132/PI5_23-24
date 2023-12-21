@@ -8,13 +8,13 @@
         "map": [
             [3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 3, 2, 2, 2, 3, 2, 3, 2, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 0, 2, 2, 2, 0, 2, 2, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 2, 2, 1, 0, 0, 0, 3, 2, 2, 2, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 2, 0, 2, 1, 0, 0, 0, 3, 2, 0, 2, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
             [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0]
         ],
@@ -158,9 +158,15 @@
             "startY": 0,
             "endX": 14,
             "endY": 2,
-            "access": {
+            "door": {
+                "position": {
+                    "positionX": 12,
+                    "positionY": 2,
+                    "direction": "north"
+                }
+            },"access": {
                 "positionX": 12,
-                "positionY": 3
+                "positionY": 2
             } 
         },
         {
@@ -169,9 +175,15 @@
             "startY": 0,
             "endX": 18,
             "endY": 2,
-            "access": {
+            "door": {
+                "position": {
+                    "positionX": 16,
+                    "positionY": 2,
+                    "direction": "north"
+                }
+            },"access": {
                 "positionX": 16,
-                "positionY": 3
+                "positionY": 2
             } 
         },
         {
@@ -180,9 +192,15 @@
             "startY": 0,
             "endX": 20,
             "endY": 2,
-            "access": {
+            "door": {
+                "position": {
+                    "positionX": 19,
+                    "positionY": 2,
+                    "direction": "north"
+                }
+            },"access": {
                 "positionX": 19,
-                "positionY": 3
+                "positionY": 2
             } 
         },
         {
@@ -191,9 +209,15 @@
             "startY": 8,
             "endX": 14,
             "endY": 10,
-            "access": {
+            "door": {
+                "position": {
+                    "positionX": 12,
+                    "positionY": 8,
+                    "direction": "north"
+                }
+            },"access": {
                 "positionX": 12,
-                "positionY": 7
+                "positionY": 8
             } 
         },
         {
@@ -202,9 +226,15 @@
             "startY": 8,
             "endX": 22,
             "endY": 10,
-            "access": {
+            "door": {
+                "position": {
+                    "positionX": 20,
+                    "positionY": 8,
+                    "direction": "north"
+                }
+            },"access": {
                 "positionX": 20,
-                "positionY": 7
+                "positionY": 8
             } 
         }
     ]
