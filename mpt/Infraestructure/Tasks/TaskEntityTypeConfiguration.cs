@@ -55,6 +55,11 @@ namespace Mpt.Infrastructure.Tasks
                 .WithOne(pt => pt.Task)
                 .HasForeignKey(pt => pt.TaskId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // lastupdate
+            builder
+                .Property(t => t.LastUpdated)
+                .HasDefaultValueSql("getdate()");
         }
         
 

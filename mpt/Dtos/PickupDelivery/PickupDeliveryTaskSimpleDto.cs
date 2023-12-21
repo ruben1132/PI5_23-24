@@ -20,8 +20,8 @@ namespace Mpt.Dtos
             bool isCompleted, string taskType, string pickupPersonName,
             string pickupPersonPhoneNumber, string deliveryPersonName, string deliveryPersonPhoneNumber,
             string taskDescription, string confirmationCode, string originType, string origin, string destinyType, 
-            string destiny, string isApproved)
-            : base(isCompleted, taskType, isApproved)
+            string destiny, string isApproved, string lastUpdated)
+            : base(isCompleted, taskType, isApproved, lastUpdated)
         {
             this.PickupPersonName = pickupPersonName;
             this.PickupPersonPhoneNumber = pickupPersonPhoneNumber;
