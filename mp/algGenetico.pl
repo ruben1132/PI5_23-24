@@ -133,7 +133,9 @@ btroca2([X|L1],[X|L2]):-btroca2(L1,L2).
 
 
 gera_geracao(G,G,Pop):-!,
-	write('Gera��o '), write(G), write(':'), nl, write(Pop), nl.
+	write('Gera��o '), write(G), write(':'), nl, write(Pop), nl,
+	select(IndivAv, Pop, _),
+	termina(IndivAv).
 
 gera_geracao(N,G,Pop):-
 	write('Gera��o '), write(N), write(':'), nl, write(Pop), nl,
@@ -240,7 +242,7 @@ tempo_decorrido(TempoDecorrido) :-
 
 % termina a execucao do algoritmo
 termina(Individuo*Avaliacao) :-
-	write('Solucao encontrada: '), write(Individuo), write(' com avaliacao '), write(Avaliacao), nl, nl,
+	write('Melhor solucao encontrada: '), write(Individuo), write(' com avaliacao '), write(Avaliacao), nl, nl,
 	halt.
 
 %%%%%%%%%%%%%%%%%%%%%%% auxiliares %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
