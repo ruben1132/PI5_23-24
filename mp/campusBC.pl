@@ -8,7 +8,7 @@ pisos(b,[b1,b2,b3]).
 pisos(c,[c1,c2,c3,c4]).
 pisos(d,[d1,d2,d3]).
 
-custo(elev,3).
+custo(elev,30).
 custo(pass,5).
 
 dimensoes(a1, 23, 11).

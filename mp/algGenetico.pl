@@ -3,6 +3,7 @@
 :-dynamic populacao/1.
 :-dynamic prob_cruzamento/1.
 :-dynamic prob_mutacao/1.
+:-dynamic solucao_ideal/1.
 
 :- consult('caminhos.pl').
 :- consult('tarefasBC.pl').
@@ -19,7 +20,8 @@
 tarefas(6).
 
 % parameteriza��o
-inicializa:-write('Numero de novas Geracoes: '),read(NG), 			(retract(geracoes(_));true), asserta(geracoes(NG)),
+inicializa:-write('Numero de novas Geracoes: '),read(NG), 			
+	(retract(geracoes(_));true), asserta(geracoes(NG)),
 	write('Dimensao da Populacao: '),read(DP),
 	(retract(populacao(_));true), asserta(populacao(DP)),
 	write('Probabilidade de Cruzamento (%):'), read(P1),
@@ -27,7 +29,9 @@ inicializa:-write('Numero de novas Geracoes: '),read(NG), 			(retract(geracoes(_
 	(retract(prob_cruzamento(_));true), 	asserta(prob_cruzamento(PC)),
 	write('Probabilidade de Mutacao (%):'), read(P2),
 	PM is P2/100, 
-	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)).
+	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)),
+	write('Solucao Ideal:'), read(SI),
+	(retract(solucao_ideal(_));true), asserta(solucao_ideal(SI)).
 
 
 gera:-
@@ -140,6 +144,7 @@ gera_geracao(N,G,Pop):-
 	restantes_melhores(PopOrdenadaComProduto, Pop, Melhores, RMelhoresComProd),	% extrai os N-P primeiros individuos para a geracao seguinte
 	remover_produtos(RMelhoresComProd, RMelhores),								% remover os produtos dos individuos
 	append(Melhores, RMelhores, PopNova),										% juntar os melhores individuos com os restantes
+	(verifica_condicao_termino(PopNova, IndivAv), termina(IndivAv), ! ; true),	% verifica se a condicao de termino foi atingida
 	N1 is N+1,
 	gera_geracao(N1,G,PopNova).
 
@@ -203,7 +208,19 @@ remover_produtos([], []).
 remover_produtos([Ind*A*_|Resto], [Ind*A|RestoSemProdutos]) :-
 	remover_produtos(Resto, RestoSemProdutos).
 
+% verifica se a populacao atingiu um valor igual ou inferior à solucao ideal
+verifica_condicao_termino(Pop, Individuo*Avaliacao) :-
+    solucao_ideal(SI),
+    member(Individuo*Avaliacao, Pop),
+    Avaliacao =< SI.
 
+
+% termina a execucao do algoritmo
+termina(Individuo*Avaliacao) :-
+	write('Solucao encontrada: '), write(Individuo), write(' com avaliacao '), write(Avaliacao), nl, nl,
+	write('Pressione qualquer tecla para terminar...'), nl,
+	get_char(_),
+	halt.
 
 %%%%%%%%%%%%%%%%%%%%%%% auxiliares %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 preencheh([],[]).
