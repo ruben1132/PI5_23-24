@@ -13,7 +13,7 @@ import { Button } from 'react-bootstrap';
 import { notify } from '@/components/notification/Notification';
 
 // config
-import config, { userRole } from '../../../config';
+import config, { userRole } from '../../../config/config';
 
 // custom hooks
 import {
@@ -33,10 +33,6 @@ import { useRouter } from 'next/navigation';
 
 // models
 import { Profile, ProfileWithPassword } from '@/models/Profile';
-import { get } from 'cypress/types/lodash';
-import { skip } from 'node:test';
-import { delay } from 'cypress/types/bluebird';
-import MeekoLoader from '../loaders/MeekoLoader';
 import ModalMisc from '../modals/ModalMisc';
 
 export default function ProfileForm() {

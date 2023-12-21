@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
-import config from '../../config';
+import config from '../../config/config';
 import { UserWithRole } from '../models/User';
 import { redirect } from 'next/navigation';
 

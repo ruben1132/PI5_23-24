@@ -21,7 +21,7 @@ import { useFetchData, useSubmitData, useDeleteData, useFormStringInputWithRegex
 import { RobotType, RobotTypeWithTaskTypes } from '@/models/RobotType';
 
 // config
-import config from '../../../config';
+import config from '../../../config/config';
 import { TaskType } from '@/models/TaskType';
 import TaskTypeSelectBox from '../selectBoxes/TaskTypeSelectBox';
 

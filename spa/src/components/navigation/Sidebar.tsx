@@ -8,7 +8,7 @@ import { Nav, Button, Col } from 'react-bootstrap';
 import Spinner from 'react-bootstrap/Spinner';
 
 // config
-import config from '../../../config';
+import config from '../../../config/config';
 
 // icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

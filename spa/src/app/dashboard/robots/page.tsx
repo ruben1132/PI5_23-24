@@ -1,4 +1,4 @@
-import config from '../../../../config';
+import config from '../../../../config/config';
 import PageContent from '@/components/pageContent/PageContent';
 
 export default async function Robots() {

@@ -3,7 +3,7 @@
 import { Form } from 'react-bootstrap';
 
 // config
-import config from '../../../config';
+import config from '../../../config/config';
 
 interface Props {
     setValue: (val: string) => void;

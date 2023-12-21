@@ -7,7 +7,7 @@ import TaskSearchForm from '../forms/search/TaskSearchForm';
 
 // auth context
 import { useAuth } from '@/context/AuthContext';
-import { userRole } from '../../../config';
+import { userRole } from '../../../config/config';
 
 interface Props {
     type: string;

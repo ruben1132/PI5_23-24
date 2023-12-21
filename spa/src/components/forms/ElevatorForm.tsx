@@ -15,7 +15,7 @@ import CloseButton from 'react-bootstrap/CloseButton';
 import { notify } from '@/components/notification/Notification';
 
 // config
-import config from '../../../config';
+import config from '../../../config/config';
 
 // custom hooks
 import { useFetchData, useSubmitData, useFormStringInput, useDeleteData } from '@/util/customHooks';

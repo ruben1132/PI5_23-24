@@ -6,7 +6,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import axios from 'axios';
 
 // config
-import config from '../../../config';
+import config from '../../../config/config';
 
 // css
 import '../../styles/v3d.css';

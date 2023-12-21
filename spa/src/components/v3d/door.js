@@ -3,7 +3,7 @@ import { merge } from './merge.js';
 import { FBXLoader } from 'three/examples/jsm/Addons.js';
 import axios from 'axios'; // Import axios
 
-import config from '../../../config';
+import config from '../../../config/config.js';
 
 
 // Function to create a texture with text
