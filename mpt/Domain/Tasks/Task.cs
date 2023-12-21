@@ -16,6 +16,7 @@ namespace Mpt.Domain.Tasks
         public string TaskType { get; private set; }
         public List<string> Path { get; private set; }
         public List<List<RobotMovement>> RobotMovements { get; private set; }
+        public DateTime LastUpdated { get; private set; }
 
         // Navigation properties
         public List<PlanningTask> PlanningTasks { get; set; } = new List<PlanningTask>();
@@ -26,7 +27,7 @@ namespace Mpt.Domain.Tasks
         {
         }
 
-        public Task(UserId userId, string taskType, List<string> path, List<List<RobotMovement>> robotMovements, ApprovalStatus isApproved)
+        public Task(UserId userId, string taskType, List<string> path, List<List<RobotMovement>> robotMovements, ApprovalStatus isApproved, DateTime? lastUpdated = null)
         {
             this.Id = new TaskId(Guid.NewGuid());
             this.UserId = userId;
@@ -34,6 +35,7 @@ namespace Mpt.Domain.Tasks
             this.Path = path;
             this.RobotMovements = robotMovements;
             this.IsApproved = isApproved;
+            this.LastUpdated = lastUpdated ?? DateTime.UtcNow;
         }
 
         // Methods
@@ -59,6 +61,10 @@ namespace Mpt.Domain.Tasks
             this.IsApproved = ApprovalStatus.rejected;
         }
 
+        public void UpdateLastUpdated()
+        {
+            this.LastUpdated = DateTime.UtcNow;
+        }
 
     }
 }

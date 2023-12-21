@@ -17,7 +17,7 @@ import { faCircleInfo, faClipboard } from '@fortawesome/free-solid-svg-icons';
 import { notify } from '@/components/notification/Notification';
 
 // config
-import config, { userRole } from '../../../config';
+import config, { userRole } from '../../../config/config';
 
 // auth context
 import { useAuth } from '@/context/AuthContext';

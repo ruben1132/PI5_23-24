@@ -1,4 +1,4 @@
-import config from '../../../../config';
+import config from '../../../../config/config';
 import PageContentTask from '@/components/pageContent/PageContentTask';
 
 export default async function Tasks() {

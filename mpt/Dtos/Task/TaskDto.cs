@@ -11,9 +11,10 @@ namespace Mpt.Dtos
         public List<string> Path { get; private set; }
         public bool IsCompleted { get; private set; }
         public string IsApproved { get; private set; }
+        public string LastUpdated { get; set; }
 
         public TaskDto(string id, List<string> path,
-            bool isCompleted, string taskType, UserTaskInfoDto user, string isApproved)
+            bool isCompleted, string taskType, UserTaskInfoDto user, string isApproved, string lastUpdated)
         {
             this.Id = id;
             this.User = user;
@@ -21,6 +22,7 @@ namespace Mpt.Dtos
             this.IsApproved = isApproved;
             this.TaskType = taskType;
             this.Path = path;
+            this.LastUpdated = lastUpdated;
         }
 
     }

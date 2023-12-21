@@ -210,8 +210,6 @@ namespace Mpt.Services
 
         private Result<string> CheckUser(User user)
         {
-
-
             if (user.IsApproved == ApprovalStatus.pending)
             {
                 return Result<string>.Fail("Your account needs to be approved by the system first!");

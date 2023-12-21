@@ -21,7 +21,7 @@ import { useFetchData, useSubmitData } from '@/util/customHooks';
 import { TaskPlanning, TaskPlanningWithTasks } from '@/models/TaskPlanning';
 
 // config
-import config from '../../../config';
+import config from '../../../config/config';
 import { Task, TaskWithUser } from '@/models/Task';
 
 interface Props {

@@ -26,6 +26,10 @@ namespace Mpt.Infrastructure.Users
                 .HasForeignKey(u => u.RoleId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Property(u => u.LastUpdated)
+                .HasDefaultValueSql("getdate()");
+                
         }
     }
 }

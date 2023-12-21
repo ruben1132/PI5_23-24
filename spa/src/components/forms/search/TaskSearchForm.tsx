@@ -9,8 +9,8 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
 // config
-import config from '../../../../config';
-import { userRole } from '../../../../config';
+import config from '../../../../config/config';
+import { userRole } from '../../../../config/config';
 
 // custom hooks
 import { useFetchData, useFormStringInput } from '@/util/customHooks';

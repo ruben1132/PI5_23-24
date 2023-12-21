@@ -12,26 +12,34 @@ namespace Mpt.Mappers
         // simple data, no user, no path, no robot movements
         public static TaskSimpleDto ToDto(Domain.Tasks.Task task)
         {
+            var date = task.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+
             return new TaskSimpleDto(
                 task.IsCompleted,
                 task.TaskType,
-                task.IsApproved.ToString()
+                task.IsApproved.ToString(),
+                date
             );
         }
 
         public static SurveillanceTaskSimpleDto ToDto(SurveillanceTask surveillanceTask, string floorCode)
         {
+            var date = surveillanceTask.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+
             return new SurveillanceTaskSimpleDto(
                 surveillanceTask.IsCompleted,
                 surveillanceTask.TaskType,
                 surveillanceTask.PhoneNumber.Value,
                 floorCode,
-                surveillanceTask.IsApproved.ToString()
+                surveillanceTask.IsApproved.ToString(),
+                date
             );
         }
 
         public static PickupDeliveryTaskSimpleDto ToDto(PickupDeliveryTask pickupDeliveryTask)
         {
+            var date = pickupDeliveryTask.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+
             return new PickupDeliveryTaskSimpleDto(
                 pickupDeliveryTask.IsCompleted,
                 pickupDeliveryTask.TaskType,
@@ -45,7 +53,8 @@ namespace Mpt.Mappers
                 pickupDeliveryTask.Origin,
                 pickupDeliveryTask.DestinyType,
                 pickupDeliveryTask.Destiny,
-                pickupDeliveryTask.IsApproved.ToString()
+                pickupDeliveryTask.IsApproved.ToString(),
+                date
             );
         }
 
@@ -53,19 +62,24 @@ namespace Mpt.Mappers
         // has full data except for the path and robot movements
         public static TaskDto ToFullDto(Domain.Tasks.Task task, UserTaskInfoDto user)
         {
+            var date = task.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+
             return new TaskDto(
                 task.Id.Value,
                 task.Path,
                 task.IsCompleted,
                 task.TaskType,
                 user,
-                task.IsApproved.ToString()
+                task.IsApproved.ToString(),
+                date
             );
 
         }
 
         public static SurveillanceTaskDto ToFullDto(SurveillanceTask surveillanceTask, string floorCode, UserTaskInfoDto user)
         {
+            var date = surveillanceTask.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+
             return new SurveillanceTaskDto(
                 surveillanceTask.Id.Value,
                 surveillanceTask.Path,
@@ -74,12 +88,15 @@ namespace Mpt.Mappers
                 surveillanceTask.PhoneNumber.Value,
                 floorCode,
                 user,
-                surveillanceTask.IsApproved.ToString()
+                surveillanceTask.IsApproved.ToString(),
+                date
             );
         }
 
         public static PickupDeliveryTaskDto ToFullDto(PickupDeliveryTask pickupDeliveryTask, UserTaskInfoDto user)
         {
+            var date = pickupDeliveryTask.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+
             return new PickupDeliveryTaskDto(
                 pickupDeliveryTask.Id.Value,
                 pickupDeliveryTask.Path,
@@ -96,7 +113,8 @@ namespace Mpt.Mappers
                 pickupDeliveryTask.DestinyType,
                 pickupDeliveryTask.Destiny,
                 user,
-                pickupDeliveryTask.IsApproved.ToString()
+                pickupDeliveryTask.IsApproved.ToString(),
+                date
             );
         }
 

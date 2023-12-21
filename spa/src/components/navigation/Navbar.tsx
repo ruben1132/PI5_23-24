@@ -23,7 +23,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 // config
-import config from '../../../config';
+import config from '../../../config/config';
 
 interface NavBarProps {
     toggle: () => void;

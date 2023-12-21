@@ -1,5 +1,5 @@
 import PageContent from '@/components/pageContent/PageContent';
-import config from '../../../../config';
+import config from '../../../../config/config';
 
 export default async function Roles() {
     return (

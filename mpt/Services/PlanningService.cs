@@ -106,6 +106,10 @@ namespace Mpt.Services
                 int sequence = 0;
                 foreach (var t in tasks)
                 {
+                    // check if approved
+                    if (t.IsApproved == ApprovalStatus.pending || t.IsApproved == ApprovalStatus.rejected)
+                        return Result<PlanningFullDto>.Fail("Task " + t.Id.Value + " is not approved.");
+
                     var planningTask = new PlanningTask { Planning = planning, Task = t, SequenceOrder = sequence };
                     planning.PlanningTasks.Add(planningTask);
 

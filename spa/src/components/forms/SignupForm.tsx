@@ -1,7 +1,7 @@
 'use client';
 
 // react
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // react bootstrap components
 import Form from 'react-bootstrap/Form';
@@ -19,21 +19,15 @@ import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { notify } from '@/components/notification/Notification';
 
 // config
-import config from '../../../config';
+import config from '../../../config/config';
 
 // custom hooks
-import {
-    useFetchData,
-    useSubmitData,
-    useFormStringInput,
-    useDeleteData,
-    useFormStringInputWithRegex,
-} from '@/util/customHooks';
+import { useSubmitData, useFormStringInput, useFormStringInputWithRegex, useModal } from '@/util/customHooks';
 
 // models
 import { UserSignUp } from '@/models/User';
-import RoleSelectBox from '../selectBoxes/RoleSelectBox';
-import StatusSelectBox from '../selectBoxes/StatusSelectBox';
+import ModalMisc from '../modals/ModalMisc';
+import { termsAndConditions } from '../../../config/termsAndConditions';
 
 export default function SignupForm() {
     // form submitter
@@ -49,6 +43,10 @@ export default function SignupForm() {
     );
     const userPhone = useFormStringInputWithRegex('', /^9\d{8}$/);
     const userNif = useFormStringInputWithRegex('', /^\d{9}$/);
+    const [isChecked, setIsChecked] = useState<boolean>(false);
+
+    // modal
+    const confirmationModal = useModal(false);
 
     // button enables - used to prevent double clicks
     const [enabled, setEnabled] = useState<boolean>(true);
@@ -82,125 +80,159 @@ export default function SignupForm() {
     };
 
     return (
-        <Form>
-            <Row>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">Name</Form.Label>
-                        <Form.Control type="text" placeholder="your name..." onChange={userName.handleChange} />
-                    </Form.Group>
-                </Col>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">
-                            Email{' '}
-                            <OverlayTrigger
-                                placement="right"
-                                overlay={
-                                    <Tooltip id="tooltip-password">
-                                        Email must be from the domain {config.emailDomain}.
-                                    </Tooltip>
+        <>
+        <ModalMisc
+            show={confirmationModal.show}
+            fade={true}
+            close={confirmationModal.handleClose}
+            title="Terms and Conditions"
+            body= {termsAndConditions}
+            footer={<Button variant="secondary" onClick={confirmationModal.handleClose}>Close</Button>}
+        />
+            <Form>
+                <Row>
+                    <Col sm={6}>
+                        <Form.Group className="mb-6">
+                            <Form.Label htmlFor="select">Name</Form.Label>
+                            <Form.Control type="text" placeholder="your name..." onChange={userName.handleChange} />
+                        </Form.Group>
+                    </Col>
+                    <Col sm={6}>
+                        <Form.Group className="mb-6">
+                            <Form.Label htmlFor="select">
+                                Email{' '}
+                                <OverlayTrigger
+                                    placement="right"
+                                    overlay={
+                                        <Tooltip id="tooltip-password">
+                                            Email must be from the domain {config.emailDomain}.
+                                        </Tooltip>
+                                    }
+                                >
+                                    <FontAwesomeIcon icon={faCircleInfo} size="xs" />
+                                </OverlayTrigger>
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder={'email@' + config.emailDomain}
+                                onChange={userEmail.handleChange}
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <br />
+                <Row>
+                    <Col sm={6}>
+                        <Form.Group className="mb-6">
+                            <Form.Label htmlFor="select">
+                                Phone Number{' '}
+                                <OverlayTrigger
+                                    placement="right"
+                                    overlay={
+                                        <Tooltip id="tooltip-password">
+                                            Phone number must start with the digit 9 and must have 9 digits.
+                                        </Tooltip>
+                                    }
+                                >
+                                    <FontAwesomeIcon icon={faCircleInfo} size="xs" />
+                                </OverlayTrigger>
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="9########"
+                                onChange={userPhone.handleChange}
+                                defaultValue={userPhone.value}
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col sm={6}>
+                        <Form.Group className="mb-6">
+                            <Form.Label htmlFor="select">
+                                NIF{' '}
+                                <OverlayTrigger
+                                    placement="right"
+                                    overlay={<Tooltip id="tooltip-password">NIF must have 9 digits.</Tooltip>}
+                                >
+                                    <FontAwesomeIcon icon={faCircleInfo} size="xs" />
+                                </OverlayTrigger>
+                            </Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="#########"
+                                onChange={userNif.handleChange}
+                                defaultValue={userNif.value}
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <br />
+                <Row>
+                    <Col sm={12}>
+                        <Form.Group className="mb-12">
+                            <Form.Label htmlFor="select">
+                                Password{' '}
+                                <OverlayTrigger
+                                    placement="right"
+                                    overlay={
+                                        <Tooltip id="tooltip-password">
+                                            Password must have at least 10 characters, at least one uppercase and
+                                            lowercase letter, one number and one special character.
+                                        </Tooltip>
+                                    }
+                                >
+                                    <FontAwesomeIcon icon={faCircleInfo} size="xs" />
+                                </OverlayTrigger>
+                            </Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="**********"
+                                onChange={userPassword.handleChange}
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <br />
+                <Row>
+                    <Col sm={12}>
+                        <Form.Group className="mb-12">
+                            <Form.Check
+                                type="checkbox"
+                                label={
+                                    <span>
+                                        I agree to the{' '}
+                                        <span style={{ color: 'blue', cursor: 'pointer' }} onClick={confirmationModal.handleOpen}>
+                                            terms and conditions
+                                        </span>
+                                    </span>
+                                }
+                                onChange={() => setIsChecked(!isChecked)}
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <br />
+                <Row>
+                    <Col sm={12}>
+                        <Form.Group className="mb-12">
+                            <Button
+                                variant="success"
+                                onClick={handleSubmitData}
+                                disabled={
+                                    userName.value === '' ||
+                                    !userEmail.isValid ||
+                                    !userPhone.isValid ||
+                                    !userNif.isValid ||
+                                    !userPassword.isValid ||
+                                    !isChecked ||
+                                    !enabled
                                 }
                             >
-                                <FontAwesomeIcon icon={faCircleInfo} size="xs" />
-                            </OverlayTrigger>
-                        </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder={'email@' + config.emailDomain}
-                            onChange={userEmail.handleChange}
-                        />
-                    </Form.Group>
-                </Col>
-            </Row>
-            <br />
-            <Row>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">
-                            Phone Number{' '}
-                            <OverlayTrigger
-                                placement="right"
-                                overlay={
-                                    <Tooltip id="tooltip-password">
-                                        Phone number must start with the digit 9 and must have 9 digits.
-                                    </Tooltip>
-                                }
-                            >
-                                <FontAwesomeIcon icon={faCircleInfo} size="xs" />
-                            </OverlayTrigger>
-                        </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="9########"
-                            onChange={userPhone.handleChange}
-                            defaultValue={userPhone.value}
-                        />
-                    </Form.Group>
-                </Col>
-                <Col sm={6}>
-                    <Form.Group className="mb-6">
-                        <Form.Label htmlFor="select">
-                            NIF{' '}
-                            <OverlayTrigger
-                                placement="right"
-                                overlay={<Tooltip id="tooltip-password">NIF must have 9 digits.</Tooltip>}
-                            >
-                                <FontAwesomeIcon icon={faCircleInfo} size="xs" />
-                            </OverlayTrigger>
-                        </Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="#########"
-                            onChange={userNif.handleChange}
-                            defaultValue={userNif.value}
-                        />
-                    </Form.Group>
-                </Col>
-            </Row>
-            <br />
-            <Row>
-                <Col sm={12}>
-                    <Form.Group className="mb-12">
-                        <Form.Label htmlFor="select">
-                            Password{' '}
-                            <OverlayTrigger
-                                placement="right"
-                                overlay={
-                                    <Tooltip id="tooltip-password">
-                                        Password must have at least 10 characters, at least one uppercase and lowercase
-                                        letter, one number and one special character.
-                                    </Tooltip>
-                                }
-                            >
-                                <FontAwesomeIcon icon={faCircleInfo} size="xs" />
-                            </OverlayTrigger>
-                        </Form.Label>
-                        <Form.Control type="password" placeholder="**********" onChange={userPassword.handleChange} />
-                    </Form.Group>
-                </Col>
-            </Row>
-            <br />
-            <Row>
-                <Col sm={12}>
-                    <Form.Group className="mb-12">
-                        <Button
-                            variant="success"
-                            onClick={handleSubmitData}
-                            disabled={
-                                userName.value === '' ||
-                                !userEmail.isValid ||
-                                !userPhone.isValid ||
-                                !userNif.isValid ||
-                                !userPassword.isValid ||
-                                !enabled
-                            }
-                        >
-                            Add
-                        </Button>
-                    </Form.Group>
-                </Col>
-            </Row>
-        </Form>
+                                Add
+                            </Button>
+                        </Form.Group>
+                    </Col>
+                </Row>
+            </Form>
+        </>
     );
 }

@@ -13,7 +13,7 @@ import { Button } from 'react-bootstrap';
 import { notify } from '@/components/notification/Notification';
 
 // config
-import config from '../../../config';
+import config from '../../../config/config';
 
 // custom hooks
 import { useFormStringInput, useFormStringInputWithRegex, useSubmitData, useDeleteData } from '@/util/customHooks';

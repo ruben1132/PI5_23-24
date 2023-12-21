@@ -7,8 +7,8 @@ namespace Mpt.Dtos
 
         public SurveillanceTaskDto(string id, List<string> path,
             bool isCompleted, string taskType, string phoneNumber, string floorCode, 
-            UserTaskInfoDto user, string isApproved)
-            : base(id, path, isCompleted, taskType, user, isApproved)
+            UserTaskInfoDto user, string isApproved, string lastUpdated)
+            : base(id, path, isCompleted, taskType, user, isApproved, lastUpdated)
         {
             this.PhoneNumber = phoneNumber;
             this.FloorCode = floorCode;

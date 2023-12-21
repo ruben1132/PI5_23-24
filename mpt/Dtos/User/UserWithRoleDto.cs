@@ -11,8 +11,9 @@ namespace Mpt.Dtos
         public RoleDto Role { get; private set; }
         public bool Active { get; private set; }
         public string IsApproved { get; set; }
+        public string LastUpdated { get; set; }
 
-        public UserWithRoleDto(string id, string email, string name, string phone, string nif, bool active, RoleDto role, string isApproved)
+        public UserWithRoleDto(string id, string email, string name, string phone, string nif, bool active, RoleDto role, string isApproved, string lastUpdated)
         {
             this.Id = id;
             this.Email = email;
@@ -22,8 +23,8 @@ namespace Mpt.Dtos
             this.Active = active;
             this.Role = role;
             this.IsApproved = isApproved;
+            this.LastUpdated = lastUpdated;
         }
-
 
     }
 

@@ -110,6 +110,7 @@ namespace Mpt.Services
                 else
                     task.DisaproveTask();
 
+                task.UpdateLastUpdated();
 
                 await this._unitOfWork.CommitAsync();
 
@@ -179,7 +180,7 @@ namespace Mpt.Services
             try
             {
                 // get path and movements of the robot
-                var pathMovementDto = await this.GetPathAsync(dto.ParsedDestiny, dto.ParsedDestiny);
+                var pathMovementDto = await this.GetPathAsync(dto.ParsedOrigin, dto.ParsedDestiny);
 
                 if (pathMovementDto.IsFailure)
                     return Result<PickupDeliveryTaskSimpleDto>.Fail(pathMovementDto.Error);

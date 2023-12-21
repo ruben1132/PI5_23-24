@@ -19,7 +19,7 @@ import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { notify } from '@/components/notification/Notification';
 
 // config
-import config from '../../../config';
+import config from '../../../config/config';
 
 // custom hooks
 import {

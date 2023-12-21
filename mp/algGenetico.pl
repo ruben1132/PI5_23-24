@@ -3,6 +3,9 @@
 :-dynamic populacao/1.
 :-dynamic prob_cruzamento/1.
 :-dynamic prob_mutacao/1.
+:-dynamic solucao_ideal/1.
+:-dynamic tempo_inicio/1.
+:-dynamic tempo_limite/1.
 
 :- consult('caminhos.pl').
 :- consult('tarefasBC.pl').
@@ -19,7 +22,8 @@
 tarefas(6).
 
 % parameteriza��o
-inicializa:-write('Numero de novas Geracoes: '),read(NG), 			(retract(geracoes(_));true), asserta(geracoes(NG)),
+inicializa:-write('Numero de novas Geracoes: '),read(NG), 			
+	(retract(geracoes(_));true), asserta(geracoes(NG)),
 	write('Dimensao da Populacao: '),read(DP),
 	(retract(populacao(_));true), asserta(populacao(DP)),
 	write('Probabilidade de Cruzamento (%):'), read(P1),
@@ -27,7 +31,13 @@ inicializa:-write('Numero de novas Geracoes: '),read(NG), 			(retract(geracoes(_
 	(retract(prob_cruzamento(_));true), 	asserta(prob_cruzamento(PC)),
 	write('Probabilidade de Mutacao (%):'), read(P2),
 	PM is P2/100, 
-	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)).
+	(retract(prob_mutacao(_));true), asserta(prob_mutacao(PM)),
+	write('Solucao Ideal:'), read(SI),
+	(retract(solucao_ideal(_));true), asserta(solucao_ideal(SI)),
+	write('Tempo limite (em segundos):'), read(TL),
+	(retract(tempo_limite(_));true), asserta(tempo_limite(TL)),
+	get_time(Tempo),
+    asserta(tempo_inicio(Tempo)).											% guarda o tempo de inicio da execucao do algoritmo
 
 
 gera:-
@@ -123,23 +133,27 @@ btroca2([X|L1],[X|L2]):-btroca2(L1,L2).
 
 
 gera_geracao(G,G,Pop):-!,
-	write('Gera��o '), write(G), write(':'), nl, write(Pop), nl.
+	write('Gera��o '), write(G), write(':'), nl, write(Pop), nl,
+	select(IndivAv, Pop, _),
+	termina(IndivAv).
 
 gera_geracao(N,G,Pop):-
 	write('Gera��o '), write(N), write(':'), nl, write(Pop), nl,
+	(verifica_condicao_termino(Pop, IndivAv), termina(IndivAv), ! ; true),							% verifica se a condicao de termino foi atingida
+	(verifica_tempo_limite(Pop, IndivAv), termina(IndivAv), ! ; true),								% verifica se ultrapassou o tempo limite
 	cruzamento(Pop,NPop1),
 	mutacao(NPop1,NPop),
 	avalia_populacao(NPop,NPopAv),
-	append(Pop, NPopAv, PopJuntas),												% juntar as duas populacoes
-	list_to_set(PopJuntas, PopJuntasSemRepetidos),								% remover os individuos repetidos
-	ordena_populacao(PopJuntasSemRepetidos, PopOrdenada),						% ordenar a populacao
-	seleciona_melhores(PopOrdenada, Melhores),									% selecionar os melhores individuos
-	remove_melhores(PopOrdenada, Melhores, PopRestantes),						% remove os melhores individuos da populacao
-	associa_produto_avaliacao(PopRestantes, PopComProduto),						% associa a cada individuo o produto da sua avaliacao por um num aleatorio entre 0 e 1
-	ordena_populacao_produto(PopComProduto,PopOrdenadaComProduto),				% ordena a populacao com produto
-	restantes_melhores(PopOrdenadaComProduto, Pop, Melhores, RMelhoresComProd),	% extrai os N-P primeiros individuos para a geracao seguinte
-	remover_produtos(RMelhoresComProd, RMelhores),								% remover os produtos dos individuos
-	append(Melhores, RMelhores, PopNova),										% juntar os melhores individuos com os restantes
+	append(Pop, NPopAv, PopJuntas),																	% juntar as duas populacoes
+	list_to_set(PopJuntas, PopJuntasSemRepetidos),													% remover os individuos repetidos
+	ordena_populacao(PopJuntasSemRepetidos, PopOrdenada),											% ordenar a populacao
+	seleciona_melhores(PopOrdenada, Melhores),														% selecionar os melhores individuos
+	remove_melhores(PopOrdenada, Melhores, PopRestantes),											% remove os melhores individuos da populacao
+	associa_produto_avaliacao(PopRestantes, PopComProduto),											% associa a cada individuo o produto da sua avaliacao por um num aleatorio entre 0 e 1
+	ordena_populacao_produto(PopComProduto,PopOrdenadaComProduto),									% ordena a populacao com produto
+	restantes_melhores(PopOrdenadaComProduto, Pop, Melhores, RMelhoresComProd),						% extrai os N-P primeiros individuos para a geracao seguinte
+	remover_produtos(RMelhoresComProd, RMelhores),													% remover os produtos dos individuos
+	append(Melhores, RMelhores, PopNova),															% juntar os melhores individuos com os restantes
 	N1 is N+1,
 	gera_geracao(N1,G,PopNova).
 
@@ -204,6 +218,32 @@ remover_produtos([Ind*A*_|Resto], [Ind*A|RestoSemProdutos]) :-
 	remover_produtos(Resto, RestoSemProdutos).
 
 
+% verifica se a populacao atingiu um valor igual ou inferior à solucao ideal
+verifica_condicao_termino(Pop, Individuo*Avaliacao) :-
+    solucao_ideal(SI),
+    member(Individuo*Avaliacao, Pop),
+    Avaliacao =< SI.
+
+
+% verifica se o tempo decorrido é maior que o limite estabelecido
+verifica_tempo_limite(Pop, IndivAv) :-
+    tempo_decorrido(TempoDecorrido),
+	tempo_limite(Limite),
+    TempoDecorrido >= Limite,!,
+	select(IndivAv, Pop, _).					% obtem o melhor individuo da populacao (o primeiro, pois a populacao esta ordenada)
+
+
+% calcula o tempo decorrido desde o inicio da execucao do algoritmo
+tempo_decorrido(TempoDecorrido) :-
+    tempo_inicio(TempoInicio),
+    get_time(TempoAtual),
+    TempoDecorrido is TempoAtual - TempoInicio.
+
+
+% termina a execucao do algoritmo
+termina(Individuo*Avaliacao) :-
+	write('Melhor solucao encontrada: '), write(Individuo), write(' com avaliacao '), write(Avaliacao), nl, nl,
+	halt.
 
 %%%%%%%%%%%%%%%%%%%%%%% auxiliares %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 preencheh([],[]).
