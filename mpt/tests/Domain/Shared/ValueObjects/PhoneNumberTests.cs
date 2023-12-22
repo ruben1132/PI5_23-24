@@ -1,8 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Mpt.Core.Domain;
+using Mpt.Domain.Shared;
 
-namespace Mpt.Domain.Shared.Tests
+namespace tests.Domain.Shared.Tests
 {
     [TestClass]
     public class PhoneNumberTests

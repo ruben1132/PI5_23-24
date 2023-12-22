@@ -12,7 +12,7 @@ namespace Mpt.IServices
         Task<Result<UserWithRoleDto>> GetByIdAsync(Guid id);
         Task<Result<UserProfileDto>> GetMyProfileAsync(Guid id);
         Task<Result<List<UserWithRoleDto>>> GetAllAsync(bool? isSysUser, string? isApproved);
-        Task<Result<List<UserWithTasks>>> GetUserAllInfo(Guid id, string token);
+        Task<Result<UserWithTasks>> GetUserAllInfo(Guid id, string token);
         Task<Result<UserWithRoleDto>> UpdateAsync(UserDto dto);
         Task<Result<UserProfileDto>> UpdateMyProfileAsync(UpdateUserProfile dto, string userId);
         Task<Result<UserDto>> UpdateIsApprovedAsync(Guid id, IsApprovedDto dto);

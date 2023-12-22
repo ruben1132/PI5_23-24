@@ -304,6 +304,7 @@ C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\tests.pdb
 C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Azure.Core.dll
 C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Azure.Identity.dll
 C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\BCrypt.Net.dll
+C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Castle.Core.dll
 C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\DotNetEnv.dll
 C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Microsoft.AspNetCore.JsonPatch.dll
@@ -337,6 +338,7 @@ C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Microsoft.TestPlatform.Cro
 C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Microsoft.TestPlatform.Utilities.dll
 C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.Common.dll
 C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Moq.dll
 C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Microsoft.VisualStudio.TestPlatform.TestFramework.dll
 C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\ruben\Desktop\PI5\mpt\tests\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll

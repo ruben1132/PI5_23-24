@@ -70,14 +70,14 @@ namespace Mpt.Services
 
 
 
-        public async Task<Result<List<UserWithTasks>>> GetUserAllInfo(Guid id, string token)
+        public async Task<Result<UserWithTasks>> GetUserAllInfo(Guid id, string token)
         {
             try
             {
                 var user = await this._repo.GetByIdAsync(new UserId(id));
 
                 if (user == null)
-                    return Result<List<UserWithTasks>>.Fail("User not found.");
+                    return Result<UserWithTasks>.Fail("User not found.");
 
                 var userDto = UserMapper.ToDto(user);
 
@@ -87,12 +87,12 @@ namespace Mpt.Services
 
                 var userwithtasks = UserMapper.ToUserWithTasksDto(userDto, tasksDto);
 
-                return Result<List<UserWithTasks>>.Ok(new List<UserWithTasks>() { userwithtasks });
+                return Result<UserWithTasks>.Ok( userwithtasks);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return Result<List<UserWithTasks>>.Fail(ex.Message);
+                return Result<UserWithTasks>.Fail(ex.Message);
             }
         }
 
