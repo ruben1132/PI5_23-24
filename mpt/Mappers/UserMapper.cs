@@ -13,7 +13,6 @@ namespace Mpt.Mappers
     {
         public static UserDto ToDto(User user)
         {
-            var date = user.LastUpdated.ToString("dd/MM/yyyy hh:mm");
 
             return new UserDto(
                     user.Id.Value,
@@ -22,7 +21,6 @@ namespace Mpt.Mappers
                     user.Phone.Value,
                     user.Nif.Value,
                     user.RoleId.Value,
-                    date,
                     user.Active,
                     user.Password.Value
                 );

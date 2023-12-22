@@ -6,6 +6,7 @@ export interface TaskWithUser {
     taskType: string;
     isCompleted?: boolean;
     isApproved?: boolean;
+    lastUpdated: string;
 }
 
 export interface Task {
@@ -13,4 +14,5 @@ export interface Task {
     taskType: string;
     isCompleted?: boolean;
     isApproved?: string;
+    lastUpdated: string;
 }

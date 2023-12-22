@@ -29,6 +29,7 @@ function TaskTable(props: Props) {
                     <th>State Approval</th>
                     <th>Completed</th>
                     {user?.role.name !== userRole.UTENTE && <th>User</th>}
+                    <th>Last Updated</th>
                 </tr>
             </thead>
             <tbody>
@@ -41,6 +42,8 @@ function TaskTable(props: Props) {
                         {item.isCompleted === true ? <td>{item.isCompleted}</td> : <td>Not Completed</td>}
 
                         {user?.role.name !== userRole.UTENTE && <td>{(item as TaskWithUser).user?.email}</td>}
+
+                        <td>{item.lastUpdated}</td>
                     </tr>
                 ))}
             </tbody>

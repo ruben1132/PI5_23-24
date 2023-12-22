@@ -1,6 +1,6 @@
-import { Task } from "./Task";
+import { Task, TaskWithUser } from "./Task";
 
-export interface SurveillanceTask extends Task {
+export interface SurveillanceTask extends TaskWithUser {
     phoneNumber: string;
     floorCode: string;
 }

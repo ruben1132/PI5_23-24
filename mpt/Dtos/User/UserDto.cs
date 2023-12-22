@@ -17,9 +17,8 @@ namespace Mpt.Dtos
         public bool? Active { get; set; }
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string? Password { get; set; }
-        public string LastUpdated { get; set; }
 
-        public UserDto(string id, string email, string name, string phone, string nif, string roleId, string lastUpdate, bool? active = true, string? password = null)
+        public UserDto(string id, string email, string name, string phone, string nif, string roleId, bool? active = true, string? password = null)
         {
             this.Id = id;
             this.Email = email;
@@ -29,7 +28,6 @@ namespace Mpt.Dtos
             this.Nif = nif;
             this.Active = active;
             this.RoleId = roleId;
-            this.LastUpdated = lastUpdate;
         }
 
     }

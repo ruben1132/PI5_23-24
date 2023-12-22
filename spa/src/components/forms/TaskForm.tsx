@@ -34,7 +34,7 @@ import {
 } from '@/util/customHooks';
 
 // model
-import { Task } from '@/models/Task';
+import { Task, TaskWithUser } from '@/models/Task';
 import RoomSelectBox from '../selectBoxes/RoomSelectBox';
 import FloorSelectBox from '../selectBoxes/FloorSelectBox';
 import ElevatorSelectBox from '../selectBoxes/ElevatorSelectBox';
@@ -393,6 +393,18 @@ export default function TaskForm(props: Props) {
                         </Form.Group>
                     </Col>
                 )}
+                {props.action === 'edit' && (props.item.value as TaskWithUser).user && (
+                    <Col sm={6}>
+                        <Form.Group className="mb-6">
+                            <Form.Label htmlFor="select">User</Form.Label>
+                            <Form.Control
+                                type="text"
+                                defaultValue={(props.item.value as TaskWithUser).user.email}
+                                disabled={true}
+                            />
+                        </Form.Group>
+                    </Col>
+                )}
             </Row>
             <br />
             {taskType.value === 'Surveillance' ? (
@@ -420,10 +432,10 @@ export default function TaskForm(props: Props) {
                                 <Form.Label htmlFor="select">Floor</Form.Label>
                                 {props.action === 'edit' ? (
                                     <Form.Control
-                                    type="text"
-                                    defaultValue={(props.item.value as SurveillanceTask)?.floorCode}
-                                    disabled={true}
-                                />
+                                        type="text"
+                                        defaultValue={(props.item.value as SurveillanceTask)?.floorCode}
+                                        disabled={true}
+                                    />
                                 ) : (
                                     <FloorSelectBox
                                         disabled={props.action === 'edit'}
