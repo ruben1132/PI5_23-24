@@ -10,53 +10,45 @@ participant "RoleRepo" as rr
 participant "RoleMapper" as rm
 
 activate SPA
-SPA -> API: POST(/api/users/)
+SPA -> API: POST(/api/auth/signup)
 activate API
 
-API -> API: auth middleware 
+
 API -> Ctrl: AddAsync(user)
 activate Ctrl
 
-Ctrl -> Ctrl: permissions middleware 
 Ctrl -> Srv: AddAsync(user)
 activate Srv
 
-Srv -> Srv: userByEmail = GetByEmailAsync(u.Email)
+Srv -> Srv: check if email is already in use
 
-alt Utilizador existe
-    Srv -> Ctrl: Utilizador já existe
-    Ctrl --> API: status code 400
-    API --> SPA: error
-else Utilizador não existe
+Srv -> Srv: hash password
 
-    Srv -> Srv: user.Password = HashPassword(u.Password, GenerateSalt())
+Srv -> Map: toDomain(user)
+activate Map
+Map --> Srv: User
+deactivate Map
 
-    Srv -> Map: toDomain(user)
-    activate Map
-    Map --> Srv: User
-    deactivate Map
+Srv -> Repo: AddAsync(user)
+activate Repo
+Repo -> Repo: AddAsync(user)
+Repo --> Srv: User
+deactivate Repo
 
-    Srv -> Repo: AddAsync(user)
-    activate Repo
-    Repo -> Repo: AddAsync(user)
-    Repo --> Srv: User
-    deactivate Repo
+Srv -> Map: toDTO(User)
+activate Map
+Map --> Srv: UserDTO
+deactivate Map
 
-    Srv -> Map: toDTO(User)
-    activate Map
-    Map --> Srv: UserDTO
-    deactivate Map
+Srv --> Ctrl: UserDTO
+deactivate Srv
 
-    Srv --> Ctrl: UserDTO
-    deactivate Srv
+Ctrl --> API: status code 201
+deactivate Ctrl
 
-    Ctrl --> API: status code 201
-    deactivate Ctrl
+API --> SPA: success
+deactivate API
 
-    API --> SPA: sucesso
-    deactivate API
-
-end
 
 
 @enduml

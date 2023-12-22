@@ -4,11 +4,9 @@ participant "MPT API" as API
 participant "TaskController" as Ctrl
 participant "TaskService" as Srv
 participant "MGI API" as API2
-participant "MPT API" as API3
+participant "MP API" as API3
 participant "TaskRepo" as Repo
 participant "TaskMapper" as Map
-participant "SurveillanceTask" as SurveillanceTask
-participant "PickupDeliveryTask" as PickupDeliveryTask
 
 alt surveillance
     activate SPA
@@ -20,7 +18,7 @@ alt surveillance
     activate Ctrl
 
     Ctrl -> Ctrl: permissions middleware 
-    Ctrl -> Ctrl: currentUser = HttpContext.Items["user"];
+    Ctrl -> Ctrl: get current user
     Ctrl -> Srv: AddSurveillanceTaskAsync(task, currentUser.id, Token)
     activate Srv
 
@@ -31,7 +29,6 @@ alt surveillance
 
     Srv -> Map: ToSurveillanceDomain(task, userId, floor)
     activate Map
-    Map --> SurveillanceTask: create()
     Map --> Srv: SurveillanceTask
     deactivate Map
 
@@ -64,7 +61,7 @@ else pickupdelivery
     activate Ctrl
 
     Ctrl -> Ctrl: permissions middleware 
-    Ctrl -> Ctrl: currentUser = HttpContext.Items["user"];
+    Ctrl -> Ctrl: get current user
     Ctrl -> Srv: AddPickupDeliveryTaskAsync(task, currentUser.id)
     activate Srv
 
@@ -75,7 +72,6 @@ else pickupdelivery
 
     Srv -> Map: ToPickupDeliveryDomain(task, userId, pathMovement)
     activate Map
-    Map --> PickupDeliveryTask: create()
     Map --> Srv: PickupDeliveryTask
     deactivate Map
 

@@ -8,126 +8,44 @@ participant "UserMapper" as Map
 participant "RoleRepo" as rr
 participant "RoleMapper" as rm
 
-activate SPA
-SPA -> API: GET(/api/users/:id)
-activate API
 
-API -> API: auth middleware 
-API -> Ctrl: GetById(id)
-activate Ctrl
-
-Ctrl -> Ctrl: permissions middleware 
-Ctrl -> Srv: GetByIdAsync(id)
-activate Srv
-
-Srv -> Repo: user = GetByIdAsync(id)
-
-Srv -> rr: role = GetByIdAsync(user.roleId)
-
-Srv -> rm: toDTO(role)
-activate rm
-rm -> Srv: roleDto
-deactivate rm
-
-Srv -> Map: toDTO(user)
-activate Map
-Map --> Srv: userDto
-deactivate Map
-
-Srv --> Ctrl: userDto
-
-deactivate Srv
-Ctrl --> API: userDto
-deactivate Ctrl
-
-API --> SPA: userDto
-
-note right of SPA 
-    Utilizador altera dados pessoais
-end note
 
 SPA -> API: PATCH(/api/users/)
+activate API
+
+API -> API: auth middleware
 
 API -> Ctrl: UpdateMyProfile(user)
 activate Ctrl
+Ctrl -> Ctrl: permissions middleware
 
-Ctrl -> Ctrl: currentUser = HttpContext.Items["user"] as UserWithRoleDto
+Ctrl -> Ctrl: get current user from
 
 Ctrl -> Srv: UpdateMyProfileAsync(user, currentUser.Id)
 activate Srv
 
 Srv -> Srv: GetByIdAsync(id)
 
-alt user not found
-    Srv --> Ctrl: null
-    deactivate Srv
+Srv -> Srv: check if user is valid (exists, active, approved)
+Srv -> Srv: update user fields
 
-    Ctrl --> API: status code 404
-    deactivate Ctrl
+Srv -> Repo: CommitAsync(user)
+Srv -> Map: ToProfileDto(user)
+activate Map
+Map --> Srv: userDto
+deactivate Map
 
-    API --> SPA: erro
-    deactivate API
+Srv --> Ctrl: userDto
+deactivate Srv
 
-else user found
+Ctrl --> API: userDto
+deactivate Ctrl
 
-    alt user inativo
-        Srv --> Ctrl: null
-        deactivate Srv
+API --> SPA: userDto
+deactivate API
 
-        Ctrl --> API: status code 404
-        deactivate Ctrl
 
-        API --> SPA: erro
-        deactivate API
 
-    else user ativo
-
-        Srv -> Srv: GetByEmailAsync(user.email)
-
-        alt email already exists
-            Srv --> Ctrl: null
-            deactivate Srv
-
-            Ctrl --> API: status code 400
-            deactivate Ctrl
-
-            API --> SPA: erro
-            deactivate API
-
-        else email not found
-
-            activate Srv
-            Srv -> Srv: user.ChangeEmail(user.email)
-            Srv -> Srv: user.ChangeName(user.name)
-            Srv -> Srv: user.ChangeNif(user.nif)
-            Srv -> Srv: user.ChangePhone(user.phone)
-
-            alt user.password != null
-                Srv -> Srv: user.ChangePassword(user.password)
-            else user.password == null
-                Srv -> Srv: user.ChangePassword(user.password)
-            end
-
-            Srv -> Repo: CommitAsync(user)
-            Srv -> Map: ToProfileDto(user)
-            activate Map
-            Map --> Srv: userDto
-            deactivate Map
-
-            Srv --> Ctrl: userDto
-            deactivate Srv
-
-            Ctrl --> API: userDto
-            deactivate Ctrl
-
-            API --> SPA: userDto
-            deactivate API
-
-        end
-
-    end
-
-end
 
 
 

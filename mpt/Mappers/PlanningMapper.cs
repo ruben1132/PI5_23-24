@@ -28,12 +28,23 @@ namespace Mpt.Mappers
                 );
         }
 
-        public static Planning ToDomain(CreatePlanningDto dto, string userId, int cost)
+        public static Planning ToDomain(string userId, int cost)
         {
             return new Planning(
                     cost,
                     new UserId(userId)
                 );
+        }
+
+        public static PlanningTask ToEntity(Planning planning, Mpt.Domain.Tasks.Task task, int sequenceOrder)
+        {
+            return new PlanningTask
+            {
+                Planning = planning,
+                Task = task,
+                SequenceOrder = sequenceOrder
+            };
+
         }
     }
 }

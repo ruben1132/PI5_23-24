@@ -100,7 +100,7 @@ namespace Mpt.Services
                 // if (tasksDto.IsFailure)
                 //     return Result<PlanningFullDto>.Fail(tasksDto.Error);
 
-                var planning = PlanningMapper.ToDomain(dto, userId.ToString(), 0);
+                var planning = PlanningMapper.ToDomain(userId.ToString(), 0);
 
                 // Create PlanningTasks and add them to the Planning
                 int sequence = 0;
@@ -110,7 +110,7 @@ namespace Mpt.Services
                     if (t.IsApproved == ApprovalStatus.pending || t.IsApproved == ApprovalStatus.rejected)
                         return Result<PlanningFullDto>.Fail("Task " + t.Id.Value + " is not approved.");
 
-                    var planningTask = new PlanningTask { Planning = planning, Task = t, SequenceOrder = sequence };
+                    var planningTask =  PlanningMapper.ToEntity(planning, t, sequence);
                     planning.PlanningTasks.Add(planningTask);
 
                     sequence++;

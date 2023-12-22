@@ -14,76 +14,64 @@ activate SPA
 SPA -> API: GET(/api/users/allInfo)
 activate API
 
-API -> API: auth middleware 
+API -> API: auth middleware
 API -> Ctrl: GetUserAllInfo()
 activate Ctrl
 
-Ctrl -> Ctrl: permissions middleware 
+Ctrl -> Ctrl: permissions middleware
 Ctrl -> Srv: GetUserAllInfo()
 activate Srv
 
-Srv -> Repo: user = GetByIdAsync(id)
+Srv -> Repo: GetByIdAsync(id)
 
-alt user not found
-    Srv --> Ctrl: null
-    deactivate Srv
 
-    Ctrl --> API: status code 404
-    deactivate Ctrl
 
-    API --> SPA: erro
-    deactivate API
+Srv -> Map: toDTO(user)
+activate Map
+Map --> Srv: userDto
+deactivate Map
 
-else user found
+Srv -> tr: tasks = GetAllFilteredAsync(null, id, null)
+activate tr
+deactivate tr
 
-    Srv -> Map: toDTO(user)
-    activate Map
-    Map --> Srv: userDto
-    deactivate Map
+loop for each task
+    alt SurveillanceTask
 
-    Srv -> tr: tasks = GetAllFilteredAsync(null, id, null)
+        Srv -> API2: GET(/api/floor/:id)
+        activate API2
+        API2 --> Srv: floor info
+        deactivate API2
 
-    Srv -> Srv: tasksDto = new List<TaskSimpleDto>()
+        Srv -> tm: toDTO(task, floor)
+        activate tm
+        tm -> Srv: TaskDto
+        deactivate tm
 
-    loop for each task
-        alt SurveillanceTask
+    else PickupDeliveryTask
+        Srv -> tm: toDTO(task)
+        activate tm
+        tm -> Srv: TaskDto
+        deactivate tm
 
-            Srv -> API2: GET(/api/floor/:id)
-            activate API2
-            API2 --> Srv: floor
-            deactivate API2
-
-            Srv -> tm: toDTO(task, floor)
-            activate tm
-            tm -> Srv: TaskDto
-            deactivate tm
-
-            Srv -> Srv: tasksDto.Add(TaskDto)
-
-        else PickupDeliveryTask
-            Srv -> tm: toDTO(task)
-            activate tm
-            tm -> Srv: TaskDto
-            deactivate tm
-
-            Srv -> Srv: tasksDto.Add(TaskDto)
-        end
     end
-
-    Srv -> Srv: userwithtasks = new UserWithTasks(userDto, tasksDto.Result)
-
-    Srv --> Ctrl: userwithtasks
-    deactivate Srv
-
-    Ctrl --> API: userwithtasks
-    deactivate Ctrl
-
-    API --> SPA: userwithtasks
-    deactivate API
-
-    SPA -> SPA: download de dados num ficheiro .json
+    Srv -> Srv: tasksDto.Add(TaskDto)
 
 end
+
+Srv -> Map: ToUserWithTasks(userDto, tasksDto)
+
+Srv --> Ctrl: userwithtasks
+deactivate Srv
+
+Ctrl --> API: status copde 200
+deactivate Ctrl
+
+API --> SPA: success
+deactivate API
+
+SPA -> SPA: download de dados num ficheiro .json
+
 
 
 

@@ -8,64 +8,36 @@ participant "UserMapper" as Map
 
 
 activate SPA
-SPA -> API: DELETE(/api/users/:id)
+SPA -> API: DELETE(/api/users/profile)
 activate API
 
-API -> API: auth middleware 
-API -> Ctrl: Delete(id)
+API -> API: auth middleware
+API -> Ctrl: DeleteMyProfile()
 activate Ctrl
 
-Ctrl -> Ctrl: permissions middleware 
-Ctrl -> Srv: DeleteAsync(id)
+Ctrl -> Ctrl: permissions middleware
+Ctrl -> Ctrl: get current user
+Ctrl -> Srv: DeleteIgnoringActiveAsync(userId)
 activate Srv
 
 Srv -> Repo: user = GetByIdAsync(id)
 activate Repo
 
-alt user not found
+Srv -> Repo: Remove(user)
+Srv -> Srv: CommitAsync()
+deactivate Repo
 
-    Repo -> Srv: return null
-    deactivate Repo
-    Srv -> Ctrl: return 404
-    deactivate Srv
-    Ctrl -> API: return 404
-    deactivate Ctrl
-    API -> SPA: return 404
-    deactivate API
-    
-else user found
+Srv -> Map: Map(user)
+activate Map
+Map -> Srv: userDto
+deactivate Map
 
-    alt user active
-        Repo -> Srv: return error
-        deactivate Repo
-        Srv -> Ctrl: return 403
-        deactivate Srv
-        Ctrl -> API: return 403
-        deactivate Ctrl
-        API -> SPA: return 403
-        deactivate API
-
-    else user inactive
-        Srv -> Repo: Remove(user)
-        activate Repo
-        Srv -> Srv: CommitAsync()
-        deactivate Repo
-
-        Srv -> Map: Map(user)
-        activate Map
-        Map -> Srv: userDto
-        deactivate Map
-
-        Srv -> Ctrl: return 200
-        deactivate Srv
-        Ctrl -> API: return 200
-        deactivate Ctrl
-        API -> SPA: return 200
-        deactivate API
-
-    end
-
-end
+Srv -> Ctrl: return userDto
+deactivate Srv
+Ctrl -> API: return 200
+deactivate Ctrl
+API -> SPA: success
+deactivate API
 
 
 @enduml

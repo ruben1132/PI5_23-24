@@ -1,7 +1,5 @@
-﻿using Mpt.Dtos;
-using Domain.Users;
-
-namespace mpt.Dtos.User
+﻿
+namespace Mpt.Dtos
 {
     public class UserWithTasks
     {

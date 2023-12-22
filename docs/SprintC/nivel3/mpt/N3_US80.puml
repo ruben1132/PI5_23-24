@@ -9,66 +9,20 @@ participant "RoleRepo" as rr
 participant "RoleMapper" as rm
 
 activate SPA
-SPA -> API: GET(/api/users/)
+SPA -> API: PUT(/api/users/)
 activate API
 
 API -> API: auth middleware 
-API -> Ctrl: GetAll()
-activate Ctrl
-
-Ctrl -> Ctrl: permissions middleware 
-Ctrl -> Srv: GetAllAsync(isSysUser?, isApproved?)
-activate Srv
-
-Srv -> Repo: GetAllFilteredAsync(isSysUser?, isApproved?)
-
-Srv -> Srv: usersDto = new List<UserWithRoleDto>()
-
-loop for each user
-    Srv -> rr: GetByIdAsync(user.RoleId)
-    activate rr
-    rr --> Srv: Role
-    deactivate rr
-
-    Srv -> rm: toDomain(Role)
-    activate rm
-    rm --> Srv: RoleDTO
-    deactivate rm
-
-    Srv -> Map: toDTO(user, RoleDTO)
-    activate Map
-    Map --> Srv: UserWithRoleDto
-    deactivate Map
-
-    Srv -> Srv: usersDto.Add(UserWithRoleDto)
-end
-
-
-Srv --> Ctrl: usersDto
-deactivate Srv
-
-Ctrl --> API: usersDto
-deactivate Ctrl
-
-API --> SPA: usersDto
-deactivate API
-
-SPA --> SPA: display usersDto
-
-note right of SPA 
-    Utilizador aprova ou rejeita as utilizadores
-end note
-
-SPA -> API: PUT(/api/users/)
 
 API -> Ctrl: ApproveReject(id, user)
 activate Ctrl
+Ctrl -> Ctrl: permissions middleware 
 
 Ctrl -> Srv: UpdateIsApprovedAsync(id, user)
 activate Srv
 
 Srv -> Srv: GetByIdAsync(id)
-Srv -> Srv: altera estado user para ativo ou desativo
+Srv -> Srv: change user state to approved or rejected
 
 Srv -> Repo: CommitAsync(user)
 Srv -> Map: toDTO(user)
@@ -79,10 +33,10 @@ deactivate Map
 Srv --> Ctrl: UserDto
 deactivate Srv
 
-Ctrl --> API: status code 201
+Ctrl --> API: status code 200
 deactivate Ctrl
 
-API --> SPA: sucesso
+API --> SPA: success
 deactivate API
 
 

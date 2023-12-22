@@ -8,7 +8,6 @@ using Mpt.Domain.Users;
 using Mpt.IServices;
 using Mpt.Core.Domain;
 using Mpt.Core.Logic;
-using mpt.Dtos.User;
 using Mpt.Domain.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
@@ -85,9 +84,9 @@ namespace Mpt.Services
 
                 var tasks = await this._taskRepo.GetAllFilteredAsync(null, userDto.Id, null);
 
-                var tasksDto = MapTasksToSimpleDto(tasks, token);
+                var tasksDto = await MapTasksToSimpleDto(tasks, token);
 
-                var userwithtasks = new UserWithTasks(userDto, tasksDto.Result);
+                var userwithtasks = UserMapper.ToUserWithTasksDto(userDto, tasksDto);
 
                 return Result<List<UserWithTasks>>.Ok(new List<UserWithTasks>() { userwithtasks });
             }
@@ -305,7 +304,7 @@ namespace Mpt.Services
                     user.Disapprove();
 
                 user.UpdateLastUpdated();
-                
+
                 await this._unitOfWork.CommitAsync();
 
                 var userDto = UserMapper.ToDto(user);

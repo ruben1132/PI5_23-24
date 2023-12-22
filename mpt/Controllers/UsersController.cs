@@ -3,7 +3,6 @@ using Mpt.IServices;
 using Mpt.Dtos;
 using Mpt.IControllers;
 using Microsoft.AspNetCore.Authorization;
-using mpt.Dtos.User;
 
 namespace Mpt.Controllers
 {

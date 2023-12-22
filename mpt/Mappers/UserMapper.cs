@@ -63,11 +63,21 @@ namespace Mpt.Mappers
                 );
         }
 
-        public static UserTaskInfoDto ToDtoTaskInfo(User user){
+        public static UserTaskInfoDto ToDtoTaskInfo(User user)
+        {
             return new UserTaskInfoDto(
                     user.Email.Value,
                     user.Name,
                     user.Phone.Value
+                );
+        }
+
+        public static UserWithTasks ToUserWithTasksDto(UserDto user, List<TaskSimpleDto> tasks)
+        {
+            return new UserWithTasks(
+                    user,
+                    tasks
+
                 );
         }
 

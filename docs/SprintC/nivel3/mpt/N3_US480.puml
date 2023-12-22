@@ -9,22 +9,20 @@ participant "TaskRepo" as Repo
 participant "UserRepo" as ur
 participant "TaskMapper" as Map
 participant "UserMapper" as um
-participant "SurveillanceTask" as SurveillanceTask
-participant "PickupDeliveryTask" as PickupDeliveryTask
 
 activate SPA
 SPA -> API: GET(/api/tasks/)
 activate API
 
 API -> API: auth middleware 
-API -> Ctrl: GetAll(type?,Approved?,user?)
+API -> Ctrl: GetAll(type?,prending,user?)
 activate Ctrl
 
 Ctrl -> Ctrl: permissions middleware 
-Ctrl -> Srv: GetAll(type?,Approved?,user?)
+Ctrl -> Srv: GetAll(type?,prending,user?)
 activate Srv
 
-Srv -> Repo: GetAllAsync(type?,Approved?,user?)
+Srv -> Repo: GetAllAsync(type?,prending,user?)
 activate Repo
 Repo --> Srv: Task
 deactivate Repo
@@ -48,7 +46,6 @@ loop for each Task
 
         Srv -> Map: toFullDTO(task, floor, user)
         activate Map
-        Map --> SurveillanceTask: create()
         Map --> Srv: SurveillanceTask
         deactivate Map
 
@@ -56,7 +53,6 @@ loop for each Task
     else Task is PickupDeliveryTask
         Srv -> Map: toFullDTO(task, user)
         activate Map
-        Map --> PickupDeliveryTask: create()
         Map --> Srv: PickupDeliveryTask
         deactivate Map
 
@@ -68,10 +64,10 @@ end
 Srv --> Ctrl: tasksDto
 deactivate Srv
 
-Ctrl --> API: retorna tasksDto
+Ctrl --> API: status code 200
 deactivate Ctrl
 
-API --> SPA: mostra tasks para o utilizador
+API --> SPA: success
 deactivate API
 
 @enduml

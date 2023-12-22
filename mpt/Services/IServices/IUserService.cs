@@ -1,7 +1,5 @@
 
-using mpt.Dtos.User;
 using Mpt.Core.Logic;
-using Mpt.Domain.Users;
 using Mpt.Dtos;
 
 namespace Mpt.IServices
