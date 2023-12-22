@@ -1,0 +1,6 @@
+@mpt_HostAddress = http://localhost:5095
+
+GET {{mpt_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
