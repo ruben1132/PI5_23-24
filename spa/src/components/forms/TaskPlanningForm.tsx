@@ -96,28 +96,32 @@ export default function TaskPlanningForm(props: Props) {
         <Form>
             {props.action === 'add' ? (
                 <Row>
-                    <Col sm={6}>
-                        <Form.Group className="mb-6">
+                    <Col sm={4}>
+                        <Form.Group className="mb-4">
                             <Form.Label htmlFor="select">Tasks</Form.Label>
                             <Form.Select onChange={handleSelect} id="select">
                                 <option defaultChecked={true}>select a task</option>
                                 {filteredSelectBoxData?.map((item: TaskWithUser) => (
                                     <option key={item.id} value={item.id}>
-                                        {item.taskType} {' - ' + item.user.name}
+                                        {item.taskType} {' - ' + item.user.name} {' - ' + item.lastUpdated}
                                     </option>
                                 ))}
                             </Form.Select>
                         </Form.Group>
                     </Col>
-                    <Col sm={6}>
-                        <ListGroup>
-                            {tasks?.map((item) => (
-                                <ListGroup.Item key={item.id}>
-                                    <CloseButton onClick={() => handleRemoveTask(item)} />
-                                    {item.taskType} {' - '} {item.user.name}
-                                </ListGroup.Item>
-                            ))}
-                        </ListGroup>
+                    <Col sm={8}>
+                        <Form.Group className="mb-8">
+                        <Form.Label htmlFor="taskList"></Form.Label>
+                            <ListGroup>
+                                {tasks?.map((item) => (
+                                    <ListGroup.Item key={item.id}>
+                                        <CloseButton onClick={() => handleRemoveTask(item)} />
+                                        {item.taskType} {' - '} {item.user.name}
+                                        {' - ' + item.lastUpdated}
+                                    </ListGroup.Item>
+                                ))}
+                            </ListGroup>
+                        </Form.Group>
                     </Col>
                 </Row>
             ) : (
@@ -126,7 +130,9 @@ export default function TaskPlanningForm(props: Props) {
                         <Col sm={12}>
                             <ListGroup>
                                 {props.item?.value.tasks.map((item: Task, i: number) => (
-                                    <ListGroup.Item key={item.id}>{i + ' - ' + item.taskType}</ListGroup.Item>
+                                    <ListGroup.Item key={item.id}>
+                                        {i + ' - ' + item.taskType + ' - ' + item.lastUpdated}
+                                    </ListGroup.Item>
                                 ))}
                             </ListGroup>
                         </Col>
