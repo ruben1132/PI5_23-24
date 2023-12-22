@@ -10,6 +10,8 @@
 :- consult('caminhos.pl').
 :- consult('tarefasBC.pl').
 
+% import the permutation predicate from the lists library
+:- use_module(library(lists)).
 
 % tarefa(Id,TempoProcessamento,TempConc,PesoPenalizacao).
 % tarefa(t1,2,5,1).
@@ -82,20 +84,20 @@ retira(N,[G1|Resto],G,[G1|Resto1]):-
 
 avalia_populacao([],[]).
 avalia_populacao([Ind|Resto],[Ind*V|Resto1]):-
-	calc(Ind,V),
+	avalia(Ind,V),
 	avalia_populacao(Resto,Resto1).
 
-calc(List, Eval):-
-   calc_helper(List, 0, Eval).
+avalia(List, Eval):-
+   avalia_aux(List, 0, Eval).
 
-calc_helper([_], Total, Total).
+avalia_aux([_], Total, Total).
 
-calc_helper([T1, T2 | Res], Acc, Eval):-
+avalia_aux([T1, T2 | Res], Acc, Eval):-
    tarefa(T1, Orig1, Dest1),
    tarefa(T2, Orig2, Dest2),
    find_caminho_entidades(astar, Dest1, Orig2, _, _, Eval1),
    NewAcc is Acc + Eval1,
-   calc_helper([T2 | Res], NewAcc, Eval).
+   avalia_aux([T2 | Res], NewAcc, Eval).
 
 ordena_populacao(PopAv,PopAvOrd):-
 	bsort(PopAv,PopAvOrd).
@@ -373,6 +375,14 @@ mutacao23(G1,P,[G|Ind],G2,[G|NInd]):-
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PERMUTACOES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% encontra todas as permutacoes possiveis e guarda a melhor
+gera_permutacoes(Tarefas, MelhorSequencia) :-
+		findall(Seq, permutation(Tarefas, Seq), TodasSequencias),
+		avalia_populacao(TodasSequencias, TodasSequenciasAvaliadas),
+		ordena_populacao(TodasSequenciasAvaliadas, TodasSequenciasAvaliadasOrdenadas),
+		select(MelhorSequencia, TodasSequenciasAvaliadasOrdenadas, _). 					% a melhor sequencia é a primeira da lista ordenada
 
 
 
