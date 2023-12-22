@@ -1,0 +1,14 @@
+@startuml
+
+actor "Gestor de tarefas" as Actor
+participant "robDroneGo:robDroneGo" as Container <<Container (C4)>>
+
+Actor -> Container: requisitar uma lista de requisições não aprovadas
+
+alt sucesso
+    Container --> Actor: retorna a lista de requisições
+else falha
+    Container --> Actor: devolve mensagem de erro
+end
+
+@enduml

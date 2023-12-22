@@ -1,0 +1,21 @@
+@startuml
+
+actor "Utente" as Actor
+participant "SPA" as Container <<Container (C4)>>
+participant "MPT API" as API <<Container (C4)>>
+
+Actor -> Container: requisita a criação de um novo utilizador
+Container --> Actor: requisita os dados do utilizador
+Actor -> Container: envia os dados do utilizador
+
+Container -> API: POST(/api/users/)
+
+alt sucesso
+    API --> Container: retorna mensagem de sucesso
+    Container --> Actor: retorna mensagem de sucesso
+else falha
+    API --> Container: retorna mensagem de erro
+    Container --> Actor: devolve mensagem de erro
+end
+
+@enduml

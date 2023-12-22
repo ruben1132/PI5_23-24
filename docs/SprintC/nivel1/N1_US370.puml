@@ -1,0 +1,16 @@
+@startuml
+
+actor "Gestor de frota" as Actor
+participant "robDroneGo:robDroneGo" as Container <<Container (C4)>>
+
+Actor -> Container: inibir um robot
+Container --> Actor: requisita que selecione um robot
+Actor -> Container: seleciona o robot
+
+alt sucesso na inibição do robot
+    Container --> Actor: devolve o robot inibido
+else falha na requisição
+    Container --> Actor: devolve mensagem de erro
+end
+
+@enduml

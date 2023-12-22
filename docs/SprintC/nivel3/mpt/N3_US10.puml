@@ -1,0 +1,79 @@
+@startuml
+participant SPA
+participant "MPT API" as API
+participant "UserController" as Ctrl
+participant "UserService" as Srv
+participant "UserRepo" as Repo
+participant "UserMapper" as Map
+participant "Email" as Email
+participant "RoleRepo" as rr
+participant "RoleMapper" as rm
+
+activate SPA
+SPA -> API: POST(/api/users/)
+activate API
+
+API -> API: auth middleware 
+API -> Ctrl: AddAsync(user)
+activate Ctrl
+
+Ctrl -> Ctrl: permissions middleware 
+Ctrl -> Srv: AddAsync(user)
+activate Srv
+
+Srv -> Srv: userByEmail = GetByEmailAsync(u.Email)
+
+alt Utilizador existe
+    Srv -> Ctrl: Utilizador já existe
+    Ctrl --> API: status code 400
+    API --> SPA: error
+else Utilizador não existe
+
+    Srv -> rr: GetByIdAsync(u.RoleId)
+    activate rr
+    rr -> rr: GetByIdAsync(u.RoleId)
+    rr --> Srv: Role
+    deactivate rr
+
+    Srv -> rm: toDomain(Role)
+    activate rm
+    rm --> Srv: Role
+    deactivate rm
+    
+    alt role existe
+
+        Srv -> Srv: user.Password = HashPassword(u.Password, GenerateSalt())
+
+        Srv -> Map: toDomain(user)
+        activate Map
+        Map --> Srv: User
+        deactivate Map
+
+        Srv -> Repo: AddAsync(user)
+        activate Repo
+        Repo -> Repo: AddAsync(user)
+        Repo --> Srv: User
+        deactivate Repo
+
+        Srv -> Map: toDTO(User)
+        activate Map
+        Map --> Srv: UserDTO
+        deactivate Map
+
+        Srv --> Ctrl: UserDTO
+        deactivate Srv
+
+        Ctrl --> API: status code 201
+        deactivate Ctrl
+
+        API --> SPA: sucesso
+        deactivate API
+    else role naõ existe
+        Srv -> Ctrl: Role não existe
+        Ctrl --> API: status code 400
+        API --> SPA: error
+    end
+end
+
+
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+
+actor "Admin" as Actor
+participant "SPA" as Container <<Container (C4)>>
+participant "MPT API" as API <<Container (C4)>>
+
+Actor -> Container: requisita lista de utilizadores para aprovar
+Container -> API: GET(/api/users/)
+
+alt sucesso
+    API --> Container: retorna lista de utilizadores
+    Container --> Actor: retorna lista de utilizadores
+else falha
+    API --> Container: devolve mensagem de erro
+    Container --> Actor: devolve mensagem de erro
+end
+
+Actor -> Container: aprova ou recusa registo de utilizador
+Container -> API: PATCH(/api/users/)
+
+alt sucesso
+    API --> Container: retorna mensagem de sucesso
+    Container --> Actor: retorna mensagem de sucesso
+else falha
+    API --> Container: devolve mensagem de erro
+    Container --> Actor: devolve mensagem de erro
+end
+
+@enduml

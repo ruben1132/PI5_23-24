@@ -1,0 +1,16 @@
+@startuml
+
+actor "Gestor de tarefas" as Actor
+participant "robDroneGo:robDroneGo" as Container <<Container (C4)>>
+
+Actor -> Container: requisitar uma lista de tarefas para aprovação
+Container --> Actor: retorna a lista de tarefas
+Actor -> Container: aprova ou rejeita a requisição
+
+alt sucesso
+    Container --> Actor: devolve mensagem de sucesso
+else falha
+    Container --> Actor: devolve mensagem de erro
+end
+
+@enduml
