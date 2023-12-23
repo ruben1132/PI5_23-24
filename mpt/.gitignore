@@ -31,7 +31,9 @@ x86/
 [Aa][Rr][Mm]64/
 bld/
 [Bb]in/
+/tests/[Bb]in/
 [Oo]bj/
+/tests/[Oo]bj/
 [Ll]og/
 [Ll]ogs/
 
@@ -485,3 +487,4 @@ $RECYCLE.BIN/
 
 # Test folder
 tests/obj/
+tests/bin/
