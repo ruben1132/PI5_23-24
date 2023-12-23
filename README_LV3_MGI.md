@@ -83,6 +83,4 @@
 ## Vista de Implementação
 ![N3_VL](./docs/SprintC/nivel3/N3_VI.svg)
 
-## Vista Física
 
-![N3_VF](./docs/SprintC/nivel3/N3_VF.svg)
