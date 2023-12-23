@@ -18,7 +18,6 @@ namespace Mpt.Controllers
             this._service = service;
         }
 
-
         // POST: api/Role
         [HttpPost]
         public async Task<ActionResult<RoleDto>> Create(CreateRoleDto role)

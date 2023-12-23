@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mpt.Core.Domain;
 using Mpt.Domain.Shared;
 
-namespace tests.Domain.Shared.Tests
+namespace tests.Domain.Shared
 {
     [TestClass]
     public class PhoneNumberTests

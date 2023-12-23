@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mpt.Core.Domain;
 using Mpt.Domain.Tasks;
 
-namespace tests.Domain.Tasks.Tests
+namespace tests.Domain.Tasks
 {
     [TestClass]
     public class RobotMovementTests

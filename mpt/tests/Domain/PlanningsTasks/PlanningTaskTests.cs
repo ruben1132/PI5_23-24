@@ -4,7 +4,7 @@ using Mpt.Domain.Plannings;
 using Mpt.Domain.Tasks;
 using Mpt.Domain.Users;
 
-namespace tests.Domain.PlanningsTasks.Tests
+namespace tests.Domain.PlanningsTasks
 {
     [TestClass]
     public class PlanningTaskTests

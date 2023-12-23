@@ -124,7 +124,6 @@ namespace Mpt.Services
             }
         }
 
-
         public async Task<Result<string>> DeleteAsync(Guid id)
         {
             try

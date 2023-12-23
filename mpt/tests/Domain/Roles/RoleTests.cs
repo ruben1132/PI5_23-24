@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mpt.Domain.Roles;
 using Mpt.Core.Domain;
 
-namespace tests.Domain.Roles.Tests
+namespace tests.Domain.Roles
 {
     [TestClass]
     public class RoleTests

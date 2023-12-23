@@ -60,8 +60,6 @@ namespace Mpt.Services
             }
         }
 
-
-
         public async Task<Result<PlanningFullDto>> GetByIdAsync(Guid id)
         {
             try

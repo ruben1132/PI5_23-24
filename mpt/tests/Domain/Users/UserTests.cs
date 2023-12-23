@@ -6,7 +6,7 @@ using Mpt.Domain.Roles;
 using Mpt.Domain.Shared;
 
 
-namespace tests.Domain.Users.Tests
+namespace tests.Domain.Users
 {
     [TestClass]
     public class UserTests

@@ -4,7 +4,7 @@ using Mpt.Core.Domain;
 using Mpt.Domain.Roles;
 using Mpt.Domain.Tasks;
 
-namespace tests.Domain.Tasks.Tests
+namespace tests.Domain.Tasks
 {
     [TestClass]
     public class TaskIdTests

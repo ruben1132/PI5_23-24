@@ -18,7 +18,6 @@ namespace Mpt.Controllers
             this._service = service;
         }
 
-
         // POST: api/Planning
         [HttpPost]
         public async Task<ActionResult<PlanningFullDto>> Create(CreatePlanningDto tasks)
