@@ -13,6 +13,8 @@ using Sprache;
 using System.Text.Json.Nodes;
 
 using Mpt.Controllers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace tests.Controllers.Tests
 {
@@ -30,8 +32,8 @@ namespace tests.Controllers.Tests
 
 
             // Insert the necessary data using the mock UserService
-            var userDto = new CreateUserDto("john.doe@example.com", "Pa$$w0rd!!", "johnDoe", "915698742", "123456789", new Guid().ToString());
-            var userWithRoleDto = new UserWithRoleDto("userId", "john.doe@example.com", "John Doe", null, null, true, new RoleDto("roleId", null), null, null);
+            var userDto = new CreateUserDto("john.doe@example.com", "Pa$$w0rd!!", "johnDoe", null, null, new Guid().ToString());
+            var userWithRoleDto = new UserWithRoleDto("00000000-0000-0000-0000-000000000000", "john.doe@example.com", "John Doe", null, null, true, new RoleDto("roleId", null), null, null);
 
             _userServiceMock.Setup(x => x.AddAsync(userDto)).ReturnsAsync(Result<UserWithRoleDto>.Ok(userWithRoleDto));
         }
@@ -43,7 +45,7 @@ namespace tests.Controllers.Tests
         {
             // Arrange
             var userDto = new CreateUserDto("john.doe@example.com", "Pa$$w0rd!!", "johnDoe", "915698742", "123456789", new Guid().ToString());
-            var userWithRoleDto = new UserWithRoleDto("userId", "john.doe@example.com", "John Doe", null, null, true, new RoleDto("roleId", null), null, null);
+            var userWithRoleDto = new UserWithRoleDto("00000000-0000-0000-0000-000000000000", "john.doe@example.com", "John Doe", null, null, true, new RoleDto("roleId", null), null, null);
 
             _userServiceMock.Setup(x => x.AddAsync(userDto)).ReturnsAsync(Result<UserWithRoleDto>.Ok(userWithRoleDto));
 
@@ -70,8 +72,8 @@ namespace tests.Controllers.Tests
             string? isApproved = null;
             var users = new List<UserWithRoleDto>()
             {
-                new UserWithRoleDto (null, null, null, null, null, false, new RoleDto(null, null, null), null, null),
-                new UserWithRoleDto (null, null, null, null, null, false, new RoleDto(null, null, null), null, null),
+                new UserWithRoleDto ("00000000-0000-0000-0000-000000000000", null, null, null, null, false, new RoleDto(null, null, null), null, null),
+                new UserWithRoleDto ("00000000-0000-0000-0000-000000000001", null, null, null, null, false, new RoleDto(null, null, null), null, null),
             };
 
             _userServiceMock.Setup(x => x.GetAllAsync(isSysUser, isApproved)).ReturnsAsync(Result<List<UserWithRoleDto>>.Ok(users));
@@ -94,7 +96,7 @@ namespace tests.Controllers.Tests
         public async Task GetById_Should_Return_OkResult_With_User()
         {
             // Arrange
-            string userId = new Guid().ToString();
+            string userId = "00000000-0000-0000-0000-000000000000";
             var user = new UserWithRoleDto(userId, null, null, null, null, false, new RoleDto(null, null, null), null, null);
 
             _userServiceMock.Setup(x => x.GetByIdAsync(new Guid(userId))).ReturnsAsync(Result<UserWithRoleDto>.Ok(user));
@@ -117,7 +119,7 @@ namespace tests.Controllers.Tests
         public async Task Update_Should_Return_OkResult_When_Successful()
         {
             // Arrange
-            var userId = new Guid().ToString();
+            var userId = "00000000-0000-0000-0000-000000000000";
             var userDto = new UserDto(userId, "john.doe@example.com", "John Doe", null, null, new Guid().ToString());
             var userWithRoleDto = new UserWithRoleDto(userId, "john.doe@example.com", "John Doe", null, null, true, new RoleDto(new Guid().ToString(), null), null, null);
 
@@ -140,7 +142,7 @@ namespace tests.Controllers.Tests
         public async Task Delete_Should_Return_OkResult_When_Successful()
         {
             // Arrange
-            var userId = new Guid();
+            var userId = new Guid("00000000-0000-0000-0000-000000000000");
             var userDto = new UserDto(userId.ToString(), "john.doe@example.com", "John Doe", null, null, new Guid().ToString());
 
             _userServiceMock.Setup(x => x.DeleteAsync(userId)).ReturnsAsync(Result<UserDto>.Ok(userDto));
@@ -155,48 +157,62 @@ namespace tests.Controllers.Tests
 
 
 
-        //[TestMethod]
-        //public async Task GetMyProfile_ShouldReturnOkResult()
-        //{
-        //    // Arrange
-        //    string userId = new Guid().ToString();
-        //    var currentUser = new UserWithRoleDto(userId, null, null, null, null, false, new RoleDto(null, null, null), null, null);
+        [TestMethod]
+        public async Task GetMyProfile_ShouldReturnOkResult()
+        {
+            // Arrange
+            var currentUser = new UserWithRoleDto("00000000-0000-0000-0000-000000000000", "john.doe@example.com", "John Doe", null, null, true, new RoleDto("roleId", null), null, null);
 
-        //    var userProfile = new UserProfileDto(null, null, null, null);
+            // Set HttpContext user item
+            _usersController.ControllerContext.HttpContext = new DefaultHttpContext();
+            _usersController.ControllerContext.HttpContext.Items["user"] = currentUser; // Set the user in HttpContext.Items
 
-        //    _userServiceMock.Setup(x => x.GetByIdAsync(new Guid(currentUser.Id))).ReturnsAsync(Result<UserWithRoleDto>.Ok(currentUser));
+            _userServiceMock.Setup(x => x.GetByIdAsync(new Guid(currentUser.Id))).ReturnsAsync(Result<UserWithRoleDto>.Ok(currentUser));
 
-        //    // Act
-        //    var result = await _usersController.GetMyProfile();
+            // Act
+            var result = await _usersController.GetMyProfile();
 
-        //    // Assert
-        //    Assert.IsNotNull(result);
-        //    Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
-        //    var okResult = result.Result as OkObjectResult;
-        //    Assert.AreEqual(userProfile, okResult.Value);
-        //}
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
+            var okResult = result.Result as OkObjectResult;
+            Assert.AreEqual(currentUser, (okResult.Value) as UserWithRoleDto);
+        }
 
 
-        //[TestMethod]
-        //public async Task GetUserAllInfo_ShouldReturnOkResult()
-        //{
-        //    // Arrange
-        //    string userId = new Guid().ToString();
-        //    var currentUser = new UserWithRoleDto(userId, null, null, null, null, false, new RoleDto(null, null, null), null, null);
+        [TestMethod]
+        public async Task GetUserAllInfo_ShouldReturnOkResult()
+        {
+            // Arrange
+            var currentUser = new UserWithRoleDto("00000000-0000-0000-0000-000000000000", "john.doe@example.com", "John Doe", null, null, true, new RoleDto("roleId", null), null, null);
 
-        //    var token = "token";
-        //    var userWithTasks = new UserWithTasks(null, null);
-        //    _userServiceMock.Setup(x => x.GetUserAllInfo(new Guid(currentUser.Id), token)).ReturnsAsync(Result<UserWithTasks>.Ok(userWithTasks));
+            // Set HttpContext user item
+            _usersController.ControllerContext.HttpContext = new DefaultHttpContext();
+            _usersController.ControllerContext.HttpContext.Items["user"] = currentUser; // Set the user in HttpContext.Items
 
-        //    // Act
-        //    var result = await _usersController.GetUserAllInfo();
+            // Set authorization header for testing purposes
+            _usersController.Request.Headers["Authorization"] = "Bearer token"; // Replace with your test token
 
-        //    // Assert
-        //    Assert.IsNotNull(result);
-        //    Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
-        //    var okResult = result.Result as OkObjectResult;
-        //    Assert.AreEqual(userWithTasks, okResult.Value);
-        //}
+
+            var userDto = new UserDto(currentUser.Id, currentUser.Email, currentUser.Name, currentUser.Phone, currentUser.Nif, currentUser.Role.Id);
+            var taskSimpleDto = new TaskSimpleDto(false, null, null, null);  
+
+            var token = "token";
+            var userWithTasks = new UserWithTasks(userDto, new List<TaskSimpleDto>());
+
+            _userServiceMock.Setup(x => x.GetUserAllInfo(new Guid(currentUser.Id), token)).ReturnsAsync(Result<UserWithTasks>.Ok(userWithTasks));
+
+            // Act
+            var result = await _usersController.GetUserAllInfo();
+
+            Console.WriteLine((((result.Result) as OkObjectResult).Value as UserWithTasks).user.Email);
+
+            // Assert
+            Assert.IsNotNull(result);
+            Assert.IsInstanceOfType(result.Result, typeof(OkObjectResult));
+            var okResult = result.Result as OkObjectResult;
+            Assert.AreEqual(userWithTasks, okResult.Value);
+        }
 
 
 

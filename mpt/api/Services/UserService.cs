@@ -68,8 +68,6 @@ namespace Mpt.Services
             }
         }
 
-
-
         public async Task<Result<UserWithTasks>> GetUserAllInfo(Guid id, string token)
         {
             try

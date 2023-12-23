@@ -64,11 +64,10 @@ namespace Mpt.Controllers
             }
         }
 
-
         // GET: api/User/profile
         [AllowAnonymous]
         [HttpGet("profile")]
-        public async Task<ActionResult<UserProfileDto>> GetMyProfile()
+        public async Task<ActionResult<UserWithRoleDto>> GetMyProfile()
         {
             try
             {
@@ -95,7 +94,6 @@ namespace Mpt.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
-
 
         // GET: api/User/allInfo
         [Authorize(Roles = "utente")]
@@ -225,7 +223,6 @@ namespace Mpt.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
-
 
         // DELETE: api/User/5
         [Authorize(Roles = "admin")]

@@ -34,6 +34,7 @@ import { useRouter } from 'next/navigation';
 // models
 import { Profile, ProfileWithPassword } from '@/models/Profile';
 import ModalMisc from '../modals/ModalMisc';
+import { get } from 'cypress/types/lodash';
 
 export default function ProfileForm() {
     // auth context
@@ -45,6 +46,8 @@ export default function ProfileForm() {
     // fetchers
     const getInfo = useFetchData(config.mptAPI.baseUrl + config.mptAPI.routes.userprofile);
     const userData = useFetchData(config.mptAPI.baseUrl + config.mptAPI.routes.userdata);
+
+    console.log(getInfo.data);
 
     // form submitter
     const profileForm = useSubmitData(config.mptAPI.baseUrl + config.mptAPI.routes.userprofile, 'PATCH');
