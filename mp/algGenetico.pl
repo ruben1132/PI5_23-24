@@ -6,6 +6,7 @@
 :-dynamic solucao_ideal/1.
 :-dynamic tempo_inicio/1.
 :-dynamic tempo_limite/1.
+:-dynamic transita/3.
 
 :- consult('caminhos.pl').
 :- consult('tarefasBC.pl').
@@ -22,6 +23,28 @@
 
 % tarefas(NTarefas).
 tarefas(6).
+
+% gera as transições entre as tarefas
+gera_transicoes :-
+    findall((IdOrigem, IdDestino, Avaliacao),
+            (tarefa(IdOrigem, _, Destino1),
+             tarefa(IdDestino, Origem2, _),
+             IdOrigem \= IdDestino, 			% garante que as tarefas não são as mesmas
+             (find_caminho_entidades(astar, Destino1, Origem2, _, _, Avaliacao) ->
+                 true
+             ; fail)),
+            Transicoes),
+			% write(Transicoes),nl,
+    retractall(transita(_, _, _)), 				% remover factos existentes
+    assert_transicoes(Transicoes).
+
+assert_transicoes([]).
+assert_transicoes([(IdOrigem, IdDestino, Eval) | Resto]) :-
+	% write(IdOrigem), write(' '), write(IdDestino), write(' '), write(Eval), nl,
+    assertz(transita(IdOrigem, IdDestino, Eval)),
+    assert_transicoes(Resto).
+
+
 
 % parameteriza��o
 inicializa:-write('Numero de novas Geracoes: '),read(NG), 			
@@ -93,9 +116,10 @@ avalia(List, Eval):-
 avalia_aux([_], Total, Total).
 
 avalia_aux([T1, T2 | Res], Acc, Eval):-
-   tarefa(T1, Orig1, Dest1),
-   tarefa(T2, Orig2, Dest2),
-   find_caminho_entidades(astar, Dest1, Orig2, _, _, Eval1),
+   tarefa(T1, _, _),
+   tarefa(T2, _, _),
+   transita(T1, T2, Eval1),
+%    find_caminho_entidades(astar, Dest1, Orig2, _, _, Eval1),
    NewAcc is Acc + Eval1,
    avalia_aux([T2 | Res], NewAcc, Eval).
 
@@ -378,8 +402,9 @@ mutacao23(G1,P,[G|Ind],G2,[G|NInd]):-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PERMUTACOES %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % encontra todas as permutacoes possiveis e guarda a melhor
-gera_permutacoes(Tarefas, MelhorSequencia) :-
-		findall(Seq, permutation(Tarefas, Seq), TodasSequencias),
+gera_permutacoes(MelhorSequencia) :-
+		findall(Tarefa,tarefa(Tarefa,_,_),ListaTarefas),
+		findall(Seq, permutation(ListaTarefas, Seq), TodasSequencias),
 		avalia_populacao(TodasSequencias, TodasSequenciasAvaliadas),
 		ordena_populacao(TodasSequenciasAvaliadas, TodasSequenciasAvaliadasOrdenadas),
 		select(MelhorSequencia, TodasSequenciasAvaliadasOrdenadas, _). 					% a melhor sequencia é a primeira da lista ordenada
