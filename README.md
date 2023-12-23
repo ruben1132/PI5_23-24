@@ -12,10 +12,10 @@
 O módulo de gestão de informação é responsável por gerir toda a informação relacionada com o campus e com a frota de robôs.
 
 #### MP
-O módulo de planeamento é responsavel por processar os caminhos que os robos terão de fazer entre os diferentes pontos de acesso do campus, como salas/gabinetes, elevadores e passagens entre edifícios. 
+O módulo de planeamento é responsavel por processar os caminhos que os robos terão de fazer entre os diferentes pontos de acesso do campus, como salas/gabinetes, elevadores e passagens entre edifícios. Também, é responsável por fazer planeamentos de tarefas de maneira eficiente.
 
 #### MPT
-O módulo de planeamento de tarefas é responsável pela gestão das tarefas, de utilizadores e autenticação
+O módulo de planeamento de tarefas é responsável pela gestão das tarefas e planeamentos, de utilizadores e autenticação. Para a criação das tarefas e dos planeamentos, o mesmo recorre ao uso do módulo MP.
 
 #### SPA
 A single page application é a UI da nossa aplicação, onde os diferentes tipos de utilizadores do sistema, podem interagir com os diferentes tipos de serviços da aplicação.
