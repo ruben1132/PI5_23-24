@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Mpt.Domain.Roles;
 
-namespace tests.Domain.Roles.Tests
+namespace tests.Domain.Roles
 {
     [TestClass]
     public class RoleIdTests

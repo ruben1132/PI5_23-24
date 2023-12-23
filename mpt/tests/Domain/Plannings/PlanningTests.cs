@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Mpt.Domain.Plannings;
 using Mpt.Domain.Users;
 
-namespace tests.Domain.Plannings.Tests
+namespace tests.Domain.Plannings
 {
     [TestClass]
     public class PlanningTests

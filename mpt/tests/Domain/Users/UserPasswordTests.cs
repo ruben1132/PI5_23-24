@@ -4,7 +4,7 @@ using Mpt.Domain.Users;
 using Mpt.Core.Domain;
 
 
-namespace tests.Domain.Users.Tests
+namespace tests.Domain.Users
 {
     [TestClass]
     public class UserPasswordTests

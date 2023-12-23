@@ -12,7 +12,7 @@ namespace Mpt.IControllers
         Task<ActionResult<UserWithRoleDto>> ApproveReject(Guid id, IsApprovedDto user);
         Task<ActionResult<IEnumerable<UserWithRoleDto>>> GetAll([FromQuery] bool? isSysUser, [FromQuery] string? isApproved);
         Task<ActionResult<UserWithRoleDto>> GetById(Guid id);
-        Task<ActionResult<UserWithRoleDto>> GetMyProfile();
+        Task<ActionResult<UserProfileDto>> GetMyProfile();
         Task<ActionResult<string>> Delete(Guid id);
         Task<ActionResult<string>> DeleteMyProfile();
     }

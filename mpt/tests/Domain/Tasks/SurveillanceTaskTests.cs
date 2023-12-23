@@ -4,7 +4,7 @@ using Mpt.Core.Domain;
 using Mpt.Domain.Tasks;
 using Mpt.Domain.Shared;
 
-namespace tests.Domain.Tasks.Tests
+namespace tests.Domain.Tasks
 {
     [TestClass]
     public class SurveillanceTaskTests

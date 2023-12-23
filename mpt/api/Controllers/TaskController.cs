@@ -27,6 +27,12 @@ namespace Mpt.Controllers
             {
                 // get current user
                 var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+
+                if (currentUser == null)
+                {
+                    return BadRequest(new { error = "Not authenticated" });
+                }
+
                 // get token
                 var token = GetToken();
 
@@ -55,6 +61,11 @@ namespace Mpt.Controllers
             {
                 // get current user
                 var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+
+                if (currentUser == null)
+                {
+                    return BadRequest(new { error = "Not authenticated" });
+                }
                 var token = GetToken();
 
                 var createdTask = await _service.AddPickupDeliveryTaskAsync(task, currentUser.Id);
@@ -99,7 +110,7 @@ namespace Mpt.Controllers
         // GET: api/Task
         [Authorize(Roles = "gestor tarefas")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TaskDto>>> GetAll([FromQuery] string? type, [FromQuery] string? isApproved, [FromQuery] string? user)
+        public async Task<ActionResult<List<TaskDto>>> GetAll([FromQuery] string? type, [FromQuery] string? isApproved, [FromQuery] string? user)
         {
             try
             {
@@ -121,15 +132,21 @@ namespace Mpt.Controllers
                 return BadRequest(new { error = ex.Message });
             }
         }
+        
         // GET: api/Task/my
         [Authorize(Roles = "gestor tarefas, utente")]
         [HttpGet("my")]
-        public async Task<ActionResult<IEnumerable<TaskSimpleDto>>> GetMyTasks([FromQuery] string? type, [FromQuery] string? isApproved)
+        public async Task<ActionResult<List<TaskSimpleDto>>> GetMyTasks([FromQuery] string? type, [FromQuery] string? isApproved)
         {
             try
             {
                 // get current user
                 var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
+
+                if (currentUser == null)
+                {
+                    return BadRequest(new { error = "Not authenticated" });
+                }
                 // get token
                 var token = GetToken();
 

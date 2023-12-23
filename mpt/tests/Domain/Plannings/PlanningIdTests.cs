@@ -2,7 +2,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Mpt.Domain.Plannings;
 
-namespace tests.Domain.Plannings.Tests
+namespace tests.Domain.Plannings
 {
     [TestClass]
     public class PlanningIdTests

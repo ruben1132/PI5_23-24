@@ -67,7 +67,7 @@ namespace Mpt.Controllers
         // GET: api/User/profile
         [AllowAnonymous]
         [HttpGet("profile")]
-        public async Task<ActionResult<UserWithRoleDto>> GetMyProfile()
+        public async Task<ActionResult<UserProfileDto>> GetMyProfile()
         {
             try
             {
@@ -79,7 +79,7 @@ namespace Mpt.Controllers
                     return BadRequest(new { error = "Not authenticated" });
                 }
 
-                var user = await _service.GetByIdAsync(new Guid(currentUser.Id));
+                var user = await _service.GetMyProfileAsync(new Guid(currentUser.Id));
 
                 if (user.IsFailure)
                 {
@@ -185,6 +185,11 @@ namespace Mpt.Controllers
                 // get current user
                 var currentUser = HttpContext.Items["user"] as UserWithRoleDto;
 
+                if (currentUser == null)
+                {
+                    return BadRequest(new { error = "Not authenticated" });
+                }
+
                 var updatedUser = await _service.UpdateMyProfileAsync(user, currentUser.Id);
 
                 if (updatedUser.IsFailure)
@@ -263,6 +268,11 @@ namespace Mpt.Controllers
                 }
 
                 var user = await _service.DeleteIgnoringActiveAsync(Guid.Parse(currentUser.Id));
+
+                if (user.IsFailure)
+                {
+                    return BadRequest(new { error = user.Error });
+                }
 
                 return Ok(new { message = "User profile deleted successfully" });
             }
