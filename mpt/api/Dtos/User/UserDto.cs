@@ -29,7 +29,5 @@ namespace Mpt.Dtos
             this.Active = active;
             this.RoleId = roleId;
         }
-
     }
-
 }

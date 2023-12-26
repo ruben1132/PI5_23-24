@@ -26,6 +26,11 @@ namespace Mpt.Dtos
             this.LastUpdated = lastUpdated;
         }
 
+        override public string ToString()
+        {
+            return $"Id: {Id}, Email: {Email}, Name: {Name}, Phone: {Phone}, Nif: {Nif}, Active: {Active}, Role: {Role}, IsApproved: {IsApproved}, LastUpdated: {LastUpdated}";
+        }
+
     }
 
 }

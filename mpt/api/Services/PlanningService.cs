@@ -14,21 +14,19 @@ namespace Mpt.Services
     public class PlanningService : IPlanningService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IPlanningRepository _repo;
-        private readonly IPlanningRepository _tasksRepo;
+        private readonly IPlanningRepository _planningRepo;
         private readonly ITaskRepository _taskRepo;
         private readonly IUserRepository _userRepo;
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _config;
 
-        public PlanningService(IConfiguration config, IUnitOfWork unitOfWork, IPlanningRepository repo, IPlanningRepository tasksRepo,
+        public PlanningService(IConfiguration config, IUnitOfWork unitOfWork, IPlanningRepository repo,
                 ITaskRepository taskRepo, IUserRepository userRepo, HttpClient httpClient)
         {
             this._config = config;
             this._httpClient = httpClient;
             this._unitOfWork = unitOfWork;
-            this._repo = repo;
-            this._tasksRepo = tasksRepo;
+            this._planningRepo = repo;
             this._userRepo = userRepo;
             this._taskRepo = taskRepo;
         }
@@ -37,7 +35,7 @@ namespace Mpt.Services
         {
             try
             {
-                var plannings = await this._repo.GetAllAsync();
+                var plannings = await this._planningRepo.GetAllAsync();
 
                 if (plannings == null)
                     return Result<List<PlanningFullDto>>.Ok(new List<PlanningFullDto>());
@@ -64,7 +62,7 @@ namespace Mpt.Services
         {
             try
             {
-                var planning = await this._repo.GetByIdAsync(new PlanningId(id));
+                var planning = await this._planningRepo.GetByIdAsync(new PlanningId(id));
 
                 if (planning == null)
                     return Result<PlanningFullDto>.Fail("Planning not found.");
@@ -100,6 +98,8 @@ namespace Mpt.Services
 
                 var planning = PlanningMapper.ToDomain(userId.ToString(), 0);
 
+                Console.WriteLine("Planning created with " + tasks.Count + " tasks.");
+
                 // Create PlanningTasks and add them to the Planning
                 int sequence = 0;
                 foreach (var t in tasks)
@@ -113,8 +113,9 @@ namespace Mpt.Services
 
                     sequence++;
                 }
+                Console.WriteLine("Planning created with " + planning.PlanningTasks.Count + " tasks.");
 
-                await this._repo.AddAsync(planning);
+                await this._planningRepo.AddAsync(planning);
                 await this._unitOfWork.CommitAsync();
 
                 var tasksDto = await this.GetTasksByIdAsync(planning);  // get tasks
@@ -135,12 +136,12 @@ namespace Mpt.Services
         {
             try
             {
-                var planning = await this._repo.GetByIdAsync(new PlanningId(id));
+                var planning = await this._planningRepo.GetByIdAsync(new PlanningId(id));
 
                 if (planning == null)
                     return Result<PlanningSimpleDto>.Fail("Planning not found.");
 
-                this._repo.Remove(planning);
+                this._planningRepo.Remove(planning);
                 await this._unitOfWork.CommitAsync();
 
                 var tasksDto = await this.GetTasksByIdAsync(planning);
@@ -158,7 +159,7 @@ namespace Mpt.Services
         {
             try
             {
-                var tasks = await this._repo.GetTasksForPlanningAsync(planning.Id);
+                var tasks = await this._planningRepo.GetTasksForPlanningAsync(planning.Id);
 
                 var tasksDto = new List<TaskSimpleDto>();
 

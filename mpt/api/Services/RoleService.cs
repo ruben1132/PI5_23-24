@@ -114,7 +114,6 @@ namespace Mpt.Services
             }
         }
 
-
         public async Task<Result<RoleDto>> DeleteAsync(Guid id)
         {
             try

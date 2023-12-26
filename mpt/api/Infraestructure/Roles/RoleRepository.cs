@@ -17,12 +17,10 @@ namespace Mpt.Infrastructure.Roles
             this._context = context;
         }
 
-
         public async Task<Role> GetByNameAsync(string name)
         {
             return await this._context.Roles.FirstOrDefaultAsync(x => x.Name == name);
         }
-
 
         public async Task<List<Role>> GetAllFilteredAsync(bool? isSysRole)
         {

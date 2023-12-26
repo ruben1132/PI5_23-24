@@ -17,10 +17,7 @@ namespace Mpt.Infrastructure.Plannings
 
         public async Task<List<Domain.Tasks.Task>> GetTasksForPlanningAsync(PlanningId planningId)
         {
-            return await this._dbContext.PlanningTasks
-                .Where(pt => pt.PlanningId == planningId)
-                .Select(pt => pt.Task)
-                 .ToListAsync();
+            return await this._dbContext.PlanningTasks.Where(pt => pt.PlanningId == planningId).Select(pt => pt.Task).ToListAsync();
         }
     }
 }
