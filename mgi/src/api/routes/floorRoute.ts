@@ -47,6 +47,11 @@ export default (app: Router) => {
         ctrl.getFloorById(req, res, next),
     );
 
+    route.get('/code/:code', authorizeRole(config.routesPermissions.floor.getByCode), (req, res, next) =>
+        ctrl.getFloorByCode(req, res, next),
+    );
+
+
     route.put(
         '',
         authorizeRole(config.routesPermissions.floor.put),

@@ -91,6 +91,22 @@ export default class RoomService implements IRoomService {
         }
     }
 
+    public async getRoomByName(roomName: string): Promise<Result<IRoomWithFloorDTO>> {
+        try {
+            const room = await this.roomRepo.findByName(roomName);
+
+            if (room === null) {
+                return Result.fail<IRoomWithFloorDTO>('Room not found');
+            } else {
+                const floor = await this.floorRepo.findByDomainId(room.floor);
+                const roomDTOResult = RoomMap.toDTOWithFloor(room, floor) as IRoomWithFloorDTO;
+                return Result.ok<IRoomWithFloorDTO>(roomDTOResult);
+            }
+        } catch (e) {
+            throw e;
+        }
+    }
+
     // check if floor exists
     private async getFloor(floorId: string): Promise<Result<Floor>> {
         const floor = await this.floorRepo.findByDomainId(floorId);

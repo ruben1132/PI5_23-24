@@ -8,4 +8,5 @@ export default interface IPassageController {
     updatePassage(req: Request, res: Response, next: NextFunction);
 
     getPassageById(req: Request, res: Response, next: NextFunction);
+    getByDesignation(req: Request, res: Response, next: NextFunction);
 }

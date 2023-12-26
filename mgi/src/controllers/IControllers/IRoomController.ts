@@ -6,4 +6,5 @@ export default interface IRoomController {
     deleteRoom(req: Request, res: Response, next: NextFunction);
     updateRoom(req: Request, res: Response, next: NextFunction);
     getRoomById(req: Request, res: Response, next: NextFunction);
+    getRoomByName(req: Request, res: Response, next: NextFunction);
 }

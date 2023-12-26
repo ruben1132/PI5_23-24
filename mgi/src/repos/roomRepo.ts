@@ -63,6 +63,16 @@ export default class RoomRepo implements IRoomRepo {
         return null;
     }
 
+    public async findByName(roomName: string): Promise<Room> {
+        const room = await this.roomSchema.findOne({ number: roomName });
+
+        if (room != null) {
+            return RoomMap.toDomain(room);
+        }
+
+        return null;
+    }
+
     public async findByIds(roomIds: RoomId[] | string[]): Promise<Room[]> {
         const rooms = await this.roomSchema.find({ domainId: { $in: roomIds } });
 

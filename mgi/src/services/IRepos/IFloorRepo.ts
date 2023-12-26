@@ -6,6 +6,7 @@ import { FloorId } from "../../domain/valueObj/floorId";
 export default interface IFloorRepo extends Repo<Floor> {
     save(floor: Floor): Promise<Floor>;
     findByDomainId(floorId: FloorId | string): Promise<Floor>;
+    findByCode(code: string): Promise<Floor>;
     getFloors(): Promise<Floor[]>;
     getFloorsByBuildingId(buildingId: string): Promise<Floor[]>;
     getFloorsWithPassages(): Promise<Floor[]>;

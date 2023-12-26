@@ -8,4 +8,5 @@ export default interface IRoomService {
   deleteRoom(roomId: string): Promise<Result<void>>;
   updateRoom(roomDTO: IRoomDTO): Promise<Result<IRoomDTO>>;
   getRoomById(roomId: string): Promise<Result<IRoomWithFloorDTO>>;
+  getRoomByName(roomName: string): Promise<Result<IRoomWithFloorDTO>>;
 }

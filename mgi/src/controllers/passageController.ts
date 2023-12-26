@@ -61,6 +61,21 @@ export default class PassageController implements IPassageController /* TODO: ex
         }
     }
 
+    public async getByDesignation(req: Request, res: Response, next: NextFunction) {
+        try {
+            const passageOrError = await this.passageServiceInstance.getByDesignation(req.params.designation) as Result<IPassageWithFloorDTO>;
+
+            if (passageOrError.isFailure) {
+                return res.status(400).send({ error: passageOrError.errorValue() });
+            }
+
+            return res.json(passageOrError.getValue()).status(201);
+        }
+        catch (e) {
+            return next(e);
+        }
+    }
+
     public async getPassagesBetweenBuildings(req: Request, res: Response, next: NextFunction) {
         try {
             const passagesOrError = await this.passageServiceInstance.getPassagesBetweenBuildings(req.params.first as string, req.params.second as string) as Result<Array<IPassageDTO>>;

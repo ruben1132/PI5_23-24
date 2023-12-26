@@ -13,7 +13,6 @@ import '../../styles/v3d.css';
 
 // models
 import { Floor, FloorWithBuilding } from '@/models/Floor.jsx';
-import { Building } from '@/models/Building.js';
 import { Button, Form } from 'react-bootstrap';
 
 // threejs and project itself
@@ -26,6 +25,10 @@ import { notify } from '@/components/notification/Notification';
 import { PassageWithFloor } from '@/models/Passage';
 import { useFetchData, useFormStringInput } from '@/util/customHooks';
 import BuildingSelectBox from '../selectBoxes/BuildingSelectBox';
+import TaskSelectBox from '../selectBoxes/TasksSelectBox';
+import { TaskWithUser } from '@/models/Task';
+import { PickupDeliveryTask } from '@/models/PickupDeliveryTask';
+import { RoomWithFloor } from '@/models/Room';
 
 interface objPass {
     passageId: string;
@@ -33,9 +36,18 @@ interface objPass {
 }
 
 export default function Scene() {
-    let animationFrameId: number;
+    // fetchers
     const buildingsFetcher = useFetchData(config.mgiAPI.baseUrl + config.mgiAPI.routes.buildings);
+    const tasksFetcher = useFetchData(
+        config.mptAPI.baseUrl + config.mptAPI.routes.tasksOnlyPickupDelivery + '&isApproved=approved',
+    );
+
+    // game stuff
     const [thumbRaiser, setThumbRaiser] = useState<ThumbRaiser>();
+    let animationFrameId: number;
+
+    // inputs and states
+    const [task, setTask] = useState<PickupDeliveryTask>();
     const building = useFormStringInput('');
     const [floors, setFloors] = useState<Floor[]>([]);
     const [isInElevator, setIsInElevator] = useState<boolean>(false); // this is for when the robot enters the elevator
@@ -490,20 +502,7 @@ export default function Scene() {
         };
     }, []);
 
-    const handleSelectFloor = (event: ChangeEvent<HTMLSelectElement>): void => {
-        setFloor(event.target.value);
-    };
-
-    const handleSelectFloorOnElevator = (event: ChangeEvent<HTMLSelectElement>): void => {
-        setFloor(event.target.value);
-        setIsInElevator(false);
-    };
-
-    const handleCancelElevator = (): void => {
-        thumbRaiser?.cancelElevatorAction();
-        setIsInElevator(false);
-    };
-
+    // when the robot changes floor through a passage
     useEffect(() => {
         if (passage === null) {
             return;
@@ -596,6 +595,87 @@ export default function Scene() {
         fetchFloors();
     }, [building.value]);
 
+    // handlers
+    const handleSelectFloor = (event: ChangeEvent<HTMLSelectElement>): void => {
+        setFloor(event.target.value);
+    };
+
+    const handleSelectFloorOnElevator = (event: ChangeEvent<HTMLSelectElement>): void => {
+        setFloor(event.target.value);
+        setIsInElevator(false);
+    };
+
+    const handleCancelElevator = (): void => {
+        thumbRaiser?.cancelElevatorAction();
+        setIsInElevator(false);
+    };
+
+    const handleChangeTask = async (taskId: string): Promise<void> => {
+        const selectedTask: PickupDeliveryTask = tasksFetcher.data.find((type: TaskWithUser) => type.id === taskId);
+        if(!selectedTask) {
+            return;
+        }
+        
+        // check origin type and get floor
+        let floor: Floor = null;
+        switch (selectedTask.originType) {
+            case 'passage':
+                // extract passage origin and floor from passage(a,b)
+                var parts = selectedTask.origin.split(/[\(,]/);
+
+                // Extracted origin and floor values
+                var origin = parts[1];
+
+                floor = await handleFindAditionalData(
+                    config.mgiAPI.baseUrl + config.mgiAPI.routes.floorsByCode + origin,
+                );
+
+                break;
+            case 'elevator':
+                // extract passage origin and floor from elev(a)
+                const floorCode = selectedTask.origin.split(/[()]/)[1];
+
+                floor = await handleFindAditionalData(
+                    config.mgiAPI.baseUrl + config.mgiAPI.routes.floorsByCode + floorCode,
+                );
+
+                break;
+            case 'room':
+                // extract room from sala(a)
+                const roomNum = selectedTask.origin.split(/[()]/)[1];
+
+                let room: RoomWithFloor = await handleFindAditionalData(
+                    config.mgiAPI.baseUrl + config.mgiAPI.routes.roomsByName + roomNum,
+                );
+                floor = room.floor;
+                break;
+            default:
+                break;
+        }
+
+        setTask(selectedTask);
+        // set floor and load it
+        setFloor(floor.id);
+    };
+
+    // handle to get info of a floor through a elevador or a passage or a room
+    const handleFindAditionalData = async (request: string): Promise<any> => {
+        try {
+            const response = await axios.get(request, {
+                withCredentials: true,
+            });
+
+            if (response.status !== 200) {
+                notify.error('Error fetching data');
+                return;
+            }
+
+            return response.data;
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
     return (
         <>
             <div id="canvas" className="v3dcanvas">
@@ -653,7 +733,14 @@ export default function Scene() {
                             <tbody>
                                 <tr>
                                     <td>
-                                        Auto mov
+                                        <TaskSelectBox
+                                            isLoading={tasksFetcher.isLoading}
+                                            isError={tasksFetcher.isError}
+                                            data={tasksFetcher.data}
+                                            setValue={handleChangeTask}
+                                        />
+                                    </td>
+                                    <td>
                                         <Button
                                             type="button"
                                             variant={auto ? 'danger' : 'success'}
@@ -668,7 +755,6 @@ export default function Scene() {
                                     {navigator && (
                                         <>
                                             <td>
-                                                Buildings:
                                                 <BuildingSelectBox
                                                     selectedValue=""
                                                     isLoading={buildingsFetcher.isLoading}
@@ -676,28 +762,17 @@ export default function Scene() {
                                                     data={buildingsFetcher.data}
                                                     setValue={building.handleLoad}
                                                 />
-                                                {/* <Form.Select onChange={handleSelectBuilding}>
-                                                <option defaultChecked={true}>Select building</option>
-                                                {buildingsFetcher.data.map((building) => (
-                                                    <option value={building.id} key={building.id}>
-                                                        {building.name}
-                                                    </option>
-                                                ))}
-                                            </Form.Select> */}
                                             </td>
                                             <td>
                                                 {floors.length > 0 && (
-                                                    <>
-                                                        <span> Floors:</span>
-                                                        <Form.Select onChange={handleSelectFloor}>
-                                                            <option defaultChecked={true}>Select floor</option>
-                                                            {floors.map((floor) => (
-                                                                <option value={floor.id} key={floor.id}>
-                                                                    {floor.information}
-                                                                </option>
-                                                            ))}
-                                                        </Form.Select>
-                                                    </>
+                                                    <Form.Select onChange={handleSelectFloor}>
+                                                        <option defaultChecked={true}>Select floor</option>
+                                                        {floors.map((floor) => (
+                                                            <option value={floor.id} key={floor.id}>
+                                                                {floor.information}
+                                                            </option>
+                                                        ))}
+                                                    </Form.Select>
                                                 )}
                                             </td>
                                         </>

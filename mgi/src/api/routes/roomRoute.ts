@@ -34,6 +34,10 @@ export default (app: Router) => {
         ctrl.getRoomById(req, res, next),
     );
 
+    route.get('/name/:room', authorizeRole(config.routesPermissions.room.getByName), (req, res, next) =>
+        ctrl.getRoomByName(req, res, next),
+    );
+
     route.put(
         '',
         authorizeRole(config.routesPermissions.room.put),
