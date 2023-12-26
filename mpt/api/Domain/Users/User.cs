@@ -112,5 +112,10 @@ namespace Mpt.Domain.Users
         {
             this.LastUpdated = DateTime.UtcNow;
         }
+
+        override public string ToString()
+        {
+            return $"User: {this.Name} | Email: {this.Email} | Phone: {this.Phone} | Nif: {this.Nif} | Role: {this.RoleId} | Active: {this.Active} | IsApproved: {this.IsApproved} | LastUpdated: {this.LastUpdated}";
+        }
     }
 }

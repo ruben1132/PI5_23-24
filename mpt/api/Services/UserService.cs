@@ -34,109 +34,6 @@ namespace Mpt.Services
             this._taskRepo = taskRepo;
         }
 
-        public async Task<Result<List<UserWithRoleDto>>> GetAllAsync(bool? isSysUser, string? isApproved = null)
-        {
-            try
-            {
-                // parse string to enum
-                ApprovalStatus? parsedApproved = null;
-                if (isApproved != null)
-                {
-                    isApproved = isApproved.ToLower();
-                    parsedApproved = (ApprovalStatus)Enum.Parse(typeof(ApprovalStatus), isApproved, true);
-                }
-
-                var users = await this._repo.GetAllFilteredAsync(isSysUser ?? true, parsedApproved);
-
-                if (users == null)
-                    return Result<List<UserWithRoleDto>>.Ok(new List<UserWithRoleDto>());
-
-                var usersDto = new List<UserWithRoleDto>();
-                foreach (var user in users)
-                {
-                    var role = await this._roleRepo.GetByIdAsync(user.RoleId);
-                    var roleDto = RoleMapper.ToDto(role);
-                    usersDto.Add(UserMapper.ToDto(user, roleDto));
-                }
-
-                return Result<List<UserWithRoleDto>>.Ok(usersDto);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return Result<List<UserWithRoleDto>>.Fail(ex.Message);
-            }
-        }
-
-        public async Task<Result<UserWithTasks>> GetUserAllInfo(Guid id, string token)
-        {
-            try
-            {
-                var user = await this._repo.GetByIdAsync(new UserId(id));
-
-                if (user == null)
-                    return Result<UserWithTasks>.Fail("User not found.");
-
-                var userDto = UserMapper.ToDto(user);
-
-                var tasks = await this._taskRepo.GetAllFilteredAsync(null, userDto.Id, null);
-
-                var tasksDto = await MapTasksToSimpleDto(tasks, token);
-
-                var userwithtasks = UserMapper.ToUserWithTasksDto(userDto, tasksDto);
-
-                return Result<UserWithTasks>.Ok( userwithtasks);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return Result<UserWithTasks>.Fail(ex.Message);
-            }
-        }
-
-        public async Task<Result<UserWithRoleDto>> GetByIdAsync(Guid id)
-        {
-            try
-            {
-                var user = await this._repo.GetByIdAsync(new UserId(id));
-
-                if (user == null)
-                    return Result<UserWithRoleDto>.Fail("User not found.");
-
-                var role = await this._roleRepo.GetByIdAsync(user.RoleId);
-
-                var roleDto = RoleMapper.ToDto(role);
-                var userDto = UserMapper.ToDto(user, roleDto);
-                return Result<UserWithRoleDto>.Ok(userDto);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-        }
-
-        public async Task<Result<UserProfileDto>> GetMyProfileAsync(Guid id)
-        {
-            try
-            {
-                var user = await this._repo.GetByIdAsync(new UserId(id));
-
-                if (user == null)
-                    return Result<UserProfileDto>.Fail("User not found.");
-
-                var role = await this._roleRepo.GetByIdAsync(user.RoleId);
-
-                var userDto = UserMapper.ToProfileDto(user);
-                return Result<UserProfileDto>.Ok(userDto);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-        }
-
         public async Task<Result<UserWithRoleDto>> AddAsync(CreateUserDto u)
         {
             try
@@ -237,6 +134,135 @@ namespace Mpt.Services
             }
         }
 
+        public async Task<Result<UserDto>> DeleteAsync(Guid id)
+        {
+            try
+            {
+                var user = await this._repo.GetByIdAsync(new UserId(id));
+
+                if (user == null)
+                    return Result<UserDto>.Fail("User not found.");
+
+                if (user.Active)
+                    throw new BusinessRuleValidationException("It is not possible to delete an active user.");
+
+                this._repo.Remove(user);
+                await this._unitOfWork.CommitAsync();
+
+                var userDto = UserMapper.ToDto(user);
+                userDto.Password = null;
+
+                return Result<UserDto>.Ok(userDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<UserDto>.Fail(ex.Message);
+            }
+        }
+
+        public async Task<Result<List<UserWithRoleDto>>> GetAllAsync(bool? isSysUser, string? isApproved = null)
+        {
+            try
+            {
+                // parse string to enum
+                ApprovalStatus? parsedApproved = null;
+                if (isApproved != null)
+                {
+                    isApproved = isApproved.ToLower();
+                    parsedApproved = (ApprovalStatus)Enum.Parse(typeof(ApprovalStatus), isApproved, true);
+                }
+
+                var users = await this._repo.GetAllFilteredAsync(isSysUser ?? true, parsedApproved);
+
+                if (users == null)
+                    return Result<List<UserWithRoleDto>>.Ok(new List<UserWithRoleDto>());
+
+                var usersDto = new List<UserWithRoleDto>();
+                foreach (var user in users)
+                {
+                    var role = await this._roleRepo.GetByIdAsync(user.RoleId);
+                    var roleDto = RoleMapper.ToDto(role);
+                    usersDto.Add(UserMapper.ToDto(user, roleDto));
+                }
+
+                return Result<List<UserWithRoleDto>>.Ok(usersDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<List<UserWithRoleDto>>.Fail(ex.Message);
+            }
+        }
+
+        public async Task<Result<UserWithRoleDto>> GetByIdAsync(Guid id)
+        {
+            try
+            {
+                var user = await this._repo.GetByIdAsync(new UserId(id));
+
+                if (user == null)
+                    return Result<UserWithRoleDto>.Fail("User not found.");
+
+                var role = await this._roleRepo.GetByIdAsync(user.RoleId);
+
+                var roleDto = RoleMapper.ToDto(role);
+                var userDto = UserMapper.ToDto(user, roleDto);
+                return Result<UserWithRoleDto>.Ok(userDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<Result<UserWithTasks>> GetUserAllInfo(Guid id, string token)
+        {
+            try
+            {
+                var user = await this._repo.GetByIdAsync(new UserId(id));
+
+                if (user == null)
+                    return Result<UserWithTasks>.Fail("User not found.");
+
+                var userDto = UserMapper.ToDto(user);
+
+                var tasks = await this._taskRepo.GetAllFilteredAsync(null, userDto.Id, null);
+
+                var tasksDto = await MapTasksToSimpleDto(tasks, token);
+
+                var userwithtasks = UserMapper.ToUserWithTasksDto(userDto, tasksDto);
+
+                return Result<UserWithTasks>.Ok( userwithtasks);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<UserWithTasks>.Fail(ex.Message);
+            }
+        }
+
+        public async Task<Result<UserProfileDto>> GetMyProfileAsync(Guid id)
+        {
+            try
+            {
+                var user = await this._repo.GetByIdAsync(new UserId(id));
+
+                if (user == null)
+                    return Result<UserProfileDto>.Fail("User not found.");
+
+                var role = await this._roleRepo.GetByIdAsync(user.RoleId);
+
+                var userDto = UserMapper.ToProfileDto(user);
+                return Result<UserProfileDto>.Ok(userDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
 
         public async Task<Result<UserProfileDto>> UpdateMyProfileAsync(UpdateUserProfile dto, string userId)
         {
@@ -315,34 +341,6 @@ namespace Mpt.Services
             }
         }
 
-
-        public async Task<Result<UserDto>> DeleteAsync(Guid id)
-        {
-            try
-            {
-                var user = await this._repo.GetByIdAsync(new UserId(id));
-
-                if (user == null)
-                    return Result<UserDto>.Fail("User not found.");
-
-                if (user.Active)
-                    throw new BusinessRuleValidationException("It is not possible to delete an active user.");
-
-                this._repo.Remove(user);
-                await this._unitOfWork.CommitAsync();
-
-                var userDto = UserMapper.ToDto(user);
-                userDto.Password = null;
-
-                return Result<UserDto>.Ok(userDto);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return Result<UserDto>.Fail(ex.Message);
-            }
-        }
-
         public async Task<Result<UserDto>> DeleteIgnoringActiveAsync(Guid id)
         {
             try
@@ -366,7 +364,6 @@ namespace Mpt.Services
                 return Result<UserDto>.Fail(ex.Message);
             }
         }
-
 
         private async Task<List<TaskSimpleDto>> MapTasksToSimpleDto(IEnumerable<Domain.Tasks.Task> tasks, string token)
         {

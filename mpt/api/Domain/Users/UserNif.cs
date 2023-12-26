@@ -19,13 +19,13 @@ namespace Mpt.Domain.Users
             this.Value = value;
         }
 
-        private bool IsValidUserNif(string phoneNumber)
+        private bool IsValidUserNif(string nif)
         {
             // Regular expression pattern for NIF validation
             string pattern = @"^\d{9}$";
 
             // Use Regex.IsMatch to check if the NIF matches the pattern
-            return Regex.IsMatch(phoneNumber, pattern);
+            return Regex.IsMatch(nif, pattern);
         }
     }
 }

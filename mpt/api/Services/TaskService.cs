@@ -26,126 +26,6 @@ namespace Mpt.Services
             this._httpClient = httpClient;
         }
 
-        public async Task<Result<List<TaskDto>>> GetAllAsync(string token, string? type, string? userId, string? isApproved = null)
-        {
-            try
-            {
-                // parse string to enum
-                var parsedApproved = this.ParseApprovalStatus(isApproved);
-
-                var tasks = await this._repo.GetAllFilteredAsync(type, userId, parsedApproved);
-                var tasksDto = await MapTasksToDto(tasks, token);
-                return Result<List<TaskDto>>.Ok(tasksDto);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return Result<List<TaskDto>>.Fail(ex.Message);
-            }
-        }
-
-        public async Task<Result<List<TaskSimpleDto>>> GetMyTasksAsync(string token, string? type, string? userId, string? isApproved = null)
-        {
-            try
-            {
-                // parse string to enum
-                var parsedApproved = this.ParseApprovalStatus(isApproved);
-
-                var tasks = await this._repo.GetAllFilteredAsync(type, userId, parsedApproved);
-                var tasksDto = await MapTasksToSimpleDto(tasks, token);
-                return Result<List<TaskSimpleDto>>.Ok(tasksDto);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return Result<List<TaskSimpleDto>>.Fail(ex.Message);
-            }
-        }
-
-        public async Task<Result<TaskDto>> GetByIdAsync(Guid id)
-        {
-            try
-            {
-                var task = await this._repo.GetByIdAsync(new TaskId(id));
-
-                if (task == null)
-                    return Result<TaskDto>.Fail("Task not found.");
-
-                // get user
-                var user = await this._userRepo.GetByIdAsync(task.UserId);
-                var userDto = UserMapper.ToDtoTaskInfo(user);
-
-                if (task is SurveillanceTask)
-                {
-                    var taskDto = TaskMapper.ToFullDto(task as SurveillanceTask, userDto);
-                    return Result<TaskDto>.Ok(taskDto);
-                }
-                else if (task is PickupDeliveryTask)
-                {
-                    var taskDto = TaskMapper.ToFullDto(task as PickupDeliveryTask, userDto);
-                    return Result<TaskDto>.Ok(taskDto);
-                }
-
-                return Result<TaskDto>.Fail("This task is weird...");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return Result<TaskDto>.Fail(ex.Message);
-            }
-
-        }
-
-        public async Task<Result<TaskSimpleDto>> UpdateIsApprovedAsync(Guid id, IsApprovedDto isApproved)
-        {
-            try
-            {
-                var task = await this._repo.GetByIdAsync(new TaskId(id));
-
-                if (task == null)
-                    return Result<TaskSimpleDto>.Fail("Task not found.");
-
-                if (isApproved.IsApproved == ApprovalStatus.approved.ToString())
-                    task.AproveTask();
-                else
-                    task.DisaproveTask();
-
-                task.UpdateLastUpdated();
-
-                await this._unitOfWork.CommitAsync();
-
-                var taskDto = TaskMapper.ToDto(task);
-                return Result<TaskSimpleDto>.Ok(taskDto);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return Result<TaskSimpleDto>.Fail(ex.Message);
-            }
-        }
-
-        public async Task<Result<string>> DeleteAsync(Guid id)
-        {
-            try
-            {
-                var task = await this._repo.GetByIdAsync(new TaskId(id));
-
-                if (task == null)
-                    return Result<string>.Fail("Task not found.")
-
-                ;
-                this._repo.Remove(task);
-                await this._unitOfWork.CommitAsync();
-
-                return Result<string>.Ok("Deleted successfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return Result<string>.Fail(ex.Message);
-            }
-        }
-
         public async Task<Result<SurveillanceTaskSimpleDto>> AddSurveillanceTaskAsync(CreateSurveillanceTaskDto dto, string userId, string token)
         {
             try
@@ -197,6 +77,133 @@ namespace Mpt.Services
                 Console.WriteLine(ex.Message);
                 return Result<PickupDeliveryTaskSimpleDto>.Fail(ex.Message);
 
+            }
+        }
+
+        public async Task<Result<List<TaskDto>>> GetAllAsync(string token, string? type, string? userId, string? isApproved = null)
+        {
+            try
+            {
+                // parse string to enum
+                var parsedApproved = this.ParseApprovalStatus(isApproved);
+
+                var tasks = await this._repo.GetAllFilteredAsync(type, userId, parsedApproved);
+
+                if (tasks.Count == 0)
+                    return Result<List<TaskDto>>.Fail("Error");
+
+
+                var tasksDto = await MapTasksToDto(tasks, token);
+                return Result<List<TaskDto>>.Ok(tasksDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<List<TaskDto>>.Fail(ex.Message);
+            }
+        }
+
+        public async Task<Result<TaskDto>> GetByIdAsync(Guid id)
+        {
+            try
+            {
+                var task = await this._repo.GetByIdAsync(new TaskId(id));
+
+                if (task == null)
+                    return Result<TaskDto>.Fail("Task not found.");
+
+                // get user
+                var user = await this._userRepo.GetByIdAsync(task.UserId);
+                var userDto = UserMapper.ToDtoTaskInfo(user);
+
+                if (task is SurveillanceTask)
+                {
+                    var taskDto = TaskMapper.ToFullDto(task as SurveillanceTask, userDto);
+                    return Result<TaskDto>.Ok(taskDto);
+                }
+                else if (task is PickupDeliveryTask)
+                {
+                    var taskDto = TaskMapper.ToFullDto(task as PickupDeliveryTask, userDto);
+                    return Result<TaskDto>.Ok(taskDto);
+                }
+
+                Console.WriteLine("This task is weird...");
+
+                return Result<TaskDto>.Fail("This task is weird...");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<TaskDto>.Fail(ex.Message);
+            }
+
+        }
+
+        public async Task<Result<string>> DeleteAsync(Guid id)
+        {
+            try
+            {
+                var task = await this._repo.GetByIdAsync(new TaskId(id));
+
+                if (task == null)
+                    return Result<string>.Fail("Task not found.")
+
+                ;
+                this._repo.Remove(task);
+                await this._unitOfWork.CommitAsync();
+
+                return Result<string>.Ok("Deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<string>.Fail(ex.Message);
+            }
+        }
+
+        public async Task<Result<List<TaskSimpleDto>>> GetMyTasksAsync(string token, string? type, string? userId, string? isApproved = null)
+        {
+            try
+            {
+                // parse string to enum
+                var parsedApproved = this.ParseApprovalStatus(isApproved);
+
+                var tasks = await this._repo.GetAllFilteredAsync(type, userId, parsedApproved);
+                var tasksDto = await MapTasksToSimpleDto(tasks, token);
+                return Result<List<TaskSimpleDto>>.Ok(tasksDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<List<TaskSimpleDto>>.Fail(ex.Message);
+            }
+        }
+
+        public async Task<Result<TaskSimpleDto>> UpdateIsApprovedAsync(Guid id, IsApprovedDto isApproved)
+        {
+            try
+            {
+                var task = await this._repo.GetByIdAsync(new TaskId(id));
+
+                if (task == null)
+                    return Result<TaskSimpleDto>.Fail("Task not found.");
+
+                if (isApproved.IsApproved == ApprovalStatus.approved.ToString())
+                    task.AproveTask();
+                else
+                    task.DisaproveTask();
+
+                task.UpdateLastUpdated();
+
+                await this._unitOfWork.CommitAsync();
+
+                var taskDto = TaskMapper.ToDto(task);
+                return Result<TaskSimpleDto>.Ok(taskDto);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return Result<TaskSimpleDto>.Fail(ex.Message);
             }
         }
 
