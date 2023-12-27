@@ -365,114 +365,7 @@ export default function Scene() {
                 setPassage,
                 {
                     isOn: auto,
-                    movements: [
-                        [
-                            { x: 11, y: 6 },
-                            { x: 12, y: 5 },
-                            { x: 13, y: 5 },
-                            { x: 14, y: 4 },
-                            { x: 15, y: 3 },
-                            { x: 16, y: 3 },
-                            { x: 17, y: 3 },
-                            { x: 18, y: 3 },
-                            { x: 19, y: 3 },
-                            { x: 20, y: 3 },
-                            { x: 21, y: 2 },
-                            { x: 21, y: 1 },
-                        ],
-                        [
-                            { x: 20, y: 1 },
-                            { x: 20, y: 2 },
-                            { x: 20, y: 3 },
-                            { x: 20, y: 4 },
-                            { x: 21, y: 5 },
-                            { x: 22, y: 5 },
-                        ],
-                        [
-                            { x: 0, y: 4 },
-                            { x: 1, y: 4 },
-                            { x: 1, y: 5 },
-                            { x: 1, y: 6 },
-                            { x: 1, y: 7 },
-                            { x: 1, y: 8 },
-                            { x: 2, y: 8 },
-                            { x: 3, y: 8 },
-                            { x: 4, y: 8 },
-                            { x: 5, y: 8 },
-                            { x: 6, y: 8 },
-                            { x: 7, y: 8 },
-                            { x: 8, y: 8 },
-                            { x: 8, y: 7 },
-                            { x: 7, y: 7 },
-                            { x: 6, y: 7 },
-                            { x: 6, y: 6 },
-                            { x: 7, y: 6 },
-                            { x: 8, y: 6 },
-                            { x: 8, y: 5 },
-                            { x: 7, y: 5 },
-                            { x: 6, y: 5 },
-                            { x: 6, y: 4 },
-                            { x: 7, y: 4 },
-                            { x: 8, y: 4 },
-                            { x: 8, y: 3 },
-                            { x: 7, y: 3 },
-                            { x: 6, y: 3 },
-                            { x: 6, y: 2 },
-                            { x: 7, y: 2 },
-                            { x: 8, y: 2 },
-                            { x: 9, y: 2 },
-                            { x: 10, y: 2 },
-                            { x: 11, y: 2 },
-                            { x: 12, y: 2 },
-                            { x: 13, y: 2 },
-                            { x: 14, y: 2 },
-                            { x: 15, y: 2 },
-                            { x: 15, y: 3 },
-                            { x: 14, y: 3 },
-                            { x: 13, y: 3 },
-                            { x: 13, y: 4 },
-                            { x: 14, y: 4 },
-                            { x: 15, y: 4 },
-                            { x: 15, y: 5 },
-                            { x: 14, y: 5 },
-                            { x: 13, y: 5 },
-                            { x: 13, y: 6 },
-                            { x: 14, y: 6 },
-                            { x: 15, y: 6 },
-                            { x: 15, y: 7 },
-                            { x: 14, y: 7 },
-                            { x: 13, y: 7 },
-                            { x: 13, y: 8 },
-                            { x: 14, y: 8 },
-                            { x: 15, y: 8 },
-                            { x: 16, y: 8 },
-                            { x: 17, y: 8 },
-                            { x: 18, y: 8 },
-                            { x: 19, y: 8 },
-                            { x: 20, y: 8 },
-                            { x: 21, y: 8 },
-                            { x: 22, y: 8 },
-                        ],
-                        [
-                            { x: 0, y: 8 },
-                            { x: 1, y: 8 },
-                            { x: 1, y: 9 },
-                            { x: 1, y: 10 },
-                            { x: 1, y: 11 },
-                        ],
-                        [
-                            { x: 1, y: 11 },
-                            { x: 2, y: 10 },
-                            { x: 3, y: 9 },
-                            { x: 4, y: 8 },
-                            { x: 5, y: 7 },
-                            { x: 6, y: 6 },
-                            { x: 6, y: 5 },
-                            { x: 6, y: 4 },
-                            { x: 6, y: 3 },
-                            { x: 6, y: 2 },
-                        ],
-                    ],
+                    movements: [],
                 },
             );
 
@@ -567,7 +460,7 @@ export default function Scene() {
         };
 
         fetchFloor();
-        
+
     }, [floor]);
 
     // when the robot changes building | or when user selects a building
@@ -627,14 +520,14 @@ export default function Scene() {
         let floor: Floor = null;
         switch (selectedTask.originType) {
             case 'passage':
-                // extract passage origin and floor from passage(a,b)
-                var parts = selectedTask.origin.split(/[\(,]/);
+                // extract passage origin and floor from pass(a,b)
+                // if the first location is a passage, then it needs to load the floor of destiny
+                var parts = selectedTask.origin.split(/pass\([^,]+,([^)]+)\)/);
 
-                // Extracted origin and floor values
-                var origin = parts[1];
-
+                // Extracted destiny and floor values
+                var destiny = parts[1];
                 floor = await handleFindAditionalData(
-                    config.mgiAPI.baseUrl + config.mgiAPI.routes.floorsByCode + origin,
+                    config.mgiAPI.baseUrl + config.mgiAPI.routes.floorsByCode + destiny,
                 );
 
                 break;
@@ -660,9 +553,14 @@ export default function Scene() {
                 break;
         }
 
+        thumbRaiser.setPassageCollision(false);
         thumbRaiser.setIniCoords(selectedTask.robotMovements[0][0]);    // set initial coords 
+        thumbRaiser.setAutoMovs(selectedTask.robotMovements);          // set movements
 
+        console.log(selectedTask)
+        // set task
         setTask(selectedTask);
+
         // set floor and load it
         setFloor(floor.id);
     };
@@ -685,10 +583,7 @@ export default function Scene() {
         }
     };
 
-    useEffect(() => {
-        console.log(building.value);
-    }),
-        [];
+
 
     return (
         <>

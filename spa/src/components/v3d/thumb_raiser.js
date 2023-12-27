@@ -1556,6 +1556,7 @@ export default class ThumbRaiser {
                         coveredDistance *= this.player.runningFactor; // run
                         // }
 
+
                         const delta = new THREE.Vector3(
                             coveredDistance * Math.sin(directionRad),
                             0.0,
@@ -1563,7 +1564,13 @@ export default class ThumbRaiser {
                         );
 
                         position.add(delta);
+
                         playerMoved = true;
+
+                        // needs to reset the passage collisions flag here as well or in auto mode it won't check passage collisions
+                        if (playerMoved && !this.isPassageCollisionsOn && (collisionResult === null || collisionResult === undefined)) {
+                            this.isPassageCollisionsOn = true;     // resets flag
+                        }
 
                         this.player.position.set(position.x, position.y, position.z);
                         this.animations.fadeToAction('Running', 0.2);
@@ -1798,6 +1805,10 @@ export default class ThumbRaiser {
         this.player.direction = this.maze.initialDirection;
     }
 
+    setAutoMovs(movements) {
+        this.autoMovs.movements = movements;
+    }
+
     setIniCoords(iniCoords) {
         this.initialCoords = iniCoords;
     }
@@ -1808,6 +1819,10 @@ export default class ThumbRaiser {
 
     setStartPassageId(startPassageId) {
         this.startPassageId = startPassageId;
+    }
+
+    setPassageCollision(isOn) {
+        this.isPassageCollisionsOn = isOn;
     }
 
     dispose() {
