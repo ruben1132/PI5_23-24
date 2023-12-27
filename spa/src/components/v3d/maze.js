@@ -660,10 +660,7 @@ export default class Maze extends THREE.Group {
                     Math.abs(position.x - (this.cellToCartesian([row, column]).x -  this.scale.x)) < distanceThresholdX ||
                     Math.abs(position.z - (this.cellToCartesian([row, column]).z + delta.z * this.scale.z)) < distanceThresholdY
                 ) {
-                    // Math.abs(position.x - this.elevator.position.x) < distanceThreshold &&
-                    // Math.abs(position.z - (this.elevator.position.z - this.scale.z)) < distanceThreshold
-                    console.log('FDSSSS', Math.abs(position.x - (this.cellToCartesian([row, column]).x -  this.scale.x)))
-                    console.log('FDSS2222', Math.abs(position.z - (this.cellToCartesian([row, column]).z - this.scale.z)))
+               
                     let data = {
                         passageId: passageId,
                         floor: this.floorId,
