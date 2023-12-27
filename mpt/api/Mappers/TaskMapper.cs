@@ -71,7 +71,8 @@ namespace Mpt.Mappers
                 task.TaskType,
                 user,
                 task.IsApproved.ToString(),
-                date
+                date,
+                RobotMovementBulkToDto(task.RobotMovements)
             );
 
         }
@@ -89,7 +90,8 @@ namespace Mpt.Mappers
                 floorCode,
                 user,
                 surveillanceTask.IsApproved.ToString(),
-                date
+                date,
+                RobotMovementBulkToDto(surveillanceTask.RobotMovements)
             );
         }
 
@@ -114,7 +116,8 @@ namespace Mpt.Mappers
                 pickupDeliveryTask.Destiny,
                 user,
                 pickupDeliveryTask.IsApproved.ToString(),
-                date
+                date,
+                RobotMovementBulkToDto(pickupDeliveryTask.RobotMovements)
             );
         }
 

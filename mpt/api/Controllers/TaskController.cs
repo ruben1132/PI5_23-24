@@ -108,7 +108,7 @@ namespace Mpt.Controllers
         }
 
         // GET: api/Task
-        [Authorize(Roles = "gestor tarefas")]
+        [Authorize(Roles = "gestor tarefas, gestor frota, gestor campus")]
         [HttpGet]
         public async Task<ActionResult<List<TaskDto>>> GetAll([FromQuery] string? type, [FromQuery] string? isApproved, [FromQuery] string? user)
         {

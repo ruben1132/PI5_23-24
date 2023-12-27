@@ -1767,13 +1767,13 @@ export default class ThumbRaiser {
             let x = pos.positionX;
             let y = pos.positionY;
 
-            if (y >= this.maze.size.width) {
+            if (y >= this.maze.size.width-1) {
                 y--;
             } else if (y - 1 <= 0) {
                 y++;
             }
 
-            if (x >= this.maze.size.depth) {
+            if (x >= this.maze.size.depth-1) {
                 x--;
             } else if (x - 1 <= 0) {
                 x++;
