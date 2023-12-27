@@ -660,6 +660,8 @@ export default function Scene() {
                 break;
         }
 
+        thumbRaiser.setIniCoords(selectedTask.robotMovements[0][0]);    // set initial coords 
+
         setTask(selectedTask);
         // set floor and load it
         setFloor(floor.id);

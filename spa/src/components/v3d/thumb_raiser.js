@@ -411,6 +411,7 @@ export default class ThumbRaiser {
         this.accessPointStart = 'elev'; // this is the access point to where the robot starts when loading the map. It can be a elevator or a passage
         this.startingPassageId = ''; // this is the passage id where the robot starts when loading the map
         this.isPassageCollisionsOn = true;
+        this.initialCoords = null;
 
         // Set the game state
         this.gameRunning = false;
@@ -1415,7 +1416,7 @@ export default class ThumbRaiser {
                 this.mazeChanged = false;
             }
         } else {
-            console.log(this.player.position);
+            // console.log(this.player.position);
             if (this.mazeChanged && this.maze.loaded) {
                 this.mazeChanged = false;
                 this.scene.add(this.maze);
@@ -1492,9 +1493,9 @@ export default class ThumbRaiser {
                     position,
                     this.collisionDetectionParameters.method != 'obb-aabb' ? this.player.radius : this.player.halfSize,
                 );
-               
 
-                if(collisionResult === null){
+
+                if (collisionResult === null) {
                 }
 
                 // check if player moved - activate passage collisions again when player moves out of the passage it currently is in
@@ -1751,6 +1752,15 @@ export default class ThumbRaiser {
     }
 
     setInitialPosition() {
+        if (this.initialCoords != null) {
+            const iniPos = this.maze.cellToCartesian([this.initialCoords.y, this.initialCoords.x]);
+            console.log('iniPos', iniPos);
+            this.player.position.set(iniPos.x, iniPos.y, iniPos.z);
+            this.player.direction = this.maze.initialDirection;
+            this.initialCoords = null; // reset
+            return;
+        }
+
         if (this.accessPointStart === 'elev') {
             const iniPos = this.maze.elevator.acess;
             this.player.position.set(iniPos.x, this.maze.initialPosition.y, iniPos.z);
@@ -1767,13 +1777,13 @@ export default class ThumbRaiser {
             let x = pos.positionX;
             let y = pos.positionY;
 
-            if (y >= this.maze.size.width-1) {
+            if (y >= this.maze.size.width - 1) {
                 y--;
             } else if (y - 1 <= 0) {
                 y++;
             }
 
-            if (x >= this.maze.size.depth-1) {
+            if (x >= this.maze.size.depth - 1) {
                 x--;
             } else if (x - 1 <= 0) {
                 x++;
@@ -1786,6 +1796,10 @@ export default class ThumbRaiser {
         }
 
         this.player.direction = this.maze.initialDirection;
+    }
+
+    setIniCoords(iniCoords) {
+        this.initialCoords = iniCoords;
     }
 
     setAccessPointStart(accessPointStart) {
