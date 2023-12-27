@@ -530,6 +530,8 @@ export default function Scene() {
             }
 
             // setFloor(floor);
+            thumbRaiser.setStartPassageId(passage.passageId);
+            thumbRaiser.setAccessPointStart('passage');
             thumbRaiser.changeMaze(floor + '.json');
         };
 
@@ -565,6 +567,7 @@ export default function Scene() {
         };
 
         fetchFloor();
+        
     }, [floor]);
 
     // when the robot changes building | or when user selects a building
@@ -572,6 +575,8 @@ export default function Scene() {
         if (building === undefined) {
             return;
         }
+
+        console.log('building changed: ' + building.value);
 
         const fetchFloors = async () => {
             try {
@@ -600,7 +605,9 @@ export default function Scene() {
         setFloor(event.target.value);
     };
 
+    // when the robot enters a elevator and the user selects a floor
     const handleSelectFloorOnElevator = (event: ChangeEvent<HTMLSelectElement>): void => {
+        thumbRaiser.setAccessPointStart('elev');
         setFloor(event.target.value);
         setIsInElevator(false);
     };
@@ -612,10 +619,10 @@ export default function Scene() {
 
     const handleChangeTask = async (taskId: string): Promise<void> => {
         const selectedTask: PickupDeliveryTask = tasksFetcher.data.find((type: TaskWithUser) => type.id === taskId);
-        if(!selectedTask) {
+        if (!selectedTask) {
             return;
         }
-        
+
         // check origin type and get floor
         let floor: Floor = null;
         switch (selectedTask.originType) {
@@ -675,6 +682,11 @@ export default function Scene() {
             console.error(e);
         }
     };
+
+    useEffect(() => {
+        console.log(building.value);
+    }),
+        [];
 
     return (
         <>
@@ -756,7 +768,7 @@ export default function Scene() {
                                         <>
                                             <td>
                                                 <BuildingSelectBox
-                                                    selectedValue=""
+                                                    selectedValue={building.value}
                                                     isLoading={buildingsFetcher.isLoading}
                                                     isError={buildingsFetcher.isError}
                                                     data={buildingsFetcher.data}
@@ -765,7 +777,12 @@ export default function Scene() {
                                             </td>
                                             <td>
                                                 {floors.length > 0 && (
-                                                    <Form.Select onChange={handleSelectFloor}>
+                                                    <Form.Select
+                                                        onChange={(e) => {
+                                                            thumbRaiser.setAccessPointStart('elev');
+                                                            handleSelectFloor(e);
+                                                        }}
+                                                    >
                                                         <option defaultChecked={true}>Select floor</option>
                                                         {floors.map((floor) => (
                                                             <option value={floor.id} key={floor.id}>
@@ -790,7 +807,12 @@ export default function Scene() {
                                         {isInElevator && (
                                             <>
                                                 <span> Floors:</span>
-                                                <Form.Select onChange={handleSelectFloorOnElevator}>
+                                                <Form.Select
+                                                    onChange={(e) => {
+                                                        thumbRaiser.setAccessPointStart('elev');
+                                                        handleSelectFloorOnElevator(e);
+                                                    }}
+                                                >
                                                     <option defaultChecked={true}>Select floor</option>
                                                     {floors.map((floor) => (
                                                         <option value={floor.id} key={floor.id}>

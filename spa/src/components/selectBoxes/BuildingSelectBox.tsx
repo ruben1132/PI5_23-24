@@ -13,8 +13,6 @@ interface Props {
 }
 
 const BuildingSelectBox = (props: Props) => {
-
-    
     if (props.isError) {
         return (
             <Form.Select>
@@ -30,7 +28,7 @@ const BuildingSelectBox = (props: Props) => {
         );
     }
 
-    if(!props.data) {
+    if (!props.data) {
         return (
             <Form.Select>
                 <option>No data</option>
@@ -46,29 +44,32 @@ const BuildingSelectBox = (props: Props) => {
     };
 
     const getSelectedValue = (): Building => {
-        let val = null;
         if (props?.selectedValue) {
-            val = props.data.find((item: Building) => item.id === props?.selectedValue);
+            return props.data.find((item: Building) => item.id === props?.selectedValue);
         }
 
-        if (!val) {
-            return filteredSelectBox[0];
-        }
-
-        return val;
+        props.setValue(filteredSelectBox[0].id);
+        return filteredSelectBox[0];
     };
 
     const selectedValue = getSelectedValue();
 
     return (
-      
-        <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='building-sb' disabled={props.disabled}>
-
-            {props?.selectedValue && <option defaultChecked={true}>{selectedValue.code + " - " + selectedValue.name}</option>}
+        <Form.Select
+            defaultValue={props?.selectedValue ?? filteredSelectBox[0].id}
+            onChange={handleChange}
+            id="building-sb"
+            disabled={props.disabled}
+        >
+            {props?.selectedValue && (
+                <option defaultChecked={true} value={selectedValue.id}>
+                    {selectedValue.code + ' - ' + selectedValue.name}
+                </option>
+            )}
 
             {filteredSelectBox?.map((item: Building) => (
                 <option key={item.id} value={item.id}>
-                    {item.code + " - " + item.name}
+                    {item.code + ' - ' + item.name}
                 </option>
             ))}
         </Form.Select>

@@ -408,6 +408,9 @@ export default class ThumbRaiser {
         this.setPassage = setPassage;
         this.autoMovs = autoMovs;
         this.autoMovsStore = autoMovs;
+        this.accessPointStart = 'elev'; // this is the access point to where the robot starts when loading the map. It can be a elevator or a passage
+        this.startingPassageId = ''; // this is the passage id where the robot starts when loading the map
+        this.isPassageCollisionsOn = true;
 
         // Set the game state
         this.gameRunning = false;
@@ -441,7 +444,6 @@ export default class ThumbRaiser {
 
         // Create the cube texture
         this.cubeTexture = new CubeTexture(this.cubeTexturesParameters.skyboxes[this.cubeTexturesParameters.selected]);
-
 
         // Create the maze
         this.maze = new Maze(this.mazeParameters);
@@ -1061,12 +1063,12 @@ export default class ThumbRaiser {
                                     ((mouseIncrement.x / this.miniMapCamera.viewport.width) *
                                         (this.miniMapCamera.orthographic.left -
                                             this.miniMapCamera.orthographic.right)) /
-                                        this.miniMapCamera.orthographic.zoom,
+                                    this.miniMapCamera.orthographic.zoom,
                                     0.0,
                                     ((mouseIncrement.y / this.miniMapCamera.viewport.height) *
                                         (this.miniMapCamera.orthographic.top -
                                             this.miniMapCamera.orthographic.bottom)) /
-                                        this.miniMapCamera.orthographic.zoom,
+                                    this.miniMapCamera.orthographic.zoom,
                                 );
                                 this.miniMapCamera.updateTarget(targetIncrement);
                             }
@@ -1141,7 +1143,7 @@ export default class ThumbRaiser {
             case 'view':
                 this.setViewportVisibility(
                     [this.fixedViewCamera, this.firstPersonViewCamera, this.thirdPersonViewCamera, this.topViewCamera][
-                        this.view.options.selectedIndex
+                    this.view.options.selectedIndex
                     ],
                 );
                 break;
@@ -1330,12 +1332,14 @@ export default class ThumbRaiser {
                 this.animations = new Animations(this.player);
 
                 // Set the player's position and direction
-                this.player.position.set(
-                    this.maze.initialPosition.x,
-                    this.maze.initialPosition.y,
-                    this.maze.initialPosition.z,
-                );
-                this.player.direction = this.maze.initialDirection;
+                // by deafult the initial position is the position of the elevator access
+                this.setInitialPosition();
+
+                // this.player.position.set(
+                //     this.maze.initialPosition.x,
+                //     this.maze.initialPosition.y,
+                //     this.maze.initialPosition.z,
+                // );
 
                 // Set the spotlight target
                 this.spotLight.target = this.player;
@@ -1411,15 +1415,16 @@ export default class ThumbRaiser {
                 this.mazeChanged = false;
             }
         } else {
+            console.log(this.player.position);
             if (this.mazeChanged && this.maze.loaded) {
                 this.mazeChanged = false;
                 this.scene.add(this.maze);
-                this.player.position.set(
-                    this.maze.initialPosition.x,
-                    this.maze.initialPosition.y,
-                    this.maze.initialPosition.z,
-                );
-                this.player.direction = this.maze.initialDirection;
+                // this.player.position.set(
+                //     this.maze.initialPosition.x,
+                //     this.maze.initialPosition.y,
+                //     this.maze.initialPosition.z,
+                // );
+                this.setInitialPosition();
             } else if (this.mazeChanged && !this.maze.loaded) {
                 return;
             }
@@ -1430,172 +1435,176 @@ export default class ThumbRaiser {
 
             // Update the player
             if (!this.animations.actionInProgress) {
-                // Check if the player found the exit
-                if (this.maze.foundExit(this.player.position)) {
-                    this.finalSequence();
-                } else {
-                    // check if player is in elevator
-                    if (this.maze.enteredElevator(this.player.position) && this.checkIfInElevator) {
-                        // stop movement
-                        this.animations.fadeToAction('Standing', 0.2);
+                // check if player is in elevator
+                if (this.maze.enteredElevator(this.player.position) && this.checkIfInElevator) {
+                    // stop movement
+                    this.animations.fadeToAction('Standing', 0.2);
 
-                        // show elevator GUI
-                        this.setIsInElevator(true);
-                        return;
-                    }
+                    // show elevator GUI
+                    this.setIsInElevator(true);
+                    return;
+                }
 
-                    // only resets the flag when the player gets out the elevator
-                    if (!this.maze.enteredElevator(this.player.position)) {
-                        this.checkIfInElevator = true; // reset flag
-                    }
+                // only resets the flag when the player gets out the elevator
+                if (!this.maze.enteredElevator(this.player.position)) {
+                    this.checkIfInElevator = true; // reset flag
+                }
 
-                    let coveredDistance = this.player.walkingSpeed * deltaT;
-                    let directionIncrement = this.player.turningSpeed * deltaT;
-                    if (this.player.shiftKey) {
-                        coveredDistance *= this.player.runningFactor;
-                        directionIncrement *= this.player.runningFactor;
-                    }
-                    let playerTurned = false;
-                    let directionDeg = this.player.direction;
-                    if (this.player.keyStates.left) {
-                        playerTurned = true;
-                        directionDeg += directionIncrement;
-                    } else if (this.player.keyStates.right) {
-                        playerTurned = true;
-                        directionDeg -= directionIncrement;
-                    }
-                    const directionRad = THREE.MathUtils.degToRad(directionDeg);
-                    let playerMoved = false;
-                    const position = this.player.position.clone();
-                    if (this.player.keyStates.backward) {
-                        playerMoved = true;
-                        position.sub(
-                            new THREE.Vector3(
-                                coveredDistance * Math.sin(directionRad),
-                                0.0,
-                                coveredDistance * Math.cos(directionRad),
-                            ),
-                        );
-                    } else if (this.player.keyStates.forward) {
-                        playerMoved = true;
-                        position.add(
-                            new THREE.Vector3(
-                                coveredDistance * Math.sin(directionRad),
-                                0.0,
-                                coveredDistance * Math.cos(directionRad),
-                            ),
-                        );
-                    }
+                let coveredDistance = this.player.walkingSpeed * deltaT;
+                let directionIncrement = this.player.turningSpeed * deltaT;
+                if (this.player.shiftKey) {
+                    coveredDistance *= this.player.runningFactor;
+                    directionIncrement *= this.player.runningFactor;
+                }
+                let playerTurned = false;
+                let directionDeg = this.player.direction;
+                if (this.player.keyStates.left) {
+                    playerTurned = true;
+                    directionDeg += directionIncrement;
+                } else if (this.player.keyStates.right) {
+                    playerTurned = true;
+                    directionDeg -= directionIncrement;
+                }
+                const directionRad = THREE.MathUtils.degToRad(directionDeg);
+                let playerMoved = false;
+                const position = this.player.position.clone();
+                if (this.player.keyStates.backward) {
+                    playerMoved = true;
+                    position.sub(
+                        new THREE.Vector3(
+                            coveredDistance * Math.sin(directionRad),
+                            0.0,
+                            coveredDistance * Math.cos(directionRad),
+                        ),
+                    );
+                } else if (this.player.keyStates.forward) {
+                    playerMoved = true;
+                    position.add(
+                        new THREE.Vector3(
+                            coveredDistance * Math.sin(directionRad),
+                            0.0,
+                            coveredDistance * Math.cos(directionRad),
+                        ),
+                    );
+                }
 
-                    const collisionResult = this.maze.passageCollision(
+                const collisionResult = this.maze.passageCollision(
+                    position,
+                    this.collisionDetectionParameters.method != 'obb-aabb' ? this.player.radius : this.player.halfSize,
+                );
+               
+
+                if(collisionResult === null){
+                }
+
+                // check if player moved - activate passage collisions again when player moves out of the passage it currently is in
+                if (playerMoved && !this.isPassageCollisionsOn && (collisionResult === null || collisionResult === undefined)) {
+                    this.isPassageCollisionsOn = true;     // resets flag
+                }
+
+                if (
+                    this.maze.collision(
+                        this.collisionDetectionParameters.method,
                         position,
                         this.collisionDetectionParameters.method != 'obb-aabb'
                             ? this.player.radius
                             : this.player.halfSize,
-                    );
-                    if (
-                        this.maze.collision(
-                            this.collisionDetectionParameters.method,
-                            position,
-                            this.collisionDetectionParameters.method != 'obb-aabb'
-                                ? this.player.radius
-                                : this.player.halfSize,
-                            directionRad - this.player.defaultDirection,
-                        )
-                    ) {
-                        this.audio.play(this.audio.deathClips, false);
-                        this.animations.fadeToAction('Death', 0.2);
-                    } else if (
-                        this.maze.doorCollision(
-                            position,
-                            this.collisionDetectionParameters.method != 'obb-aabb'
-                                ? this.player.radius
-                                : this.player.halfSize,
-                        )
-                    ) {
-                    } else if (collisionResult != null) {
-                        console.log('collisionResult' + JSON.stringify(collisionResult));
-                        this.setPassage(collisionResult);
-                        return;
-                    } else if (this.autoMovs.isOn && this.autoMovs.movements.length > 0) {
-                        // auto movement
-                        const currentMovement = this.autoMovs.movements[0];
-                        const fromCartesian = this.player.position.clone();
+                        directionRad - this.player.defaultDirection,
+                    )
+                ) {
+                    this.audio.play(this.audio.deathClips, false);
+                    this.animations.fadeToAction('Death', 0.2);
+                } else if (
+                    this.maze.doorCollision(
+                        position,
+                        this.collisionDetectionParameters.method != 'obb-aabb'
+                            ? this.player.radius
+                            : this.player.halfSize,
+                    )
+                ) {
+                } else if (collisionResult != null && this.isPassageCollisionsOn) {
+                    this.isPassageCollisionsOn = false; // turn off passage collisions to avoid infinite passage collisions
+                    console.log('collisionResult' + JSON.stringify(collisionResult));
+                    this.setPassage(collisionResult);
+                    return;
+                } else if (this.autoMovs.isOn && this.autoMovs.movements.length > 0) {
+                    // auto movement
+                    const currentMovement = this.autoMovs.movements[0];
+                    const fromCartesian = this.player.position.clone();
 
-                        if (currentMovement.length > 1) {
-                            const to = currentMovement[1];
-                            const toCartesian = this.maze.cellToCartesian([to.y, to.x]);
+                    if (currentMovement.length > 1) {
+                        const to = currentMovement[1];
+                        const toCartesian = this.maze.cellToCartesian([to.y, to.x]);
 
-                            const directionRad = Math.atan2(
-                                toCartesian.x - fromCartesian.x,
-                                toCartesian.z - fromCartesian.z,
-                            );
+                        const directionRad = Math.atan2(
+                            toCartesian.x - fromCartesian.x,
+                            toCartesian.z - fromCartesian.z,
+                        );
 
-                            // Synchronize rotation with arrow key logic
-                            this.player.direction = THREE.MathUtils.radToDeg(directionRad);
+                        // Synchronize rotation with arrow key logic
+                        this.player.direction = THREE.MathUtils.radToDeg(directionRad);
 
-                            // Rotate the player first
-                            this.player.rotation.y = directionRad - this.player.defaultDirection;
+                        // Rotate the player first
+                        this.player.rotation.y = directionRad - this.player.defaultDirection;
 
-                            // Then move the player
-                            const distance = fromCartesian.distanceTo(toCartesian);
-                            let coveredDistance = Math.min(distance, this.player.walkingSpeed * deltaT);
+                        // Then move the player
+                        const distance = fromCartesian.distanceTo(toCartesian);
+                        let coveredDistance = Math.min(distance, this.player.walkingSpeed * deltaT);
 
-                            // if (this.player.shiftKey) {
-                            coveredDistance *= this.player.runningFactor; // run
-                            // }
+                        // if (this.player.shiftKey) {
+                        coveredDistance *= this.player.runningFactor; // run
+                        // }
 
-                            const delta = new THREE.Vector3(
-                                coveredDistance * Math.sin(directionRad),
-                                0.0,
-                                coveredDistance * Math.cos(directionRad),
-                            );
+                        const delta = new THREE.Vector3(
+                            coveredDistance * Math.sin(directionRad),
+                            0.0,
+                            coveredDistance * Math.cos(directionRad),
+                        );
 
-                            position.add(delta);
-                            playerMoved = true;
+                        position.add(delta);
+                        playerMoved = true;
 
-                            this.player.position.set(position.x, position.y, position.z);
-                            this.animations.fadeToAction('Running', 0.2);
+                        this.player.position.set(position.x, position.y, position.z);
+                        this.animations.fadeToAction('Running', 0.2);
 
-                            if (coveredDistance >= distance) {
-                                // Move to the next movement
-                                currentMovement.shift();
-                            }
-                        } else {
-                            // Move to the next set of movements
-                            this.autoMovs.movements.shift();
+                        if (coveredDistance >= distance) {
+                            // Move to the next movement
+                            currentMovement.shift();
                         }
-                    } else if (this.player.keyStates.jump) {
-                        this.audio.play(this.audio.jumpClips, true);
-                        this.animations.fadeToAction('Jump', 0.2);
-                    } else if (this.player.keyStates.yes) {
-                        this.animations.fadeToAction('Yes', 0.2);
-                    } else if (this.player.keyStates.no) {
-                        this.animations.fadeToAction('No', 0.2);
-                    } else if (this.player.keyStates.wave) {
-                        this.animations.fadeToAction('Wave', 0.2);
-                    } else if (this.player.keyStates.punch) {
-                        this.animations.fadeToAction('Punch', 0.2);
-                    } else if (this.player.keyStates.thumbsUp) {
-                        this.animations.fadeToAction('ThumbsUp', 0.2);
                     } else {
-                        if (playerTurned) {
-                            this.player.direction = directionDeg;
-                        }
-                        if (playerMoved) {
-                            this.animations.fadeToAction(this.player.shiftKey ? 'Running' : 'Walking', 0.2);
-                            this.player.position.set(position.x, position.y, position.z);
-                        } else {
-                            if (this.animations.idleTimeOut()) {
-                                this.animations.resetIdleTime();
-                                this.audio.play(this.audio.idleClips, false);
-                            }
-                            this.animations.fadeToAction('Idle', this.animations.activeName != 'Death' ? 0.2 : 0.6);
-                        }
+                        // Move to the next set of movements
+                        this.autoMovs.movements.shift();
                     }
-
-                    this.player.rotation.y = directionRad - this.player.defaultDirection;
+                } else if (this.player.keyStates.jump) {
+                    this.audio.play(this.audio.jumpClips, true);
+                    this.animations.fadeToAction('Jump', 0.2);
+                } else if (this.player.keyStates.yes) {
+                    this.animations.fadeToAction('Yes', 0.2);
+                } else if (this.player.keyStates.no) {
+                    this.animations.fadeToAction('No', 0.2);
+                } else if (this.player.keyStates.wave) {
+                    this.animations.fadeToAction('Wave', 0.2);
+                } else if (this.player.keyStates.punch) {
+                    this.animations.fadeToAction('Punch', 0.2);
+                } else if (this.player.keyStates.thumbsUp) {
+                    this.animations.fadeToAction('ThumbsUp', 0.2);
+                } else {
+                    if (playerTurned) {
+                        this.player.direction = directionDeg;
+                    }
+                    if (playerMoved) {
+                        this.animations.fadeToAction(this.player.shiftKey ? 'Running' : 'Walking', 0.2);
+                        this.player.position.set(position.x, position.y, position.z);
+                    } else {
+                        if (this.animations.idleTimeOut()) {
+                            this.animations.resetIdleTime();
+                            this.audio.play(this.audio.idleClips, false);
+                        }
+                        this.animations.fadeToAction('Idle', this.animations.activeName != 'Death' ? 0.2 : 0.6);
+                    }
                 }
+
+                this.player.rotation.y = directionRad - this.player.defaultDirection;
             }
 
             // Update the flashlight, first-person view, third-person view and top view camera parameters (player orientation and target)
@@ -1715,6 +1724,10 @@ export default class ThumbRaiser {
         });
 
         this.scene.remove(this.maze);
+        this.scene.remove(this.maze.elevator);
+        this.scene.remove(this.maze.doors);
+        this.scene.remove(this.maze.passages);
+
         this.maze = newMaze;
     }
 
@@ -1735,6 +1748,52 @@ export default class ThumbRaiser {
         //     let iniCart = this.maze.cellToCartesian(arr); // convert the autoMovs to cartesian coordinates
         //     this.player.position.set(iniCart[1], 0.0, iniCart[0]);
         // }
+    }
+
+    setInitialPosition() {
+        if (this.accessPointStart === 'elev') {
+            const iniPos = this.maze.elevator.acess;
+            this.player.position.set(iniPos.x, this.maze.initialPosition.y, iniPos.z);
+        } else {
+            const pass = this.maze.passages.find((p) => p.passageId === this.startPassageId);
+            if (!pass) {
+                const iniPos = this.maze.elevator.acess;
+                this.player.position.set(iniPos.x, this.maze.initialPosition.y, iniPos.z);
+                return;
+            }
+
+            const pos = pass.passage.position;
+            console.log('posP', pos);
+            let x = pos.positionX;
+            let y = pos.positionY;
+
+            if (y >= this.maze.size.width) {
+                y--;
+            } else if (y - 1 <= 0) {
+                y++;
+            }
+
+            if (x >= this.maze.size.depth) {
+                x--;
+            } else if (x - 1 <= 0) {
+                x++;
+            }
+
+            const iniPos = this.maze.cellToCartesian([y, x]);
+            console.log('iniPos', iniPos);
+
+            this.player.position.set(iniPos.x, iniPos.y, iniPos.z);
+        }
+
+        this.player.direction = this.maze.initialDirection;
+    }
+
+    setAccessPointStart(accessPointStart) {
+        this.accessPointStart = accessPointStart;
+    }
+
+    setStartPassageId(startPassageId) {
+        this.startPassageId = startPassageId;
     }
 
     dispose() {

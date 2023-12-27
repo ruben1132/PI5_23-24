@@ -46,21 +46,20 @@ const PassageSelectBox = (props: Props) => {
     };
 
     const getSelectedValue = (): PassageWithFloor => {
-        let val = null;
         if (props?.selectedValue) {
-            val = props.data.find((item: PassageWithFloor) => item.id === props?.selectedValue);
+           return props.data.find((item: PassageWithFloor) => item.id === props?.selectedValue);
         }
 
-        if (!val) {
+            props.setValue(filteredSelectBox[0].id);
             return filteredSelectBox[0];
-        }
-
-        return val;
+     
     };
+
+    const selectedValue = getSelectedValue();
 
     return (
         <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='passage-sb' disabled={props.disabled}>
-            {props?.selectedValue && <option defaultChecked={true}>{getSelectedValue().designation}</option>}
+            {props?.selectedValue && <option defaultChecked={true} value={selectedValue.id}>{selectedValue.designation}</option>}
 
             {filteredSelectBox?.map((item: PassageWithFloor) => (
                 <option key={item.id} value={item.id}>

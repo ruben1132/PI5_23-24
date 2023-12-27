@@ -38,8 +38,6 @@ export default class Passage extends THREE.Group {
 
         // Function to fetch room name using axios
         const fetchPassageFromDatabase = async (passageId) => {
-            console.log('Passage ID:', passageId);
-            console.log('Floor ID:', this.floorId);
             try {
                 const response = await axios.get(config.mgiAPI.baseUrl + config.mgiAPI.routes.passages + passageId, {
                     withCredentials: true,

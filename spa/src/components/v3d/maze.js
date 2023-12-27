@@ -646,6 +646,9 @@ export default class Maze extends THREE.Group {
         const row = indices[0] + offsets[0];
         const column = indices[1] + offsets[1];
 
+        const distanceThresholdX = 0.008;
+        const distanceThresholdY = 0.5;
+
         for (let i = 0; i < this.passages.length; i++) {
             const passageId = this.passages[i].passage.passageId;
             if (
@@ -654,9 +657,13 @@ export default class Maze extends THREE.Group {
             ) {
                 console.log('Collision passage ' + passageId);
                 if (
-                    Math.abs(position.x - (this.cellToCartesian([row, column]).x + delta.x * this.scale.x)) < radius ||
-                    Math.abs(position.z - (this.cellToCartesian([row, column]).z + delta.z * this.scale.z)) < radius
+                    Math.abs(position.x - (this.cellToCartesian([row, column]).x -  this.scale.x)) < distanceThresholdX ||
+                    Math.abs(position.z - (this.cellToCartesian([row, column]).z + delta.z * this.scale.z)) < distanceThresholdY
                 ) {
+                    // Math.abs(position.x - this.elevator.position.x) < distanceThreshold &&
+                    // Math.abs(position.z - (this.elevator.position.z - this.scale.z)) < distanceThreshold
+                    console.log('FDSSSS', Math.abs(position.x - (this.cellToCartesian([row, column]).x -  this.scale.x)))
+                    console.log('FDSS2222', Math.abs(position.z - (this.cellToCartesian([row, column]).z - this.scale.z)))
                     let data = {
                         passageId: passageId,
                         floor: this.floorId,
