@@ -1761,7 +1761,6 @@ export default class ThumbRaiser {
     setInitialPosition() {
         if (this.initialCoords != null) {
             const iniPos = this.maze.cellToCartesian([this.initialCoords.y, this.initialCoords.x]);
-            console.log('iniPos', iniPos);
             this.player.position.set(iniPos.x, iniPos.y, iniPos.z);
             this.player.direction = this.maze.initialDirection;
             this.initialCoords = null; // reset
@@ -1773,31 +1772,29 @@ export default class ThumbRaiser {
             this.player.position.set(iniPos.x, this.maze.initialPosition.y, iniPos.z);
         } else {
             const pass = this.maze.passages.find((p) => p.passageId === this.startPassageId);
-            if (!pass) {
-                const iniPos = this.maze.elevator.acess;
-                this.player.position.set(iniPos.x, this.maze.initialPosition.y, iniPos.z);
-                return;
-            }
 
             const pos = pass.passage.position;
-            console.log('posP', pos);
             let x = pos.positionX;
             let y = pos.positionY;
 
-            if (y >= this.maze.size.width - 1) {
-                y--;
-            } else if (y - 1 <= 0) {
-                y++;
-            }
 
-            if (x >= this.maze.size.depth - 1) {
-                x--;
-            } else if (x - 1 <= 0) {
-                x++;
+            if (pos.direction === 'north') {
+                if (y >= this.maze.size.depth - 1) {
+                    y-=1;
+                } else if (y - 1 <= 0) {
+                    y+=1;
+                }
+            } else {
+                if (x >= this.maze.size.width - 1) {
+                    x-=1;
+                } else if (x - 1 <= 0) {
+                    x+=1;
+                }
+               
+
             }
 
             const iniPos = this.maze.cellToCartesian([y, x]);
-            console.log('iniPos', iniPos);
 
             this.player.position.set(iniPos.x, iniPos.y, iniPos.z);
         }

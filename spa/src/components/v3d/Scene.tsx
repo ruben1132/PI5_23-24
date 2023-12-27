@@ -425,6 +425,7 @@ export default function Scene() {
             // setFloor(floor);
             thumbRaiser.setStartPassageId(passage.passageId);
             thumbRaiser.setAccessPointStart('passage');
+            console.log(floor + '.json')
             thumbRaiser.changeMaze(floor + '.json');
         };
 
