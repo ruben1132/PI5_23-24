@@ -167,9 +167,9 @@ namespace tests.Controllers
             // Arrange
             var tasks = new List<TaskDto>
             {
-                new TaskDto("00000000-0000-0000-0000-000000000000", null, false, null, null, null, null),
-                new TaskDto("00000000-0000-0000-0000-000000000001", null, false, null, null, null, null),
-                new TaskDto("00000000-0000-0000-0000-000000000002", null, false, null, null, null, null),
+                new TaskDto("00000000-0000-0000-0000-000000000000", null, false, null, null, null, null, null),
+                new TaskDto("00000000-0000-0000-0000-000000000001", null, false, null, null, null, null, null),
+                new TaskDto("00000000-0000-0000-0000-000000000002", null, false, null, null, null, null, null),
             };
 
             var token = "token";
@@ -210,7 +210,7 @@ namespace tests.Controllers
         {
             // Arrange
             var taskId = "1";
-            var task = new TaskDto("00000000-0000-0000-0000-000000000000", null, false, null, null, null, null);
+            var task = new TaskDto("00000000-0000-0000-0000-000000000000", null, false, null, null, null, null, null);
 
             _serviceMock.Setup(x => x.GetByIdAsync(new Guid(task.Id))).ReturnsAsync(Result<TaskDto>.Ok(task));
 
@@ -276,8 +276,6 @@ namespace tests.Controllers
             var badRequestResult = result.Result as BadRequestObjectResult;
             Assert.AreEqual(new { error = error }.ToString(), badRequestResult.Value.ToString());
         }
-
-
 
         [TestMethod]
         public async System.Threading.Tasks.Task ApproveReject_ReturnsOk()
