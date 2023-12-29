@@ -22,7 +22,7 @@
 % tarefa(t5,3,8,2).
 
 % tarefas(NTarefas).
-tarefas(6).
+tarefas(8).
 
 % gera as transições entre as tarefas
 gera_transicoes :-

@@ -3,9 +3,13 @@
 tarefa(t1, sala(k1), sala(apn)).
 tarefa(t2, sala(beng), sala(k2)).
 tarefa(t3, sala(r1), sala(r2)).
-tarefa(t4, sala(k1), sala(apn)).
-tarefa(t5, sala(beng), sala(k2)).
-tarefa(t6, sala(r1), sala(r2)).
+tarefa(t4, sala(k1), sala(k2)).
+tarefa(t5, sala(beng), sala(a207b)).
+tarefa(t6, sala(r1), sala(a201)).
+tarefa(t7, sala(r2), sala(a202)).
+tarefa(t8, sala(a204), sala(beng)).
+% tarefa(t9, sala(a204), sala(beng)).
+% tarefa(t10, sala(a209), sala(k1)).
 
 
 % plantas simples
