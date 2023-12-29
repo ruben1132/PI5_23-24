@@ -17,6 +17,8 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Mpt.Middleware;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace Mpt
 {
@@ -97,11 +99,16 @@ namespace Mpt
 
 
             app.UseRouting();
-            app.UseMiddleware<MyMiddleware>();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+            // Only use the middleware in non-test environments
+            if (!env.IsEnvironment("Test"))
+            {
+                app.UseMiddleware<MyMiddleware>();
+                app.UseAuthentication();
+                app.UseAuthorization();
+            }
 
+         
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -122,6 +129,25 @@ namespace Mpt
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ITaskService, TaskService>();
             services.AddTransient<IPlanningService, PlanningService>();
+
+        }
+
+        // Test environment configuration method
+        public static void ConfigureTestServices(IServiceCollection services)
+        {
+
+            services.AddDbContext<MptDbContext>(opt => opt.UseInMemoryDatabase("TestDatabase")
+                .ReplaceService<IValueConverterSelector, StronglyEntityIdValueConverterSelector>());
+
+
+            // Allow anonymous access to all controllers for testing
+            services.AddMvc(options =>
+            {
+                var policy = new AuthorizationPolicyBuilder()
+                              .RequireAuthenticatedUser()
+                              .Build();
+                options.Filters.Add(new AuthorizeFilter(policy));
+            });
 
         }
     }

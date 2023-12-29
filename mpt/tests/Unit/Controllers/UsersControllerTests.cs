@@ -40,7 +40,7 @@ namespace unit.Controllers
 
 
             // Set authorization header for testing purposes
-            _controller.Request.Headers["Authorization"] = "Bearer token"; // Replace with your test token
+            _controller.Request.Headers["Authorization"] = "Bearer token"; 
 
 
             // Insert the necessary data using the mock UserService
