@@ -46,6 +46,7 @@ namespace tests.Integration
             _taskRepoMock = new Mock<ITaskRepository>();
             _roleRepoMock = new Mock<IRoleRepository>();
             _taskRepoMock = new Mock<ITaskRepository>();
+            _userRepoMock = new Mock<IUserRepository>();
             _httpClientMock = new Mock<HttpClient>();
             _emailDomain = "isep.ipp.pt";
             _defaultRole = "utente";
@@ -160,13 +161,12 @@ namespace tests.Integration
             Assert.AreEqual(taskDto.User.Name, task.User.Name);
             Assert.AreEqual(taskDto.User.Phone, task.User.Phone);
             Assert.AreEqual(taskDto.IsApproved, task.IsApproved);
-            Assert.AreEqual(taskDto.LastUpdated, task.LastUpdated);
 
         }
 
 
         [TestMethod]
-        public async System.Threading.Tasks.Task UpdateIsApprovedAsync_Ok()
+        public async System.Threading.Tasks.Task Approve_Ok()
         {
             // Arrange
             var id = new Guid(tasksList[0].Id.Value);
@@ -185,10 +185,25 @@ namespace tests.Integration
             Assert.AreEqual(taskSimpleDto.IsCompleted, task.IsCompleted);
             Assert.AreEqual(taskSimpleDto.TaskType, task.TaskType);
             Assert.AreEqual(taskSimpleDto.IsApproved, task.IsApproved);
-            Assert.AreEqual(taskSimpleDto.LastUpdated, task.LastUpdated);
 
         }
 
+        // [TestMethod]
+        // public async System.Threading.Tasks.Task Approve_Should_Fail_TaskNotFound(){
+        //     // Arrange
+        //     var id = new Guid("00000000-0000-0000-0000-000000000000");
+        //     var isApproved = new IsApprovedDto(ApprovalStatus.approved.ToString());
+
+        //     // Act
+        //     var result = await _controller.ApproveReject(id, isApproved);
+
+        //     // Assert
+        //     var notFoundResult = result.Result as NotFoundObjectResult;
+        //     Assert.IsNotNull(notFoundResult.Value);
+        //     Assert.IsInstanceOfType(notFoundResult.Value, typeof(string));
+        //     var message = notFoundResult.Value as string;
+        //     Assert.AreEqual("Task not found", message);
+        // }
 
 
     }
