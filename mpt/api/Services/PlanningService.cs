@@ -155,29 +155,29 @@ namespace Mpt.Services
             }
         }
 
-        private async Task<Result<List<TaskSimpleDto>>> GetTasksByIdAsync(Planning planning)
+        private async Task<Result<List<TaskWithRobotMovDto>>> GetTasksByIdAsync(Planning planning)
         {
             try
             {
                 var tasks = await this._planningRepo.GetTasksForPlanningAsync(planning.Id);
 
-                var tasksDto = new List<TaskSimpleDto>();
+                var tasksDto = new List<TaskWithRobotMovDto>();
 
                 if (tasks == null)
-                    return Result<List<TaskSimpleDto>>.Ok(tasksDto);
+                    return Result<List<TaskWithRobotMovDto>>.Ok(tasksDto);
 
                 // to dto
                 foreach (var task in tasks)
                 {
-                    tasksDto.Add(TaskMapper.ToDto(task));
+                    tasksDto.Add(TaskMapper.toDtoWithRobotMov(task));
                 }
 
-                return Result<List<TaskSimpleDto>>.Ok(tasksDto);
+                return Result<List<TaskWithRobotMovDto>>.Ok(tasksDto);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return Result<List<TaskSimpleDto>>.Fail(ex.Message);
+                return Result<List<TaskWithRobotMovDto>>.Fail(ex.Message);
             }
         }
 

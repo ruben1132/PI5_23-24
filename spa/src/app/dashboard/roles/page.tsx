@@ -9,6 +9,7 @@ export default async function Roles() {
             <PageContent
                 type="role"
                 routeToFetch={config.mptAPI.baseUrl + config.mptAPI.routes.roles}
+                showAddButton={false}
             />
         </div>
     );

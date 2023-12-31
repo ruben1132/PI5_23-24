@@ -10,6 +10,7 @@ interface Props {
     isLoading: boolean;
     isError: boolean;
     customHandleChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+    allOption?: boolean;
 }
 
 const TaskTypeSelectBox = (props: Props) => {
@@ -72,7 +73,7 @@ const TaskTypeSelectBox = (props: Props) => {
                     {item.name}
                 </option>
             ))}
-            <option value={''}>All</option>
+            {props.allOption && <option value={''}>All</option>}
         </Form.Select>
     );
 };

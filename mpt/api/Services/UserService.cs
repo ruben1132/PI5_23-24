@@ -227,6 +227,7 @@ namespace Mpt.Services
                     return Result<UserWithTasks>.Fail("User not found.");
 
                 var userDto = UserMapper.ToDto(user);
+                userDto.Password = null; // hide
 
                 var tasks = await this._taskRepo.GetAllFilteredAsync(null, userDto.Id, null);
 

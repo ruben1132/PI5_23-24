@@ -70,6 +70,7 @@ const { user } = useAuth();
                             isLoading={taskTypeDataFetch.isLoading}
                             isError={taskTypeDataFetch.isError}
                             setValue={taskType.handleLoad}
+                            allOption={true}
                         />
                     </Form.Group>
                 </Col>

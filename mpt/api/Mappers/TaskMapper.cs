@@ -12,7 +12,7 @@ namespace Mpt.Mappers
         // simple data, no user, no path, no robot movements
         public static TaskSimpleDto ToDto(Domain.Tasks.Task task)
         {
-            var date = task.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+            var date = task.LastUpdated.ToString("dd/MM/yyyy HH:mm");
 
             return new TaskSimpleDto(
                 task.IsCompleted,
@@ -22,9 +22,24 @@ namespace Mpt.Mappers
             );
         }
 
+        public static TaskWithRobotMovDto toDtoWithRobotMov(Domain.Tasks.Task task)
+        {
+            var date = task.LastUpdated.ToString("dd/MM/yyyy HH:mm");
+
+            return new TaskWithRobotMovDto(
+                task.Id.Value,
+                task.Path,
+                RobotMovementBulkToDto(task.RobotMovements),
+                task.IsCompleted,
+                task.TaskType,
+                date,
+                task.IsApproved.ToString()
+            );
+        }
+
         public static SurveillanceTaskSimpleDto ToDto(SurveillanceTask surveillanceTask, string floorCode)
         {
-            var date = surveillanceTask.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+            var date = surveillanceTask.LastUpdated.ToString("dd/MM/yyyy HH:mm");
 
             return new SurveillanceTaskSimpleDto(
                 surveillanceTask.IsCompleted,
@@ -38,7 +53,7 @@ namespace Mpt.Mappers
 
         public static PickupDeliveryTaskSimpleDto ToDto(PickupDeliveryTask pickupDeliveryTask)
         {
-            var date = pickupDeliveryTask.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+            var date = pickupDeliveryTask.LastUpdated.ToString("dd/MM/yyyy HH:mm");
 
             return new PickupDeliveryTaskSimpleDto(
                 pickupDeliveryTask.IsCompleted,
@@ -62,7 +77,7 @@ namespace Mpt.Mappers
         // has full data except for the path and robot movements
         public static TaskDto ToFullDto(Domain.Tasks.Task task, UserTaskInfoDto user)
         {
-            var date = task.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+            var date = task.LastUpdated.ToString("dd/MM/yyyy HH:mm");
 
             return new TaskDto(
                 task.Id.Value,
@@ -79,7 +94,7 @@ namespace Mpt.Mappers
 
         public static SurveillanceTaskDto ToFullDto(SurveillanceTask surveillanceTask, string floorCode, UserTaskInfoDto user)
         {
-            var date = surveillanceTask.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+            var date = surveillanceTask.LastUpdated.ToString("dd/MM/yyyy HH:mm");
 
             return new SurveillanceTaskDto(
                 surveillanceTask.Id.Value,
@@ -97,7 +112,7 @@ namespace Mpt.Mappers
 
         public static PickupDeliveryTaskDto ToFullDto(PickupDeliveryTask pickupDeliveryTask, UserTaskInfoDto user)
         {
-            var date = pickupDeliveryTask.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+            var date = pickupDeliveryTask.LastUpdated.ToString("dd/MM/yyyy HH:mm");
 
             return new PickupDeliveryTaskDto(
                 pickupDeliveryTask.Id.Value,

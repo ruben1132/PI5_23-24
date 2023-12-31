@@ -28,7 +28,7 @@ namespace Mpt.Mappers
 
         public static UserWithRoleDto ToDto(User user, RoleDto role)
         {
-            var date = user.LastUpdated.ToString("dd/MM/yyyy hh:mm");
+            var date = user.LastUpdated.ToString("dd/MM/yyyy HH:mm");
 
             return new UserWithRoleDto(
                     user.Id.Value,

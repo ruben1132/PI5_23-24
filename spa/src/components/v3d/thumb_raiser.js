@@ -1525,6 +1525,7 @@ export default class ThumbRaiser {
                 ) {
                 } else if (collisionResult != null && this.isPassageCollisionsOn) {
                     this.isPassageCollisionsOn = false; // turn off passage collisions to avoid infinite passage collisions
+                    this.autoMovs.movements.shift(); // remove the first set of movements from the queue - this is necessary to clear the rest of the cells (the robot can never reach the real cel of the passage)
                     console.log('collisionResult' + JSON.stringify(collisionResult));
                     this.setPassage(collisionResult);
                     return;

@@ -53,6 +53,7 @@ export default function RobotSearchForm(props: Props) {
                             isLoading={taskTypeDataFetch.isLoading}
                             isError={taskTypeDataFetch.isError}
                             setValue={robotType.handleLoad}
+                            allOption={true}
                         />
                     </Form.Group>
                 </Col>

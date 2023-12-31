@@ -18,7 +18,7 @@ namespace Mpt.Mappers
                 );
         }
 
-        public static PlanningFullDto ToDto(Planning planning, List<TaskSimpleDto> tasks, UserProfileDto user)
+        public static PlanningFullDto ToDto(Planning planning, List<TaskWithRobotMovDto> tasks, UserProfileDto user)
         {
             return new PlanningFullDto(
                     planning.Id.Value,

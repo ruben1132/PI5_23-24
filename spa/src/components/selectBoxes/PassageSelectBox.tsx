@@ -59,7 +59,7 @@ const PassageSelectBox = (props: Props) => {
 
     return (
         <Form.Select defaultValue={props?.selectedValue ?? filteredSelectBox[0].id} onChange={handleChange} id='passage-sb' disabled={props.disabled}>
-            {props?.selectedValue && <option defaultChecked={true} value={selectedValue.id}>{selectedValue.designation}</option>}
+            {props?.selectedValue && <option defaultChecked={true} value={selectedValue?.id}>{selectedValue?.designation}</option>}
 
             {filteredSelectBox?.map((item: PassageWithFloor) => (
                 <option key={item.id} value={item.id}>

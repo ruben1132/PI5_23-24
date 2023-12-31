@@ -89,10 +89,6 @@ namespace Mpt.Services
 
                 var tasks = await this._repo.GetAllFilteredAsync(type, userId, parsedApproved);
 
-                if (tasks.Count == 0)
-                    return Result<List<TaskDto>>.Fail("Error");
-
-
                 var tasksDto = await MapTasksToDto(tasks, token);
                 return Result<List<TaskDto>>.Ok(tasksDto);
             }

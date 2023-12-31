@@ -7,7 +7,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { Button } from 'react-bootstrap';
+import { Accordion, Button } from 'react-bootstrap';
 import ListGroup from 'react-bootstrap/ListGroup';
 import CloseButton from 'react-bootstrap/CloseButton';
 
@@ -111,16 +111,38 @@ export default function TaskPlanningForm(props: Props) {
                     </Col>
                     <Col sm={8}>
                         <Form.Group className="mb-8">
-                        <Form.Label htmlFor="taskList"></Form.Label>
-                            <ListGroup>
-                                {tasks?.map((item) => (
-                                    <ListGroup.Item key={item.id}>
-                                        <CloseButton onClick={() => handleRemoveTask(item)} />
-                                        {item.taskType} {' - '} {item.user.name}
-                                        {' - ' + item.lastUpdated}
-                                    </ListGroup.Item>
+                            <Form.Label htmlFor="taskList"></Form.Label>
+                            <Accordion >
+                                {tasks?.map((item: TaskWithUser, i: number) => (
+                                    <Accordion.Item eventKey={i.toString()} key={item.id}>
+                                        <Accordion.Header>
+                                            {i + ' - ' + item.taskType + ' - ' + item.lastUpdated}
+                                            <CloseButton onClick={() => handleRemoveTask(item)} />
+                                        </Accordion.Header>
+                                        <Accordion.Body>
+                                            <b>path:</b> {' '}
+                                            {item.path.map((pathItem, i) => (
+                                                <span key={i}>
+                                                    {pathItem}
+                                                    {i !== item.path.length - 1 && ' ► '}
+                                                </span>
+                                            ))}
+                                            <br />
+                                            <br />
+                                            <b>robot movements:</b> {' '}
+                                            {item.robotMovements.length === 0 && 'whole floor'}
+                                            {item.robotMovements.map((pathItem, index) => (
+                                                <span key={index}>
+                                                    {`[${pathItem.map((c, i) => `(${c.x}, ${c.y})`).join(', ')}]`}
+                                                    {index !== item.robotMovements.length - 1 && ' ► '}
+                                                </span>
+                                            ))}
+
+                                        </Accordion.Body>
+                                    </Accordion.Item>
                                 ))}
-                            </ListGroup>
+                            </Accordion>
+                        
                         </Form.Group>
                     </Col>
                 </Row>
@@ -128,13 +150,34 @@ export default function TaskPlanningForm(props: Props) {
                 <>
                     <Row>
                         <Col sm={12}>
-                            <ListGroup>
+
+                            <Accordion >
                                 {props.item?.value.tasks.map((item: Task, i: number) => (
-                                    <ListGroup.Item key={item.id}>
-                                        {i + ' - ' + item.taskType + ' - ' + item.lastUpdated}
-                                    </ListGroup.Item>
+                                    <Accordion.Item eventKey={i.toString()} key={item.id}>
+                                        <Accordion.Header> {i + ' - ' + item.taskType + ' - ' + item.lastUpdated}</Accordion.Header>
+                                        <Accordion.Body>
+                                            <b>path:</b> {' '}
+                                            {item.path.map((pathItem, i) => (
+                                                <span key={i}>
+                                                    {pathItem}
+                                                    {i !== item.path.length - 1 && ' ► '}
+                                                </span>
+                                            ))}
+                                            <br />
+                                            <br />
+                                            <b>robot movements:</b> {' '}
+                                            {item.robotMovements.length === 0 && 'whole floor'}
+                                            {item.robotMovements.map((pathItem, index) => (
+                                                <span key={index}>
+                                                    {`[${pathItem.map((c, i) => `(${c.x}, ${c.y})`).join(', ')}]`}
+                                                    {index !== item.robotMovements.length - 1 && ' ► '}
+                                                </span>
+                                            ))}
+
+                                        </Accordion.Body>
+                                    </Accordion.Item>
                                 ))}
-                            </ListGroup>
+                            </Accordion>
                         </Col>
                     </Row>
                 </>

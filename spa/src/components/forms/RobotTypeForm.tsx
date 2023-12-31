@@ -188,8 +188,9 @@ export default function RobotTypeForm(props: Props) {
                             isError={selectBoxTaskTypesDataFetch.isError}
                             isLoading={selectBoxTaskTypesDataFetch.isLoading}
                             customHandleChange={handleSelect}
+                            allOption={false}
                         />
-                    </Form.Group>
+                    </Form.Group>   
                 </Col>
             </Row>
             <Row>
