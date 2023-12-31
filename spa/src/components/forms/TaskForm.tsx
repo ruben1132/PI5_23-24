@@ -166,7 +166,7 @@ export default function TaskForm(props: Props) {
         notify.success(`Task ${props.action == 'edit' ? 'updated' : 'submitted'} successfully`);
     };
 
-    // TODO: approve/reject a stask
+    // approve/reject a stask
     const handleUpdateData = async (isApproved: string) => {
         setEnabled(false);
 
@@ -510,13 +510,29 @@ export default function TaskForm(props: Props) {
                         <Col sm={6}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Origin</Form.Label>
-                                <OriginSelectBox />
+                                {props.action === 'edit' ? (
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={(props.item.value as PickupDeliveryTask)?.origin}
+                                        disabled={true}
+                                    />
+                                ) : (
+                                    <OriginSelectBox />
+                                )}
                             </Form.Group>
                         </Col>
                         <Col sm={6}>
                             <Form.Group className="mb-6">
                                 <Form.Label htmlFor="select">Destiny</Form.Label>
-                                <DestinySelectBox />
+                                {props.action === 'edit' ? (
+                                    <Form.Control
+                                        type="text"
+                                        defaultValue={(props.item.value as PickupDeliveryTask)?.destiny}
+                                        disabled={true}
+                                    />
+                                ) : (
+                                    <DestinySelectBox />
+                                )}
                             </Form.Group>
                         </Col>
                     </Row>

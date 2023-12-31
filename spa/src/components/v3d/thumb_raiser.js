@@ -1526,7 +1526,8 @@ export default class ThumbRaiser {
                 } else if (collisionResult != null && this.isPassageCollisionsOn) {
                     this.isPassageCollisionsOn = false; // turn off passage collisions to avoid infinite passage collisions
                     this.autoMovs.movements.shift(); // remove the first set of movements from the queue - this is necessary to clear the rest of the cells (the robot can never reach the real cel of the passage)
-                    console.log('collisionResult' + JSON.stringify(collisionResult));
+                    // console.log('movements' + JSON.stringify(this.autoMovs.movements));
+                    // console.log('collisionResult' + JSON.stringify(collisionResult));
                     this.setPassage(collisionResult);
                     return;
                 } else if (this.autoMovs.isOn && this.autoMovs.movements.length > 0) {
@@ -1583,6 +1584,7 @@ export default class ThumbRaiser {
                     } else {
                         // Move to the next set of movements
                         this.autoMovs.movements.shift();
+                        // console.log('movements' + JSON.stringify(this.autoMovs.movements));
                     }
                 } else if (this.player.keyStates.jump) {
                     this.audio.play(this.audio.jumpClips, true);
@@ -1769,7 +1771,7 @@ export default class ThumbRaiser {
         }
 
         if (this.accessPointStart === 'elev') {
-            const iniPos = this.maze.elevator.acess;
+            const iniPos = this.maze?.elevator?.acess ?? this.maze.initialPosition;
             this.player.position.set(iniPos.x, this.maze.initialPosition.y, iniPos.z);
         } else {
             const pass = this.maze.passages.find((p) => p.passageId === this.startPassageId);

@@ -186,7 +186,7 @@ namespace unit.Services
             var userId = new Guid(userList[0].Id.Value);
 
             var userProfileDto = new UserProfileDto(userList[0].Email.Value, userList[0].Name, userList[0].Phone.Value, userList[0].Nif.Value);
-            var planningFullDto = new PlanningFullDto(new Guid().ToString(), new List<TaskSimpleDto>(), 0, userProfileDto);
+            var planningFullDto = new PlanningFullDto(new Guid().ToString(), new List<TaskWithRobotMovDto>(), 0, userProfileDto);
 
             // Act
             var result = await _planningService.AddAsync(dto, userId);
